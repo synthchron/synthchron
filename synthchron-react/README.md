@@ -1,34 +1,31 @@
-# synthchron-electron
+# Synthchron React
 
-An Electron application with React and TypeScript
-
-## Recommended IDE Setup
-
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+The Electron and Web Frontend for Synthchron. This repository uses code sharing between the Electron and Web versions to minimize redundancy.
 
 ## Project Setup
 
 ### Install
 
 ```bash
-$ npm install
+$ yarn
 ```
 
 ### Development
 
 ```bash
-$ npm run dev
+$ yarn web-dev # for web development
+$ yarn electron-dev # for electron development
 ```
 
 ### Build
 
 ```bash
 # For windows
-$ npm run build:win
+$ yarn build:win
 
 # For macOS
-$ npm run build:mac
+$ yarn build:mac
 
 # For Linux
-$ npm run build:linux
+$ yarn build:linux
 ```
