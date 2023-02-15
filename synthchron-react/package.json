@@ -1,6 +1,7 @@
 {
   "name": "synthchron-electron",
   "private": true,
+  "homepage": "https://github.com/synthchron/synthchron",
   "version": "1.0.0",
   "description": "An Electron application with React and TypeScript",
   "main": "./out/main/index.js",
