@@ -14,6 +14,15 @@
   -webkit-text-size-adjust: 100%;
 }
 
+#root {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+}
+
 .container {
   margin: 0;
   padding-top: 10vh;
@@ -88,6 +97,7 @@ button {
   :root {
     color: #f6f6f6;
     background-color: #2f2f2f;
+      height: 100%;
   }
 
   a:hover {

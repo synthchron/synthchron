@@ -1,6 +1,55 @@
 # Created by https://www.toptal.com/developers/gitignore/api/macos,visualstudiocode,windows,linux,intellij+all,react,reactnative,rust
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,visualstudiocode,windows,linux,intellij+all,react,reactnative,rust
 
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+tauri-example/logs
+tauri-example/*.log
+tauri-example/npm-debug.log*
+tauri-example/yarn-debug.log*
+tauri-example/yarn-error.log*
+tauri-example/pnpm-debug.log*
+tauri-example/lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+tauri-example/node_modules
+tauri-example/dist
+tauri-example/dist-ssr
+tauri-example/*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+tauri-example/.vscode/*
+tauri-example/!.vscode/extensions.json
+tauri-example/.idea
+tauri-example/.DS_Store
+tauri-example/*.suo
+tauri-example/*.ntvs*
+tauri-example/*.njsproj
+tauri-example/*.sln
+tauri-example/*.sw?
+
+
 ### yarn ###
 # https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
 

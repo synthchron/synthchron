@@ -13,13 +13,26 @@ function App() {
   }
 
   return (
-    <div className="container">
-      <h1>Welcome to Tauri!!!</h1>
-          <button onClick={(e) => {
-              console.log("123");
-              create_rect(50, 50, 50, 50);
-          }}>Create Rect</button>
-      <Rect width={50} height={50} pos_x={50} pos_y={50}></Rect>
+    <div style={{height: "100%", width: "100%", paddingTop: "0px"}} className="container">
+        <div
+        style={{
+            position: "fixed",
+            height: "100%",
+            left: "0px",
+            background: "gray",
+            width: "200px"
+        }}
+        >
+            <h1>Actions</h1>
+            <button onClick={(e) => {
+                create_rect(50, 50, 50, 50);
+            }}>Create Rect</button>
+        </div>
+        <div style={{
+            background: "blue"
+        }} id="graph">
+            <Rect width={50} height={50} pos_x={500} pos_y={500}></Rect>
+        </div>
     </div>
   );
 }

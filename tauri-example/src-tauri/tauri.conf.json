@@ -19,7 +19,7 @@
       "category": "DeveloperTool",
       "copyright": "",
       "deb": {
-        "depends": []
+        "depends": ["gdk-3.0>=3.22", "atk>=2.18", "gdk-pixbuf-2.0>=2.36.8", "pango>=1.38", "cairo>=1.14"]
       },
       "externalBin": [],
       "icon": [
