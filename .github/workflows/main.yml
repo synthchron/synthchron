@@ -63,8 +63,7 @@ jobs:
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          projectPath:
-            - ./synthchron-tauri
+          projectPath: ./synthchron-tauri
         with:
           releaseId: ${{ needs.create-release.outputs.release_id }}
 
