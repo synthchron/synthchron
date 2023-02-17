@@ -1,7 +1,19 @@
-# Tauri + React + Typescript
+# Tauri Application for Synthchron
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+## Usage
 
-## Recommended IDE Setup
+Install dependencies using `yarn`.
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+Run the web version using `yarn dev`.
+
+Run the tauri version using `yarn tauri dev`.
+
+## Storybook
+
+Storybook is used to test and view singular components. Run it using `yarn storybook`.
+
+## Build
+
+Build the web version using `yarn build`.
+
+Build the tauri version using `yarn tauri build`.
