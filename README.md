@@ -1,20 +1,25 @@
 # Synthchron
 A synthetic eventlog generator
 
-## Usage
+## Setup
 
-Install dependencies using `yarn`.
+### Requirements
 
-Run the web version using `yarn dev`.
+- [Node.js](https://nodejs.org/en/)
+- [Yarn](https://yarnpkg.com/en/)
 
-Run the tauri version using `yarn tauri dev`.
+- For the [Tauri](https://tauri.studio/en/) project, also follow the [setup instructions](https://tauri.studio/en/docs/getting-started/intro)
 
-## Storybook
+### Installation
 
-Storybook is used to test and view singular components. Run it using `yarn storybook`.
+```bash
+yarn 
+```
 
-## Build
+### Build
 
-Build the web version using `yarn build`.
+```bash
+turbo build
+```
 
-Build the tauri version using `yarn tauri build`.
+You will find the system-specific compiled binaries in the `packages/synthchron/src-tauri/target/release/bundle` folder.
