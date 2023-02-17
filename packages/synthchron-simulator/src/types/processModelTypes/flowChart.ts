@@ -1,18 +1,18 @@
 
-type FlowchartProcessModel = {
+export type FlowchartProcessModel = {
     type: "flowchart";
     nodes: FlowchartNode[];
     edges: FlowchartEdge[];
     initialNode: string;
 }
 
-type FlowchartNode = {
+export type FlowchartNode = {
     type: "terminal" | "decision";
     identifier: string;
     name?: string;
 }
 
-type FlowchartEdge = {
+export type FlowchartEdge = {
     source: string;
     target: string;
     weight: number;
