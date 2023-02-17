@@ -3,12 +3,6 @@ name: 'Publish releases'
 on: pull_request
 
 jobs:
-  create-version-number:
-    steps:
-
-    - name: Next Release Number
-      run: echo ${{ steps.versioning.outputs.version }}
-
   create-release:
     permissions:
       contents: write
