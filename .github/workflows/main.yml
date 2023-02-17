@@ -3,6 +3,12 @@ name: 'Publish releases'
 on: pull_request
 
 jobs:
+  create-version-number:
+    steps:
+
+    - name: Next Release Number
+      run: echo ${{ steps.versioning.outputs.version }}
+
   create-release:
     permissions:
       contents: write
@@ -16,9 +22,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-      - name: get version
-        working-directory: ./synthchron-tauri
-        run: echo "PACKAGE_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+      - name: Auto Increment Version
+        uses: MCKanpolat/auto-semver-action@1.0.5
+        id: versioning
+        with:
+          releaseType: patch 
+          incrementPerCommit: false
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: create release
         id: create-release
         uses: actions/github-script@v6
@@ -27,8 +37,8 @@ jobs:
             const { data } = await github.rest.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              tag_name: `app-v${process.env.PACKAGE_VERSION}`,
-              name: `Desktop App v${process.env.PACKAGE_VERSION}`,
+              tag_name: `app-v${{ steps.versioning.outputs.version }}`,
+              name: `Desktop App v${{ steps.versioning.outputs.version }}`,
               body: 'Take a look at the assets to download and install this app.',
               draft: true,
               prerelease: false
