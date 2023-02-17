@@ -1,2 +1,2 @@
 
-type ProcessModel = PetriNetProcessModel | DcrGraphProcessModel | FlowChartProcessModel;
+type ProcessModel = PetriNetProcessModel | DcrGraphProcessModel | FlowchartProcessModel;

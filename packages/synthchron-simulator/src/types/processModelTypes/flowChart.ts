@@ -1,18 +1,18 @@
 
-type FlowChartProcessModel = {
+type FlowchartProcessModel = {
     type: "flowchart";
-    nodes: FlowChartNode[];
-    edges: FlowChartEdge[];
+    nodes: FlowchartNode[];
+    edges: FlowchartEdge[];
     initialNode: string;
 }
 
-type FlowChartNode = {
+type FlowchartNode = {
     type: "terminal" | "decision";
     identifier: string;
     name?: string;
 }
 
-type FlowChartEdge = {
+type FlowchartEdge = {
     source: string;
     target: string;
     weight: number;
