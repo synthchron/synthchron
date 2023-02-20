@@ -16,12 +16,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
+      - name: install dependencies for git version
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
       - name: Git Version
         id: version
         uses: codacy/git-version@2.7.1
         with:
+          tool-version: latest
           release-branch: main
-          prefix: 'version '
+          prefix: v
       - name: create release
         id: create-release
         uses: actions/github-script@v6
@@ -43,8 +48,6 @@ jobs:
     permissions:
       contents: write
     uses: ./.github/workflows/build_test.yml
-    with:
-      releaseId: needs.create-release.outputs.release_id
 
   publish-release:
     permissions:
