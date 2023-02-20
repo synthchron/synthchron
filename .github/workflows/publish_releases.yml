@@ -16,13 +16,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-      - name: Auto Increment Version
-        uses: MCKanpolat/auto-semver-action@1.0.5
-        id: versioning
+      - name: Git Version
+        id: version
+        uses: codacy/git-version@2.7.1
         with:
-          releaseType: patch 
-          incrementPerCommit: true
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          release-branch: main
+          release-branch: 'version '
       - name: create release
         id: create-release
         uses: actions/github-script@v6
@@ -31,8 +30,8 @@ jobs:
             const { data } = await github.rest.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              tag_name: `app-v${{ steps.versioning.outputs.version }}`,
-              name: `Desktop App v${{ steps.versioning.outputs.version }}`,
+              tag_name: `app-v${{ steps.version.outputs.version }}`,
+              name: `Desktop App v${{ steps.version.outputs.version }}`,
               body: 'Take a look at the assets to download and install this app.',
               draft: true,
               prerelease: false
@@ -57,7 +56,7 @@ jobs:
         id: publish-release
         uses: actions/github-script@v6
         env:
-          release_id: ${{ needs.create-release.outputs.release_id }}
+          release_id: ${{ needs.create-release.outputs.version }}
         with:
           script: |
             github.rest.repos.updateRelease({
@@ -67,3 +66,13 @@ jobs:
               draft: false,
               prerelease: false
             })
+
+
+
+      
+      - name: Use the version
+        run: |
+          echo ${{ steps.version.outputs.version }}
+      - name: Use the previous version
+        run: |
+          echo ${{ steps.version.outputs.previous-version }}
