@@ -38,3 +38,30 @@ jobs:
             })
 
             return data.id
+  build-solution:
+    needs: create-release
+    permissions:
+      contents: write
+    uses: ./.github/workflows/build_test.yml
+
+  publish-release:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    needs: [create-release, build-solution]
+
+    steps:
+      - name: publish release
+        id: publish-release
+        uses: actions/github-script@v6
+        env:
+          release_id: ${{ needs.create-release.outputs.release_id }}
+        with:
+          script: |
+            github.rest.repos.updateRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: ${{ needs.create-release.outputs.release_id }},
+              draft: false,
+              prerelease: false
+            })
