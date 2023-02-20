@@ -5,6 +5,10 @@ on:
     branches: ["main"]
     types: [opened, synchronize]
   workflow_call:
+    input:
+      releaseId:
+        required: false
+        type: string
 
 jobs:
   build-tauri:
@@ -35,3 +39,5 @@ jobs:
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          releaseId: ${{ needs.create-release.outputs.release_id }}
