@@ -21,7 +21,7 @@ jobs:
         uses: codacy/git-version@2.7.1
         with:
           release-branch: main
-          release-branch: 'version '
+          prefix: 'version '
       - name: create release
         id: create-release
         uses: actions/github-script@v6
