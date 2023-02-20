@@ -43,9 +43,7 @@ jobs:
     needs: create-release
     permissions:
       contents: write
-    steps:
-      - name: building the tauri app
-        uses: ./.github/workflows/build_test.yml
+    uses: ./.github/workflows/build_test.yml
 
   publish-release:
     permissions:
