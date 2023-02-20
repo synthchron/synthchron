@@ -1,4 +1,4 @@
-import { FlowchartProcessModel } from "../../src/types/processModelTypes/flowChart"
+import { FlowchartProcessModel } from "../types/processModelTypes/flowChart"
 
 export const flowchart1 = (): FlowchartProcessModel => ({
     type: "flowchart",

@@ -1,4 +1,4 @@
-import { PetriNetProcessModel } from "../../src/types/processModelTypes/petriNetTypes"
+import { PetriNetProcessModel } from "../types/processModelTypes/petriNetTypes"
 
 export const petriNet1 = (): PetriNetProcessModel => ({
     type: "petri-net",
