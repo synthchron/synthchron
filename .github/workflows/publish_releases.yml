@@ -1,6 +1,13 @@
 name: 'Publish releases'
 
-on: pull_request
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'The current release version.'
+        required: true
+        default: '0.0.1'
+        type: string
 
 jobs:
   create-release:
@@ -8,7 +15,7 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     outputs:
-      release_id: ${{ steps.version.outputs.version }}
+      release_id: ${{ inputs.version }}
 
     steps:
       - uses: actions/checkout@v3
@@ -16,18 +23,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-      - name: install dependencies for git version
-        run: |
-          sudo apt-get update
-          sudo apt-get install libevent-dev git
-      - name: Git Version
-        id: version
-        uses: codacy/git-version@2.7.1
-        with:
-          tool-version: latest
-          release-branch: main
-          prefix: v
-          log-path: ./
       - name: create release
         id: create-release
         uses: actions/github-script@v6
@@ -36,8 +31,8 @@ jobs:
             const { data } = await github.rest.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              tag_name: `app-version: ${{ steps.version.outputs.version }}`,
-              name: `Desktop App version: ${{ steps.version.outputs.version }}`,
+              tag_name: `app-version: ${{ inputs.version }}`,
+              name: `Desktop App version: ${{ inputs.version }}`,
               body: 'Take a look at the assets to download and install this app.',
               draft: true,
               prerelease: false
