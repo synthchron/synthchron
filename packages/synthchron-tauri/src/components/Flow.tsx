@@ -22,14 +22,20 @@ import {getNodeText} from "@storybook/testing-library";
 import {match} from "assert";
 
 
-
 const initialNodes = [
   { id: '1', type: 'Place', position: { x: 0, y: 0 }, data: { label: '1' } },
   { id: '2', position: { x: 0, y: 100 }, data: { label: '2' } },
   { id: '3', type: 'Place', position: { x: 700, y: 300 }, data: { label: '1' } },
-  { id: '4', type: 'Place', position: { x: 500, y: 500 }, data: { label: '1' } },
-  { id: '5', type: 'Transition', position: { x: 400, y: 300 }, data: { label: '1' } },
+  { id: '4', type: 'Place', position: { x: 500, y: 500 }, data: { label: 'TEST' } },
+  { id: '5', type: 'Transition', position: { x: 400, y: 300 }, data: { label: 'TransitionNode' } },
 ];
+
+const initialEdges = [
+    {
+        id: 'e1-3', type: 'Arc', source: '1', target: '3', sourceHandle: 'c',
+        targetHandle: 'a',  markerEnd: { type: MarkerType.ArrowClosed }
+    }
+    ];
 
 const nodeTypes = {
   Place: PlaceNode,
@@ -41,19 +47,12 @@ const edgeTypes = {
 };
 
 
-const initialEdges = [
-    {
-        id: 'e1-3', type: 'Arc', source: '1', target: '3', sourceHandle: 'c',
-        targetHandle: 'a',  markerEnd: { type: MarkerType.ArrowClosed }
-    }
-    ];
 
 export default Flow;
 
-
 function Flow() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  	const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  	const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
 	function get_node(nodeId: string) {
 		return nodes.find((node) => {
@@ -62,8 +61,19 @@ function Flow() {
 			}
 		})
 	}
+	
+	function edgeDelTest() {
+		console.log("deelet");
+	}
 
-  const onConnect = useCallback(
+	function getEdges(params : any, node : any){
+		var test = edges.filter(edge => edge.source == node.id || edge.target == node.id );
+		console.log(test);
+		//console.log(node);
+	}
+	
+		
+	const onConnect = useCallback(
 		(params:any) =>
 			setEdges((eds : (Edge<any>) []) =>
 				{
@@ -106,6 +116,8 @@ function Flow() {
 			),
 		[setEdges]
     );
+
+  	
   
   const fitViewOptions = { padding: 0.2 };
 
@@ -118,6 +130,8 @@ function Flow() {
       onConnect={onConnect}
       nodeTypes={nodeTypes}
       edgeTypes={edgeTypes}
+	  onEdgesDelete={edgeDelTest}
+	  onNodeDoubleClick={getEdges}
       connectionMode = {ConnectionMode.Loose} 
       fitView
       fitViewOptions={fitViewOptions}
