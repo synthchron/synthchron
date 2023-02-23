@@ -1,9 +1,10 @@
 // tslint:disable: only-arrow-functions
 import { expect } from 'chai';
 import { main } from '../src';
+import { flowchart1 } from '../src/model-examples/flowchart';
 import { petriNet1, petriNet2 } from '../src/model-examples/petriNet';
 import { petriNetEngine } from '../src/process-engines/petrinet-engine';
-import { simulate } from '../src/simulation';
+import { simulate, simulateWithEngine } from '../src/simulation';
 
 describe('Index module', function() {
   describe('expected behavior', function() {
@@ -125,4 +126,10 @@ describe('Deterministic Process Models', () => {
         });
     });
   });
+
+  describe('Flow Chart 1', () => {
+    it('should not work with the petri net process engine', () => {
+      expect(() => simulateWithEngine(flowchart1, {}, petriNetEngine)).to.throw()
+    })
+  })
 })
