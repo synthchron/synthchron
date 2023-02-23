@@ -73,6 +73,7 @@ const resetActivity: ResetActivityType<ProcessModel, State, ActivityIdentifier> 
 
 export const petriNetEngine: ProcessEngine<PetriNetProcessModel, PetriNetState, string> = {
 
+    processModelType: 'petri-net',
     isAccepting: isAccepting,
     getEnabled: getEnabled,
     executeActivity: executeActivity,

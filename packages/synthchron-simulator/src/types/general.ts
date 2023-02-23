@@ -20,6 +20,7 @@ export type ExecuteActivityType<ProcessModel, StateType, ActivityIdentifier> = (
 export type ResetActivityType<ProcessModel, StateType, ActivityIdentifier> = (model: ProcessModel) => StateType
 
 export type ProcessEngine<ProcessModel, StateType, ActivityIdentifier> = {
+    processModelType: string,
     isAccepting: IsAcceptingType<ProcessModel, StateType, ActivityIdentifier>,
     getEnabled: GetEnabledType<ProcessModel, StateType, ActivityIdentifier>,
     executeActivity: ExecuteActivityType<ProcessModel, StateType, ActivityIdentifier>,
