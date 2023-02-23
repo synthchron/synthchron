@@ -8,7 +8,8 @@ import ReactFlow, {
 	addEdge,
 	MarkerType,
 	ConnectionMode,
-	Edge
+	Edge,
+	updateEdge
 } from 'reactflow';
 
 // 👇 you need to import the reactflow styles
@@ -23,17 +24,16 @@ import {match} from "assert";
 
 
 const initialNodes = [
-  { id: '1', type: 'Place', position: { x: 0, y: 0 }, data: { label: '1' } },
-  { id: '2', position: { x: 0, y: 100 }, data: { label: '2' } },
-  { id: '3', type: 'Place', position: { x: 700, y: 300 }, data: { label: '1' } },
-  { id: '4', type: 'Place', position: { x: 500, y: 500 }, data: { label: 'TEST' } },
-  { id: '5', type: 'Transition', position: { x: 400, y: 300 }, data: { label: 'TransitionNode' } },
+  { id: '1', type: 'Place', position: { x: 0, y: 0 }, data: { label: '1', store: 9 } },
+  { id: '3', type: 'Place', position: { x: 700, y: 300 }, data: { label: '1', store: 0 } },
+  { id: '4', type: 'Place', position: { x: 500, y: 500 }, data: { label: 'TEST', store: 0 } },
+  { id: '5', type: 'Transition', position: { x: 400, y: 300 }, data: { label: 'TransitionNode', store: 10 } },
 ];
 
 const initialEdges = [
     {
         id: 'e1-3', type: 'Arc', source: '1', target: '3', sourceHandle: 'c',
-        targetHandle: 'a',  markerEnd: { type: MarkerType.ArrowClosed }
+        targetHandle: 'a', markerEnd: { type: MarkerType.ArrowClosed }, data: {weight: 1}
     }
     ];
 
@@ -63,13 +63,31 @@ function Flow() {
 	}
 	
 	function edgeDelTest() {
-		console.log("deelet");
+		console.log("delete");
 	}
 
+
 	function getEdges(params : any, node : any){
-		var test = edges.filter(edge => edge.source == node.id || edge.target == node.id );
-		console.log(test);
-		//console.log(node);
+		let fromEdges = edges.filter(edge => edge.source == node.id);
+		let toEdges = edges.filter(edge => edge.target == node.id);
+		console.log(node);
+		if (node.type == 'Transition'){
+			fromEdges[0].animated = true;
+			let sourceNodes = toEdges.map(edge => get_node(edge.source))
+			let targetNodes = fromEdges.map(edge => get_node(edge.target))
+			console.log(sourceNodes.length);
+			if (sourceNodes.every(node => (node?.data.store! >= 1))){
+				sourceNodes.forEach(node =>
+						node!.data = { label: 'TEST', store: node?.data.store! - 1})
+				targetNodes.forEach(node =>
+						node!.data = { label: 'TEST', store: node?.data.store! + 1})
+				
+				console.log("yes");
+			}
+			else {
+				console.log("no");
+			}
+		}
 	}
 	
 		
@@ -111,7 +129,7 @@ function Flow() {
 					}
 
 					// Add edge to the list of edges
-					return addEdge({ ...params, type: 'Arc', markerEnd: { type: MarkerType.ArrowClosed } }, eds);
+					return addEdge({ ...params, type: 'Arc', markerEnd: { type: MarkerType.ArrowClosed }, data: {weight: 1} }, eds);
 				}
 			),
 		[setEdges]

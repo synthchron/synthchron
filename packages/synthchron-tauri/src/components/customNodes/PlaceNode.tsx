@@ -3,6 +3,7 @@ import {Handle, MarkerType, Position, useReactFlow} from 'reactflow';
 
 const handleStyle = { left: 10 };
 
+
 //@ts-ignore
 function PlaceNode({ data, isConnectable } ) {
 
