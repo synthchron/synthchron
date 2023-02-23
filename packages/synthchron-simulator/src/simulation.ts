@@ -2,19 +2,24 @@ import { petriNetEngine } from "./process-engines/petrinet-engine"
 import { Configuration, ProcessEngine, SimulationResult, TerminationStatus, Trace } from "./types/general"
 import { ProcessModel } from "./types/processModel"
 
+const PROCESS_ENGINES = [petriNetEngine];
 
 export const simulate = (processModel: ProcessModel, configuration: Configuration): SimulationResult => {
-    switch (processModel.type) {
-        case 'petri-net':
-            return simulateWithEngine(processModel, configuration, petriNetEngine)
-        case 'dcr-graph':
-            throw new Error('Not implemented');
-        case 'flowchart':
-            throw new Error('Not implemented');
-    }
+
+    // TODO: This currently finds the process engine to use. If we want to make this more flexible, we can add a processEngine field to be specified instead.
+    const processEngine = PROCESS_ENGINES.find(engine => engine.processModelType === processModel.type);
+
+    if (processEngine === undefined) throw new Error(`No process engine found for process model type ${processModel.type}`)
+
+    return simulateWithEngine(processModel, configuration, petriNetEngine)
+
 }
 
-const simulateWithEngine = (processModel: ProcessModel, configuration: Configuration, processEngine: ProcessEngine<any, any, any>): SimulationResult => {
+export const simulateWithEngine = (processModel: ProcessModel, configuration: Configuration, processEngine: ProcessEngine<any, any, any>): SimulationResult => {
+
+    // Validate the used engine with the used model
+    if (processEngine.processModelType !== processModel.type) throw new Error(`Process engine ${processEngine.processModelType} cannot be used with process model ${processModel.type}`)
+
     const trace: Trace = {
         events: []
     }
