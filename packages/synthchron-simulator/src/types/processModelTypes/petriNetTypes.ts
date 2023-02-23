@@ -1,11 +1,11 @@
 
-export type PetriNetProcessModel = {
+export interface PetriNetProcessModel {
     type: "petri-net";
     nodes: PetriNetNode[];
     edges: PetriNetEdge[];
 }
 
-export type PetriNetPlace = {
+export interface PetriNetPlace {
     type: "place";
     identifier: string;
     name: string;
@@ -13,7 +13,7 @@ export type PetriNetPlace = {
     amountOfTokens: number;
 }
 
-export type PetriNetTransition = {
+export interface PetriNetTransition {
     type: "transition";
     identifier: string;
     weight: number;
@@ -22,7 +22,7 @@ export type PetriNetTransition = {
 
 export type PetriNetNode = PetriNetPlace | PetriNetTransition;
 
-export type PetriNetEdge = {
+export interface PetriNetEdge {
     multiplicity: number;
     source: string;
     target: string;
