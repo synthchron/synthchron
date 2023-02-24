@@ -1,6 +1,6 @@
 import { FlowchartProcessModel } from "../types/processModelTypes/flowChart"
 
-export const flowchart1 = (): FlowchartProcessModel => ({
+export const flowchart1: FlowchartProcessModel = ({
     type: "flowchart",
     nodes: [
         {
@@ -36,7 +36,7 @@ export const flowchart1 = (): FlowchartProcessModel => ({
     initialNode: "n1"
 })
 
-export const flowchart2 = (): FlowchartProcessModel => ({
+export const flowchart2: FlowchartProcessModel = ({
     type: "flowchart",
     nodes: [
         {
