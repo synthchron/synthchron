@@ -5,6 +5,6 @@ import { Doc } from 'yjs';
 import { WebsocketProvider } from 'y-websocket';
 
 const ydoc = new Doc();
-const wsProvider = new WebsocketProvider('ws://eager-cows-feel-130-225-188-129.loca.lt/', 'my-roomname', ydoc)
+const wsProvider = new WebsocketProvider('ws://94.16.117.1/', 'my-roomname', ydoc)
 
 export default ydoc;
