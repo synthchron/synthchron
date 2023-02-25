@@ -7,7 +7,11 @@ import { WebrtcProvider } from 'y-webrtc';
 localStorage.log = 'true'
 const ydoc = new Doc();
 const wsProvider = new WebrtcProvider('my-roomname-142', ydoc, {
-    signaling: ['ws://94.16.117.1:4444/']
+    signaling: ['ws://94.16.117.1:4444/'],
+    peerOpts: {
+        config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:global.stun.twilio.com:3478?transport=udp' }, { urls: 'turn:94.16.117.1:3478' }] },
+
+    }
 })
 
 export default ydoc;
