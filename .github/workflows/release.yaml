@@ -21,7 +21,7 @@ jobs:
           echo ${{ steps.version.outputs.version }}
       - name: Set output
         id: store
-        run: echo "version={{ steps.version.outputs.version }}" >> $GITHUB_OUTPUT
+        run: echo "version=${{ steps.version.outputs.version }}" >> $GITHUB_OUTPUT
 
   publish-tauri:
     needs: compute-version
