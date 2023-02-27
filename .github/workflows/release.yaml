@@ -1,4 +1,4 @@
-name: 'release'
+name: 'Continuous Release'
 on:
   push:
     branches:
