@@ -16,18 +16,17 @@ jobs:
 
     runs-on: ${{ matrix.platform }}
     steps:
-      - name: Auto Increment Semver Action
-        uses: MCKanpolat/auto-semver-action@1.0.5
-        id: versioning
-        with:
-          releaseType: patch 
-          incrementPerCommit: true
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Next Release Number
-        run: echo ${{ steps.versioning.outputs.version }}
 
       - uses: actions/checkout@v3
+
+      - name: Git Version
+        id: version
+        uses: codacy/git-version@2.7.1
+      
+      - name: Use the version
+        run: |
+          echo ${{ steps.version.outputs.version }}
+
       - name: setup node
         uses: actions/setup-node@v3
         with:
@@ -45,8 +44,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: synthchron-v${{ steps.versioning.outputs.version }} 
-          releaseName: 'Synthchron v${{ steps.versioning.outputs.version }} '
+          tagName: synthchron-v${{ steps.version.outputs.version }} 
+          releaseName: 'Synthchron v${{ steps.version.outputs.version }} '
           releaseBody: 'See the assets to download this version and install.'
           releaseDraft: true
           prerelease: false
