@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     # Map a step output to a job output
     outputs:
-      version: ${{ steps.version.outputs.version }}
+      version: ${{ steps.store.outputs.version }}
     steps:
       - uses: actions/checkout@v3
       - name: Git Version
@@ -19,6 +19,9 @@ jobs:
       - name: Use the version
         run: |
           echo ${{ steps.version.outputs.version }}
+      - name: Set output
+        id: store
+        run: echo "version={{ steps.version.outputs.version }}" >> $GITHUB_OUTPUT
 
   publish-tauri:
     needs: compute-version
