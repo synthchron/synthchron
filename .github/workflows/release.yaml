@@ -17,7 +17,7 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - name: Auto Increment Semver Action
-        uses: MCKanpolat/auto-semver-action@1.0.9
+        uses: MCKanpolat/auto-semver-action@1.0.5
         id: versioning
         with:
           releaseType: patch 
