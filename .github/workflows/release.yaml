@@ -6,7 +6,22 @@ on:
       - SYN-87-Implement-GitHub-Action-for-creating-releases # Remove before merge.
 
 jobs:
+  compute-version:
+    runs-on: ubuntu-latest
+    # Map a step output to a job output
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Git Version
+        id: version
+        uses: codacy/git-version@2.7.1
+      - name: Use the version
+        run: |
+          echo ${{ steps.version.outputs.version }}
+
   publish-tauri:
+    needs: compute-version
     permissions:
       contents: write
     strategy:
@@ -18,14 +33,6 @@ jobs:
     steps:
 
       - uses: actions/checkout@v3
-
-      - name: Git Version
-        id: version
-        uses: codacy/git-version@2.7.1
-      
-      - name: Use the version
-        run: |
-          echo ${{ steps.version.outputs.version }}
 
       - name: setup node
         uses: actions/setup-node@v3
@@ -44,8 +51,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: synthchron-v${{ steps.version.outputs.version }} 
-          releaseName: 'Synthchron v${{ steps.version.outputs.version }} '
+          tagName: synthchron-v${{ needs.compute-version.outputs.version }} 
+          releaseName: 'Synthchron v${{ needs.compute-version.outputs.version }} '
           releaseBody: 'See the assets to download this version and install.'
           releaseDraft: true
           prerelease: false
