@@ -6,6 +6,10 @@
     },
     "build": {
       "dependsOn": ["^build"],
+      "outputs": ["/dist/**"]
+    },
+    "build:tauri": {
+      "dependsOn": ["^build", "^build:tauri"],
       "outputs": ["/dist/**", "/src-tauri/target/**"]
     }
   }

@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build:web": "tsc && vite build",
-    "build": "tauri build",
+    "build": "tsc && vite build",
+    "build:tauri": "tauri build",
     "preview": "vite preview",
     "tauri": "tauri",
     "storybook": "start-storybook -p 6006",
