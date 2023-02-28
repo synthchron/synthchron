@@ -41,7 +41,6 @@ const generateEvent = (event: XESEvent): object => {
             string: event.attributes.map(generateAttribute)
         }
         
-    
     }
 
 const generateAttribute = (attribute: XESAttribute): object => {
@@ -51,7 +50,5 @@ const generateAttribute = (attribute: XESAttribute): object => {
                 "@value": attribute.value
             }
         
-
     }
-    
-        
+     
