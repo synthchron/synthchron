@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import ReactFlow, {
 	MiniMap,
 	Controls,
@@ -9,7 +9,7 @@ import ReactFlow, {
 	MarkerType,
 	ConnectionMode,
 	Edge,
-	updateEdge
+	ReactFlowProvider
 } from 'reactflow';
 
 // 👇 you need to import the reactflow styles
@@ -19,41 +19,46 @@ import "./customEdges/EdgeStyle.css";
 import PlaceNode from './customNodes/PlaceNode';
 import TransitionNode from './customNodes/TransitionNode';
 import ArcEdge from './customEdges/ArcEdge';
+import "./sidebar.css";
+import Sidebar from './Sidebar';
+
 import {getNodeText} from "@storybook/testing-library";
 import {match} from "assert";
 
 
+//Types
+const nodeTypes = {
+	Place: PlaceNode,
+	Transition: TransitionNode
+};
+const edgeTypes = {
+	Arc: ArcEdge,
+};
+
+//Initial nodes and edges
 const initialNodes = [
   { id: '1', type: 'Place', position: { x: 0, y: 0 }, data: { label: '1', store: 9 } },
   { id: '3', type: 'Place', position: { x: 700, y: 300 }, data: { label: '1', store: 0 } },
   { id: '4', type: 'Place', position: { x: 500, y: 500 }, data: { label: 'TEST', store: 0 } },
   { id: '5', type: 'Transition', position: { x: 400, y: 300 }, data: { label: 'TransitionNode', store: 10 } },
 ];
-
-const initialEdges = [
-    {
-        id: 'e1-3', type: 'Arc', source: '1', target: '3', sourceHandle: 'c',
-        targetHandle: 'a', markerEnd: { type: MarkerType.ArrowClosed }, data: {weight: 1}
-    }
-    ];
-
-const nodeTypes = {
-  Place: PlaceNode,
-  Transition: TransitionNode
-};
-
-const edgeTypes = {
-  Arc: ArcEdge,
-};
+const initialEdges = [{
+	id: 'e1-3', type: 'Arc', source: '1', target: '3', sourceHandle: 'c',
+	targetHandle: 'a', markerEnd: { type: MarkerType.ArrowClosed }, data: {weight: 1}
+}];
 
 
+//Drag and drop setup
+let id = 0;
+const dndGetId = () => `dndnode_${id++}`;
 
-export default Flow;
-
-function Flow() {
+export default function Flow() {
   	const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   	const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+	const reactFlowWrapper = useRef(null);
+	const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
+	
 	function get_node(nodeId: string) {
 		return nodes.find((node) => {
 			if (node.id == nodeId) {
@@ -67,26 +72,38 @@ function Flow() {
 	}
 
 
-	function getEdges(params : any, node : any){
+	//Transfer tokens on double click
+	function onNodeDoubleClick(params : any, node : any){
 		let fromEdges = edges.filter(edge => edge.source == node.id);
 		let toEdges = edges.filter(edge => edge.target == node.id);
 		console.log(node);
 		if (node.type == 'Transition'){
-			fromEdges[0].animated = true;
-			let sourceNodes = toEdges.map(edge => get_node(edge.source))
-			let targetNodes = fromEdges.map(edge => get_node(edge.target))
-			console.log(sourceNodes.length);
+			
+			let sourceNodesIds = toEdges.map(edge => edge.source);
+			let sourceNodes = nodes.filter(fnodes => sourceNodesIds.includes(fnodes.id));
+			let targetNodesIds = fromEdges.map(edge => edge.target);
+			let targetNodes = nodes.filter(fnodes => targetNodesIds.includes(fnodes.id));
+			
 			if (sourceNodes.every(node => (node?.data.store! >= 1))){
 				sourceNodes.forEach(node =>
-						node!.data = { label: 'TEST', store: node?.data.store! - 1})
+						node!.data = { label: 'Trigg', store: node?.data.store! - 1})
 				targetNodes.forEach(node =>
-						node!.data = { label: 'TEST', store: node?.data.store! + 1})
-				
+						node!.data = { label: 'ered', store: node?.data.store! + 1})
 				console.log("yes");
 			}
 			else {
 				console.log("no");
 			}
+			
+			//For updating edges, if for example we wanted to animate edges
+			//fromEdges[0].animated = true;
+			//let unchangedEdges = edges.filter(edge => !fromEdges.includes(edge) && !toEdges.includes(edge))
+			//let changedEdges = fromEdges.concat(toEdges);
+			//setEdges(changedEdges.concat(unchangedEdges));
+
+			let unchangedNodes = nodes.filter(node => !sourceNodes.includes(node) && !targetNodes.includes(node))
+			let changedNodes = sourceNodes.concat(targetNodes);
+			setNodes(unchangedNodes.concat(changedNodes));
 		}
 	}
 	
@@ -135,28 +152,72 @@ function Flow() {
 		[setEdges]
     );
 
-  	
+	const onDragOver = useCallback((event : any) => {
+		event.preventDefault();
+		event.dataTransfer.dropEffect = 'move';
+	  }, []);
   
-  const fitViewOptions = { padding: 0.2 };
+  	const onDrop = useCallback(
+		(event : any) => {
+		  event.preventDefault();
+	
+		  const reactFlowBounds = reactFlowWrapper.current!.getBoundingClientRect();
+		  const type = event.dataTransfer.getData('application/reactflow');
+	
+		  // check if the dropped element is valid
+		  if (typeof type === 'undefined' || !type) {
+			return;
+		  }
+	
+		  const position = reactFlowInstance!.project({
+			x: event.clientX - reactFlowBounds.left,
+			y: event.clientY - reactFlowBounds.top,
+		  });
+		  const newNode = {
+			id: dndGetId(),
+			type,
+			position,
+			data: { label: `${type} node` },
+		  };
+	
+		  setNodes((nds) => nds.concat(newNode));
+		},
+		[reactFlowInstance]
+	  );
+	
+	
+	
+	const fitViewOptions = { padding: 0.2 };
 
-  return (
-    <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      nodeTypes={nodeTypes}
-      edgeTypes={edgeTypes}
-	  onEdgesDelete={edgeDelTest}
-	  onNodeDoubleClick={getEdges}
-      connectionMode = {ConnectionMode.Loose} 
-      fitView
-      fitViewOptions={fitViewOptions}
-    >
-      <MiniMap />
-      <Controls />
-      <Background />
-    </ReactFlow>
-  );
+  	return (
+		<div className="dndflow">
+			<ReactFlowProvider>
+				<div className="reactflow-wrapper" ref={reactFlowWrapper}>
+		<ReactFlow
+		nodes={nodes}
+		edges={edges}
+		onNodesChange={onNodesChange}
+		onEdgesChange={onEdgesChange}
+		onConnect={onConnect}
+		nodeTypes={nodeTypes}
+		//@ts-ignore
+		edgeTypes={edgeTypes}
+		onEdgesDelete={edgeDelTest}
+		onNodeDoubleClick={onNodeDoubleClick}
+		connectionMode = {ConnectionMode.Loose} 
+		fitView
+		onDrop={onDrop}
+		onDragOver={onDragOver}
+		fitViewOptions={fitViewOptions}
+		>
+		
+		<MiniMap />
+		<Controls />
+		<Background />
+		<Sidebar/>
+		</ReactFlow>
+				</div>
+			</ReactFlowProvider>
+		</div>
+  	);
 }

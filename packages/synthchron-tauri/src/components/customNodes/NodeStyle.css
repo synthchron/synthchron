@@ -59,3 +59,12 @@
 .react-flow__handle-right {
   right: -15px;
 }
+
+.node-label {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  color: lightgray;
+  background-color: gray;
+}
