@@ -1,8 +1,5 @@
-import { XESLog } from "./types";
-
+// Todo: remove this at some point but keep for now as an example.
 export const main = (): string => 'Hello World';
 
-export const generateXES = (xesLog: XESLog): string => {
-    return ""
-}
+export { generateXES } from "./generate";
 

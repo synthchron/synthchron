@@ -9,3 +9,5 @@ describe('Index module', function() {
     });
   });
 });
+
+// TODO: Tests once we have XES parsing
