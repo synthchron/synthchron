@@ -1,4 +1,4 @@
-name: 'Build Test'
+name: 'Build Tauri App as Smoke Test'
 
 on:
   pull_request:
@@ -30,7 +30,7 @@ jobs:
       - name: install app dependencies
         run: yarn
       - name: build the app
-        run: npx turbo build
+        run: npx turbo build:tauri
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

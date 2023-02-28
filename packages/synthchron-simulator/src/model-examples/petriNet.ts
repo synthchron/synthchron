@@ -1,6 +1,8 @@
 import { PetriNetProcessModel } from "../types/processModelTypes/petriNetTypes"
 
-export const petriNet1 = (): PetriNetProcessModel => ({
+// This petri net should simulate as follows:
+// ["t1"]
+export const petriNet1: PetriNetProcessModel = ({
     type: "petri-net",
     nodes: [
         {
@@ -38,7 +40,9 @@ export const petriNet1 = (): PetriNetProcessModel => ({
     ]
 })
 
-export const petriNet2 = (): PetriNetProcessModel => ({
+// This petri Net should simulate as follows:
+// ["t1"]
+export const petriNet2: PetriNetProcessModel = ({
     type: "petri-net",
     nodes: [
         {
