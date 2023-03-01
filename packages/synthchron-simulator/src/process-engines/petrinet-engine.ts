@@ -12,7 +12,7 @@ const isAccepting: IsAcceptingType<ProcessModel, State, ActivityIdentifier> = (m
         // We only care about the places
         .filter((node): node is PetriNetPlace => node.type === "place")
         // Every place that has a token has to be accepting
-        .every(place => state.get(place.identifier) || 0 >= 1 === place.accepting)
+        .every(place =>  place.accepting(state.get(place.identifier) || 0))
 
 const getEnabled: GetEnabledType<ProcessModel, State, ActivityIdentifier> = (model, state) => new Set(model.nodes
         // We only care about the transitions
@@ -61,7 +61,6 @@ const executeActivity: ExecuteActivityType<ProcessModel, State, ActivityIdentifi
                 const newWeight = (newState.get(place.identifier) || 0) + transition.weight;
                 newState.set(place.identifier, newWeight)
             })
-
         return newState
 
 }
