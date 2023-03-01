@@ -22,6 +22,7 @@
     "@synthchron/xes": "*",
     "@tauri-apps/api": "^1.2.0",
     "react": "^18.2.0",
+    "react-detect-offline": "^2.4.5",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.8.2",
     "reactflow": "^11.5.6"
@@ -38,6 +39,7 @@
     "@tauri-apps/cli": "^1.2.2",
     "@types/node": "^18.14.2",
     "@types/react": "^18.0.15",
+    "@types/react-detect-offline": "^2.4.1",
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^3.0.0",
     "babel-loader": "^9.1.2",
