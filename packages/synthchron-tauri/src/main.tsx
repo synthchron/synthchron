@@ -1,14 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { FullscreenFlow } from "./components/FullscreenFlow";
 import "./style.css";
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import { BrowserRouter } from "react-router-dom";
+import { Routing } from "./Routing";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <FullscreenFlow />
+    <BrowserRouter>
+      <Routing />
+    </BrowserRouter>
   </React.StrictMode>
 );
