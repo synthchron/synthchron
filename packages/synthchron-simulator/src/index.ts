@@ -4,3 +4,5 @@ export const main = (): string => 'Hello World';
 export { simulate, simulateWithEngine } from './simulation';
 
 export * from './types/processModel';
+
+export * from './model-examples/petriNet';
