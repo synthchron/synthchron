@@ -9,7 +9,7 @@ export interface PetriNetPlace {
     type: "place";
     identifier: string;
     name: string;
-    accepting: boolean;
+    accepting: (numOfTokens: number) => boolean;
     amountOfTokens: number;
 }
 
