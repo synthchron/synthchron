@@ -12,7 +12,7 @@ const isAccepting: IsAcceptingType<ProcessModel, State, ActivityIdentifier> = (m
         // We only care about the places
         .filter((node): node is PetriNetPlace => node.type === "place")
         // Every place that has a token has to be accepting
-        .every(place => state.get(place.identifier) === undefined ? 0 : place.accepting(state.get(place.identifier)!))
+        .every(place => state.get(place.identifier) !== undefined && place.accepting(state.get(place.identifier)!))
 
 const getEnabled: GetEnabledType<ProcessModel, State, ActivityIdentifier> = (model, state) => new Set(model.nodes
         // We only care about the transitions
