@@ -36,6 +36,10 @@ const executeActivity: ExecuteActivityType<ProcessModel, State, ActivityIdentifi
         const transition = model.nodes
             .filter((node): node is PetriNetTransition => node.type === "transition")
             .find(node => node.identifier === activity)
+
+        if (transition == undefined) {
+            throw new Error("No such transition")
+        }
     
         // Remove tokens from source places
         model.nodes
