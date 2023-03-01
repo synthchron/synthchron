@@ -12,8 +12,10 @@ export const Routing = () => {
     return (
         <Routes>
             <Route index element={ <MainMenuPage /> } />
-            <Route path="editor" element={ <EditorPage /> } />
-            <Route path="debug" element={ <Debug /> } />
+            <Route path="editor/" element={ <EditorPage /> } >
+                <Route path=":processmodelid/" element={ <EditorPage /> } />
+            </Route>
+            <Route path="debug/" element={ <Debug /> } />
             <Route path='*' element={ <NotFoundPage /> } />
         </Routes>
     )

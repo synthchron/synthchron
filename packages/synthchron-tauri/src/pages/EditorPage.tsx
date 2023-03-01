@@ -1,6 +1,10 @@
+import { CustomAppBar } from "../components/CustomAppBar"
 import { FullscreenFlow } from "../components/FullscreenFlow"
 
 export const EditorPage = () => {
 
-    return <FullscreenFlow />
+    return <>
+        <CustomAppBar />
+        <FullscreenFlow />
+    </>
 }
