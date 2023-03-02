@@ -78,9 +78,8 @@ export default function Flow() {
 	function onNodeDoubleClick(params : any, node : any){
 		let fromEdges = edges.filter(edge => edge.source == node.id);
 		let toEdges = edges.filter(edge => edge.target == node.id);
-		console.log(node);
+
 		if (node.type == 'Transition'){
-			
 			let sourceNodesIds = toEdges.map(edge => edge.source);
 			let sourceNodes = nodes.filter(fnodes => sourceNodesIds.includes(fnodes.id));
 			let targetNodesIds = fromEdges.map(edge => edge.target);
@@ -91,10 +90,6 @@ export default function Flow() {
 						node!.data = { label: 'Trigg', store: node?.data.store! - 1})
 				targetNodes.forEach(node =>
 						node!.data = { label: 'ered', store: node?.data.store! + 1})
-				console.log("yes");
-			}
-			else {
-				console.log("no");
 			}
 			
 			//For updating edges, if for example we wanted to animate edges
@@ -109,94 +104,76 @@ export default function Flow() {
 		}
 	}
 
-	const onConnect = useCallback(
-		(params:any) =>
-			setEdges((eds : (Edge<any>) []) =>
+
+	function onConnect(params:any) {
+		setEdges((eds : (Edge<any>) []) =>
+			{
+				let sourceNode = get_node(params.source);
+				let targetNode = get_node(params.target);
+
+				let is_invalid = edges.every(edge =>
 				{
-					console.log("e1");
-					let sourceNode = get_node(params.source);
-					let targetNode = get_node(params.target);
+					// checking if another edge already exists
+					if (edge.source == params.source && edge.target == params.target) return true;
+					return false;
+				})
+				
+				// returning without the added note if invalid found
+				if (is_invalid) {
+					return eds;
+				}
 
-					let is_invalid = edges.every(edge =>
-					{
-						// checking if another edge already exists
-						if (edge.source == params.source && edge.target == params.target) return true;
-
-						return false;
-					})
-					console.log("e2");
-					// returning without the added note if invalid found
-					if (is_invalid) {
+				// Checking both nodes exists
+				if (sourceNode == undefined || targetNode == undefined) return eds;
+				
+				// Checking if it is valid connection for a place node
+				if (sourceNode.type == 'Place') {
+					if (targetNode.type == 'Place') {
 						return eds;
 					}
-					console.log("e3");
-
-
-					if(sourceNode == undefined){
-						console.log("TEST");
-					}
-
-
-
-					// Checking both nodes exists
-					if (sourceNode == undefined || targetNode == undefined) return eds;
-					console.log("e3.5");
-					// Checking if it is valid connection for a place node
-					if (sourceNode.type == 'Place') {
-						if (targetNode.type == 'Place') {
-							return eds;
-						}
-					}
-					console.log("e4");
-					// Checking if it is valid connection for a transition node
-					if (sourceNode.type == 'Transition') {
-						if (targetNode.type == 'Transition') {
-							return eds;
-						}
-					}
-					console.log("e5");
-
-					// Add edge to the list of edges
-					return addEdge({ ...params, type: 'Arc', markerEnd: { type: MarkerType.ArrowClosed }, data: {weight: 1} }, eds);
 				}
-			),
-		[setEdges]
-    );
+				
+				// Checking if it is valid connection for a transition node
+				if (sourceNode.type == 'Transition') {
+					if (targetNode.type == 'Transition') {
+						return eds;
+					}
+				}
+
+				// Add edge to the list of edges
+				return addEdge({ ...params, type: 'Arc', markerEnd: { type: MarkerType.ArrowClosed }, data: {weight: 1} }, eds);
+			}
+		)
+	}
 
 	const onDragOver = useCallback((event : any) => {
 		event.preventDefault();
 		event.dataTransfer.dropEffect = 'move';
 	}, []);
 
-	const onDrop = useCallback(
-		(event : any) => {
-		  	event.preventDefault();
-	
-			const reactFlowBounds = reactFlowWrapper.current!.getBoundingClientRect();
-			const type = event.dataTransfer.getData('application/reactflow');
-		
-			// check if the dropped element is valid
-			if (typeof type === 'undefined' || !type) {
-				return;
-			}
-		
-			const position = reactFlowInstance!.project({
+	function onDrop(event : any) {
+		event.preventDefault();
+
+		const reactFlowBounds = reactFlowWrapper.current!.getBoundingClientRect();
+		const type = event.dataTransfer.getData('application/reactflow');
+
+		// check if the dropped element is valid
+		if (typeof type === 'undefined' || !type) {
+			return;
+		}
+
+		const position = reactFlowInstance!.project({
 				x: event.clientX - reactFlowBounds.left,
 				y: event.clientY - reactFlowBounds.top,
-			});
-			const newNode = {
-				id: dndGetId(),
-				type: type,
-				position,
-				data: { label: `${type} node`, store: 0 },
-			};
-			console.log(nodes);
-		
-			setNodes((nds) => nds.concat(newNode));
-			console.log(nodes);
-		},
-		[reactFlowInstance]
-	);
+		});
+		const newNode = {
+			id: dndGetId(),
+			type: type,
+			position,
+			data: { label: `${type} node`, store: 0 },
+		};
+		setNodes((nds) => nds.concat(newNode));
+	}
 
 	const fitViewOptions = { padding: 0.2 };
 

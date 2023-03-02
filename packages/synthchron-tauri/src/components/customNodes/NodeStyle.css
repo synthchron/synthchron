@@ -64,6 +64,9 @@
   position: absolute;
   bottom: -40px;
   left: 50%;
+  padding-left: 4px;
+  padding-right: 4px;
+  white-space: nowrap;
   transform: translate(-50%, 0);
   color: lightgray;
   background-color: gray;
