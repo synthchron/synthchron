@@ -10,6 +10,7 @@ import ReactFlow, {
 	ConnectionMode,
 	Edge,
 	ReactFlowProvider,
+	ReactFlowInstance,
 } from 'reactflow';
 
 // 👇 you need to import the reactflow styles
@@ -55,10 +56,10 @@ const dndGetId = () => `dndnode_${id++}`;
 
 export default function Flow() {
 	//Setting consts
-	const reactFlowWrapper = useRef(null);
+	const reactFlowWrapper = useRef<HTMLDivElement>(null);
 	const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
 	const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  	const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  	const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
 
 	//Function for getting a node
 	function get_node(nodeId: string) {
