@@ -1,18 +1,18 @@
 
-export type FlowchartProcessModel = {
+export interface FlowchartProcessModel {
     type: "flowchart";
     nodes: FlowchartNode[];
     edges: FlowchartEdge[];
     initialNode: string;
 }
 
-export type FlowchartNode = {
+export interface FlowchartNode {
     type: "terminal" | "decision";
     identifier: string;
     name?: string;
 }
 
-export type FlowchartEdge = {
+export interface FlowchartEdge {
     source: string;
     target: string;
     weight: number;
