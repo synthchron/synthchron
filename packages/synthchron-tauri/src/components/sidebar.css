@@ -1,3 +1,7 @@
+
+body {
+  margin: 0%;
+}
 .dndflow {
   flex-direction: column;
   display: flex;
@@ -10,11 +14,13 @@
   padding: 15px 10px;
   font-size: 12px;
   background: #fcfcfc;
+  color: black;
 }
 
 .dndflow aside .description {
   margin-bottom: 10px;
   background-color: green;
+  color: white;
 }
   
 .dndflow .dndnode {
