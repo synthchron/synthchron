@@ -1,0 +1,73 @@
+.react-flow__node-Place {
+    font-size: 12px;
+    background: #eee;
+    border: 1px solid #000000;
+    border-radius: 50px;
+    text-align: center;
+    color: red;
+    min-width: 100px;
+    min-height: 100px;
+  }
+
+  
+.react-flow__node-Transitions {
+    font-size: 12px;
+    background: #eee;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    text-align: center;
+  }
+
+
+.token {
+    background: red;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    text-align: center;
+    width: 10px;
+    height: 10px;
+    margin: 4px;
+ }
+
+ .tokenContainer{
+  display: grid;
+  grid-template-columns: auto auto auto;
+  padding-top: 20px;
+  padding-left: 10px;
+ }
+
+
+ .react-flow__handle {
+  width: 8px;
+  height: 8px;
+  background-color: #bbb;
+}
+
+
+.react-flow__handle-top {
+  top: -15px;
+}
+
+.react-flow__handle-bottom {
+  bottom: -15px;
+}
+
+.react-flow__handle-left {
+  left: -15px;
+}
+
+.react-flow__handle-right {
+  right: -15px;
+}
+
+.node-label {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  padding-left: 4px;
+  padding-right: 4px;
+  white-space: nowrap;
+  transform: translate(-50%, 0);
+  color: lightgray;
+  background-color: gray;
+}

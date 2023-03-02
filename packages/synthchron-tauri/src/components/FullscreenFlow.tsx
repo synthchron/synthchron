@@ -1,3 +1,4 @@
+import React from "react";
 import Flow from "./Flow";
 
 export const FullscreenFlow = () =>
