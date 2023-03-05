@@ -4,6 +4,9 @@
   "workspaces": [
     "packages/*"
   ],
-  "devDependencies": {
+  "devDependencies": {},
+  "dependencies": {
+    "global": "^4.4.0",
+    "turbo": "^1.8.3"
   }
 }

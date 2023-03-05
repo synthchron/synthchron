@@ -8,7 +8,6 @@ import { NotFoundPage } from "./pages/NotFoundPage"
 
 export const Routing = () => {
 
-
     return (
         <Routes>
             <Route index element={ <MainMenuPage /> } />
