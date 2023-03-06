@@ -2,7 +2,6 @@
   "name": "synthchron-tauri",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -10,7 +9,9 @@
     "preview": "vite preview",
     "tauri": "tauri",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "lint": "npx eslint src/**/*.ts src/**/*.tsx",
+    "lint:fix": "npx eslint --fix src/**/*.ts src/**/*.tsx"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
@@ -25,7 +26,8 @@
     "react-detect-offline": "^2.4.5",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.8.2",
-    "reactflow": "^11.5.6"
+    "reactflow": "^11.5.6",
+    "vite-plugin-eslint": "^1.8.1"
   },
   "devDependencies": {
     "@babel/core": "^7.21.0",
@@ -36,6 +38,7 @@
     "@storybook/builder-vite": "^0.4.2",
     "@storybook/react": "^6.5.16",
     "@storybook/testing-library": "^0.0.13",
+    "@synthchron/eslint-config": "*",
     "@tauri-apps/cli": "^1.2.2",
     "@types/node": "^18.14.2",
     "@types/react": "^18.0.15",
@@ -43,6 +46,7 @@
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^3.0.0",
     "babel-loader": "^9.1.2",
+    "eslint": "^8.35.0",
     "typescript": "^4.6.4",
     "vite": "^4.1.4"
   }
