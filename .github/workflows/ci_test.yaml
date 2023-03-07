@@ -30,6 +30,9 @@ jobs:
  
         - name: Install dependencies
           run: yarn
+
+        - name: Test
+          run: yarn turbo lint
  
         - name: Test
-          run: npx turbo test
+          run: yarn turbo test

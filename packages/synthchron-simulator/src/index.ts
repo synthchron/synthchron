@@ -5,4 +5,4 @@ export { simulate, simulateWithEngine } from './simulation'
 
 export * from './types/processModel'
 
-export * from './model-examples/petriNetExamples';
+export * from './model-examples/petriNetExamples'
