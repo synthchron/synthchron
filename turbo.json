@@ -12,11 +12,7 @@
       "dependsOn": ["^build", "^build:tauri"],
       "outputs": ["/dist/**", "/src-tauri/target/**"]
     },
-    "lint": {
-      "dependsOn": ["^lint"]
-    },
-    "lint:fix": {
-      "dependsOn": ["^lint:fix"]
-    }
+    "lint": {},
+    "lint:fix": {}
   }
 }
