@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 import { CustomAppBar } from '../components/CustomAppBar'
-import Flow from '../components/react-flow/Flow'
+import { DragAndDropWrapper } from '../components/react-flow/Flow'
 
 export const EditorPage = () => {
   return (
@@ -13,7 +13,7 @@ export const EditorPage = () => {
       }}
     >
       <CustomAppBar />
-      <Flow />
+      <DragAndDropWrapper />
     </Box>
   )
 }
