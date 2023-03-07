@@ -14,8 +14,8 @@ import useStore, { RFState } from './flowStore'
 const selector = (state: RFState) => ({
   nodes: state.nodes,
   edges: state.edges,
-  nodeTypes: state.nodeTypes,
-  edgeTypes: state.edgeTypes,
+  nodeTypes: state.processModelFlowConfig.nodeTypes,
+  edgeTypes: state.processModelFlowConfig.edgeTypes,
   onNodesChange: state.onNodesChange,
   onEdgesChange: state.onEdgesChange,
   onConnect: state.onConnect,

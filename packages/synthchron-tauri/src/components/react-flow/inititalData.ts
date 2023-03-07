@@ -1,10 +1,7 @@
 // This file contains initial data for the react flow component
 // This will be deleted once we implement saving and restoring flows
 
-import { Edge, EdgeTypes, MarkerType, Node, NodeTypes } from 'reactflow'
-import ArcEdge from './customEdges/ArcEdge'
-import PlaceNode from './customNodes/PlaceNode'
-import TransitionNode from './customNodes/TransitionNode'
+import { Edge, MarkerType, Node } from 'reactflow'
 
 //Initial nodes and edges
 export const initialNodes: Node[] = [
@@ -46,12 +43,3 @@ export const initialEdges: Edge[] = [
     data: { weight: 1 },
   },
 ]
-
-export const nodeTypes: NodeTypes = {
-  Place: PlaceNode,
-  Transition: TransitionNode,
-}
-
-export const edgeTypes: EdgeTypes = {
-  Arc: ArcEdge,
-}

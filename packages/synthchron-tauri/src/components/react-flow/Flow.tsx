@@ -3,9 +3,6 @@ import { ReactFlowProvider, ReactFlowInstance } from 'reactflow'
 
 // 👇 you need to import the reactflow styles
 import 'reactflow/dist/style.css'
-import './customNodes/NodeStyle.css'
-import './customEdges/EdgeStyle.css'
-import './sidebar.css'
 
 // 👇 Importing components
 import { Sidebar } from './Sidebar'

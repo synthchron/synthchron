@@ -1,4 +1,7 @@
-import React from 'react'
+import { useCallback } from 'react'
+import { shallow } from 'zustand/shallow'
+import useStore, { RFState } from './flowStore'
+import './sidebar.css'
 
 export const Sidebar = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -7,25 +10,30 @@ export const Sidebar = () => {
     event.dataTransfer.effectAllowed = 'move'
   }
 
+  const selector = useCallback(
+    (state: RFState) => ({
+      nodeTypes: state.processModelFlowConfig.nodeTypes,
+    }),
+    []
+  )
+
+  const { nodeTypes } = useStore(selector, shallow)
+
   return (
     <aside>
       <div className='description'>
         You can drag these nodes to the pane on the right.
       </div>
-      <div
-        className='dndnode input'
-        onDragStart={(event) => onDragStart(event, 'Place')}
-        draggable
-      >
-        Place node
-      </div>
-      <div
-        className='dndnode'
-        onDragStart={(event) => onDragStart(event, 'Transition')}
-        draggable
-      >
-        Transition node
-      </div>
+      {Object.keys(nodeTypes).map((key) => (
+        <div
+          className='dndnode'
+          key={key}
+          onDragStart={(event) => onDragStart(event, key)}
+          draggable
+        >
+          {key}
+        </div>
+      ))}
     </aside>
   )
 }

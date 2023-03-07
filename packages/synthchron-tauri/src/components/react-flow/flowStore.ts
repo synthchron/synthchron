@@ -11,23 +11,16 @@ import {
   OnConnect,
   applyNodeChanges,
   applyEdgeChanges,
-  NodeTypes,
-  EdgeTypes,
-  MarkerType,
 } from 'reactflow'
 
-import {
-  initialNodes,
-  initialEdges,
-  nodeTypes,
-  edgeTypes,
-} from './inititalData'
+import { initialNodes, initialEdges } from './inititalData'
+import { ProcessModelFlowConfig } from './processModels/processModelFlowConfig'
+import { petriNetFlowConfig } from './processModels/petriNet/petriNetFlowConfig'
 
 export type RFState = {
   nodes: Node[]
   edges: Edge[]
-  nodeTypes: NodeTypes
-  edgeTypes: EdgeTypes
+  processModelFlowConfig: ProcessModelFlowConfig
   onNodesChange: OnNodesChange
   onEdgesChange: OnEdgesChange
   onConnect: OnConnect
@@ -42,8 +35,7 @@ const getNodeFromLabel = (nodes: Node[], label: string) => {
 const useStore = create<RFState>((set, get) => ({
   nodes: initialNodes,
   edges: initialEdges,
-  nodeTypes: nodeTypes,
-  edgeTypes: edgeTypes,
+  processModelFlowConfig: petriNetFlowConfig,
   onNodesChange: (changes: NodeChange[]) => {
     set({
       nodes: applyNodeChanges(changes, get().nodes),
@@ -72,22 +64,16 @@ const useStore = create<RFState>((set, get) => ({
     )
       return
 
-    // Checking if it is valid connection for a petri net
-    // TODO: Extract this somewhere else
-    if (sourceNode.type == targetNode.type) {
-      return
-    }
+    const modelSpecificConnection = get().processModelFlowConfig.checkConnect(
+      connection,
+      sourceNode,
+      targetNode
+    )
+
+    if (modelSpecificConnection == null) return
 
     set({
-      edges: addEdge(
-        {
-          ...connection,
-          type: 'Arc',
-          markerEnd: { type: MarkerType.ArrowClosed },
-          data: { weight: 1 },
-        },
-        get().edges
-      ),
+      edges: addEdge(modelSpecificConnection, get().edges),
     })
   },
   addNode: (node: Node) => {
