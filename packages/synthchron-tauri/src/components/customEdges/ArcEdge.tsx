@@ -1,17 +1,25 @@
-import { useCallback } from 'react';
-import { useStore, getBezierPath } from 'reactflow';
-import { getEdgeParams } from './utils';
+import { useCallback } from 'react'
+import { useStore, getBezierPath } from 'reactflow'
+import { getEdgeParams } from './utils'
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 function ArcEdge({ id, source, target, markerEnd, style }) {
-  const sourceNode = useStore(useCallback((store) => store.nodeInternals.get(source), [source]));
-  const targetNode = useStore(useCallback((store) => store.nodeInternals.get(target), [target]));
+  const sourceNode = useStore(
+    useCallback((store) => store.nodeInternals.get(source), [source])
+  )
+  const targetNode = useStore(
+    useCallback((store) => store.nodeInternals.get(target), [target])
+  )
 
   if (!sourceNode || !targetNode) {
-    return null;
+    return null
   }
 
-  const { sx, sy, tx, ty, sourcePos, targetPos } = getEdgeParams(sourceNode, targetNode);
+  const { sx, sy, tx, ty, sourcePos, targetPos } = getEdgeParams(
+    sourceNode,
+    targetNode
+  )
 
   const [edgePath] = getBezierPath({
     sourceX: sx,
@@ -20,18 +28,18 @@ function ArcEdge({ id, source, target, markerEnd, style }) {
     targetPosition: targetPos,
     targetX: tx,
     targetY: ty,
-  });
+  })
 
   return (
     <path
       id={id}
-      className="react-flow__edge-path"
+      className='react-flow__edge-path'
       d={edgePath}
       strokeWidth={5}
       markerEnd={markerEnd}
       style={style}
     />
-  );
+  )
 }
 
-export default ArcEdge;
+export default ArcEdge

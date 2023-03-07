@@ -1,18 +1,18 @@
 export type XESLog = {
-    traces: XESTrace[]
+  traces: XESTrace[]
 }
 
 export type XESTrace = {
-    events: XESEvent[]
+  events: XESEvent[]
 }
 
 export type XESEvent = {
-    attributes: XESAttribute[]
+  attributes: XESAttribute[]
 }
 
 export type XESAttribute = {
-    key: string
-    value: string
+  key: string
+  value: string
 }
 
 // TODO: Add full XES specs

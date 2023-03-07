@@ -1,0 +1,31 @@
+{
+    "printWidth": 80,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "semi": false,
+    "htmlWhitespaceSensitivity": "css",
+    "quoteProps": "as-needed",
+    "jsxSingleQuote": true,
+    "singleQuote": true,
+    "endOfLine": "auto",
+    "overrides": [
+        {
+            "files": "*.css",
+            "options": {
+                "parser": "css"
+            }
+        },
+        {
+            "files": "*.scss",
+            "options": {
+                "parser": "scss"
+            }
+        },
+        {
+            "files": "*.sass",
+            "options": {
+                "parser": "sass"
+            }
+        }
+    ]
+}

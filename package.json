@@ -4,6 +4,12 @@
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {
+    "prepare": "husky install",
+    "turbo": "turbo"
+  },
   "devDependencies": {
+    "husky": "^8.0.3",
+    "turbo": "^1.8.3"
   }
 }
