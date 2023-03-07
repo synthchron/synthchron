@@ -10,6 +10,8 @@ export interface PetriNetPlace {
   name: string
   accepting: (numOfTokens: number) => boolean
   amountOfTokens: number
+  x? : number
+  y? : number
 }
 
 export interface PetriNetTransition {
@@ -17,6 +19,8 @@ export interface PetriNetTransition {
   identifier: string
   weight: number
   name: string
+  x? : number
+  y? : number
 }
 
 export type PetriNetNode = PetriNetPlace | PetriNetTransition

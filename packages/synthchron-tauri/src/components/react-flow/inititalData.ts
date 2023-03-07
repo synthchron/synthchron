@@ -9,19 +9,23 @@ export const initialNodes: Node[] = [
     id: '1',
     type: 'Place',
     position: { x: 0, y: 0 },
-    data: { label: '1', store: 9 },
+    data: { label: '1', store: 9, accepting: (amountOfTokens: number) => true },
   },
   {
     id: '3',
     type: 'Place',
     position: { x: 700, y: 300 },
-    data: { label: '1', store: 0 },
+    data: { label: '1', store: 0, accepting: (amountOfTokens: number) => true },
   },
   {
     id: '4',
     type: 'Place',
     position: { x: 500, y: 500 },
-    data: { label: 'TEST', store: 0 },
+    data: {
+      label: 'TEST',
+      store: 0,
+      accepting: (amountOfTokens: number) => true,
+    },
   },
   {
     id: '5',

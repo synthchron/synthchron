@@ -1,5 +1,7 @@
+import { Button } from '@mui/material'
 import { useCallback } from 'react'
 import { shallow } from 'zustand/shallow'
+import { TransformFlowToSimulator } from '../FlowTransformer'
 import useStore, { RFState } from './flowStore'
 import './sidebar.css'
 
@@ -9,7 +11,9 @@ export const Sidebar = () => {
     event.dataTransfer.setData('application/reactflow', nodeType)
     event.dataTransfer.effectAllowed = 'move'
   }
-
+  const transformTest = () => {
+    console.log(TransformFlowToSimulator(useStore.getState()))
+  }
   const selector = useCallback(
     (state: RFState) => ({
       nodeTypes: state.processModelFlowConfig.nodeTypes,
@@ -34,6 +38,7 @@ export const Sidebar = () => {
           {key}
         </div>
       ))}
+      <Button onClick={transformTest}> Transform </Button>
     </aside>
   )
 }
