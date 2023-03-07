@@ -1,10 +1,16 @@
 import { useCallback } from 'react'
-import { useStore, getBezierPath } from 'reactflow'
+import { useStore, getBezierPath, EdgeProps } from 'reactflow'
 import { getEdgeParams } from './utils'
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-ignore
-function ArcEdge({ id, source, target, markerEnd, style }) {
+import './EdgeStyle.css'
+
+const ArcEdge: React.FC<EdgeProps<unknown>> = ({
+  id,
+  source,
+  target,
+  markerEnd,
+  style,
+}) => {
   const sourceNode = useStore(
     useCallback((store) => store.nodeInternals.get(source), [source])
   )

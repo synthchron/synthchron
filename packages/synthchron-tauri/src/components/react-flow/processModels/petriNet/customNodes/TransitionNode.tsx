@@ -1,5 +1,7 @@
 import { Handle, Position } from 'reactflow'
 
+import './NodeStyle.css'
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const TransitionNode: React.FC<any> = ({ data, isConnectable }) => (
   <>
