@@ -1,4 +1,3 @@
-import { petriNetEngine } from './process-engines/petrinet-engine'
 import {
   Configuration,
   ProcessEngine,
@@ -8,10 +7,14 @@ import {
 } from './types/general'
 import { ProcessModel } from './types/processModel'
 
-const PROCESS_ENGINES = [petriNetEngine]
+//const PROCESS_ENGINES = [petriNetEngine]
 
-export const simulate = (
-  processModel: ProcessModel,
+/* export const simulate = <
+  SpecificProcessModel extends ProcessModel,
+  StateType,
+  ActivityIdentifier
+>(
+  processModel: SpecificProcessModel,
   configuration: Configuration
 ): SimulationResult => {
   // TODO: This currently finds the process engine to use. If we want to make this more flexible, we can add a processEngine field to be specified instead.
@@ -24,13 +27,29 @@ export const simulate = (
       `No process engine found for process model type ${processModel.type}`
     )
 
-  return simulateWithEngine(processModel, configuration, petriNetEngine)
+  return simulateWithEngine(
+    processModel,
+    configuration,
+    processEngine as ProcessEngine<
+      SpecificProcessModel,
+      StateType,
+      ActivityIdentifier
+    >
+  )
 }
-
-export const simulateWithEngine = (
-  processModel: ProcessModel,
+ */
+export const simulateWithEngine = <
+  SpecificProcessModel extends ProcessModel,
+  StateType,
+  ActivityIdentifier
+>(
+  processModel: SpecificProcessModel,
   configuration: Configuration,
-  processEngine: ProcessEngine<unknown, unknown, unknown>
+  processEngine: ProcessEngine<
+    SpecificProcessModel,
+    StateType,
+    ActivityIdentifier
+  >
 ): SimulationResult => {
   // Validate the used engine with the used model
   if (processEngine.processModelType !== processModel.type)
@@ -75,11 +94,19 @@ export const simulateWithEngine = (
   }
 }
 
-const checkTermination = (
-  processModel: ProcessModel,
+const checkTermination = <
+  SpecificProcessModel extends ProcessModel,
+  StateType,
+  ActivityIdentifier
+>(
+  processModel: SpecificProcessModel,
   configuration: Configuration,
-  state: unknown,
-  processEngine: ProcessEngine<unknown, unknown, unknown>,
+  state: StateType,
+  processEngine: ProcessEngine<
+    SpecificProcessModel,
+    StateType,
+    ActivityIdentifier
+  >,
   trace: Trace
 ): TerminationStatus => {
   // Check if the process is accepting (and the minimum number of events has been reached)
