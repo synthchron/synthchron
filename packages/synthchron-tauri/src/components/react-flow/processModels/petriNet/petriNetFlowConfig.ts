@@ -10,8 +10,8 @@ import { ProcessModelFlowConfig } from '../processModelFlowConfig'
 import ArcEdge from './customEdges/ArcEdge'
 import PlaceNode from './customNodes/PlaceNode'
 import TransitionNode from './customNodes/TransitionNode'
-import { PetriNetTransition, ProcessModel } from '@synthchron/simulator'
-import { PetriNetPlace, PetriNetNode } from '@synthchron/simulator'
+import { PetriNetTransition } from '@synthchron/simulator'
+import { PetriNetPlace } from '@synthchron/simulator'
 
 const nodeTypes: NodeTypes = {
   Place: PlaceNode,

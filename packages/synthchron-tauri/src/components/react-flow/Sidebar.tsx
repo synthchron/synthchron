@@ -1,7 +1,7 @@
 import { Button } from '@mui/material'
 import { useCallback } from 'react'
 import { shallow } from 'zustand/shallow'
-import { TransformFlowToSimulator } from '../FlowTransformer'
+import { TransformFlowToSimulator } from '../flowTransformer'
 import useStore, { RFState } from './flowStore'
 import './sidebar.css'
 

@@ -9,13 +9,21 @@ export const initialNodes: Node[] = [
     id: '1',
     type: 'Place',
     position: { x: 0, y: 0 },
-    data: { label: '1', store: 9, accepting: (amountOfTokens: number) => true },
+    data: {
+      label: '1',
+      store: 9,
+      accepting: (_amountOfTokens: number) => true,
+    },
   },
   {
     id: '3',
     type: 'Place',
     position: { x: 700, y: 300 },
-    data: { label: '1', store: 0, accepting: (amountOfTokens: number) => true },
+    data: {
+      label: '1',
+      store: 0,
+      accepting: (_amountOfTokens: number) => true,
+    },
   },
   {
     id: '4',
@@ -24,7 +32,7 @@ export const initialNodes: Node[] = [
     data: {
       label: 'TEST',
       store: 0,
-      accepting: (amountOfTokens: number) => true,
+      accepting: (_amountOfTokens: number) => true,
     },
   },
   {
