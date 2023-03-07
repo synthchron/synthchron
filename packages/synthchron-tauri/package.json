@@ -10,8 +10,8 @@
     "tauri": "tauri",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "lint": "npx eslint src/**/*.ts src/**/*.tsx",
-    "lint:fix": "npx eslint --fix src/**/*.ts src/**/*.tsx"
+    "lint": "npx eslint src --ext .ts --ext .tsx",
+    "lint:fix": "npx eslint src --ext .ts --ext .tsx --fix"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",

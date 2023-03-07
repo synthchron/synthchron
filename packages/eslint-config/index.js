@@ -23,7 +23,7 @@ module.exports = {
     'no-console': 'off',
     'import/prefer-default-export': 'off',
     'no-use-before-define': 'off',
-    'max-len': ['warn', { code: 120 }],
+    'max-len': ['warn', { code: 120, ignoreComments: true }],
     '@typescript-eslint/no-unused-vars': [
       'warn', // or "error"
       {
@@ -32,7 +32,8 @@ module.exports = {
         caughtErrorsIgnorePattern: '^_',
       },
     ],
-    "react/react-in-jsx-scope": "off",
+    'react/react-in-jsx-scope': 'off',
+    'react/prop-types': 'off',
   },
   settings: {
     react: {

@@ -4,6 +4,10 @@
   "main": "index.js",
   "author": "Lennart Mischnaewski",
   "license": "MIT",
+  "scripts": {
+    "lint": "npx eslint index.js",
+    "lint:fix": "npx eslint index.js --fix"
+  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.54.0",
     "@typescript-eslint/parser": "^5.54.0",
