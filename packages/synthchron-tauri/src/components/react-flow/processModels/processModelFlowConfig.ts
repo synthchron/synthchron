@@ -1,4 +1,10 @@
-import { EdgeTypes, NodeTypes, Node, Connection } from 'reactflow'
+import { ProcessModel } from '@synthchron/simulator'
+import { EdgeTypes, NodeTypes, Node, Connection, Edge } from 'reactflow'
+
+type RFStateInit = {
+  nodes: Node[]
+  edges: Edge[]
+}
 
 export type ProcessModelFlowConfig = {
   nodeTypes: NodeTypes
@@ -8,4 +14,5 @@ export type ProcessModelFlowConfig = {
     sourceNode: Node,
     targetNode: Node
   ) => Connection | null
+  generateFlow: (processModel: ProcessModel) => RFStateInit
 }

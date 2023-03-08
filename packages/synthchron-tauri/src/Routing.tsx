@@ -9,7 +9,7 @@ export const Routing: React.FC = () => {
     <Routes>
       <Route index element={<MainMenuPage />} />
       <Route path='editor/' element={<EditorPage />}>
-        <Route path=':processmodelid/' element={<EditorPage />} />
+        <Route path=':projectId/' element={<EditorPage />} />
       </Route>
       <Route path='debug/' element={<Debug />} />
       <Route path='*' element={<NotFoundPage />} />
