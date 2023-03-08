@@ -9,16 +9,6 @@
     min-height: 100px;
   }
 
-  
-.react-flow__node-Transitions {
-    font-size: 12px;
-    background: #eee;
-    border: 1px solid #000000;
-    border-radius: 5px;
-    text-align: center;
-  }
-
-
 .token {
     background: red;
     border: 1px solid #000000;
