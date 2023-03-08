@@ -5,30 +5,38 @@ import {
   CardContent,
   Typography,
 } from '@mui/material'
-import { ProcessModel } from '@synthchron/simulator'
+import moment from 'moment'
+import { Project } from '../types/project'
+import { usePersistentStore } from './common/persistentStore'
 
 interface ProjectCardProps {
-  processModel: ProcessModel
+  projectId: string
+  project: Project
 }
 
-export const ProjectCard: React.FC<ProjectCardProps> = ({ processModel }) => {
+export const ProjectCard: React.FC<ProjectCardProps> = ({
+  project,
+  projectId,
+}) => {
+  const removeProject = usePersistentStore((state) => state.removeProject)
+
   return (
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color='text.secondary' gutterBottom>
-          {processModel.type}
+          {project.projectModel.type}
         </Typography>
         <Typography variant='h5' component='div'>
-          My Project 1
+          {project.projectName}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color='text.secondary'>
-          {new Date().toLocaleString()}
+          {moment(project.lastEdited).fromNow()}
         </Typography>
       </CardContent>
       <CardActions>
-        <Button href='/editor/processmodelid'>Edit</Button>
+        <Button href={`/editor/${projectId}`}>Edit</Button>
         <Button onClick={() => alert('Not implemented')}>Clone</Button>
-        <Button onClick={() => alert('Not implemented')} color='error'>
+        <Button onClick={() => removeProject(projectId)} color='error'>
           Delete
         </Button>
       </CardActions>
