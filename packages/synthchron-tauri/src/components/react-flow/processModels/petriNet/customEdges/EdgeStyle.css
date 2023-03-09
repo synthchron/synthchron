@@ -27,17 +27,6 @@
     right: -15px;
 }
   
-.react-flow__node-custom {
-    background: #fff;
-    border: 1px solid #1a192b;
-    border-radius: 3px;
-    color: #222;
-    font-size: 12px;
-    padding: 10px;
-    text-align: center;
-    width: 150px;
-}
-    
 .react-flow__edge-path, .react-flow__connection-path {
     stroke: #b1b1b7;
     stroke-width: 2;
