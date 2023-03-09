@@ -6,3 +6,12 @@ export type ProcessModel =
   | PetriNetProcessModel
   | DcrGraphProcessModel
   | FlowchartProcessModel
+
+export type Point = {
+  x: number
+  y: number
+}
+
+export type PositionalNode = {
+  position?: Point
+}
