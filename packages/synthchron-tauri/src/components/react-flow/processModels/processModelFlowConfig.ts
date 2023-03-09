@@ -7,6 +7,7 @@ type RFStateInit = {
 }
 
 export type ProcessModelFlowConfig = {
+  processModelType: string
   nodeTypes: NodeTypes
   edgeTypes: EdgeTypes
   checkConnect: (
@@ -15,4 +16,5 @@ export type ProcessModelFlowConfig = {
     targetNode: Node
   ) => Connection | null
   generateFlow: (processModel: ProcessModel) => RFStateInit
+  serialize: (nodes: Node[], edges: Edge[]) => ProcessModel
 }
