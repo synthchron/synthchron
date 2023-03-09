@@ -28,7 +28,7 @@ const edgeTypes: EdgeTypes = {
 }
 
 const isPlaceNode = (node: PetriNetNode): node is PetriNetPlace =>
-  (node as PetriNetPlace).amountOfTokens !== undefined
+  node.type === 'place'
 
 export const petriNetFlowConfig: ProcessModelFlowConfig = {
   processModelType: 'petri-net',
