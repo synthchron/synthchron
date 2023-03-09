@@ -1,3 +1,4 @@
+import { PositionalNode } from '../processModel'
 export interface PetriNetProcessModel {
   type: 'petri-net'
   nodes: PetriNetNode[]
@@ -19,7 +20,7 @@ export interface PetriNetTransition {
   name: string
 }
 
-export type PetriNetNode = PetriNetPlace | PetriNetTransition
+export type PetriNetNode = PositionalNode & (PetriNetPlace | PetriNetTransition)
 
 export interface PetriNetEdge {
   multiplicity: number

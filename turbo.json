@@ -5,7 +5,7 @@
       "dependsOn": ["^test"]
     },
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["lint", "^build"],
       "outputs": ["/dist/**"]
     },
     "build:tauri": {

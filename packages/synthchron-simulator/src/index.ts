@@ -8,3 +8,5 @@ export * from './types/processModel'
 export * from './model-examples/petriNetExamples'
 
 export * from './process-engines/petrinet-engine'
+
+export * from './types/processModelTypes/petriNetTypes'
