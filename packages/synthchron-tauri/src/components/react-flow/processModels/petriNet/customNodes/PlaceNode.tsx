@@ -1,4 +1,4 @@
-import { Handle, Node, NodeProps, Position } from 'reactflow'
+import { Handle, NodeProps, Position } from 'reactflow'
 
 import './NodeStyle.css'
 
