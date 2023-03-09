@@ -22,18 +22,43 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 
   return (
     <Card sx={{ minWidth: 275 }}>
-      <CardContent>
-        <Typography sx={{ fontSize: 14 }} color='text.secondary' gutterBottom>
+      <CardContent
+        sx={{
+          height: 150,
+        }}
+      >
+        <Typography
+          sx={{ fontSize: 14, textTransform: 'capitalize' }}
+          color='text.secondary'
+          gutterBottom
+        >
           {project.projectModel.type}
         </Typography>
-        <Typography variant='h5' component='div'>
+        <Typography variant='h5' component='div' noWrap>
           {project.projectName}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color='text.secondary'>
+          {/* {moment(project.lastEdited).fromNow()} */}
           {moment(project.lastEdited).fromNow()}
         </Typography>
+        <Typography
+          sx={{
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: '-webkit-box',
+            WebkitLineClamp: '3',
+            WebkitBoxOrient: 'vertical',
+          }}
+          variant='body2'
+        >
+          {project.projectDescription}
+        </Typography>
       </CardContent>
-      <CardActions>
+      <CardActions
+        style={{
+          alignSelf: 'flex-end',
+        }}
+      >
         <Button href={`/editor/${projectId}`}>Edit</Button>
         <Button onClick={() => alert('Not implemented')}>Clone</Button>
         <Button onClick={() => removeProject(projectId)} color='error'>

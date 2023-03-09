@@ -33,9 +33,9 @@ export const MainMenuPage = () => {
           }}
         />
         <Grid item justifyContent={'center'} xs={12}>
-          <Grid container justifyContent={'center'} spacing={2} xs={12}>
+          <Grid container justifyContent={'center'} spacing={2}>
             <Grid item xs={9}>
-              <Grid container spacing={2} xs={12}>
+              <Grid container spacing={2}>
                 <Grid item xs={4}>
                   <IconButton
                     color='primary'
@@ -43,7 +43,7 @@ export const MainMenuPage = () => {
                     onClick={() => {
                       addProject({
                         projectName: faker.animal.bird(),
-                        projectDescription: 'This is a project',
+                        projectDescription: faker.lorem.lines(3),
                         projectModel: petriNet1,
                         created: new Date().toJSON(),
                         lastEdited: new Date().toJSON(),

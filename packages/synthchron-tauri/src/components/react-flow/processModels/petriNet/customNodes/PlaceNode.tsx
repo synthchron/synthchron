@@ -12,25 +12,25 @@ function PlaceNode({ data, isConnectable }) {
         <Handle
           type='source'
           position={Position.Top}
-          id='a'
+          id='top'
           isConnectable={isConnectable}
         />
         <Handle
           type='source'
           position={Position.Bottom}
-          id='b'
+          id='bottom'
           isConnectable={isConnectable}
         />
         <Handle
           type='source'
           position={Position.Right}
-          id='c'
+          id='right'
           isConnectable={isConnectable}
         />
         <Handle
           type='source'
           position={Position.Left}
-          id='d'
+          id='left'
           isConnectable={isConnectable}
         />
       </div>
