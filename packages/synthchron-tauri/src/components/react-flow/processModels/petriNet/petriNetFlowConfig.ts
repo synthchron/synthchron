@@ -54,9 +54,9 @@ export const petriNetFlowConfig: ProcessModelFlowConfig = {
     nodes: (processModel as PetriNetProcessModel).nodes.map((node) => ({
       id: node.identifier,
       type: isPlaceNode(node) ? 'Place' : 'Transition',
-      position: {
-        x: 0,
-        y: 0,
+      position: (node as PetriNetNode).position ?? {
+        x: Math.random() * 500 - 250,
+        y: Math.random() * 500 - 250,
       },
       data: {
         label: node.name,

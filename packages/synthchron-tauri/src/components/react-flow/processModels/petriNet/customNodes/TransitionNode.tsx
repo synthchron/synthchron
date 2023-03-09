@@ -2,14 +2,18 @@ import { Handle, NodeProps, Position } from 'reactflow'
 
 import './NodeStyle.css'
 
+const config = {
+  width: 5,
+  height: 100,
+  color: '#eee',
+}
+
 export const TransitionNode: React.FC<NodeProps> = ({
   data,
   selected,
   isConnectable,
 }) => {
-  const width = 10
-  const height = 200
-  const color = '#eee'
+  const { width, height, color } = config
 
   /* const shape = useShape({
     type: data?.shape,
@@ -59,6 +63,7 @@ export const TransitionNode: React.FC<NodeProps> = ({
           left: 0,
           width: '100%',
           height: '100%',
+          pointerEvents: 'none',
         }}
       >
         <div

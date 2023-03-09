@@ -32,7 +32,6 @@ export const EditorPage = () => {
       }}
     >
       <CustomAppBar />
-      <div>Current project ID: {projectId}</div>
       <DragAndDropWrapper />
     </Box>
   )
