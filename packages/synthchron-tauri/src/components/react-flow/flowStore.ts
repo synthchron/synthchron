@@ -25,6 +25,11 @@ export type RFState = {
   onEdgesChange: OnEdgesChange
   onConnect: OnConnect
   addNode: (node: Node) => void
+  initializeFlow: (
+    nodes: Node[],
+    edges: Edge[],
+    config: ProcessModelFlowConfig
+  ) => void
 }
 
 const getNodeFromLabel = (nodes: Node[], label: string) => {
@@ -79,6 +84,17 @@ const useStore = create<RFState>((set, get) => ({
   addNode: (node: Node) => {
     set({
       nodes: [...get().nodes, node],
+    })
+  },
+  initializeFlow: (
+    nodes: Node[],
+    edges: Edge[],
+    config: ProcessModelFlowConfig
+  ) => {
+    set({
+      nodes: nodes,
+      edges: edges,
+      processModelFlowConfig: config,
     })
   },
 }))

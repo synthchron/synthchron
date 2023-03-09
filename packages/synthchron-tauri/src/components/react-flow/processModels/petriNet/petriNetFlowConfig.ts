@@ -1,17 +1,22 @@
+import { ProcessModel } from '@synthchron/simulator'
+import {
+  PetriNetProcessModel,
+  PetriNetPlace,
+  PetriNetNode,
+  PetriNetTransition,
+} from '@synthchron/simulator/src/types/processModelTypes/petriNetTypes'
 import {
   Connection,
+  Edge,
   EdgeTypes,
   MarkerType,
   Node,
-  Edge,
   NodeTypes,
 } from 'reactflow'
 import { ProcessModelFlowConfig } from '../processModelFlowConfig'
 import ArcEdge from './customEdges/ArcEdge'
 import PlaceNode from './customNodes/PlaceNode'
 import TransitionNode from './customNodes/TransitionNode'
-import { PetriNetTransition } from '@synthchron/simulator'
-import { PetriNetPlace } from '@synthchron/simulator'
 
 const nodeTypes: NodeTypes = {
   Place: PlaceNode,
@@ -21,6 +26,9 @@ const nodeTypes: NodeTypes = {
 const edgeTypes: EdgeTypes = {
   Arc: ArcEdge,
 }
+
+const isPlaceNode = (node: PetriNetNode): node is PetriNetPlace =>
+  node.type === 'place'
 
 export const petriNetFlowConfig: ProcessModelFlowConfig = {
   processModelType: 'petri-net',
@@ -42,6 +50,30 @@ export const petriNetFlowConfig: ProcessModelFlowConfig = {
       data: { weight: 1 },
     }
   },
+  generateFlow: (processModel: ProcessModel) => ({
+    nodes: (processModel as PetriNetProcessModel).nodes.map((node) => ({
+      id: node.identifier,
+      type: isPlaceNode(node) ? 'Place' : 'Transition',
+      position: (node as PetriNetNode).position ?? {
+        x: Math.random() * 500 - 250,
+        y: Math.random() * 500 - 250,
+      },
+      data: {
+        label: node.name,
+        store: isPlaceNode(node) ? node.amountOfTokens : undefined,
+      },
+    })),
+    edges: (processModel as PetriNetProcessModel).edges.map((edge) => ({
+      id: `e${edge.source}-${edge.target}`,
+      type: 'Arc',
+      source: edge.source,
+      target: edge.target,
+      sourceHandle: 'left',
+      targetHandle: 'left',
+      markerEnd: { type: MarkerType.ArrowClosed },
+      data: { weight: edge.multiplicity },
+    })),
+  }),
   serialize: (nodes: Node[], edges: Edge[]) => {
     const simulatorNodes = nodes.map((node) => {
       const identifier = node.id
