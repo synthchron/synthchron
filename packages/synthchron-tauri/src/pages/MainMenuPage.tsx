@@ -7,17 +7,6 @@ import AddCircleIcon from '@mui/icons-material/AddCircle'
 import { faker } from '@faker-js/faker'
 
 export const MainMenuPage = () => {
-  /* const projects: ProcessModel[] = [
-    petriNet1,
-    petriNet2,
-    petriNet1,
-    petriNet2,
-    petriNet1,
-    petriNet2,
-    petriNet1,
-    petriNet2,
-  ] */
-
   const projects = usePersistentStore((state) => state.projects)
   const addProject = usePersistentStore((state) => state.addProject)
 
