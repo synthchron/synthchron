@@ -1,5 +1,6 @@
 import { Button } from '@mui/material'
 import { useCallback } from 'react'
+import { useParams } from 'react-router'
 import { shallow } from 'zustand/shallow'
 import { transformFlowToSimulator } from '../flowTransformer'
 import useStore, { RFState } from './flowStore'
@@ -17,11 +18,14 @@ export const Sidebar = () => {
   const selector = useCallback(
     (state: RFState) => ({
       nodeTypes: state.processModelFlowConfig.nodeTypes,
+      saveFlow: state.saveFlow,
     }),
     []
   )
 
-  const { nodeTypes } = useStore(selector, shallow)
+  const { nodeTypes, saveFlow } = useStore(selector, shallow)
+
+  const { projectId } = useParams<{ projectId: string }>()
 
   return (
     <aside>
@@ -39,6 +43,7 @@ export const Sidebar = () => {
         </div>
       ))}
       <Button onClick={transformTest}> Transform </Button>
+      <Button onClick={() => projectId && saveFlow(projectId)}>Save</Button>
     </aside>
   )
 }
