@@ -1,41 +1,77 @@
-import { Handle, Position } from 'reactflow'
+import { Handle, Node, NodeProps, Position } from 'reactflow'
 
 import './NodeStyle.css'
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-ignore
-function PlaceNode({ data, isConnectable }) {
+const config = {
+  diameter: 50,
+  color: '#eee',
+}
+
+export const PlaceNode: React.FC<NodeProps> = ({ data, isConnectable }) => {
   return (
-    <>
-      <div className='node-label'>{data.label}</div>
+    <div
+      style={{
+        fontSize: '12px',
+        background: '#eee',
+        border: '1px solid #000000',
+        borderRadius: '50px',
+        textAlign: 'center',
+        color: 'red',
+        minWidth: config.diameter,
+        minHeight: config.diameter,
+      }}
+    >
       <div className='handleContainer'>
         <Handle
           type='source'
           position={Position.Top}
-          id='a'
+          id='top'
           isConnectable={isConnectable}
         />
         <Handle
           type='source'
           position={Position.Bottom}
-          id='b'
+          id='bottom'
           isConnectable={isConnectable}
         />
         <Handle
           type='source'
           position={Position.Right}
-          id='c'
+          id='right'
           isConnectable={isConnectable}
         />
         <Handle
           type='source'
           position={Position.Left}
-          id='d'
+          id='left'
           isConnectable={isConnectable}
         />
       </div>
-      <label htmlFor='text'>{data.store}</label>
-    </>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'absolute',
+          top: -config.diameter / 2 - 25,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          pointerEvents: 'none',
+        }}
+      >
+        <div
+          style={{
+            fontFamily: 'monospace',
+            fontWeight: 'bold',
+            color: '#222',
+            fontSize: 12,
+          }}
+        >
+          {data?.label}
+        </div>
+      </div>
+    </div>
   )
 }
 
