@@ -1,10 +1,12 @@
+import { Point } from '../processModel'
+
 export interface DcrGraphProcessModel {
   type: 'dcr-graph'
   nodes: DcrGraphNode[]
   edges: DcrGraphEdge[]
 }
 
-export interface DcrGraphNode {
+export type DcrGraphNode = Point & {
   label: string
   included: boolean
   pending: boolean
