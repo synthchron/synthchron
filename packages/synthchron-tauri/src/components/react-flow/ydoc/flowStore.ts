@@ -56,7 +56,7 @@ export const useFlowStore = create<RFState>((set, get) => ({
       yDoc.destroy()
     }
     const webrtcProvider = new WebrtcProvider(room, yDoc, {
-      signaling: ['ws://94.16.117.1:4444/'],
+      signaling: ['wss://netcup.lenny.codes/signaling/'],
       peerOpts: {
         config: {
           iceServers: [
