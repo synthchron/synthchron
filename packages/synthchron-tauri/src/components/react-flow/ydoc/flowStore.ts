@@ -93,6 +93,7 @@ export const useFlowStore = create<RFState>((set, get) => ({
 
     webrtcProvider.awareness.setLocalStateField('user', {
       name: faker.animal.fish(),
+      color: faker.color.rgb(),
     })
 
     set({

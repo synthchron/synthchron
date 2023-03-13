@@ -1,5 +1,6 @@
 import { useStore } from 'reactflow'
 import { useFlowStore } from './ydoc/flowStore'
+import GpsFixedIcon from '@mui/icons-material/GpsFixed'
 
 export const AwarenessCursors = () => {
   const collaboratorStates = useFlowStore((state) => state.collaboratorStates)
@@ -34,10 +35,11 @@ export const AwarenessCursors = () => {
                   width: 10,
                   height: 10,
                   borderRadius: '50%',
-                  backgroundColor: 'red',
                   transform: 'translate(-50%, -50%)',
                 }}
-              />
+              >
+                <GpsFixedIcon htmlColor={state.user.color} />
+              </div>
             )
           })}
     </div>
