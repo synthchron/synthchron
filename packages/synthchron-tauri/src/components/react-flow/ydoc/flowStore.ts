@@ -50,18 +50,18 @@ export const yDocState = {
 export const useFlowStore = create<RFState>((set, get) => ({
   // YDoc state for collaboration
   yWebRTCProvider: null,
-  connectRoom: (_room: string, keepChanges = true) => {
+  connectRoom: (room: string, keepChanges = true) => {
     get().yWebRTCProvider?.disconnect()
     if (!keepChanges) {
       yDoc.destroy()
     }
-    const webrtcProvider = new WebrtcProvider(_room, yDoc, {
-      signaling: ['wss://94.16.117.1:4444/'],
+    const webrtcProvider = new WebrtcProvider(room, yDoc, {
+      signaling: ['ws://94.16.117.1:4444/'],
       peerOpts: {
         config: {
           iceServers: [
             { urls: 'stun:stun.l.google.com:19302' },
-            { urls: 'stun:global.stun.twilio.com:3478?transport=udp' },
+            //{ urls: 'stun:global.stun.twilio.com:3478?transport=udp' },
             {
               urls: 'turn:94.16.117.1:3478',
               username: 'blue',
@@ -114,13 +114,14 @@ export const useFlowStore = create<RFState>((set, get) => ({
 
     if (modelSpecificConnection == null) return
 
-    const { source, sourceHandle, target, targetHandle } = connection
+    const { source, sourceHandle, target, targetHandle } =
+      modelSpecificConnection
     const id = `edge-${source}${sourceHandle || ''}-${target}${
       targetHandle || ''
     }`
     yDocState.edgesMap.set(id, {
       id,
-      ...connection,
+      ...modelSpecificConnection,
     } as Edge)
   },
   addNode: (node: Node) => {
