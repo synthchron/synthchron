@@ -51,7 +51,7 @@ export const useFlowStore = create<RFState>((set, get) => ({
   // YDoc state for collaboration
   yWebRTCProvider: null,
   connectRoom: (room: string, keepChanges = true) => {
-    get().yWebRTCProvider?.disconnect()
+    get().yWebRTCProvider?.destroy()
     if (!keepChanges) {
       yDoc.destroy()
     }
