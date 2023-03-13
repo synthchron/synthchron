@@ -14,10 +14,23 @@ import { Doc } from 'yjs'
 import { WebrtcProvider } from 'y-webrtc'
 import { onNodesChanges } from './onNodesChange'
 import { onEdgesChange } from './onEdgesChange'
+import { Awareness } from 'y-protocols/awareness'
+import { faker } from '@faker-js/faker'
+
+type AwarenessState = any
 
 export type RFState = {
   // YDoc state for collaboration
   yWebRTCProvider: WebrtcProvider | null
+  awareness: Awareness | null
+  collaboratorStates: Map<
+    number,
+    {
+      [x: string]: AwarenessState
+    }
+  >
+  awarenessState: AwarenessState
+  setAwarenessState: (state: Partial<AwarenessState>) => void
   connectRoom: (room: string, keepChanges: boolean) => void
   disconnectRoom: () => void
   // React Flow state
@@ -50,7 +63,7 @@ export const yDocState = {
 export const useFlowStore = create<RFState>((set, get) => ({
   // YDoc state for collaboration
   yWebRTCProvider: null,
-  connectRoom: (room: string, keepChanges = true) => {
+  connectRoom: async (room: string, keepChanges = true) => {
     get().yWebRTCProvider?.destroy()
     if (!keepChanges) {
       yDoc.destroy()
@@ -71,8 +84,30 @@ export const useFlowStore = create<RFState>((set, get) => ({
         },
       },
     })
+    webrtcProvider.awareness.on('change', () => {
+      useFlowStore.setState({
+        collaboratorStates: new Map(webrtcProvider.awareness.getStates()),
+        awarenessState: webrtcProvider.awareness.getLocalState(),
+      })
+    })
+
+    webrtcProvider.awareness.setLocalStateField('user', {
+      name: faker.animal.fish(),
+    })
+
     set({
       yWebRTCProvider: webrtcProvider,
+      awareness: webrtcProvider.awareness,
+    })
+  },
+  awareness: null,
+  collaboratorStates: new Map(),
+  awarenessState: {},
+  setAwarenessState: (state: Partial<AwarenessState>) => {
+    const awareness = get().awareness
+    awareness?.setLocalStateField('user', {
+      ...awareness?.getLocalState()?.user,
+      ...state,
     })
   },
   disconnectRoom: () => {

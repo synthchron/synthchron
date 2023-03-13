@@ -20,14 +20,19 @@ export const Sidebar = () => {
       connectRoom: state.connectRoom,
       disconnectRoom: state.disconnectRoom,
       yWebRTCProvider: state.yWebRTCProvider,
+      awareness: state.awareness,
+      collaboratorStates: state.collaboratorStates,
     }),
     []
   )
 
-  const { nodeTypes, connectRoom, yWebRTCProvider } = useFlowStore(
-    selector,
-    shallow
-  )
+  const {
+    nodeTypes,
+    connectRoom,
+    yWebRTCProvider,
+    awareness,
+    collaboratorStates,
+  } = useFlowStore(selector, shallow)
 
   return (
     <aside>
@@ -47,6 +52,10 @@ export const Sidebar = () => {
       <Button onClick={transformTest}> Transform </Button>
       <Button onClick={() => connectRoom('myroom', true)}> Connect </Button>
       Is connected : {yWebRTCProvider !== null ? 'true' : 'false'}
+      Peers :{' '}
+      {awareness !== null
+        ? JSON.stringify(Object.fromEntries(collaboratorStates))
+        : '[]'}
     </aside>
   )
 }

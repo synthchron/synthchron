@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { usePersistentStore } from '../components/common/persistentStore'
 import { CustomAppBar } from '../components/CustomAppBar'
-import { DragAndDropWrapper } from '../components/react-flow/Flow'
+import { DragAndDropWrapper } from '../components/react-flow/DragAndDropWrapper'
 import { useFlowStore } from '../components/react-flow/ydoc/flowStore'
 import { petriNetFlowConfig } from '../components/react-flow/processModels/petriNet/petriNetFlowConfig'
 
