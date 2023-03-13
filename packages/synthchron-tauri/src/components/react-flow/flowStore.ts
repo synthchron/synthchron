@@ -21,6 +21,7 @@ export type RFState = {
   nodes: Node[]
   edges: Edge[]
   processModelFlowConfig: ProcessModelFlowConfig
+  selectedElement: Node | Edge | undefined
   onNodesChange: OnNodesChange
   onEdgesChange: OnEdgesChange
   onConnect: OnConnect
@@ -30,6 +31,7 @@ export type RFState = {
     edges: Edge[],
     config: ProcessModelFlowConfig
   ) => void
+  selectElement: (elem: Node | Edge | undefined) => void
 }
 
 const getNodeFromLabel = (nodes: Node[], label: string) => {
@@ -41,6 +43,7 @@ const useStore = create<RFState>((set, get) => ({
   nodes: initialNodes,
   edges: initialEdges,
   processModelFlowConfig: petriNetFlowConfig,
+  selectedElement: undefined,
   onNodesChange: (changes: NodeChange[]) => {
     set({
       nodes: applyNodeChanges(changes, get().nodes),
@@ -95,6 +98,11 @@ const useStore = create<RFState>((set, get) => ({
       nodes: nodes,
       edges: edges,
       processModelFlowConfig: config,
+    })
+  },
+  selectElement: (elem: Node | Edge | undefined) => {
+    set({
+      selectedElement: elem,
     })
   },
 }))
