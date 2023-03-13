@@ -9,6 +9,7 @@ import { Sidebar } from './Sidebar'
 import { StateFlow } from './StateFlow'
 import useStore, { RFState } from './flowStore'
 import { shallow } from 'zustand/shallow'
+import { PropertiesWindow } from './PropertiesWindow'
 
 //Drag and drop setup
 let id = 0
@@ -70,6 +71,7 @@ export const DragAndDropWrapper = () => {
             onDragOver={onDragOver}
           />
         </div>
+        <PropertiesWindow />
       </ReactFlowProvider>
     </div>
   )
