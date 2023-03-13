@@ -7,7 +7,7 @@ import 'reactflow/dist/style.css'
 // 👇 Importing components
 import { Sidebar } from './Sidebar'
 import { StateFlow } from './StateFlow'
-import useStore, { RFState } from './flowStore'
+import { RFState, useFlowStore } from './ydoc/flowStore'
 import { shallow } from 'zustand/shallow'
 
 //Drag and drop setup
@@ -34,7 +34,7 @@ export const DragAndDropWrapper = () => {
     }),
     []
   )
-  const { addNode } = useStore(selector, shallow)
+  const { addNode } = useFlowStore(selector, shallow)
 
   const onDrop: React.DragEventHandler<HTMLDivElement> = (
     event: React.DragEvent<HTMLDivElement>

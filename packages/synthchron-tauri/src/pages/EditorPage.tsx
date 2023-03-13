@@ -4,13 +4,13 @@ import { useParams } from 'react-router-dom'
 import { usePersistentStore } from '../components/common/persistentStore'
 import { CustomAppBar } from '../components/CustomAppBar'
 import { DragAndDropWrapper } from '../components/react-flow/Flow'
-import useStore from '../components/react-flow/flowStore'
+import { useFlowStore } from '../components/react-flow/ydoc/flowStore'
 import { petriNetFlowConfig } from '../components/react-flow/processModels/petriNet/petriNetFlowConfig'
 
 export const EditorPage = () => {
   const { projectId } = useParams<{ projectId: string }>()
 
-  const initializeFlow = useStore((state) => state.initializeFlow)
+  const initializeFlow = useFlowStore((state) => state.initializeFlow)
   const projects = usePersistentStore((state) => state.projects)
 
   useEffect(() => {

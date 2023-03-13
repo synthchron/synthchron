@@ -9,7 +9,7 @@ import { shallow } from 'zustand/shallow'
 
 import 'reactflow/dist/style.css'
 
-import useStore, { RFState } from './flowStore'
+import { RFState, useFlowStore } from './ydoc/flowStore'
 
 const selector = (state: RFState) => ({
   nodes: state.nodes,
@@ -40,7 +40,7 @@ export const StateFlow: React.FC<StateFlowProps> = ({
     onNodesChange,
     onEdgesChange,
     onConnect,
-  } = useStore(selector, shallow)
+  } = useFlowStore(selector, shallow)
 
   const fitViewOptions = { padding: 0.2 }
 
