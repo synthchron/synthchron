@@ -17,15 +17,4 @@ export type ProcessModelFlowConfig = {
   ) => Connection | null
   generateFlow: (processModel: ProcessModel) => RFStateInit
   serialize: (nodes: Node[], edges: Edge[]) => ProcessModel
-  temp: (element: Node | Edge) => Properties[]
 }
-
-type TextFields = {
-  type: 'TextFields'
-  label: string
-}
-type NumberFields = {
-  type: 'NumberFields'
-  number: number
-} //Change identifiers!!!
-type Properties = TextFields | NumberFields
