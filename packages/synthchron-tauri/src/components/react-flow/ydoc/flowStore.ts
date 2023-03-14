@@ -79,10 +79,10 @@ export const useFlowStore: UseBoundStore<StoreApi<RFState>> = create<RFState>(
         yDocState.nodesMap.clear()
         yDocState.edgesMap.clear()
         yDocState.processModelType.delete(0, yDocState.processModelType.length)
-      } else {
+      } /* else { // This feature would wait for the document to be loaded before allowing changes, but it might now work at this point
         yDoc.autoLoad = false
         yDoc.shouldLoad = false
-      }
+      } */
       const webrtcProvider = new WebrtcProvider(room, yDoc, {
         signaling: ['wss://netcup.lenny.codes/signaling/'],
         peerOpts: {
