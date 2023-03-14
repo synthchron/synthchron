@@ -12,7 +12,7 @@ export const Routing: React.FC = () => {
       <Route path='editor/' element={<EditorPage />}>
         <Route path=':projectId/' element={<EditorPage />} />
       </Route>
-      <Route path='collaboration/' element={<CollaborationPage />}>
+      <Route path='collaborate/' element={<CollaborationPage />}>
         <Route path=':roomId/' element={<CollaborationPage />} />
       </Route>
       <Route path='debug/' element={<Debug />} />
