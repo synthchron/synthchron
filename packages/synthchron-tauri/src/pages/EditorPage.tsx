@@ -19,6 +19,7 @@ export const EditorPage = () => {
 
   useHotkeys(
     'ctrl+s',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (event: any) => {
       event.preventDefault()
       if (projectId !== undefined) saveFlow(projectId)
