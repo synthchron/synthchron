@@ -1,5 +1,6 @@
 import { Avatar, Button, Chip } from '@mui/material'
 import { useCallback } from 'react'
+import { useParams } from 'react-router'
 import { shallow } from 'zustand/shallow'
 import { transformFlowToSimulator } from '../flowTransformer'
 import { RFState, useFlowStore } from './ydoc/flowStore'
@@ -23,6 +24,7 @@ export const Sidebar = () => {
       awareness: state.awareness,
       collaboratorStates: state.collaboratorStates,
       awarenessState: state.awarenessState,
+      saveFlow: state.saveFlow,
     }),
     []
   )
@@ -34,7 +36,10 @@ export const Sidebar = () => {
     awareness,
     collaboratorStates,
     awarenessState,
+    saveFlow,
   } = useFlowStore(selector, shallow)
+
+  const { projectId } = useParams<{ projectId: string }>()
 
   return (
     <aside>
@@ -83,6 +88,7 @@ export const Sidebar = () => {
           )}
         </>
       )}
+      <Button onClick={() => projectId && saveFlow(projectId)}>Save</Button>
     </aside>
   )
 }

@@ -88,6 +88,7 @@ export const petriNetFlowConfig: ProcessModelFlowConfig = {
           name,
           accepting: node.data.accepting,
           amountOfTokens: node.data.store,
+          position: node.position,
         } as PetriNetPlace
       } else {
         return {
@@ -95,6 +96,7 @@ export const petriNetFlowConfig: ProcessModelFlowConfig = {
           type,
           weight: node.data.store,
           name,
+          position: node.position,
         } as PetriNetTransition
       }
     })
