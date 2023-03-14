@@ -19,7 +19,7 @@ export const EditorPage = () => {
 
   useHotkeys(
     'ctrl+s',
-    (event) => {
+    (event: any) => {
       event.preventDefault()
       if (projectId !== undefined) saveFlow(projectId)
     },

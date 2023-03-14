@@ -47,7 +47,7 @@ export const DragAndDropWrapper = () => {
       y: event.clientY - reactFlowBounds.top,
     })
     const newNode = {
-      id: '',
+      id: '', // Will be overwritten by addNode
       type: type,
       position,
       data: { label: `${type == 'place' ? 'p' : 't'}`, store: 0 },

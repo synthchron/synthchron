@@ -1,12 +1,16 @@
 import { Box, TextField, Typography } from '@mui/material'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { checkRoomIsEmpty } from '../components/react-flow/ydoc/checkRoom'
+import { useFlowStore } from '../components/react-flow/ydoc/flowStore'
 
 export const CollaborationPage = () => {
   const [roomId, setRoomId] = useState<string>('')
-  const [isEmpty, setIsEmpty] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
   const [checking, setChecking] = useState<boolean>(false)
+
+  const navigate = useNavigate()
+  const connectRoom = useFlowStore((state) => state.connectRoom)
 
   return (
     <Box
@@ -63,8 +67,8 @@ export const CollaborationPage = () => {
               setChecking(false)
               if (!isEmpty) {
                 // TODO: Redirect to editor
-                console.log('Redirect to editor')
-                setError('')
+                connectRoom(roomid, false)
+                navigate('/editor')
               } else {
                 setError('Room does not exist')
               }

@@ -29,6 +29,7 @@
     "react-hotkeys-hook": "^4.3.7",
     "react-router-dom": "^6.9.0",
     "reactflow": "^11.5.6",
+    "uuid": "^9.0.0",
     "vite-plugin-eslint": "^1.8.1",
     "y-protocols": "^1.0.5",
     "y-webrtc": "^10.2.4",

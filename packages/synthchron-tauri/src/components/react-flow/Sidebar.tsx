@@ -88,7 +88,17 @@ export const Sidebar = () => {
           )}
         </>
       )}
-      <Button onClick={() => projectId && saveFlow(projectId)}>Save</Button>
+      <Button
+        onClick={() => {
+          if (projectId) {
+            saveFlow(projectId)
+          } else {
+            console.log('No project id') // TODO: Create project
+          }
+        }}
+      >
+        Save
+      </Button>
     </aside>
   )
 }
