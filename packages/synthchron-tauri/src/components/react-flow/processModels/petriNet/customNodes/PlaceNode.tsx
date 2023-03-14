@@ -1,10 +1,16 @@
 import { Handle, NodeProps, Position } from 'reactflow'
 
-import './NodeStyle.css'
+//import styles from './Nodes.module.scss'
 
 const config = {
   diameter: 50,
   color: '#eee',
+}
+
+const handleStyle = {
+  width: '8px',
+  height: '8px',
+  backgroundColor: '#bbb',
 }
 
 export const PlaceNode: React.FC<NodeProps> = ({ data, isConnectable }) => {
@@ -27,24 +33,40 @@ export const PlaceNode: React.FC<NodeProps> = ({ data, isConnectable }) => {
           position={Position.Top}
           id='top'
           isConnectable={isConnectable}
+          style={{
+            ...handleStyle,
+            top: '-15px',
+          }}
         />
         <Handle
           type='source'
           position={Position.Bottom}
           id='bottom'
           isConnectable={isConnectable}
+          style={{
+            ...handleStyle,
+            bottom: '-15px',
+          }}
         />
         <Handle
           type='source'
           position={Position.Right}
           id='right'
           isConnectable={isConnectable}
+          style={{
+            ...handleStyle,
+            right: '-15px',
+          }}
         />
         <Handle
           type='source'
           position={Position.Left}
           id='left'
           isConnectable={isConnectable}
+          style={{
+            ...handleStyle,
+            left: '-15px',
+          }}
         />
       </div>
       <div

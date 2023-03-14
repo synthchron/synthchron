@@ -181,7 +181,19 @@ export const useFlowStore: UseBoundStore<StoreApi<RFState>> = create<RFState>(
       } as Edge)
     },
     addNode: (node: Node) => {
-      yDocState.nodesMap.set(node.id, node)
+      // Get new node id
+      const newId =
+        Math.max(
+          0,
+          ...Array.from(yDocState.nodesMap.values())
+            .map((node) => parseInt(node.id))
+            .filter((id) => !isNaN(id))
+        ) + 1
+      console.log(newId)
+      yDocState.nodesMap.set(newId.toString(), {
+        ...node,
+        id: newId.toString(),
+      })
     },
     initializeFlow: (
       nodes: Node[],
