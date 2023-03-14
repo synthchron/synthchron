@@ -70,8 +70,10 @@ export const CollaborationPage = () => {
                 setChecking(false)
                 if (!isEmpty) {
                   // TODO: Redirect to editor
-                  connectRoom(roomid, false)
                   navigate('/editor')
+                  setTimeout(() => {
+                    connectRoom(roomid, false)
+                  }, 500)
                 } else {
                   setError('Room does not exist')
                 }

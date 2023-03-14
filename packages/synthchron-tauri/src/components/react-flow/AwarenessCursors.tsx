@@ -21,7 +21,7 @@ export const AwarenessCursors = () => {
     >
       {collaboratorStates &&
         Array.from(collaboratorStates.values())
-          .filter((state) => state.user.y && state.user.x)
+          .filter((state) => state.user && state.user.y && state.user.x)
           .map((state: AwarenessState, idx) => {
             return (
               <div

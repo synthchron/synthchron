@@ -1,4 +1,4 @@
-import { create, StoreApi, UseBoundStore } from 'zustand'
+import { create } from 'zustand'
 import {
   Connection,
   Edge,
@@ -63,163 +63,166 @@ export const yDocState = {
   processModelType: yDoc.getText('processModelType'),
 }
 
-export const undoManager = new UndoManager([
+/* export const undoManager = new UndoManager([
   yDocState.nodesMap,
   yDocState.edgesMap,
 ])
 
+undoManager.on('stack-item-added', (event: any) => {
+  // save the current cursor location on the stack-item
+  console.log('stack-item-added', event)
+}) */
+
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
-export const useFlowStore: UseBoundStore<StoreApi<RFState>> = create<RFState>(
-  (set, get) => ({
-    // YDoc state for collaboration
-    yWebRTCProvider: null,
-    connectRoom: async (room: string, keepChanges = true) => {
-      get().yWebRTCProvider?.destroy()
-      if (!keepChanges) {
-        yDocState.nodesMap.clear()
-        yDocState.edgesMap.clear()
-        yDocState.processModelType.delete(0, yDocState.processModelType.length)
-      } /* else { // This feature would wait for the document to be loaded before allowing changes, but it might now work at this point
+export const useFlowStore = create<RFState>((set, get) => ({
+  // YDoc state for collaboration
+  yWebRTCProvider: null,
+  connectRoom: async (room: string, keepChanges = true) => {
+    get().yWebRTCProvider?.destroy()
+    if (!keepChanges) {
+      yDocState.nodesMap.clear()
+      yDocState.edgesMap.clear()
+      yDocState.processModelType.delete(0, yDocState.processModelType.length)
+    } /* else { // This feature would wait for the document to be loaded before allowing changes, but it might now work at this point
         yDoc.autoLoad = false
         yDoc.shouldLoad = false
       } */
-      const webrtcProvider = new WebrtcProvider(room, yDoc, {
-        signaling: ['wss://netcup.lenny.codes/signaling/'],
-        peerOpts: {
-          config: {
-            iceServers: [
-              { urls: 'stun:stun.l.google.com:19302' },
-              //{ urls: 'stun:global.stun.twilio.com:3478?transport=udp' },
-              {
-                urls: 'turn:94.16.117.1:3478',
-                username: 'blue',
-                credential: 'sunflower',
-              },
-            ],
-          },
+    const webrtcProvider = new WebrtcProvider(room, yDoc, {
+      signaling: ['wss://netcup.lenny.codes/signaling/'],
+      peerOpts: {
+        config: {
+          iceServers: [
+            { urls: 'stun:stun.l.google.com:19302' },
+            //{ urls: 'stun:global.stun.twilio.com:3478?transport=udp' },
+            {
+              urls: 'turn:94.16.117.1:3478',
+              username: 'blue',
+              credential: 'sunflower',
+            },
+          ],
         },
+      },
+    })
+    webrtcProvider.awareness.on('change', () => {
+      const allCollaborators = new Map(webrtcProvider.awareness.getStates())
+      allCollaborators.delete(webrtcProvider.awareness.clientID)
+      useFlowStore.setState({
+        collaboratorStates: allCollaborators,
+        awarenessState: webrtcProvider.awareness.getLocalState(),
       })
-      webrtcProvider.awareness.on('change', () => {
-        const allCollaborators = new Map(webrtcProvider.awareness.getStates())
-        allCollaborators.delete(webrtcProvider.awareness.clientID)
-        useFlowStore.setState({
-          collaboratorStates: allCollaborators,
-          awarenessState: webrtcProvider.awareness.getLocalState(),
-        })
-      })
+    })
 
-      webrtcProvider.awareness.setLocalStateField('user', {
-        name: faker.animal.fish(),
-        color: faker.color.rgb(),
-      })
+    webrtcProvider.awareness.setLocalStateField('user', {
+      name: faker.animal.fish(),
+      color: faker.color.rgb(),
+    })
 
-      set({
-        yWebRTCProvider: webrtcProvider,
-        awareness: webrtcProvider.awareness,
-      })
-    },
-    awareness: null,
-    collaboratorStates: new Map(),
-    awarenessState: {},
-    setAwarenessState: (state: Partial<AwarenessState>) => {
-      const awareness = get().awareness
-      awareness?.setLocalStateField('user', {
-        ...awareness?.getLocalState()?.user,
-        ...state,
-      })
-    },
-    disconnectRoom: () => {
-      get().yWebRTCProvider?.disconnect()
-      set({
-        yWebRTCProvider: null,
-        awareness: null,
-        collaboratorStates: new Map(),
-        awarenessState: {},
-      })
-    },
-    // React Flow state
-    nodes: Array.from(yDocState.nodesMap.values()),
-    edges: Array.from(yDocState.edgesMap.values()),
-    processModelFlowConfig: petriNetFlowConfig, // TODO: Add switch on process model type from ydoc
-    // React Flow actions
-    onNodesChange: onNodesChanges,
-    onEdgesChange: onEdgesChange,
-    onConnect: (connection: Connection) => {
-      if (connection.source == null || connection.target == null) return
+    set({
+      yWebRTCProvider: webrtcProvider,
+      awareness: webrtcProvider.awareness,
+    })
+  },
+  awareness: null,
+  collaboratorStates: new Map(),
+  awarenessState: {},
+  setAwarenessState: (state: Partial<AwarenessState>) => {
+    const awareness = get().awareness
+    awareness?.setLocalStateField('user', {
+      ...awareness?.getLocalState()?.user,
+      ...state,
+    })
+  },
+  disconnectRoom: () => {
+    get().yWebRTCProvider?.disconnect()
+    set({
+      yWebRTCProvider: null,
+      awareness: null,
+      collaboratorStates: new Map(),
+      awarenessState: {},
+    })
+  },
+  // React Flow state
+  nodes: Array.from(yDocState.nodesMap.values()),
+  edges: Array.from(yDocState.edgesMap.values()),
+  processModelFlowConfig: petriNetFlowConfig, // TODO: Add switch on process model type from ydoc
+  // React Flow actions
+  onNodesChange: onNodesChanges,
+  onEdgesChange: onEdgesChange,
+  onConnect: (connection: Connection) => {
+    if (connection.source == null || connection.target == null) return
 
-      const sourceNode = getNodeFromLabel(get().nodes, connection.source)
-      const targetNode = getNodeFromLabel(get().nodes, connection.target)
+    const sourceNode = getNodeFromLabel(get().nodes, connection.source)
+    const targetNode = getNodeFromLabel(get().nodes, connection.target)
 
-      // Checking both nodes exists
-      if (sourceNode == undefined || targetNode == undefined) return
+    // Checking both nodes exists
+    if (sourceNode == undefined || targetNode == undefined) return
 
-      if (
-        // Checking if the connection already exists
-        get().edges.some(
-          (edge) =>
-            edge.source == connection.source && edge.target == connection.target
-        )
+    if (
+      // Checking if the connection already exists
+      get().edges.some(
+        (edge) =>
+          edge.source == connection.source && edge.target == connection.target
       )
-        return
+    )
+      return
 
-      const modelSpecificConnection = get().processModelFlowConfig.checkConnect(
-        connection,
-        sourceNode,
-        targetNode
-      )
+    const modelSpecificConnection = get().processModelFlowConfig.checkConnect(
+      connection,
+      sourceNode,
+      targetNode
+    )
 
-      if (modelSpecificConnection == null) return
+    if (modelSpecificConnection == null) return
 
-      const { source, sourceHandle, target, targetHandle } =
-        modelSpecificConnection
-      const id = `edge-${source}${sourceHandle || ''}-${target}${
-        targetHandle || ''
-      }`
-      yDocState.edgesMap.set(id, {
-        id,
-        ...modelSpecificConnection,
-      } as Edge)
-    },
-    addNode: (node: Node) => {
-      // Get new node id
-      const newId =
-        Math.max(
-          0,
-          ...Array.from(yDocState.nodesMap.values())
-            .map((node) => parseInt(node.id))
-            .filter((id) => !isNaN(id))
-        ) + 1
-      console.log(newId)
-      yDocState.nodesMap.set(newId.toString(), {
-        ...node,
-        id: newId.toString(),
-      })
-    },
-    initializeFlow: (
-      nodes: Node[],
-      edges: Edge[],
-      config: ProcessModelFlowConfig
-    ) => {
-      yDoc.destroy()
-      nodes.forEach((node) => {
-        yDocState.nodesMap.set(node.id, node)
-      })
-      edges.forEach((edge) => {
-        yDocState.edgesMap.set(edge.id, edge)
-      })
-      yDocState.processModelType.insert(0, config.processModelType)
-    },
-    saveFlow: (id: string) => {
-      const processModel: ProcessModel = get().processModelFlowConfig.serialize(
-        get().nodes,
-        get().edges
-      )
-      usePersistentStore.getState().updateProject(id, {
-        projectModel: processModel,
-      })
-    },
-  })
-)
+    const { source, sourceHandle, target, targetHandle } =
+      modelSpecificConnection
+    const id = `edge-${source}${sourceHandle || ''}-${target}${
+      targetHandle || ''
+    }`
+    yDocState.edgesMap.set(id, {
+      id,
+      ...modelSpecificConnection,
+    } as Edge)
+  },
+  addNode: (node: Node) => {
+    // Get new node id
+    const newId =
+      Math.max(
+        0,
+        ...Array.from(yDocState.nodesMap.values())
+          .map((node) => parseInt(node.id))
+          .filter((id) => !isNaN(id))
+      ) + 1
+    console.log(newId)
+    yDocState.nodesMap.set(newId.toString(), {
+      ...node,
+      id: newId.toString(),
+    })
+  },
+  initializeFlow: (
+    nodes: Node[],
+    edges: Edge[],
+    config: ProcessModelFlowConfig
+  ) => {
+    yDoc.destroy()
+    nodes.forEach((node) => {
+      yDocState.nodesMap.set(node.id, node)
+    })
+    edges.forEach((edge) => {
+      yDocState.edgesMap.set(edge.id, edge)
+    })
+    yDocState.processModelType.insert(0, config.processModelType)
+  },
+  saveFlow: (id: string) => {
+    const processModel: ProcessModel = get().processModelFlowConfig.serialize(
+      get().nodes,
+      get().edges
+    )
+    usePersistentStore.getState().updateProject(id, {
+      projectModel: processModel,
+    })
+  },
+}))
 
 const nodeObserver = () => {
   const nodes = Array.from(yDocState.nodesMap.values())

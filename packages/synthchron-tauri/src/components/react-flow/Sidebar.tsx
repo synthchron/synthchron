@@ -67,16 +67,19 @@ export const Sidebar = () => {
         <>
           <br />
           You:
-          <Chip
-            avatar={<Avatar>{awarenessState.user.name.charAt(0)}</Avatar>}
-            color='primary'
-            style={{ backgroundColor: awarenessState.user.color }}
-            label={awarenessState.user.name}
-          />
+          {awarenessState?.user?.name && (
+            <Chip
+              avatar={<Avatar>{awarenessState.user.name.charAt(0)}</Avatar>}
+              color='primary'
+              style={{ backgroundColor: awarenessState.user.color }}
+              label={awarenessState.user.name}
+            />
+          )}
           <br /> <br />
           Peers:
-          {Object.entries(Object.fromEntries(collaboratorStates)).map(
-            ([key, value]) => (
+          {Object.entries(Object.fromEntries(collaboratorStates))
+            .filter(([_key, value]) => value?.user?.name)
+            .map(([key, value]) => (
               <Chip
                 key={key}
                 avatar={<Avatar>{value.user.name.charAt(0)}</Avatar>}
@@ -84,8 +87,7 @@ export const Sidebar = () => {
                 style={{ backgroundColor: value.user.color }}
                 label={value.user.name}
               />
-            )
-          )}
+            ))}
         </>
       )}
       <Button
