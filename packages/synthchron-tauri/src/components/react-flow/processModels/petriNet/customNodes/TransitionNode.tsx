@@ -1,11 +1,17 @@
 import { Handle, NodeProps, Position } from 'reactflow'
 
-import './NodeStyle.css'
+// import './NodeStyle.css'
 
 const config = {
   width: 5,
   height: 100,
   color: '#eee',
+}
+
+const handleStyle = {
+  width: '8px',
+  height: '8px',
+  backgroundColor: '#bbb',
 }
 
 export const TransitionNode: React.FC<NodeProps> = ({
@@ -15,13 +21,6 @@ export const TransitionNode: React.FC<NodeProps> = ({
 }) => {
   const { width, height, color } = config
 
-  /* const shape = useShape({
-    type: data?.shape,
-    width,
-    height,
-    color: data?.color,
-    selected,
-  }) */
   const styles = {
     fill: color,
     strokeWidth: selected ? 2 : 1,
@@ -39,12 +38,20 @@ export const TransitionNode: React.FC<NodeProps> = ({
         position={Position.Right}
         type='source'
         isConnectable={isConnectable}
+        style={{
+          ...handleStyle,
+          right: '-15px',
+        }}
       />
       <Handle
         id='left'
         position={Position.Left}
         type='source'
         isConnectable={isConnectable}
+        style={{
+          ...handleStyle,
+          left: '-15px',
+        }}
       />
       <svg
         style={{ display: 'block', overflow: 'visible' }}

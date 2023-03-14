@@ -1,0 +1,13 @@
+{
+  "name": "@synthchron/webrtc-signaling",
+  "version": "1.0.0",
+  "description": "A signaling server for the yjs webrtc provider",
+  "main": "server.js",
+  "repository": "https://github.com/synthchron/synthchron",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "lib0": "^0.2.42",
+    "ws": "^7.2.0"
+  }
+}

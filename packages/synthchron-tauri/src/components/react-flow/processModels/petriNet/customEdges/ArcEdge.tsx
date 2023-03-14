@@ -2,14 +2,11 @@ import { useCallback } from 'react'
 import { useStore, getBezierPath, EdgeProps } from 'reactflow'
 import { getEdgeParams } from './utils'
 
-import './EdgeStyle.css'
-
 const ArcEdge: React.FC<EdgeProps<unknown>> = ({
   id,
   source,
   target,
   markerEnd,
-  style,
 }) => {
   const sourceNode = useStore(
     useCallback((store) => store.nodeInternals.get(source), [source])
@@ -43,7 +40,9 @@ const ArcEdge: React.FC<EdgeProps<unknown>> = ({
       d={edgePath}
       strokeWidth={5}
       markerEnd={markerEnd}
-      style={style}
+      style={{
+        strokeWidth: 2,
+      }}
     />
   )
 }
