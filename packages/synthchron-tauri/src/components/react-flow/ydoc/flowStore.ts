@@ -10,14 +10,15 @@ import {
 
 import { ProcessModelFlowConfig } from '../processModels/processModelFlowConfig'
 import { petriNetFlowConfig } from '../processModels/petriNet/petriNetFlowConfig'
-import { Doc } from 'yjs'
+import { Doc, UndoManager } from 'yjs'
 import { WebrtcProvider } from 'y-webrtc'
 import { onNodesChanges } from './onNodesChange'
 import { onEdgesChange } from './onEdgesChange'
 import { Awareness } from 'y-protocols/awareness'
 import { faker } from '@faker-js/faker'
 
-type AwarenessState = any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type AwarenessState = any
 
 export type RFState = {
   // YDoc state for collaboration
@@ -59,6 +60,11 @@ export const yDocState = {
   processModelType: yDoc.getText('processModelType'),
 }
 
+export const undoManager = new UndoManager([
+  yDocState.nodesMap,
+  yDocState.edgesMap,
+])
+
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
 export const useFlowStore = create<RFState>((set, get) => ({
   // YDoc state for collaboration
@@ -66,7 +72,12 @@ export const useFlowStore = create<RFState>((set, get) => ({
   connectRoom: async (room: string, keepChanges = true) => {
     get().yWebRTCProvider?.destroy()
     if (!keepChanges) {
-      yDoc.destroy()
+      yDocState.nodesMap.clear()
+      yDocState.edgesMap.clear()
+      yDocState.processModelType.delete(0, yDocState.processModelType.length)
+    } else {
+      yDoc.autoLoad = false
+      yDoc.shouldLoad = false
     }
     const webrtcProvider = new WebrtcProvider(room, yDoc, {
       signaling: ['wss://netcup.lenny.codes/signaling/'],
@@ -85,8 +96,10 @@ export const useFlowStore = create<RFState>((set, get) => ({
       },
     })
     webrtcProvider.awareness.on('change', () => {
+      const allCollaborators = new Map(webrtcProvider.awareness.getStates())
+      allCollaborators.delete(webrtcProvider.awareness.clientID)
       useFlowStore.setState({
-        collaboratorStates: new Map(webrtcProvider.awareness.getStates()),
+        collaboratorStates: allCollaborators,
         awarenessState: webrtcProvider.awareness.getLocalState(),
       })
     })
@@ -115,6 +128,9 @@ export const useFlowStore = create<RFState>((set, get) => ({
     get().yWebRTCProvider?.disconnect()
     set({
       yWebRTCProvider: null,
+      awareness: null,
+      collaboratorStates: new Map(),
+      awarenessState: {},
     })
   },
   // React Flow state

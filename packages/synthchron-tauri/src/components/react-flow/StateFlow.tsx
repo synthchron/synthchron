@@ -50,7 +50,9 @@ export const StateFlow: React.FC<StateFlowProps> = ({
 
   const transform = useStore((store) => store.transform)
 
-  const setAwarenessCursor = (event: any) => {
+  const setAwarenessCursor: React.PointerEventHandler<HTMLDivElement> = (
+    event
+  ) => {
     setAwarenessState({
       x:
         (event.clientX - event.currentTarget.offsetLeft - transform[0]) /

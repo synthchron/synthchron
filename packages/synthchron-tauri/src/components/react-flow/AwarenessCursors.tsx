@@ -1,10 +1,9 @@
 import { useStore } from 'reactflow'
-import { useFlowStore } from './ydoc/flowStore'
+import { AwarenessState, useFlowStore } from './ydoc/flowStore'
 import GpsFixedIcon from '@mui/icons-material/GpsFixed'
 
 export const AwarenessCursors = () => {
   const collaboratorStates = useFlowStore((state) => state.collaboratorStates)
-  const awarenessState = useFlowStore((state) => state.awarenessState)
 
   const transform = useStore((store) => store.transform)
 
@@ -23,8 +22,7 @@ export const AwarenessCursors = () => {
       {collaboratorStates &&
         Array.from(collaboratorStates.values())
           .filter((state) => state.user.y && state.user.x)
-          .filter((state) => state.user.name !== awarenessState?.user?.name)
-          .map((state: any, idx) => {
+          .map((state: AwarenessState, idx) => {
             return (
               <div
                 key={idx}

@@ -1,4 +1,4 @@
-import { Button } from '@mui/material'
+import { Avatar, Button, Chip } from '@mui/material'
 import { useCallback } from 'react'
 import { shallow } from 'zustand/shallow'
 import { transformFlowToSimulator } from '../flowTransformer'
@@ -22,6 +22,7 @@ export const Sidebar = () => {
       yWebRTCProvider: state.yWebRTCProvider,
       awareness: state.awareness,
       collaboratorStates: state.collaboratorStates,
+      awarenessState: state.awarenessState,
     }),
     []
   )
@@ -32,6 +33,7 @@ export const Sidebar = () => {
     yWebRTCProvider,
     awareness,
     collaboratorStates,
+    awarenessState,
   } = useFlowStore(selector, shallow)
 
   return (
@@ -50,12 +52,37 @@ export const Sidebar = () => {
         </div>
       ))}
       <Button onClick={transformTest}> Transform </Button>
-      <Button onClick={() => connectRoom('myroom', true)}> Connect </Button>
-      Is connected : {yWebRTCProvider !== null ? 'true' : 'false'}
-      Peers :{' '}
-      {awareness !== null
-        ? JSON.stringify(Object.fromEntries(collaboratorStates))
-        : '[]'}
+      <Button onClick={() => connectRoom('myroom', true)}>
+        {yWebRTCProvider !== null ? 'Reconnect (keep)' : 'Connect (keep)'}
+      </Button>
+      <Button onClick={() => connectRoom('myroom', false)}>
+        {yWebRTCProvider !== null ? 'Reconnect (throw)' : 'Connect (throw)'}
+      </Button>
+      {awareness && collaboratorStates && awarenessState && (
+        <>
+          <br />
+          You:
+          <Chip
+            avatar={<Avatar>{awarenessState.user.name.charAt(0)}</Avatar>}
+            color='primary'
+            style={{ backgroundColor: awarenessState.user.color }}
+            label={awarenessState.user.name}
+          />
+          <br /> <br />
+          Peers:
+          {Object.entries(Object.fromEntries(collaboratorStates)).map(
+            ([key, value]) => (
+              <Chip
+                key={key}
+                avatar={<Avatar>{value.user.name.charAt(0)}</Avatar>}
+                color='primary'
+                style={{ backgroundColor: value.user.color }}
+                label={value.user.name}
+              />
+            )
+          )}
+        </>
+      )}
     </aside>
   )
 }
