@@ -25,7 +25,7 @@ export const checkRoomIsEmpty = async (room: string) => {
     },
   })
 
-  await delay(1000)
+  await delay(2500)
 
   const isEmpty = tempWebrtcProvider.awareness.getStates().size <= 1
 
