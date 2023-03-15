@@ -4,8 +4,8 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { useParams } from 'react-router-dom'
 import { usePersistentStore } from '../components/common/persistentStore'
 import { CustomAppBar } from '../components/CustomAppBar'
-import { DragAndDropWrapper } from '../components/react-flow/Flow'
-import useStore from '../components/react-flow/flowStore'
+import { DragAndDropWrapper } from '../components/react-flow/DragAndDropWrapper'
+import { useFlowStore } from '../components/react-flow/ydoc/flowStore'
 import { petriNetFlowConfig } from '../components/react-flow/processModels/petriNet/petriNetFlowConfig'
 
 export const EditorPage = () => {
@@ -14,12 +14,13 @@ export const EditorPage = () => {
   const doneSaving = usePersistentStore((state) => state.doneSaving)
   const projects = usePersistentStore((state) => state.projects)
 
-  const initializeFlow = useStore((state) => state.initializeFlow)
-  const saveFlow = useStore((state) => state.saveFlow)
+  const initializeFlow = useFlowStore((state) => state.initializeFlow)
+  const saveFlow = useFlowStore((state) => state.saveFlow)
 
   useHotkeys(
     'ctrl+s',
-    (event) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (event: any) => {
       event.preventDefault()
       if (projectId !== undefined) saveFlow(projectId)
     },

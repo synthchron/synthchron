@@ -17,6 +17,10 @@ export const CustomAppBar: React.FC = () => {
       href: '/editor',
     },
     {
+      name: 'Collaborate',
+      href: '/collaborate',
+    },
+    {
       name: 'Debug',
       href: '/debug',
     },
