@@ -11,10 +11,6 @@ import useStore, { RFState } from './flowStore'
 import { shallow } from 'zustand/shallow'
 import { PropertiesWindow } from './PropertiesWindow'
 
-//Drag and drop setup
-let id = 0
-const dndGetId = () => `dndnode_${id++}`
-
 export const DragAndDropWrapper = () => {
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
 
@@ -52,10 +48,10 @@ export const DragAndDropWrapper = () => {
       y: event.clientY - reactFlowBounds.top,
     })
     const newNode = {
-      id: dndGetId(),
+      id: '',
       type: type,
       position,
-      data: { label: `${type} node`, store: 0 },
+      data: { label: `${type == 'place' ? 'p' : 't'}`, store: 0 },
     }
     addNode(newNode)
   }

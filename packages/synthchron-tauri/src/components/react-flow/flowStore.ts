@@ -16,6 +16,8 @@ import {
 import { initialNodes, initialEdges } from './inititalData'
 import { ProcessModelFlowConfig } from './processModels/processModelFlowConfig'
 import { petriNetFlowConfig } from './processModels/petriNet/petriNetFlowConfig'
+import { usePersistentStore } from '../common/persistentStore'
+import { ProcessModel } from '@synthchron/simulator'
 
 export type RFState = {
   nodes: Node[]
@@ -32,6 +34,7 @@ export type RFState = {
     config: ProcessModelFlowConfig
   ) => void
   selectElement: (elem: Node | Edge | undefined) => void
+  saveFlow: (id: string) => void
 }
 
 const getNodeFromLabel = (nodes: Node[], label: string) => {
@@ -85,8 +88,22 @@ const useStore = create<RFState>((set, get) => ({
     })
   },
   addNode: (node: Node) => {
+    // compute next free id
     set({
-      nodes: [...get().nodes, node],
+      nodes: [
+        ...get().nodes,
+        {
+          ...node,
+          id: (
+            Math.max(
+              0,
+              ...get()
+                .nodes.map((node) => parseInt(node.id))
+                .filter((id) => !Number.isNaN(id))
+            ) + 1
+          ).toString(),
+        },
+      ],
     })
   },
   initializeFlow: (
@@ -103,6 +120,19 @@ const useStore = create<RFState>((set, get) => ({
   selectElement: (elem: Node | Edge | undefined) => {
     set({
       selectedElement: elem,
+    })
+  },
+  saveFlow: (id: string) => {
+    const processModel: ProcessModel = get().processModelFlowConfig.serialize(
+      get().nodes,
+      get().edges
+    )
+    usePersistentStore.getState().updateProject(id, {
+      projectModel: processModel,
+      projectName: '',
+      projectDescription: '',
+      created: '',
+      lastEdited: '',
     })
   },
 }))
