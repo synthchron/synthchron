@@ -1,5 +1,4 @@
-import { ProcessModel } from '../../../synthchron-simulator/src/types/processModel'
-
+import { ProcessModel } from '@synthchron/simulator'
 import { RFState } from './react-flow/ydoc/flowStore'
 
 export const transformFlowToSimulator = (flow: RFState): ProcessModel => {

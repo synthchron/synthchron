@@ -1,11 +1,11 @@
 import {
   Configuration,
-  ProcessEngine,
   SimulationResult,
   TerminationStatus,
   Trace,
-} from './types/general'
-import { ProcessModel } from './types/processModel'
+} from './types/simulationConfigurationTypes'
+import { ProcessModel } from './types/processModelTypes'
+import { ProcessEngine } from './types/processEngineTypes'
 
 //const PROCESS_ENGINES = [petriNetEngine]
 

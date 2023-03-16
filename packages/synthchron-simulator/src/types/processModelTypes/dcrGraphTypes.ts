@@ -14,7 +14,6 @@ export type DcrGraphNode = AbstractNode & {
   label: string
   included: boolean
   pending: boolean
-  executed: boolean
   weight: number
 }
 
@@ -29,6 +28,4 @@ export type DcrGraphEdge = AbstractEdge & {
     | 'spawn'
     | 'precondition'
     | 'logical-inclusion'
-  source: string
-  target: string
 }

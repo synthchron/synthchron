@@ -10,17 +10,15 @@ export type PetriNetProcessModel = AbstractProcessModel & {
   edges: PetriNetEdge[]
 }
 
-export interface PetriNetPlace {
+export type PetriNetPlace = AbstractNode & {
   type: 'place'
-  identifier: string
   name: string
   accepting: (numOfTokens: number) => boolean
   amountOfTokens: number
 }
 
-export interface PetriNetTransition {
+export type PetriNetTransition = AbstractNode & {
   type: 'transition'
-  identifier: string
   weight: number
   name: string
 }
@@ -29,6 +27,4 @@ export type PetriNetNode = AbstractNode & (PetriNetPlace | PetriNetTransition)
 
 export type PetriNetEdge = AbstractEdge & {
   multiplicity: number
-  source: string
-  target: string
 }
