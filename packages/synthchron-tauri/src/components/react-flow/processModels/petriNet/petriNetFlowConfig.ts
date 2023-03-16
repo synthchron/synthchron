@@ -4,6 +4,7 @@ import {
   PetriNetPlace,
   PetriNetNode,
   PetriNetTransition,
+  PetriNetEdge,
 } from '@synthchron/simulator/src/types/processModelTypes/petriNetTypes'
 import {
   Connection,
@@ -51,28 +52,33 @@ export const petriNetFlowConfig: ProcessModelFlowConfig = {
     }
   },
   generateFlow: (processModel: ProcessModel) => ({
-    nodes: (processModel as PetriNetProcessModel).nodes.map((node) => ({
-      id: node.identifier,
-      type: isPlaceNode(node) ? 'Place' : 'Transition',
-      position: (node as PetriNetNode).position ?? {
-        x: Math.random() * 500 - 250,
-        y: Math.random() * 500 - 250,
-      },
-      data: {
-        label: node.name,
-        store: isPlaceNode(node) ? node.amountOfTokens : undefined,
-      },
-    })),
-    edges: (processModel as PetriNetProcessModel).edges.map((edge) => ({
-      id: `e${edge.source}-${edge.target}`,
-      type: 'Arc',
-      source: edge.source,
-      target: edge.target,
-      sourceHandle: 'left',
-      targetHandle: 'left',
-      markerEnd: { type: MarkerType.ArrowClosed },
-      data: { weight: edge.multiplicity },
-    })),
+    nodes: (processModel as PetriNetProcessModel).nodes.map(
+      (node: PetriNetNode) => ({
+        id: node.identifier,
+        type: isPlaceNode(node) ? 'Place' : 'Transition',
+        position: (node as PetriNetNode).position ?? {
+          x: Math.random() * 500 - 250,
+          y: Math.random() * 500 - 250,
+        },
+        data: {
+          label: node.name,
+          store: isPlaceNode(node) ? node.amountOfTokens : undefined,
+          accepting: isPlaceNode(node) ? node.accepting : undefined,
+        },
+      })
+    ),
+    edges: (processModel as PetriNetProcessModel).edges.map(
+      (edge: PetriNetEdge) => ({
+        id: `e${edge.source}-${edge.target}`,
+        type: 'Arc',
+        source: edge.source,
+        target: edge.target,
+        sourceHandle: 'left',
+        targetHandle: 'left',
+        markerEnd: { type: MarkerType.ArrowClosed },
+        data: { weight: edge.multiplicity },
+      })
+    ),
   }),
   serialize: (nodes: Node[], edges: Edge[]) => {
     const simulatorNodes = nodes.map((node) => {

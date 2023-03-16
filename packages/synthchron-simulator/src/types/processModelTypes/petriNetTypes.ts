@@ -1,5 +1,10 @@
-import { PositionalNode } from '../processModel'
-export interface PetriNetProcessModel {
+import {
+  AbstractEdge,
+  AbstractNode,
+  AbstractProcessModel,
+} from '../processModelTypes'
+
+export type PetriNetProcessModel = AbstractProcessModel & {
   type: 'petri-net'
   nodes: PetriNetNode[]
   edges: PetriNetEdge[]
@@ -20,9 +25,9 @@ export interface PetriNetTransition {
   name: string
 }
 
-export type PetriNetNode = PositionalNode & (PetriNetPlace | PetriNetTransition)
+export type PetriNetNode = AbstractNode & (PetriNetPlace | PetriNetTransition)
 
-export interface PetriNetEdge {
+export type PetriNetEdge = AbstractEdge & {
   multiplicity: number
   source: string
   target: string

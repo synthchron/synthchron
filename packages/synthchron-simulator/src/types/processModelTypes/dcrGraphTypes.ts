@@ -1,12 +1,16 @@
-import { Point } from '../processModel'
+import {
+  AbstractEdge,
+  AbstractNode,
+  AbstractProcessModel,
+} from '../processModelTypes'
 
-export interface DcrGraphProcessModel {
+export type DcrGraphProcessModel = AbstractProcessModel & {
   type: 'dcr-graph'
   nodes: DcrGraphNode[]
   edges: DcrGraphEdge[]
 }
 
-export type DcrGraphNode = Point & {
+export type DcrGraphNode = AbstractNode & {
   label: string
   included: boolean
   pending: boolean
@@ -14,7 +18,7 @@ export type DcrGraphNode = Point & {
   weight: number
 }
 
-export interface DcrGraphEdge {
+export type DcrGraphEdge = AbstractEdge & {
   type:
     | 'condition'
     | 'exclude'
