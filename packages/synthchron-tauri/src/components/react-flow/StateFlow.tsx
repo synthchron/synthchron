@@ -4,14 +4,17 @@ import ReactFlow, {
   Controls,
   MiniMap,
   OnInit,
+  useStore,
 } from 'reactflow'
 import { shallow } from 'zustand/shallow'
 
 import 'reactflow/dist/style.css'
 
-import useStore, { RFState } from './flowStore'
+import { RFState, useFlowStore } from './ydoc/flowStore'
+import { AwarenessCursors } from './AwarenessCursors'
 
 const selector = (state: RFState) => ({
+  setAwarenessState: state.setAwarenessState,
   nodes: state.nodes,
   edges: state.edges,
   nodeTypes: state.processModelFlowConfig.nodeTypes,
@@ -34,6 +37,7 @@ export const StateFlow: React.FC<StateFlowProps> = ({
   onDragOver,
 }) => {
   const {
+    setAwarenessState,
     nodes,
     edges,
     nodeTypes,
@@ -41,10 +45,25 @@ export const StateFlow: React.FC<StateFlowProps> = ({
     onNodesChange,
     onEdgesChange,
     onConnect,
-  } = useStore(selector, shallow)
+  } = useFlowStore(selector, shallow)
 
   const fitViewOptions = { padding: 0.2 }
-  const { selectElement } = useStore(selector, shallow)
+  const { selectElement } = useFlowStore(selector, shallow)
+
+  const transform = useStore((store) => store.transform)
+
+  const setAwarenessCursor: React.PointerEventHandler<HTMLDivElement> = (
+    event
+  ) => {
+    setAwarenessState({
+      x:
+        (event.clientX - event.currentTarget.offsetLeft - transform[0]) /
+        transform[2],
+      y:
+        (event.clientY - event.currentTarget.offsetTop - transform[1]) /
+        transform[2],
+    })
+  }
 
   return (
     <ReactFlow
@@ -73,7 +92,9 @@ export const StateFlow: React.FC<StateFlowProps> = ({
       onPaneClick={(_) => {
         selectElement(undefined)
       }}
+      onPointerMove={setAwarenessCursor}
     >
+      <AwarenessCursors />
       <MiniMap />
       <Controls />
       <Background />

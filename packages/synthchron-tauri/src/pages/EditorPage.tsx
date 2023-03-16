@@ -1,17 +1,31 @@
-import { Box } from '@mui/material'
+import { Alert, Box, Snackbar } from '@mui/material'
 import { useEffect } from 'react'
+import { useHotkeys } from 'react-hotkeys-hook'
 import { useParams } from 'react-router-dom'
 import { usePersistentStore } from '../components/common/persistentStore'
 import { CustomAppBar } from '../components/CustomAppBar'
-import { DragAndDropWrapper } from '../components/react-flow/Flow'
-import useStore from '../components/react-flow/flowStore'
+import { DragAndDropWrapper } from '../components/react-flow/DragAndDropWrapper'
+import { useFlowStore } from '../components/react-flow/ydoc/flowStore'
 import { petriNetFlowConfig } from '../components/react-flow/processModels/petriNet/petriNetFlowConfig'
 
 export const EditorPage = () => {
   const { projectId } = useParams<{ projectId: string }>()
-
-  const initializeFlow = useStore((state) => state.initializeFlow)
+  const open = usePersistentStore((state) => state.saving)
+  const doneSaving = usePersistentStore((state) => state.doneSaving)
   const projects = usePersistentStore((state) => state.projects)
+
+  const initializeFlow = useFlowStore((state) => state.initializeFlow)
+  const saveFlow = useFlowStore((state) => state.saveFlow)
+
+  useHotkeys(
+    'ctrl+s',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (event: any) => {
+      event.preventDefault()
+      if (projectId !== undefined) saveFlow(projectId)
+    },
+    [saveFlow, projectId]
+  )
 
   useEffect(() => {
     if (projectId === undefined) return // User has opened the editor window directly
@@ -33,6 +47,16 @@ export const EditorPage = () => {
     >
       <CustomAppBar />
       <DragAndDropWrapper />
+      <Snackbar
+        open={open}
+        autoHideDuration={1000}
+        onClose={() => doneSaving()}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert onClose={doneSaving} severity='success' sx={{ width: '100%' }}>
+          Model saved
+        </Alert>
+      </Snackbar>
     </Box>
   )
 }

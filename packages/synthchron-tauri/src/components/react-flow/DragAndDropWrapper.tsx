@@ -7,13 +7,9 @@ import 'reactflow/dist/style.css'
 // 👇 Importing components
 import { Sidebar } from './Sidebar'
 import { StateFlow } from './StateFlow'
-import useStore, { RFState } from './flowStore'
+import { RFState, useFlowStore } from './ydoc/flowStore'
 import { shallow } from 'zustand/shallow'
 import { PropertiesWindow } from './PropertiesWindow'
-
-//Drag and drop setup
-let id = 0
-const dndGetId = () => `dndnode_${id++}`
 
 export const DragAndDropWrapper = () => {
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
@@ -35,7 +31,7 @@ export const DragAndDropWrapper = () => {
     }),
     []
   )
-  const { addNode } = useStore(selector, shallow)
+  const { addNode } = useFlowStore(selector, shallow)
 
   const onDrop: React.DragEventHandler<HTMLDivElement> = (
     event: React.DragEvent<HTMLDivElement>
@@ -52,10 +48,10 @@ export const DragAndDropWrapper = () => {
       y: event.clientY - reactFlowBounds.top,
     })
     const newNode = {
-      id: dndGetId(),
+      id: '', // Will be overwritten by addNode
       type: type,
       position,
-      data: { label: `${type} node`, store: 0 },
+      data: { label: `${type == 'place' ? 'p' : 't'}`, store: 0 },
     }
     addNode(newNode)
   }

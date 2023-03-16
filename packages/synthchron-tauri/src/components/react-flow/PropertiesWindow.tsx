@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { shallow } from 'zustand/shallow'
-import useStore, { RFState } from './flowStore'
+import { RFState, useFlowStore } from './ydoc/flowStore'
 import './propertiesWindow.css'
 import { Stack, TextField } from '@mui/material'
 
@@ -13,7 +13,7 @@ export const PropertiesWindow = () => {
     []
   )
 
-  const { selectedElement } = useStore(selector, shallow)
+  const { selectedElement } = useFlowStore(selector, shallow)
 
   const selectedElementProperties = selectedElement ? (
     Object.entries(selectedElement.data).map(([key, value]) => (
