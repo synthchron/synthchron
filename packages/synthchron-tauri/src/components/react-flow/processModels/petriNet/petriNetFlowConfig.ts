@@ -61,6 +61,7 @@ export const petriNetFlowConfig: ProcessModelFlowConfig = {
       data: {
         label: node.name,
         store: isPlaceNode(node) ? node.amountOfTokens : undefined,
+        accepting: (node as any).accepting,
       },
     })),
     edges: (processModel as PetriNetProcessModel).edges.map((edge) => ({
@@ -80,7 +81,7 @@ export const petriNetFlowConfig: ProcessModelFlowConfig = {
       const type: 'place' | 'transition' =
         node.type == 'Place' ? 'place' : 'transition'
       const name = node.data.label
-
+      console.log(node.data.accepting)
       if (type == 'place') {
         return {
           identifier,

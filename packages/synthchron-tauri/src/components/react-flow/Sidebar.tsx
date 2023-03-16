@@ -2,9 +2,11 @@ import { Avatar, Button, Chip } from '@mui/material'
 import { useCallback } from 'react'
 import { useParams } from 'react-router'
 import { shallow } from 'zustand/shallow'
+import { petriNetEngine, PetriNetProcessModel } from '@synthchron/simulator'
 import { transformFlowToSimulator } from '../flowTransformer'
 import { RFState, useFlowStore } from './ydoc/flowStore'
 import './sidebar.css'
+import { simulateWithEngine } from '@synthchron/simulator'
 
 export const Sidebar = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -13,8 +15,21 @@ export const Sidebar = () => {
     event.dataTransfer.effectAllowed = 'move'
   }
   const transformTest = () => {
+    console.log(useFlowStore.getState())
     console.log(transformFlowToSimulator(useFlowStore.getState()))
   }
+  const simulate = () => {
+    console.log(
+      simulateWithEngine(
+        transformFlowToSimulator(
+          useFlowStore.getState()
+        ) as PetriNetProcessModel,
+        { endOnAcceptingState: true, minEvents: 1, maxEvents: 100 },
+        petriNetEngine
+      )
+    )
+  }
+
   const selector = useCallback(
     (state: RFState) => ({
       nodeTypes: state.processModelFlowConfig.nodeTypes,
@@ -101,6 +116,7 @@ export const Sidebar = () => {
       >
         Save
       </Button>
+      <Button onClick={simulate}>Simulate</Button>
     </aside>
   )
 }

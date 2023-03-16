@@ -90,7 +90,7 @@ export const PlaceNode: React.FC<NodeProps> = ({ data, isConnectable }) => {
             fontSize: 12,
           }}
         >
-          {data?.label}
+          {data?.store}
         </div>
       </div>
     </div>

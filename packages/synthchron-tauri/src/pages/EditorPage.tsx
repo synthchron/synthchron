@@ -33,6 +33,8 @@ export const EditorPage = () => {
     const { nodes, edges } = processModelConfig.generateFlow(
       projects[projectId].projectModel
     )
+    console.log(nodes, edges)
+    console.log(projects[projectId])
     initializeFlow(nodes, edges, processModelConfig)
   }, [projectId])
 
