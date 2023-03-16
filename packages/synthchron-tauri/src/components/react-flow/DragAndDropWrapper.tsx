@@ -51,7 +51,10 @@ export const DragAndDropWrapper = () => {
       id: '', // Will be overwritten by addNode
       type: type,
       position,
-      data: { label: `${type == 'place' ? 'p' : 't'}`, store: 0 },
+      data: {
+        label: `${type == 'place' ? 'place' : 'transition'}`,
+        storage: 0,
+      },
     }
     addNode(newNode)
   }
