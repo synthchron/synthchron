@@ -22,6 +22,7 @@ const selector = (state: RFState) => ({
   onNodesChange: state.onNodesChange,
   onEdgesChange: state.onEdgesChange,
   onConnect: state.onConnect,
+  selectElement: state.selectElement,
 })
 
 interface StateFlowProps {
@@ -47,6 +48,7 @@ export const StateFlow: React.FC<StateFlowProps> = ({
   } = useFlowStore(selector, shallow)
 
   const fitViewOptions = { padding: 0.2 }
+  const { selectElement } = useFlowStore(selector, shallow)
 
   const transform = useStore((store) => store.transform)
 
@@ -80,6 +82,16 @@ export const StateFlow: React.FC<StateFlowProps> = ({
       onInit={onInit}
       onDrop={onDrop}
       onDragOver={onDragOver}
+      //OnClickEvents
+      onNodeClick={(_, node) => {
+        selectElement(node)
+      }}
+      onEdgeClick={(_, edge) => {
+        selectElement(edge)
+      }}
+      onPaneClick={(_) => {
+        selectElement(undefined)
+      }}
       onPointerMove={setAwarenessCursor}
     >
       <AwarenessCursors />

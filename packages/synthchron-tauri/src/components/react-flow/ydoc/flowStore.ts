@@ -40,6 +40,8 @@ export type RFState = {
   nodes: Node[]
   edges: Edge[]
   processModelFlowConfig: ProcessModelFlowConfig
+  selectedElement: Node | Edge | undefined
+  selectElement: (elem: Node | Edge | undefined) => void
   onNodesChange: OnNodesChange
   onEdgesChange: OnEdgesChange
   onConnect: OnConnect
@@ -77,6 +79,7 @@ undoManager.on('stack-item-added', (event: any) => {
 export const useFlowStore = create<RFState>((set, get) => ({
   // YDoc state for collaboration
   yWebRTCProvider: null,
+  selectedElement: undefined,
   connectRoom: async (room: string, keepChanges = true) => {
     get().yWebRTCProvider?.destroy()
     if (!keepChanges) {
@@ -220,6 +223,11 @@ export const useFlowStore = create<RFState>((set, get) => ({
     )
     usePersistentStore.getState().updateProject(id, {
       projectModel: processModel,
+    })
+  },
+  selectElement: (elem: Node | Edge | undefined) => {
+    set({
+      selectedElement: elem,
     })
   },
 }))

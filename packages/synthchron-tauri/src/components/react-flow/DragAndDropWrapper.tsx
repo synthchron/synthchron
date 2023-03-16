@@ -9,6 +9,7 @@ import { Sidebar } from './Sidebar'
 import { StateFlow } from './StateFlow'
 import { RFState, useFlowStore } from './ydoc/flowStore'
 import { shallow } from 'zustand/shallow'
+import { PropertiesWindow } from './PropertiesWindow'
 
 export const DragAndDropWrapper = () => {
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
@@ -66,6 +67,7 @@ export const DragAndDropWrapper = () => {
             onDragOver={onDragOver}
           />
         </div>
+        <PropertiesWindow />
       </ReactFlowProvider>
     </div>
   )
