@@ -92,7 +92,7 @@ export const StateFlow: React.FC<StateFlowProps> = ({
       onPaneClick={(_) => {
         selectElement(undefined)
       }}
-      onPointerMove={setAwarenessCursor}
+      onMouseMove={setAwarenessCursor}
     >
       <AwarenessCursors />
       <MiniMap />
