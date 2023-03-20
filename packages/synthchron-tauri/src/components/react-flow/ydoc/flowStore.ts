@@ -135,8 +135,10 @@ export const useFlowStore = create<RFState>((set, get) => ({
       ...state,
     })
   },
-  disconnectRoom: () => {
-    get().yWebRTCProvider?.disconnect()
+  disconnectRoom: async () => {
+    // I have no idea why the 'await' is needed here, but if it is not there, the "collaboratorState" is not deleted properly
+    // My IDE says it is redundant. TOOD: Please investigate at some point.
+    await get().yWebRTCProvider?.destroy()
     set({
       yWebRTCProvider: null,
       awareness: null,
