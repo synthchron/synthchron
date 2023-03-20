@@ -10,7 +10,7 @@ import {
 
 import { ProcessModelFlowConfig } from '../processModels/processModelFlowConfig'
 import { petriNetFlowConfig } from '../processModels/petriNet/petriNetFlowConfig'
-import { Doc, UndoManager } from 'yjs'
+import { Doc } from 'yjs'
 import { WebrtcProvider } from 'y-webrtc'
 import { onNodesChanges } from './onNodesChange'
 import { onEdgesChange } from './onEdgesChange'
