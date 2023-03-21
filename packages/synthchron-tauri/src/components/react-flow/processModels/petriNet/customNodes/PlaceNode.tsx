@@ -1,3 +1,4 @@
+import React from 'react'
 import { Handle, NodeProps, Position } from 'reactflow'
 
 //import styles from './Nodes.module.scss'
@@ -92,7 +93,7 @@ export const PlaceNode: React.FC<NodeProps> = ({
           pointerEvents: 'none',
         }}
       >
-        {data?.storage}
+        {data?.store}
       </div>
     </div>
   )
