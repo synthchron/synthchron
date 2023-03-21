@@ -15,7 +15,6 @@ export const Sidebar = () => {
     event.dataTransfer.effectAllowed = 'move'
   }
   const transformTest = () => {
-    console.log(useFlowStore.getState())
     console.log(transformFlowToSimulator(useFlowStore.getState()))
   }
   const simulate = () => {

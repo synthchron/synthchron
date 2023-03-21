@@ -22,6 +22,7 @@
     "@synthchron/simulator": "*",
     "@synthchron/xes": "*",
     "@tauri-apps/api": "^1.2.0",
+    "filtrex": "^3.0.0",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-detect-offline": "^2.4.5",
