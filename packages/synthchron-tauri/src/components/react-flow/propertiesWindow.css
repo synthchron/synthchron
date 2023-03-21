@@ -1,0 +1,19 @@
+.PropertiesWindow {
+    display: block;
+    flex-grow: 1;
+    width: 20%;
+    max-width: 250px;
+    right: 0%;
+}
+
+.PropertiesTitle {
+    font-size:x-large;
+    background-color: bisque;
+    padding: 8px;
+    border-radius: 25px;
+    text-align: center;
+}
+
+.PropertyContainer {
+    font-size: large;
+}

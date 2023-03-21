@@ -47,6 +47,7 @@ export const Sidebar = () => {
   const {
     nodeTypes,
     connectRoom,
+    disconnectRoom,
     yWebRTCProvider,
     awareness,
     collaboratorStates,
@@ -78,6 +79,9 @@ export const Sidebar = () => {
       <Button onClick={() => connectRoom('myroom', false)}>
         {yWebRTCProvider !== null ? 'Reconnect (throw)' : 'Connect (throw)'}
       </Button>
+      {yWebRTCProvider !== null && (
+        <Button onClick={disconnectRoom}>Leave Collaboration</Button>
+      )}
       {awareness && collaboratorStates && awarenessState && (
         <>
           <br />
