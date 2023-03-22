@@ -1,3 +1,4 @@
+import React from 'react'
 import { useCallback, useRef, useState } from 'react'
 import { ReactFlowProvider, ReactFlowInstance } from 'reactflow'
 
@@ -42,6 +43,7 @@ export const DragAndDropWrapper = () => {
 
     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect()
     const type = event.dataTransfer.getData('application/reactflow')
+    if (type == '') return
 
     const position = reactFlowInstance.project({
       x: event.clientX - reactFlowBounds.left,
@@ -52,7 +54,7 @@ export const DragAndDropWrapper = () => {
       type: type,
       position,
       data: {
-        label: `${type == 'place' ? 'place' : 'transition'}`,
+        label: `${type == 'Transition' ? 'Transition' : 'Place'}`,
         store: 0,
       },
     }

@@ -14,23 +14,71 @@ const handleStyle = {
   backgroundColor: '#bbb',
 }
 
+interface PlaceNodeShapeProps {
+  strokeWidth: string | number | undefined
+  label: string | number | undefined
+}
+
+export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = (NodeProps) => {
+  const { diameter, color } = config
+
+  const styles = {
+    fill: color,
+    stroke: '#222',
+  }
+
+  const shape = (
+    <circle
+      cx={diameter / 2}
+      cy={diameter / 2}
+      r={diameter}
+      strokeWidth={NodeProps.strokeWidth ? NodeProps.strokeWidth : 1}
+      {...styles}
+    />
+  )
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        position: 'relative',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
+      }}
+    >
+      <svg
+        style={{ display: 'block', overflow: 'visible' }}
+        width={diameter}
+        height={diameter}
+      >
+        {shape}
+      </svg>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          pointerEvents: 'none',
+        }}
+      >
+        {NodeProps?.label}
+      </div>
+    </div>
+  )
+}
+
 export const PlaceNode: React.FC<NodeProps> = ({
   data,
   selected,
   isConnectable,
 }) => {
-  const { diameter, color } = config
-
-  const styles = {
-    fill: color,
-    strokeWidth: selected ? 2 : 1,
-    stroke: '#222',
-  }
-
-  const shape = (
-    <circle cx={diameter / 2} cy={diameter / 2} r={diameter} {...styles} />
-  )
-
   return (
     <div style={{ position: 'relative' }}>
       <Handle
@@ -73,28 +121,7 @@ export const PlaceNode: React.FC<NodeProps> = ({
           left: '-30px',
         }}
       />
-      <svg
-        style={{ display: 'block', overflow: 'visible' }}
-        width={diameter}
-        height={diameter}
-      >
-        {shape}
-      </svg>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          pointerEvents: 'none',
-        }}
-      >
-        {data?.store}
-      </div>
+      <PlaceNodeShape strokeWidth={selected ? 2 : 1} label={data?.store} />
     </div>
   )
 }

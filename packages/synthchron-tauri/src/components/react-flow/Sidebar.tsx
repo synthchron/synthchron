@@ -1,10 +1,12 @@
-import { Avatar, Button, Chip } from '@mui/material'
+import { Avatar, Button, Chip, Stack, Typography } from '@mui/material'
 import { useCallback } from 'react'
 import { useParams } from 'react-router'
 import { shallow } from 'zustand/shallow'
 import { transformFlowToSimulator } from '../flowTransformer'
 import { RFState, useFlowStore } from './ydoc/flowStore'
 import './sidebar.css'
+import React from 'react'
+import { NodeShapeMap } from './processModels/NodeShapeMap'
 
 export const Sidebar = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,67 +46,66 @@ export const Sidebar = () => {
 
   return (
     <aside>
-      <div className='description'>
-        You can drag these nodes to the pane on the right.
-      </div>
-      {Object.keys(nodeTypes).map((key) => (
-        <div
-          className='dndnode'
-          key={key}
-          onDragStart={(event) => onDragStart(event, key)}
-          draggable
-        >
-          {key}
-        </div>
-      ))}
-      <Button onClick={transformTest}> Transform </Button>
-      <Button onClick={() => connectRoom('myroom', true)}>
-        {yWebRTCProvider !== null ? 'Reconnect (keep)' : 'Connect (keep)'}
-      </Button>
-      <Button onClick={() => connectRoom('myroom', false)}>
-        {yWebRTCProvider !== null ? 'Reconnect (throw)' : 'Connect (throw)'}
-      </Button>
-      {yWebRTCProvider !== null && (
-        <Button onClick={disconnectRoom}>Leave Collaboration</Button>
-      )}
-      {awareness && collaboratorStates && awarenessState && (
-        <>
-          <br />
-          You:
-          {awarenessState?.user?.name && (
-            <Chip
-              avatar={<Avatar>{awarenessState.user.name.charAt(0)}</Avatar>}
-              color='primary'
-              style={{ backgroundColor: awarenessState.user.color }}
-              label={awarenessState.user.name}
-            />
-          )}
-          <br /> <br />
-          Peers:
-          {Object.entries(Object.fromEntries(collaboratorStates))
-            .filter(([_key, value]) => value?.user?.name)
-            .map(([key, value]) => (
+      <Stack spacing={4}>
+        <Typography color='text.primary'>
+          You can drag these nodes to the pane on the right.
+        </Typography>
+        {Object.keys(nodeTypes).map((key) => (
+          <div
+            key={key}
+            onDragStart={(event) => onDragStart(event, key)}
+            draggable
+          >
+            {NodeShapeMap(key)}
+          </div>
+        ))}
+        <Button onClick={transformTest}> Transform </Button>
+        <Button onClick={() => connectRoom('myroom', true)}>
+          {yWebRTCProvider !== null ? 'Reconnect (keep)' : 'Connect (keep)'}
+        </Button>
+        <Button onClick={() => connectRoom('myroom', false)}>
+          {yWebRTCProvider !== null ? 'Reconnect (throw)' : 'Connect (throw)'}
+        </Button>
+        {yWebRTCProvider !== null && (
+          <Button onClick={disconnectRoom}>Leave Collaboration</Button>
+        )}
+        {awareness && collaboratorStates && awarenessState && (
+          <>
+            <Typography color='text.primary'>You:</Typography>
+            {awarenessState?.user?.name && (
               <Chip
-                key={key}
-                avatar={<Avatar>{value.user.name.charAt(0)}</Avatar>}
+                avatar={<Avatar>{awarenessState.user.name.charAt(0)}</Avatar>}
                 color='primary'
-                style={{ backgroundColor: value.user.color }}
-                label={value.user.name}
+                style={{ backgroundColor: awarenessState.user.color }}
+                label={awarenessState.user.name}
               />
-            ))}
-        </>
-      )}
-      <Button
-        onClick={() => {
-          if (projectId) {
-            saveFlow(projectId)
-          } else {
-            console.log('No project id') // TODO: Create project
-          }
-        }}
-      >
-        Save
-      </Button>
+            )}
+            <Typography color='text.primary'>Peers:</Typography>
+            {Object.entries(Object.fromEntries(collaboratorStates))
+              .filter(([_key, value]) => value?.user?.name)
+              .map(([key, value]) => (
+                <Chip
+                  key={key}
+                  avatar={<Avatar>{value.user.name.charAt(0)}</Avatar>}
+                  color='primary'
+                  style={{ backgroundColor: value.user.color }}
+                  label={value.user.name}
+                />
+              ))}
+          </>
+        )}
+        <Button
+          onClick={() => {
+            if (projectId) {
+              saveFlow(projectId)
+            } else {
+              console.log('No project id') // TODO: Create project
+            }
+          }}
+        >
+          Save
+        </Button>
+      </Stack>
     </aside>
   )
 }
