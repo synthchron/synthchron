@@ -29,8 +29,8 @@ export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = (NodeProps) => {
 
   const shape = (
     <circle
-      cx={diameter / 2}
-      cy={diameter / 2}
+      cx={diameter}
+      cy={diameter}
       r={diameter}
       strokeWidth={NodeProps.strokeWidth ? NodeProps.strokeWidth : 1}
       {...styles}
@@ -49,23 +49,17 @@ export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = (NodeProps) => {
       }}
     >
       <svg
-        style={{ display: 'block', overflow: 'visible' }}
-        width={diameter}
-        height={diameter}
+        style={{ overflow: 'visible' }}
+        width={diameter * 2}
+        height={diameter * 2}
       >
         {shape}
       </svg>
       <div
         style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
+          textAlign: 'center',
           position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          pointerEvents: 'none',
+          color: '#222',
         }}
       >
         {NodeProps?.label}
@@ -79,6 +73,8 @@ export const PlaceNode: React.FC<NodeProps> = ({
   selected,
   isConnectable,
 }) => {
+  const { diameter } = config
+
   return (
     <div style={{ position: 'relative' }}>
       <Handle
@@ -88,7 +84,7 @@ export const PlaceNode: React.FC<NodeProps> = ({
         isConnectable={isConnectable}
         style={{
           ...handleStyle,
-          bottom: '-30px',
+          bottom: -diameter / 2,
         }}
       />
       <Handle
@@ -98,7 +94,7 @@ export const PlaceNode: React.FC<NodeProps> = ({
         isConnectable={isConnectable}
         style={{
           ...handleStyle,
-          top: '-30px',
+          top: -diameter / 2,
         }}
       />
       <Handle
@@ -108,7 +104,7 @@ export const PlaceNode: React.FC<NodeProps> = ({
         isConnectable={isConnectable}
         style={{
           ...handleStyle,
-          right: '-30px',
+          right: -diameter / 2,
         }}
       />
       <Handle
@@ -118,7 +114,7 @@ export const PlaceNode: React.FC<NodeProps> = ({
         isConnectable={isConnectable}
         style={{
           ...handleStyle,
-          left: '-30px',
+          left: -diameter / 2,
         }}
       />
       <PlaceNodeShape strokeWidth={selected ? 2 : 1} label={data?.store} />

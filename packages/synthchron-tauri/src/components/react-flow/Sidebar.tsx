@@ -46,7 +46,7 @@ export const Sidebar = () => {
 
   return (
     <aside>
-      <Stack spacing={4}>
+      <Stack spacing={2}>
         <Typography color='text.primary'>
           You can drag these nodes to the pane on the right.
         </Typography>
