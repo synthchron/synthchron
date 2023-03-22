@@ -39,7 +39,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         </Typography>
         <Typography sx={{ mb: 1.5 }} color='text.secondary'>
           {/* {moment(project.lastEdited).fromNow()} */}
-          {moment(project.lastEdited).fromNow()}
+          last edited {moment(project.lastEdited).fromNow()}
         </Typography>
         <Typography
           sx={{
