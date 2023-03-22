@@ -52,8 +52,9 @@ export const DragAndDropWrapper = () => {
       type: type,
       position,
       data: {
-        label: `${type == 'place' ? 'place' : 'transition'}`,
-        store: 0,
+        label: `${type == 'place' ? 'p' : 't'}`,
+        store: 1,
+        accepting: 'tokens >= 10',
       },
     }
     addNode(newNode)

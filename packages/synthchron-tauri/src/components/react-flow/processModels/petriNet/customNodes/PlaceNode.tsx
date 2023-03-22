@@ -93,7 +93,16 @@ export const PlaceNode: React.FC<NodeProps> = ({
           pointerEvents: 'none',
         }}
       >
-        {data?.store}
+        <div
+          style={{
+            fontFamily: 'monospace',
+            fontWeight: 'bold',
+            color: '#222',
+            fontSize: 12,
+          }}
+        >
+          {data?.store}
+        </div>
       </div>
     </div>
   )

@@ -9,14 +9,14 @@ export const petriNet1: PetriNetProcessModel = {
       type: 'place',
       identifier: 'p1',
       name: 'p1',
-      accepting: (numOfTokens: number) => numOfTokens >= 1,
+      accepting: 'tokens >= 1',
       amountOfTokens: 2,
     },
     {
       type: 'place',
       identifier: 'p2',
       name: 'p2',
-      accepting: (numOfTokens: number) => numOfTokens >= 1,
+      accepting: 'tokens >= 1',
       amountOfTokens: 0,
     },
     {
@@ -49,21 +49,21 @@ export const petriNet2: PetriNetProcessModel = {
       type: 'place',
       identifier: 'p1',
       name: 'p1',
-      accepting: (numOfTokens: number) => numOfTokens >= 1,
+      accepting: 'tokens >= 1',
       amountOfTokens: 2,
     },
     {
       type: 'place',
       identifier: 'p2',
       name: 'p2',
-      accepting: (numOfTokens: number) => numOfTokens >= 1,
+      accepting: 'tokens >= 1',
       amountOfTokens: 0,
     },
     {
       type: 'place',
       identifier: 'p3',
       name: 'p3',
-      accepting: (numOfTokens: number) => numOfTokens >= 1,
+      accepting: 'tokens >= 1',
       amountOfTokens: 0,
     },
     {
@@ -99,14 +99,14 @@ export const petriNet3: PetriNetProcessModel = {
       type: 'place',
       identifier: 'p1',
       name: 'p1',
-      accepting: (numOfTokens: number) => (numOfTokens & 1) === 0, // isEven
+      accepting: 'tokens mod 2 == 0', // isEven
       amountOfTokens: 2,
     },
     {
       type: 'place',
       identifier: 'p2',
       name: 'p2',
-      accepting: (numOfTokens: number) => (numOfTokens & 1) === 1, // isOdd
+      accepting: 'tokens mod 2 == 1', // isOdd
       amountOfTokens: 1,
     },
     {
