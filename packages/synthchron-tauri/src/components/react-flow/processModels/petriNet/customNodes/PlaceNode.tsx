@@ -1,9 +1,10 @@
+import React from 'react'
 import { Handle, NodeProps, Position } from 'reactflow'
 
 //import styles from './Nodes.module.scss'
 
 const config = {
-  diameter: 50,
+  diameter: 30,
   color: '#eee',
 }
 
@@ -13,69 +14,79 @@ const handleStyle = {
   backgroundColor: '#bbb',
 }
 
-export const PlaceNode: React.FC<NodeProps> = ({ data, isConnectable }) => {
+export const PlaceNode: React.FC<NodeProps> = ({
+  data,
+  selected,
+  isConnectable,
+}) => {
+  const { diameter, color } = config
+
+  const styles = {
+    fill: color,
+    strokeWidth: selected ? 2 : 1,
+    stroke: '#222',
+  }
+
+  const shape = (
+    <circle cx={diameter / 2} cy={diameter / 2} r={diameter} {...styles} />
+  )
+
   return (
-    <div
-      style={{
-        fontSize: '12px',
-        background: '#eee',
-        border: '1px solid #000000',
-        borderRadius: '50px',
-        textAlign: 'center',
-        color: 'red',
-        minWidth: config.diameter,
-        minHeight: config.diameter,
-      }}
-    >
-      <div className='handleContainer'>
-        <Handle
-          type='source'
-          position={Position.Top}
-          id='top'
-          isConnectable={isConnectable}
-          style={{
-            ...handleStyle,
-            top: '-15px',
-          }}
-        />
-        <Handle
-          type='source'
-          position={Position.Bottom}
-          id='bottom'
-          isConnectable={isConnectable}
-          style={{
-            ...handleStyle,
-            bottom: '-15px',
-          }}
-        />
-        <Handle
-          type='source'
-          position={Position.Right}
-          id='right'
-          isConnectable={isConnectable}
-          style={{
-            ...handleStyle,
-            right: '-15px',
-          }}
-        />
-        <Handle
-          type='source'
-          position={Position.Left}
-          id='left'
-          isConnectable={isConnectable}
-          style={{
-            ...handleStyle,
-            left: '-15px',
-          }}
-        />
-      </div>
+    <div style={{ position: 'relative' }}>
+      <Handle
+        id='bottom'
+        position={Position.Bottom}
+        type='source'
+        isConnectable={isConnectable}
+        style={{
+          ...handleStyle,
+          bottom: '-30px',
+        }}
+      />
+      <Handle
+        id='top'
+        position={Position.Top}
+        type='source'
+        isConnectable={isConnectable}
+        style={{
+          ...handleStyle,
+          top: '-30px',
+        }}
+      />
+      <Handle
+        id='right'
+        position={Position.Right}
+        type='source'
+        isConnectable={isConnectable}
+        style={{
+          ...handleStyle,
+          right: '-30px',
+        }}
+      />
+      <Handle
+        id='left'
+        position={Position.Left}
+        type='source'
+        isConnectable={isConnectable}
+        style={{
+          ...handleStyle,
+          left: '-30px',
+        }}
+      />
+      <svg
+        style={{ display: 'block', overflow: 'visible' }}
+        width={diameter}
+        height={diameter}
+      >
+        {shape}
+      </svg>
       <div
         style={{
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
           position: 'absolute',
-          top: -config.diameter / 2 - 25,
+          top: 0,
           left: 0,
           width: '100%',
           height: '100%',
