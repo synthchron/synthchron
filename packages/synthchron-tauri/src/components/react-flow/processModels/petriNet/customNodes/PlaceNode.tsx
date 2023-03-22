@@ -40,18 +40,15 @@ export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = (NodeProps) => {
   return (
     <div
       style={{
-        display: 'flex',
-        position: 'relative',
+        display: 'inline-flex',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '100%',
-        height: '100%',
       }}
     >
-      <svg
+      <svg //+2 for storkewidth of 1.
         style={{ overflow: 'visible' }}
-        width={diameter * 2}
-        height={diameter * 2}
+        width={diameter * 2 + 2}
+        height={diameter * 2 + 2}
       >
         {shape}
       </svg>

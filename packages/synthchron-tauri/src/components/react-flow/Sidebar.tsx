@@ -55,6 +55,7 @@ export const Sidebar = () => {
             key={key}
             onDragStart={(event) => onDragStart(event, key)}
             draggable
+            style={{ alignSelf: 'center' }}
           >
             {NodeShapeMap(key)}
           </div>
