@@ -1,4 +1,3 @@
-import './sidebar.css'
 import { TabbedDrawer } from './TabbedDrawer'
 import { CollaborationTab } from './leftSidebar/CollaborationTab'
 import { CreatorTab } from './leftSidebar/CreatorTab'
