@@ -25,7 +25,6 @@ export const CreatorTab: React.FC = () => {
       <Typography variant='h6'>Node Creator</Typography>
       {Object.keys(nodeTypes).map((key) => (
         <div
-          className='dndnode'
           key={key}
           onDragStart={(event) => onDragStart(event, key)}
           draggable
