@@ -9,8 +9,15 @@ import './sidebar.css'
 import React from 'react'
 import { NodeShapeMap } from './processModels/NodeShapeMap'
 import { simulateWithEngine } from '@synthchron/simulator'
+import { usePersistentStore } from '../common/persistentStore'
+import { faker } from '@faker-js/faker'
+import { useNavigate } from 'react-router-dom'
 
 export const Sidebar = () => {
+  const addProject = usePersistentStore((state) => state.addProject)
+
+  const navigate = useNavigate()
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onDragStart = (event: any, nodeType: any) => {
     event.dataTransfer.setData('application/reactflow', nodeType)
@@ -114,7 +121,18 @@ export const Sidebar = () => {
             if (projectId) {
               saveFlow(projectId)
             } else {
-              console.log('No project id') // TODO: Create project
+              const processModel = transformFlowToSimulator(
+                useFlowStore.getState()
+              )
+              const id = addProject({
+                projectName: faker.animal.cow(),
+                projectDescription: faker.lorem.lines(3),
+                projectModel: processModel,
+                created: new Date().toJSON(),
+                lastEdited: new Date().toJSON(),
+              })
+
+              navigate(`/editor/${id}`)
             }
           }}
         >
