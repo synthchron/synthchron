@@ -1,3 +1,4 @@
+import React from 'react'
 import { useCallback, useRef, useState } from 'react'
 import { ReactFlowProvider, ReactFlowInstance } from 'reactflow'
 
@@ -44,6 +45,7 @@ export const SidebarsWrapper = () => {
 
     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect()
     const type = event.dataTransfer.getData('application/reactflow')
+    if (type == '') return
 
     const position = reactFlowInstance.project({
       x: event.clientX - reactFlowBounds.left,
@@ -54,7 +56,7 @@ export const SidebarsWrapper = () => {
       type: type,
       position,
       data: {
-        label: `${type == 'place' ? 'p' : 't'}`,
+        label: `${type == 'Transition' ? 'Transition' : 'Place'}`,
         store: 1,
         accepting: 'tokens >= 10',
       },
