@@ -3,8 +3,8 @@ import { Handle, NodeProps, Position } from 'reactflow'
 // import './NodeStyle.css'
 
 const config = {
-  width: 5,
-  height: 100,
+  width: 50,
+  height: 50,
   color: '#eee',
 }
 
