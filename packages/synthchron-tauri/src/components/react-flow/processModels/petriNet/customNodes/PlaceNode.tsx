@@ -20,6 +20,7 @@ interface PlaceNodeShapeProps {
 }
 
 export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = (NodeProps) => {
+  //There are a lot of +1's and +2's to account for strokewidth
   const { diameter, color } = config
 
   const styles = {
@@ -29,8 +30,8 @@ export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = (NodeProps) => {
 
   const shape = (
     <circle
-      cx={diameter}
-      cy={diameter}
+      cx={diameter + 1}
+      cy={diameter + 1}
       r={diameter}
       strokeWidth={NodeProps.strokeWidth ? NodeProps.strokeWidth : 1}
       {...styles}
@@ -45,7 +46,7 @@ export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = (NodeProps) => {
         alignItems: 'center',
       }}
     >
-      <svg //+2 for storkewidth of 1.
+      <svg
         style={{ overflow: 'visible' }}
         width={diameter * 2 + 2}
         height={diameter * 2 + 2}
@@ -73,7 +74,7 @@ export const PlaceNode: React.FC<NodeProps> = ({
   const { diameter } = config
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative', height: diameter * 2 + 2 }}>
       <Handle
         id='bottom'
         position={Position.Bottom}
