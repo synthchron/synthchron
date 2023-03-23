@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material'
+import { NodeShapeMap } from '../processModels/NodeShapeMap'
 import { useFlowStore } from '../ydoc/flowStore'
 
 export const CreatorTab: React.FC = () => {
@@ -28,8 +29,9 @@ export const CreatorTab: React.FC = () => {
           key={key}
           onDragStart={(event) => onDragStart(event, key)}
           draggable
+          style={{ alignSelf: 'center', transform: 'translate(0, 0)' }}
         >
-          {key}
+          {NodeShapeMap(key)}
         </div>
       ))}
     </Box>
