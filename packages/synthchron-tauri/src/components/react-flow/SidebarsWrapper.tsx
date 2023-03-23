@@ -10,7 +10,7 @@ import { LeftSidebar } from './LeftSidebar'
 import { StateFlow } from './StateFlow'
 import { RFState, useFlowStore } from './ydoc/flowStore'
 import { shallow } from 'zustand/shallow'
-import { PropertiesWindow } from './RightSidebar'
+import { RightSidebar } from './RightSidebar'
 import { Box } from '@mui/material'
 
 // This component includes both the left and right sidebar, and handles the drag and drop functionality
@@ -89,7 +89,7 @@ export const SidebarsWrapper = () => {
             onDragOver={onDragOver}
           />
         </Box>
-        <PropertiesWindow />
+        <RightSidebar />
       </ReactFlowProvider>
     </Box>
   )

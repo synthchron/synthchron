@@ -4,7 +4,7 @@ import { RFState, useFlowStore } from './ydoc/flowStore'
 import { Stack, TextField, Typography } from '@mui/material'
 import { DrawerWrapper } from './DrawerWrapper'
 
-export const PropertiesWindow = () => {
+export const RightSidebar = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const selector = useCallback(
     (state: RFState) => ({
