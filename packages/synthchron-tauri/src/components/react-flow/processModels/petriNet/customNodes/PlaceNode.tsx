@@ -14,25 +14,67 @@ const handleStyle = {
   backgroundColor: '#bbb',
 }
 
+interface PlaceNodeShapeProps {
+  strokeWidth: string | number | undefined
+  label: string | number | undefined
+}
+
+export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = (NodeProps) => {
+  //There are a lot of +1's and +2's to account for strokewidth
+  const { diameter, color } = config
+
+  const styles = {
+    fill: color,
+    stroke: '#222',
+  }
+
+  const shape = (
+    <circle
+      cx={diameter + 1}
+      cy={diameter + 1}
+      r={diameter}
+      strokeWidth={NodeProps.strokeWidth ? NodeProps.strokeWidth : 1}
+      {...styles}
+    />
+  )
+
+  return (
+    <div
+      style={{
+        display: 'inline-flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <svg
+        style={{ overflow: 'visible' }}
+        width={diameter * 2 + 2}
+        height={diameter * 2 + 2}
+      >
+        {shape}
+      </svg>
+      <div
+        style={{
+          textAlign: 'center',
+          position: 'absolute',
+          color: '#222',
+        }}
+      >
+        {NodeProps?.label}
+      </div>
+    </div>
+  )
+}
+
 export const PlaceNode: React.FC<NodeProps> = ({
   data,
   selected,
   isConnectable,
 }) => {
-  const { diameter, color } = config
-
-  const styles = {
-    fill: color,
-    strokeWidth: selected ? 2 : 1,
-    stroke: '#222',
-  }
-
-  const shape = (
-    <circle cx={diameter / 2} cy={diameter / 2} r={diameter} {...styles} />
-  )
+  const { diameter } = config
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative', height: diameter * 2 + 2 }}>
       <Handle
         id='bottom'
         position={Position.Bottom}
@@ -40,7 +82,7 @@ export const PlaceNode: React.FC<NodeProps> = ({
         isConnectable={isConnectable}
         style={{
           ...handleStyle,
-          bottom: '-30px',
+          bottom: -diameter / 2,
         }}
       />
       <Handle
@@ -50,7 +92,7 @@ export const PlaceNode: React.FC<NodeProps> = ({
         isConnectable={isConnectable}
         style={{
           ...handleStyle,
-          top: '-30px',
+          top: -diameter / 2,
         }}
       />
       <Handle
@@ -60,7 +102,7 @@ export const PlaceNode: React.FC<NodeProps> = ({
         isConnectable={isConnectable}
         style={{
           ...handleStyle,
-          right: '-30px',
+          right: -diameter / 2,
         }}
       />
       <Handle
@@ -70,40 +112,10 @@ export const PlaceNode: React.FC<NodeProps> = ({
         isConnectable={isConnectable}
         style={{
           ...handleStyle,
-          left: '-30px',
+          left: -diameter / 2,
         }}
       />
-      <svg
-        style={{ display: 'block', overflow: 'visible' }}
-        width={diameter}
-        height={diameter}
-      >
-        {shape}
-      </svg>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          pointerEvents: 'none',
-        }}
-      >
-        <div
-          style={{
-            fontFamily: 'monospace',
-            fontWeight: 'bold',
-            color: '#222',
-            fontSize: 12,
-          }}
-        >
-          {data?.store}
-        </div>
-      </div>
+      <PlaceNodeShape strokeWidth={selected ? 2 : 1} label={data?.store} />
     </div>
   )
 }

@@ -61,6 +61,7 @@ export const petriNetFlowConfig: ProcessModelFlowConfig = {
       data: {
         label: node.name,
         store: isPlaceNode(node) ? node.amountOfTokens : node.weight,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         accepting: (node as any).accepting,
       },
     })),

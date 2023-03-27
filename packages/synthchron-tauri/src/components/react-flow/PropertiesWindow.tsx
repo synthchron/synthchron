@@ -3,6 +3,7 @@ import { shallow } from 'zustand/shallow'
 import { RFState, useFlowStore } from './ydoc/flowStore'
 import './propertiesWindow.css'
 import { Stack, TextField } from '@mui/material'
+import React from 'react'
 
 export const PropertiesWindow = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
