@@ -1,5 +1,7 @@
+import { ProcessModelType } from '../processModel'
+
 export interface FlowchartProcessModel {
-  type: 'flowchart'
+  type: ProcessModelType
   nodes: FlowchartNode[]
   edges: FlowchartEdge[]
   initialNode: string

@@ -12,15 +12,9 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { ProcessModel } from '@synthchron/simulator'
+import { ProcessModel, ProcessModelType } from '@synthchron/simulator'
 import { faker } from '@faker-js/faker'
-import { usePersistentStore } from './persistentStore'
-
-export enum ProcessModelType {
-  PetriNet = 'petri-net',
-  Flowchart = 'flowchart',
-  DcrGraph = 'dcr-graph',
-}
+import { usePersistentStore } from './common/persistentStore'
 
 export type ProjectConfig = {
   name: string
@@ -67,14 +61,14 @@ const NewProjectModal: React.FC<{ open: boolean; onClose: () => void }> = ({
     switch (newProjectConfig.modelType) {
       default:
       case ProcessModelType.PetriNet:
-        model = { type: 'petri-net', nodes: [], edges: [] }
+        model = { type: newProjectConfig.modelType, nodes: [], edges: [] }
         break
       case ProcessModelType.DcrGraph:
-        model = { type: 'dcr-graph', nodes: [], edges: [] }
+        model = { type: newProjectConfig.modelType, nodes: [], edges: [] }
         break
       case ProcessModelType.Flowchart:
         model = {
-          type: 'flowchart',
+          type: newProjectConfig.modelType,
           nodes: [
             {
               type: 'decision',
