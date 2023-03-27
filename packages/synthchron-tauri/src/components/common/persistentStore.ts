@@ -6,7 +6,7 @@ interface PersistentState {
   projects: { [id: string]: Project }
   saving: boolean
   doneSaving: () => void
-  addProject: (project: Project) => void
+  addProject: (project: Project) => string
   removeProject: (id: string) => void
   updateProject: (id: string, project: Partial<Project>) => void
 }
@@ -35,6 +35,8 @@ export const usePersistentStore = create<PersistentState>()(
               },
             },
           }))
+
+          return id.toString()
         },
         removeProject: (id: string) => {
           set((state) => {
