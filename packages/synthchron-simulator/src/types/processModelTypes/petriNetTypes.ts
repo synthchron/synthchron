@@ -1,6 +1,6 @@
 import { PositionalNode, ProcessModelType } from '../processModel'
 export interface PetriNetProcessModel {
-  type: ProcessModelType
+  type: ProcessModelType.PetriNet
   nodes: PetriNetNode[]
   edges: PetriNetEdge[]
 }
