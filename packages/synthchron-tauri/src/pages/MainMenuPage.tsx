@@ -6,7 +6,7 @@ import { ProjectCard } from '../components/ProjectCard'
 import AddCircleIcon from '@mui/icons-material/AddCircle'
 
 import React from 'react'
-import NewProjectModal from '../components/common/NewProjectModal'
+import NewProjectModal from '../components/NewProjectModal'
 
 export const MainMenuPage = () => {
   const projects = usePersistentStore((state) => state.projects)

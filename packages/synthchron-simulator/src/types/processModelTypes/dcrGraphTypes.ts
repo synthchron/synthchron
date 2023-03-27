@@ -1,7 +1,7 @@
-import { Point } from '../processModel'
+import { Point, ProcessModelType } from '../processModel'
 
 export interface DcrGraphProcessModel {
-  type: 'dcr-graph'
+  type: ProcessModelType
   nodes: DcrGraphNode[]
   edges: DcrGraphEdge[]
 }
@@ -16,15 +16,15 @@ export type DcrGraphNode = Point & {
 
 export interface DcrGraphEdge {
   type:
-    | 'condition'
-    | 'exclude'
-    | 'include'
-    | 'response'
-    | 'milestone'
-    | 'no-response'
-    | 'spawn'
-    | 'precondition'
-    | 'logical-inclusion'
+  | 'condition'
+  | 'exclude'
+  | 'include'
+  | 'response'
+  | 'milestone'
+  | 'no-response'
+  | 'spawn'
+  | 'precondition'
+  | 'logical-inclusion'
   source: string
   target: string
 }
