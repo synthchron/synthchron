@@ -1,3 +1,4 @@
+import { Circle } from '@mui/icons-material'
 import React from 'react'
 import { Handle, NodeProps, Position } from 'reactflow'
 
@@ -16,7 +17,7 @@ const handleStyle = {
 
 interface PlaceNodeShapeProps {
   strokeWidth: string | number | undefined
-  label: string | number | undefined
+  label: number | undefined
 }
 
 export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = (NodeProps) => {
@@ -27,16 +28,6 @@ export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = (NodeProps) => {
     fill: color,
     stroke: '#222',
   }
-
-  const shape = (
-    <circle
-      cx={diameter + 1}
-      cy={diameter + 1}
-      r={diameter}
-      strokeWidth={NodeProps.strokeWidth ? NodeProps.strokeWidth : 1}
-      {...styles}
-    />
-  )
 
   return (
     <div
@@ -51,7 +42,13 @@ export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = (NodeProps) => {
         width={diameter * 2 + 2}
         height={diameter * 2 + 2}
       >
-        {shape}
+        <circle
+          cx={diameter + 1}
+          cy={diameter + 1}
+          r={diameter}
+          strokeWidth={NodeProps.strokeWidth ? NodeProps.strokeWidth : 1}
+          {...styles}
+        />
       </svg>
       <div
         style={{
@@ -72,6 +69,18 @@ export const PlaceNode: React.FC<NodeProps> = ({
   isConnectable,
 }) => {
   const { diameter } = config
+
+  const labelNumber = Number(data?.store)
+
+  let labelElement
+
+  if (labelNumber < 5 && labelNumber > 0) {
+    labelElement = Array.from({ length: labelNumber }, (_, index) => (
+      <Circle key={index} sx={{ fontSize: 10, padding: '1px' }} />
+    ))
+  } else {
+    labelElement = data?.store
+  }
 
   return (
     <div style={{ position: 'relative', height: diameter * 2 + 2 }}>
@@ -115,7 +124,7 @@ export const PlaceNode: React.FC<NodeProps> = ({
           left: -diameter / 2,
         }}
       />
-      <PlaceNodeShape strokeWidth={selected ? 2 : 1} label={data?.store} />
+      <PlaceNodeShape strokeWidth={selected ? 2 : 1} label={labelElement} />
     </div>
   )
 }
