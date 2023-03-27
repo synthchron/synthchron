@@ -11,6 +11,7 @@ import {
   PetriNetTransition,
 } from '../types/processModelTypes/petriNetTypes'
 import { compileExpression } from 'filtrex'
+import { ProcessModelType } from '../types/processModel'
 
 type PetriNetState = Map<string, number>
 
@@ -127,7 +128,7 @@ export const petriNetEngine: ProcessEngine<
   PetriNetState,
   string
 > = {
-  processModelType: 'petri-net',
+  processModelType: ProcessModelType.PetriNet,
   isAccepting: isAccepting,
   getEnabled: getEnabled,
   executeActivity: executeActivity,
