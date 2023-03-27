@@ -8404,10 +8404,10 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-lib0@^0.2.42, lib0@^0.2.49:
-  version "0.2.66"
-  resolved "https://registry.yarnpkg.com/lib0/-/lib0-0.2.66.tgz#791b21f825380fa7223ed074d26a45e34eaffda5"
-  integrity sha512-h63Jt0nmFGmE4aXMPHUuRBpDgkdr1gfeVn+epJJ8m6+gPK0AozP6akJ8rp9IqBP8RC/peLi+pwaOx/qpgAvqgA==
+lib0@^0.2.42, lib0@^0.2.49, lib0@^0.2.73:
+  version "0.2.73"
+  resolved "https://registry.yarnpkg.com/lib0/-/lib0-0.2.73.tgz#af7d7ce9ad523fa3e241d437cc3ab1862f9a1f29"
+  integrity sha512-aJJIElCLWnHMcYZPtsM07QoSfHwpxCy4VUzBYGXFYEmh/h2QS5uZNbCCfL0CqnkOE30b7Tp9DVfjXag+3qzZjQ==
   dependencies:
     isomorphic.js "^0.2.4"
 
