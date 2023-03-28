@@ -6,13 +6,15 @@ import { ReactFlowProvider, ReactFlowInstance } from 'reactflow'
 import 'reactflow/dist/style.css'
 
 // 👇 Importing components
-import { Sidebar } from './Sidebar'
+import { LeftSidebar } from './LeftSidebar'
 import { StateFlow } from './StateFlow'
 import { RFState, useFlowStore } from './ydoc/flowStore'
 import { shallow } from 'zustand/shallow'
-import { PropertiesWindow } from './PropertiesWindow'
+import { RightSidebar } from './RightSidebar'
+import { Box } from '@mui/material'
 
-export const DragAndDropWrapper = () => {
+// This component includes both the left and right sidebar, and handles the drag and drop functionality
+export const SidebarsWrapper = () => {
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
 
   const [reactFlowInstance, setReactFlowInstance] =
@@ -63,18 +65,32 @@ export const DragAndDropWrapper = () => {
   }
 
   return (
-    <div className='dndflow'>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        height: '100%',
+        width: '100%',
+        flexGrow: 1,
+      }}
+    >
       <ReactFlowProvider>
-        <Sidebar />
-        <div className='reactflow-wrapper' ref={reactFlowWrapper}>
+        <LeftSidebar />
+        <Box
+          sx={{
+            flexGrow: 1,
+            height: '100%',
+          }}
+          ref={reactFlowWrapper}
+        >
           <StateFlow
             onInit={setReactFlowInstance}
             onDrop={onDrop}
             onDragOver={onDragOver}
           />
-        </div>
-        <PropertiesWindow />
+        </Box>
+        <RightSidebar />
       </ReactFlowProvider>
-    </div>
+    </Box>
   )
 }
