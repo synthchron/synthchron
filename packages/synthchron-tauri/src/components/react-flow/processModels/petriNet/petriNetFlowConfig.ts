@@ -1,4 +1,4 @@
-import { ProcessModel } from '@synthchron/simulator'
+import { ProcessModel, ProcessModelType } from '@synthchron/simulator'
 import {
   PetriNetProcessModel,
   PetriNetPlace,
@@ -31,7 +31,7 @@ const isPlaceNode = (node: PetriNetNode): node is PetriNetPlace =>
   node.type === 'place'
 
 export const petriNetFlowConfig: ProcessModelFlowConfig = {
-  processModelType: 'petri-net',
+  processModelType: ProcessModelType.PetriNet,
   nodeTypes: nodeTypes,
   edgeTypes: edgeTypes,
   checkConnect: (
@@ -61,7 +61,7 @@ export const petriNetFlowConfig: ProcessModelFlowConfig = {
       data: {
         label: node.name,
         store: isPlaceNode(node) ? node.amountOfTokens : node.weight,
-        accepting: (node as any).accepting,
+        accepting: isPlaceNode(node) ? node.accepting : undefined,
       },
     })),
     edges: (processModel as PetriNetProcessModel).edges.map((edge) => ({
@@ -109,7 +109,7 @@ export const petriNetFlowConfig: ProcessModelFlowConfig = {
       }
     })
     return {
-      type: 'petri-net',
+      type: ProcessModelType.PetriNet,
       nodes: simulatorNodes,
       edges: simulatorEdges,
     }

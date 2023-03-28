@@ -1,9 +1,10 @@
+import { ProcessModelType } from '../types/processModel'
 import { PetriNetProcessModel } from '../types/processModelTypes/petriNetTypes'
 
 // This petri net should simulate as follows:
 // ["t1"]
 export const petriNet1: PetriNetProcessModel = {
-  type: 'petri-net',
+  type: ProcessModelType.PetriNet,
   nodes: [
     {
       type: 'place',
@@ -43,7 +44,7 @@ export const petriNet1: PetriNetProcessModel = {
 // This petri Net should simulate as follows:
 // ["t1"]
 export const petriNet2: PetriNetProcessModel = {
-  type: 'petri-net',
+  type: ProcessModelType.PetriNet,
   nodes: [
     {
       type: 'place',
@@ -93,7 +94,7 @@ export const petriNet2: PetriNetProcessModel = {
 }
 
 export const petriNet3: PetriNetProcessModel = {
-  type: 'petri-net',
+  type: ProcessModelType.PetriNet,
   nodes: [
     {
       type: 'place',
