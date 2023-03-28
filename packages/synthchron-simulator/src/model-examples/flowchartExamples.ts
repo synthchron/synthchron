@@ -1,7 +1,8 @@
+import { ProcessModelType } from '../types/processModel'
 import { FlowchartProcessModel } from '../types/processModelTypes/flowChart'
 
 export const flowchart1: FlowchartProcessModel = {
-  type: 'flowchart',
+  type: ProcessModelType.Flowchart,
   nodes: [
     {
       type: 'terminal',
@@ -37,7 +38,7 @@ export const flowchart1: FlowchartProcessModel = {
 }
 
 export const flowchart2: FlowchartProcessModel = {
-  type: 'flowchart',
+  type: ProcessModelType.Flowchart,
   nodes: [
     {
       type: 'terminal',

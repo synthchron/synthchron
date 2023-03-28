@@ -1,11 +1,18 @@
+import { faker } from '@faker-js/faker'
 import { Box, Button, Typography } from '@mui/material'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { usePersistentStore } from '../../common/persistentStore'
+import { transformFlowToSimulator } from '../../flowTransformer'
 import { useFlowStore } from '../ydoc/flowStore'
 
 export const ProjectTab: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>()
 
   const saveFlow = useFlowStore((state) => state.saveFlow)
+
+  const addProject = usePersistentStore((state) => state.addProject)
+
+  const navigate = useNavigate()
 
   return (
     <Box
@@ -22,7 +29,18 @@ export const ProjectTab: React.FC = () => {
           if (projectId) {
             saveFlow(projectId)
           } else {
-            console.log('No project id') // TODO: Create project
+            const processModel = transformFlowToSimulator(
+              useFlowStore.getState()
+            )
+            const id = addProject({
+              projectName: faker.animal.cow(),
+              projectDescription: faker.lorem.lines(3),
+              projectModel: processModel,
+              created: new Date().toJSON(),
+              lastEdited: new Date().toJSON(),
+            })
+
+            navigate(`/editor/${id}`)
           }
         }}
       >
