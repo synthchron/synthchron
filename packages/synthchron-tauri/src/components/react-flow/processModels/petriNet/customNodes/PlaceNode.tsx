@@ -17,7 +17,7 @@ const handleStyle = {
 
 interface PlaceNodeShapeProps {
   strokeWidth: string | number | undefined
-  label: number | undefined
+  label: string | number | undefined
 }
 
 export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = (NodeProps) => {
