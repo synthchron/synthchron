@@ -1,8 +1,7 @@
 import { Event, SimulationResult } from '@synthchron/simulator'
 import { XESEvent, XESLog } from '@synthchron/xes'
-import { x } from '@tauri-apps/api/path-e12e0e34'
 
-const transformSimulatioResultToXESLog = (
+export const transformSimulatioResultToXESLog = (
   simulationResult: SimulationResult
 ): XESLog => {
   const XESTrace = {
@@ -15,7 +14,7 @@ const transformSimulatioResultToXESLog = (
 }
 
 function convertEventToXESEvent(event: Event): XESEvent {
-  const attributes = Object.entries(event).map(([key, value]) => {
+  const attributes = Object.entries(event.meta).map(([key, value]) => {
     return {
       key,
       value: value.toString(),
@@ -23,7 +22,7 @@ function convertEventToXESEvent(event: Event): XESEvent {
   })
   if (event.name !== undefined) {
     attributes.push({
-      key: 'concept:name',
+      key: 'Activity',
       value: event.name,
     })
   }

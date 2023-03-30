@@ -3,4 +3,4 @@ export const main = (): string => 'Hello World'
 
 export { generateXES } from './generate'
 
-export { XESLog, XESTrace, XESEvent, XESAttribute } from './types'
+export type { XESLog, XESTrace, XESEvent, XESAttribute } from './types'

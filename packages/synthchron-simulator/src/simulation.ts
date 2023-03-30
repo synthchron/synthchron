@@ -1,13 +1,11 @@
 import {
   Configuration,
-  Event,
   ProcessEngine,
   SimulationResult,
   TerminationStatus,
   Trace,
 } from './types/general'
 import { ProcessModel } from './types/processModel'
-import { XESEvent, XESLog } from '../../synthchron-xes/src/types.js'
 
 //const PROCESS_ENGINES = [petriNetEngine]
 
