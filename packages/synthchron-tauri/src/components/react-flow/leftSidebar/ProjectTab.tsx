@@ -1,7 +1,12 @@
 import { faker } from '@faker-js/faker'
 import { Box, Button, Container, Input, Typography } from '@mui/material'
+import { useCallback } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { usePersistentStore } from '../../common/persistentStore'
+import { shallow } from 'zustand/shallow'
+import {
+  PersistentState,
+  usePersistentStore,
+} from '../../common/persistentStore'
 import { transformFlowToSimulator } from '../../flowTransformer'
 import { useFlowStore } from '../ydoc/flowStore'
 
@@ -10,9 +15,18 @@ export const ProjectTab: React.FC = () => {
 
   const saveFlow = useFlowStore((state) => state.saveFlow)
 
-  const addProject = usePersistentStore((state) => state.addProject)
-  const updateProject = usePersistentStore((state) => state.updateProject)
-  const projects = usePersistentStore((state) => state.projects)
+  const selector = useCallback(
+    (state: PersistentState) => ({
+      projects: state.projects,
+      addProject: state.addProject,
+      updateProject: state.updateProject,
+    }),
+    []
+  )
+  const { projects, addProject, updateProject } = usePersistentStore(
+    selector,
+    shallow
+  )
 
   const navigate = useNavigate()
 
