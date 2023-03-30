@@ -1920,27 +1920,27 @@
   resolved "https://registry.npmjs.org/@popperjs/core/-/core-2.11.6.tgz"
   integrity sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==
 
-"@reactflow/background@11.1.8":
-  version "11.1.8"
-  resolved "https://registry.npmjs.org/@reactflow/background/-/background-11.1.8.tgz"
-  integrity sha512-NYZwiEeKVc1qJbDRrRX5RgHbMMzofhzOAqz3teWtUIGju5d+kEf/vcx/35bLM+CZuhucL+OvJpRgCjKmViiTIw==
+"@reactflow/background@11.1.10":
+  version "11.1.10"
+  resolved "https://registry.yarnpkg.com/@reactflow/background/-/background-11.1.10.tgz#5457f00cf8a34e9c89cf46c387ba6f3952768970"
+  integrity sha512-BeNODSlZEaLkhOiZvGROrC7g/tdIt3qzzjguB0/wwDd/LXWj8bPxOAL4+1c9qnJszH2yCgww1U/QWe2xXc0hTg==
   dependencies:
-    "@reactflow/core" "11.5.5"
+    "@reactflow/core" "11.6.1"
     classcat "^5.0.3"
     zustand "^4.3.1"
 
-"@reactflow/controls@11.1.8":
-  version "11.1.8"
-  resolved "https://registry.npmjs.org/@reactflow/controls/-/controls-11.1.8.tgz"
-  integrity sha512-QCG4q52HS/zmuBAFzmTFh4wkR6thmNDxSKHQPxTwfVIuQtV/oGpfz7zMaoU0ZSN84qSWl5UdzmV4PAC50tOAkQ==
+"@reactflow/controls@11.1.10":
+  version "11.1.10"
+  resolved "https://registry.yarnpkg.com/@reactflow/controls/-/controls-11.1.10.tgz#874d8fe73d4ca13623fc2253ce2951fa32fd8c11"
+  integrity sha512-7GiAhYdQFmfReafahkQPY+RnLISSIbgfqGfMghQyW/fuBQoV3lgqhthnb0Q4AtM4Bp/s/Jv3aHcdVdj3E3a2yw==
   dependencies:
-    "@reactflow/core" "11.5.5"
+    "@reactflow/core" "11.6.1"
     classcat "^5.0.3"
 
-"@reactflow/core@11.5.5":
-  version "11.5.5"
-  resolved "https://registry.npmjs.org/@reactflow/core/-/core-11.5.5.tgz"
-  integrity sha512-/FPnpvO9I4E6/mmfZInbsVusR214gzIZ2e2xgl9XJdBo90cWaqHgo0c5F2YPXX19R3mItzxveN+WlENFEOvdPg==
+"@reactflow/core@11.6.1":
+  version "11.6.1"
+  resolved "https://registry.yarnpkg.com/@reactflow/core/-/core-11.6.1.tgz#4c845298f4687ca4c2ce825ac06a6983a5813117"
+  integrity sha512-qKmXi9z1n6aycAGv+GYCNHgsGznCAyY73DsvOvPH99V/+2M3FtpOnQf6Am5HHfDsCk+h5vuRiT6hlv7Oi2Xn0w==
   dependencies:
     "@types/d3" "^7.4.0"
     "@types/d3-drag" "^3.0.1"
@@ -1952,12 +1952,12 @@
     d3-zoom "^3.0.0"
     zustand "^4.3.1"
 
-"@reactflow/minimap@11.3.8":
-  version "11.3.8"
-  resolved "https://registry.npmjs.org/@reactflow/minimap/-/minimap-11.3.8.tgz"
-  integrity sha512-hOW3FVP/ObRK3oZxvKSSKIIR/DRe1OR4KU+3AIHxTK6K2kt/D48zQU37fOmEasfohjBjsqEopK7Ux8tapTT0EA==
+"@reactflow/minimap@11.4.1":
+  version "11.4.1"
+  resolved "https://registry.yarnpkg.com/@reactflow/minimap/-/minimap-11.4.1.tgz#1cdc97bfe5744b81cc36cbeb059ac248f6e34464"
+  integrity sha512-1fEt0NQ51llDvEcnNnyFZlpfvZX9WhLBJMbAHFOVk2p3i2ppyKutj/l2TwYv/l3sDu2irc1G4GCwGagdddRHWQ==
   dependencies:
-    "@reactflow/core" "11.5.5"
+    "@reactflow/core" "11.6.1"
     "@types/d3-selection" "^3.0.3"
     "@types/d3-zoom" "^3.0.1"
     classcat "^5.0.3"
@@ -1965,12 +1965,12 @@
     d3-zoom "^3.0.0"
     zustand "^4.3.1"
 
-"@reactflow/node-toolbar@1.1.8":
-  version "1.1.8"
-  resolved "https://registry.npmjs.org/@reactflow/node-toolbar/-/node-toolbar-1.1.8.tgz"
-  integrity sha512-/Aj5dfarrBRvPeyDk+CZef7InP4LXlhMnlMPw6hnT/P9lVVChe02knzzkeKiVGmiWKXWL/gOCDXBFp9tMtIAsQ==
+"@reactflow/node-toolbar@1.1.10":
+  version "1.1.10"
+  resolved "https://registry.yarnpkg.com/@reactflow/node-toolbar/-/node-toolbar-1.1.10.tgz#416c671bcec82a362c811bbf965b943ac89e5b89"
+  integrity sha512-gvxQjj9huyaWnVhuu23DLzwooljAf9P55AIC3BnREqTEFd4IUBmS+Xca1yXNWsoS3hfVDjyV/fiBDcm2EXxEzw==
   dependencies:
-    "@reactflow/core" "11.5.5"
+    "@reactflow/core" "11.6.1"
     classcat "^5.0.3"
     zustand "^4.3.1"
 
@@ -2008,10 +2008,10 @@
   dependencies:
     "@sinonjs/commons" "^2.0.0"
 
-"@sinonjs/samsam@^7.0.1":
-  version "7.0.1"
-  resolved "https://registry.npmjs.org/@sinonjs/samsam/-/samsam-7.0.1.tgz"
-  integrity sha512-zsAk2Jkiq89mhZovB2LLOdTCxJF4hqqTToGP0ASWlhp4I1hqOjcfmZGafXntCN7MDC6yySH0mFHrYtHceOeLmw==
+"@sinonjs/samsam@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@sinonjs/samsam/-/samsam-8.0.0.tgz#0d488c91efb3fa1442e26abea81759dfc8b5ac60"
+  integrity sha512-Bp8KUVlLp8ibJZrnvq2foVhP0IVX2CIprMJPK0vqGqgrDa0OHVKeZyBykqskkrdxV6yKBPmGasO8LVjAKR3Gew==
   dependencies:
     "@sinonjs/commons" "^2.0.0"
     lodash.get "^4.4.2"
@@ -3372,6 +3372,11 @@
   resolved "https://registry.npmjs.org/@types/node/-/node-16.18.12.tgz"
   integrity sha512-vzLe5NaNMjIE3mcddFVGlAXN1LEWueUsMsOJWaT6wWMJGyljHAWHznqfnKUQWGzu7TLPrGvWdNAsvQYW+C0xtw==
 
+"@types/node@^18.15.10":
+  version "18.15.11"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.15.11.tgz#b3b790f09cb1696cffcec605de025b088fa4225f"
+  integrity sha512-E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==
+
 "@types/normalize-package-data@^2.4.0":
   version "2.4.1"
   resolved "https://registry.npmjs.org/@types/normalize-package-data/-/normalize-package-data-2.4.1.tgz"
@@ -3435,10 +3440,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^18.0.15":
-  version "18.0.28"
-  resolved "https://registry.npmjs.org/@types/react/-/react-18.0.28.tgz"
-  integrity sha512-RD0ivG1kEztNBdoAK7lekI9M+azSnitIn85h4iOiaLjaTrMjzslhaqCGaI4IyCJ1RljWiLCEu4jyrLLgqxBTew==
+"@types/react@*", "@types/react@^18.0.29":
+  version "18.0.29"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.29.tgz#4cead505172c0020c5b51940199e31fc6ff2f63a"
+  integrity sha512-wXHktgUABxplw1+UnljseDq4+uztQyp2tlWZRIxHlpchsCFqiYkvaDS8JR7eKOQm8wziTH/el5qL7D6gYNkYcw==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -8399,10 +8404,10 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-lib0@^0.2.42, lib0@^0.2.49:
-  version "0.2.66"
-  resolved "https://registry.yarnpkg.com/lib0/-/lib0-0.2.66.tgz#791b21f825380fa7223ed074d26a45e34eaffda5"
-  integrity sha512-h63Jt0nmFGmE4aXMPHUuRBpDgkdr1gfeVn+epJJ8m6+gPK0AozP6akJ8rp9IqBP8RC/peLi+pwaOx/qpgAvqgA==
+lib0@^0.2.42, lib0@^0.2.72, lib0@^0.2.73:
+  version "0.2.73"
+  resolved "https://registry.yarnpkg.com/lib0/-/lib0-0.2.73.tgz#af7d7ce9ad523fa3e241d437cc3ab1862f9a1f29"
+  integrity sha512-aJJIElCLWnHMcYZPtsM07QoSfHwpxCy4VUzBYGXFYEmh/h2QS5uZNbCCfL0CqnkOE30b7Tp9DVfjXag+3qzZjQ==
   dependencies:
     isomorphic.js "^0.2.4"
 
@@ -10220,16 +10225,16 @@ react@^18.2.0:
   dependencies:
     loose-envify "^1.1.0"
 
-reactflow@^11.5.6:
-  version "11.5.6"
-  resolved "https://registry.npmjs.org/reactflow/-/reactflow-11.5.6.tgz"
-  integrity sha512-my4LUKT7H7t2mK/qy4n+bfAMgjqhHOhYGYrvzSWB4yPhOhamPGjs0Ted9G8JWEw15Svn7pHf8DppTHUfk5zH2g==
+reactflow@^11.6.1:
+  version "11.6.1"
+  resolved "https://registry.yarnpkg.com/reactflow/-/reactflow-11.6.1.tgz#9408c8d40a9d58110d2c35d77f8ef726a267b9c5"
+  integrity sha512-1KpBHljqSDO+yHJCkpbupRdOvYVGmCtnY8Km8iTQNo3Bq/ivYbX4SDpAIL5inqoJu8chPP00DNSLuDcMqRJcZw==
   dependencies:
-    "@reactflow/background" "11.1.8"
-    "@reactflow/controls" "11.1.8"
-    "@reactflow/core" "11.5.5"
-    "@reactflow/minimap" "11.3.8"
-    "@reactflow/node-toolbar" "1.1.8"
+    "@reactflow/background" "11.1.10"
+    "@reactflow/controls" "11.1.10"
+    "@reactflow/core" "11.6.1"
+    "@reactflow/minimap" "11.4.1"
+    "@reactflow/node-toolbar" "1.1.10"
 
 read-pkg-up@^1.0.1:
   version "1.0.1"
@@ -10888,14 +10893,14 @@ simple-peer@^9.11.0:
     randombytes "^2.1.0"
     readable-stream "^3.6.0"
 
-sinon@^15.0.2:
-  version "15.0.2"
-  resolved "https://registry.yarnpkg.com/sinon/-/sinon-15.0.2.tgz#f3e3aacb990bbaa8a7bb976e86118c5dc0154e66"
-  integrity sha512-PCVP63XZkg0/LOqQH5rEU4LILuvTFMb5tNxTHfs6VUMNnZz2XrnGSTZbAGITjzwQWbl/Bl/8hi4G3zZWjyBwHg==
+sinon@^15.0.3:
+  version "15.0.3"
+  resolved "https://registry.yarnpkg.com/sinon/-/sinon-15.0.3.tgz#38005fcd80827177b6aa0245f82401d9ec88994b"
+  integrity sha512-si3geiRkeovP7Iel2O+qGL4NrO9vbMf3KsrJEi0ghP1l5aBkB5UxARea5j0FUsSqH3HLBh0dQPAyQ8fObRUqHw==
   dependencies:
     "@sinonjs/commons" "^3.0.0"
     "@sinonjs/fake-timers" "^10.0.2"
-    "@sinonjs/samsam" "^7.0.1"
+    "@sinonjs/samsam" "^8.0.0"
     diff "^5.1.0"
     nise "^5.1.4"
     supports-color "^7.2.0"
@@ -12513,12 +12518,12 @@ yargs@16.2.0, yargs@^16.2.0:
     y18n "^5.0.5"
     yargs-parser "^20.2.2"
 
-yjs@^13.5.50:
-  version "13.5.50"
-  resolved "https://registry.yarnpkg.com/yjs/-/yjs-13.5.50.tgz#ab0605c677922163c9fe49295d3fd47c04c8e0e9"
-  integrity sha512-Q2KVNfovwjtJV4Yxz+HaFYT6vTYBaFagOSpTL3jbPc7Sbv/My68fLTfPlYy9FmNO87pV8dMBd5XuVar+9WsAWg==
+yjs@^13.5.51:
+  version "13.5.51"
+  resolved "https://registry.yarnpkg.com/yjs/-/yjs-13.5.51.tgz#afd5a26a230498c3b4bf8fee9c8dbeea71ef7e5c"
+  integrity sha512-F1Nb3z3TdandD80IAeQqgqy/2n9AhDLcXoBhZvCUX1dNVe0ef7fIwi6MjSYaGAYF2Ev8VcLcsGnmuGGOl7AWbw==
   dependencies:
-    lib0 "^0.2.49"
+    lib0 "^0.2.72"
 
 yn@3.1.1:
   version "3.1.1"

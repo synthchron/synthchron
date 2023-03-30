@@ -1,22 +1,21 @@
+import { ProcessModelType } from '../types/processModel'
 import { PetriNetProcessModel } from '../types/processModelTypes/petriNetTypes'
 
 // This petri net should simulate as follows:
 // ["t1"]
 export const petriNet1: PetriNetProcessModel = {
-  type: 'petri-net',
+  type: ProcessModelType.PetriNet,
   nodes: [
     {
       type: 'place',
       identifier: 'p1',
       name: 'p1',
-      accepting: 'tokens >= 1',
       amountOfTokens: 2,
     },
     {
       type: 'place',
       identifier: 'p2',
       name: 'p2',
-      accepting: 'tokens >= 1',
       amountOfTokens: 0,
     },
     {
@@ -38,32 +37,35 @@ export const petriNet1: PetriNetProcessModel = {
       target: 'p2',
     },
   ],
+  acceptingExpressions: [
+    {
+      name: 'accepting',
+      expression: 'pp1 >= 1 and pp2 >= 1',
+    },
+  ],
 }
 
 // This petri Net should simulate as follows:
 // ["t1"]
 export const petriNet2: PetriNetProcessModel = {
-  type: 'petri-net',
+  type: ProcessModelType.PetriNet,
   nodes: [
     {
       type: 'place',
       identifier: 'p1',
       name: 'p1',
-      accepting: 'tokens >= 1',
       amountOfTokens: 2,
     },
     {
       type: 'place',
       identifier: 'p2',
       name: 'p2',
-      accepting: 'tokens >= 1',
       amountOfTokens: 0,
     },
     {
       type: 'place',
       identifier: 'p3',
       name: 'p3',
-      accepting: 'tokens >= 1',
       amountOfTokens: 0,
     },
     {
@@ -90,23 +92,27 @@ export const petriNet2: PetriNetProcessModel = {
       target: 'p3',
     },
   ],
+  acceptingExpressions: [
+    {
+      name: 'accepting',
+      expression: 'pp1 >= 1 and pp2 >= 1 and pp3 >= 1',
+    },
+  ],
 }
 
 export const petriNet3: PetriNetProcessModel = {
-  type: 'petri-net',
+  type: ProcessModelType.PetriNet,
   nodes: [
     {
       type: 'place',
       identifier: 'p1',
       name: 'p1',
-      accepting: 'tokens mod 2 == 0', // isEven
       amountOfTokens: 2,
     },
     {
       type: 'place',
       identifier: 'p2',
       name: 'p2',
-      accepting: 'tokens mod 2 == 1', // isOdd
       amountOfTokens: 1,
     },
     {
@@ -126,6 +132,12 @@ export const petriNet3: PetriNetProcessModel = {
       multiplicity: 1,
       source: 't1',
       target: 'p2',
+    },
+  ],
+  acceptingExpressions: [
+    {
+      name: 'accepting',
+      expression: 'pp1 mod 2 == 0 and pp2 mod 2 == 1',
     },
   ],
 }

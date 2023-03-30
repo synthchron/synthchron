@@ -39,10 +39,11 @@ export type RFState = {
   // React Flow state
   nodes: Node[]
   edges: Edge[]
+  meta: object // Meta information for the model, such as starting node for flowcharts or accepting states for Petri nets
+  setMeta: (meta: object) => void
   processModelFlowConfig: ProcessModelFlowConfig
   selectedElement: Node | Edge | undefined
   selectElement: (elem: Node | Edge | undefined) => void
-  onSelectedElementChange: () => void
   onNodesChange: OnNodesChange
   onEdgesChange: OnEdgesChange
   onConnect: OnConnect
@@ -50,6 +51,7 @@ export type RFState = {
   initializeFlow: (
     nodes: Node[],
     edges: Edge[],
+    meta: object,
     config: ProcessModelFlowConfig
   ) => void
   saveFlow: (id: string) => void
@@ -63,6 +65,7 @@ export const yDoc = new Doc()
 export const yDocState = {
   nodesMap: yDoc.getMap<Node>('nodes'),
   edgesMap: yDoc.getMap<Edge>('edges'),
+  metaMap: yDoc.getMap('meta'),
   processModelType: yDoc.getText('processModelType'),
 }
 
@@ -150,6 +153,12 @@ export const useFlowStore = create<RFState>((set, get) => ({
   // React Flow state
   nodes: Array.from(yDocState.nodesMap.values()),
   edges: Array.from(yDocState.edgesMap.values()),
+  meta: Object.fromEntries(yDocState.metaMap.entries()),
+  setMeta: (meta: object) => {
+    for (const [key, value] of Object.entries(meta)) {
+      yDocState.metaMap.set(key, value)
+    }
+  },
   processModelFlowConfig: petriNetFlowConfig, // TODO: Add switch on process model type from ydoc
   // React Flow actions
   onNodesChange: onNodesChanges,
@@ -199,15 +208,15 @@ export const useFlowStore = create<RFState>((set, get) => ({
           .map((node) => parseInt(node.id))
           .filter((id) => !isNaN(id))
       ) + 1
-    console.log(newId)
     yDocState.nodesMap.set(newId.toString(), {
       ...node,
-      id: newId.toString(),
+      id: `${newId}`,
     })
   },
   initializeFlow: (
     nodes: Node[],
     edges: Edge[],
+    meta: object,
     config: ProcessModelFlowConfig
   ) => {
     yDoc.destroy()
@@ -217,12 +226,16 @@ export const useFlowStore = create<RFState>((set, get) => ({
     edges.forEach((edge) => {
       yDocState.edgesMap.set(edge.id, edge)
     })
+    Object.entries(meta).forEach(([key, value]) => {
+      yDocState.metaMap.set(key, value)
+    })
     yDocState.processModelType.insert(0, config.processModelType)
   },
   saveFlow: (id: string) => {
     const processModel: ProcessModel = get().processModelFlowConfig.serialize(
       get().nodes,
-      get().edges
+      get().edges,
+      get().meta
     )
     usePersistentStore.getState().updateProject(id, {
       projectModel: processModel,
@@ -233,7 +246,6 @@ export const useFlowStore = create<RFState>((set, get) => ({
       selectedElement: elem,
     })
 
-    console.log(elem)
     if (elem) {
       if ('position' in elem) {
         //Element is a node
@@ -249,9 +261,6 @@ export const useFlowStore = create<RFState>((set, get) => ({
       }
     }
   },
-  onSelectedElementChange: () => {
-    console.log('TEST_Should deltetes')
-  },
 }))
 
 const nodeObserver = () => {
@@ -261,6 +270,7 @@ const nodeObserver = () => {
   })
 }
 yDocState.nodesMap.observe(nodeObserver)
+
 const edgeObserver = () => {
   const edges = Array.from(yDocState.edgesMap.values())
   useFlowStore.setState({
@@ -268,6 +278,16 @@ const edgeObserver = () => {
   })
 }
 yDocState.edgesMap.observe(edgeObserver)
+
+const metaObserver = () => {
+  const meta = Object.fromEntries(yDocState.metaMap.entries())
+  console.log(meta)
+  useFlowStore.setState({
+    meta,
+  })
+}
+yDocState.metaMap.observe(metaObserver)
+
 const processModelTypeObserver = () => {
   const processModelType = yDocState.processModelType.toString()
   switch (processModelType) {

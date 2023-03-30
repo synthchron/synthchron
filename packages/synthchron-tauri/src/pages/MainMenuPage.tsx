@@ -1,14 +1,16 @@
 import { Grid, IconButton } from '@mui/material'
-import { petriNet1 } from '@synthchron/simulator'
+
 import { usePersistentStore } from '../components/common/persistentStore'
 import { CustomAppBar } from '../components/CustomAppBar'
 import { ProjectCard } from '../components/ProjectCard'
 import AddCircleIcon from '@mui/icons-material/AddCircle'
-import { faker } from '@faker-js/faker'
+
+import React from 'react'
+import NewProjectModal from '../components/NewProjectModal'
 
 export const MainMenuPage = () => {
   const projects = usePersistentStore((state) => state.projects)
-  const addProject = usePersistentStore((state) => state.addProject)
+  const [isNewProjectModalOpen, setNewProjectModalOpen] = React.useState(false)
 
   return (
     <>
@@ -30,13 +32,7 @@ export const MainMenuPage = () => {
                     color='primary'
                     aria-label='add to shopping cart'
                     onClick={() => {
-                      addProject({
-                        projectName: faker.animal.bird(),
-                        projectDescription: faker.lorem.lines(3),
-                        projectModel: petriNet1,
-                        created: new Date().toJSON(),
-                        lastEdited: new Date().toJSON(),
-                      })
+                      setNewProjectModalOpen(true)
                     }}
                   >
                     <AddCircleIcon fontSize='large' />
@@ -57,6 +53,12 @@ export const MainMenuPage = () => {
           </Grid>
         </Grid>
       </Grid>
+      <NewProjectModal
+        open={isNewProjectModalOpen}
+        onClose={() => {
+          setNewProjectModalOpen(false)
+        }}
+      />
     </>
   )
 }

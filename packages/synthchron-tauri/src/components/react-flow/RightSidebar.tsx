@@ -1,9 +1,10 @@
 import { useCallback } from 'react'
 import { shallow } from 'zustand/shallow'
 import { RFState, useFlowStore } from './ydoc/flowStore'
-import './propertiesWindow.css'
-import { Stack, TextField } from '@mui/material'
-import internal from 'stream'
+import { Stack, TextField, Typography } from '@mui/material'
+import { TabbedDrawer } from './TabbedDrawer'
+import { GeneralTab } from './rightSidebar/GeneralTab'
+import { SimulationTab } from './rightSidebar/SimulationTab'
 import { Edge, Node } from 'reactflow'
 
 type NodeDataFields = {
@@ -15,7 +16,8 @@ type NodeDataFields = {
   weight: number
 }
 
-export const PropertiesWindow = () => {
+export const RightSidebar = () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const selector = useCallback(
     (state: RFState) => ({
       selectedElement: state.selectedElement,
@@ -51,7 +53,6 @@ export const PropertiesWindow = () => {
         selectElement(updatedSelectedElement)
       }
     }
-    console.log(fields)
   }
 
   const selectedElementProperties = selectedElement ? (
@@ -73,14 +74,16 @@ export const PropertiesWindow = () => {
   )
 
   return (
-    <aside
-      className='PropertiesWindow'
-      style={{ display: selectedElement ? 'block' : 'none' }}
-    >
-      <Stack spacing={2} className='PropertyContainer'>
-        <div className='PropertiesTitle'>Properties Window</div>
-        {selectedElementProperties}
-      </Stack>
-    </aside>
+    <TabbedDrawer side='right' tabs={['Properties', 'General', 'Simulator']}>
+      <>
+        <Stack spacing={2}>
+          <Typography variant='h6'>Properties</Typography>
+          {/* TODO: Center this */}
+          {selectedElementProperties}
+        </Stack>
+      </>
+      <GeneralTab />
+      <SimulationTab />
+    </TabbedDrawer>
   )
 }

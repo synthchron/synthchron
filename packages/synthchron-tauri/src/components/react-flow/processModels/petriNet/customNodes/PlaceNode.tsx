@@ -68,6 +68,7 @@ export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = (NodeProps) => {
 
 export const PlaceNode: React.FC<NodeProps> = ({
   data,
+  id,
   selected,
   isConnectable,
 }) => {
@@ -115,7 +116,7 @@ export const PlaceNode: React.FC<NodeProps> = ({
           left: -diameter / 2,
         }}
       />
-      <PlaceNodeShape strokeWidth={selected ? 2 : 1} label={data?.store} />
+      <PlaceNodeShape strokeWidth={selected ? 2 : 1} label={data?.store} />p{id}
     </div>
   )
 }
