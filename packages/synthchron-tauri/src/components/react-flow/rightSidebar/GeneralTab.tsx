@@ -19,7 +19,9 @@ export const GeneralTab: React.FC = () => {
   const meta = useFlowStore((state) => state.meta)
   const setMeta = useFlowStore((state) => state.setMeta)
 
-  const processModel = projectId ? projects[projectId].projectModel : undefined
+  const processModelFlowConfig = useFlowStore(
+    (state) => state.processModelFlowConfig
+  )
 
   return (
     <Container
@@ -31,7 +33,7 @@ export const GeneralTab: React.FC = () => {
       }}
     >
       <Typography variant='h6'>Project</Typography>
-      {processModel?.type == ProcessModelType.PetriNet && (
+      {processModelFlowConfig.processModelType == ProcessModelType.PetriNet && (
         <>
           <Typography variant='subtitle1'>Accepting Expressions</Typography>
           {(meta as PetriNetMeta).acceptingExpressions.map(
