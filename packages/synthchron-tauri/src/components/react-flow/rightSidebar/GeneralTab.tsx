@@ -11,6 +11,14 @@ import ControlPointIcon from '@mui/icons-material/ControlPoint'
 import { useFlowStore } from '../ydoc/flowStore'
 import { PetriNetMeta } from '../processModels/petriNet/petriNetFlowConfig'
 
+const exampleExpressions = [
+  'p1 > 1 and p2 <= 4',
+  'p1 == p3',
+  'p1 * p2 == 0',
+  'p1 mod 2 == 1',
+  'p1 > 0 or p2 > 0',
+]
+
 export const GeneralTab: React.FC = () => {
   const meta = useFlowStore((state) => state.meta)
   const setMeta = useFlowStore((state) => state.setMeta)
@@ -61,6 +69,7 @@ export const GeneralTab: React.FC = () => {
                   }}
                   variant='outlined'
                   size='small'
+                  placeholder='name'
                 />
                 <TextField
                   sx={{
@@ -78,6 +87,9 @@ export const GeneralTab: React.FC = () => {
                   }}
                   variant='outlined'
                   size='small'
+                  placeholder={
+                    exampleExpressions[index % exampleExpressions.length]
+                  }
                 />
                 <IconButton
                   sx={{}}
