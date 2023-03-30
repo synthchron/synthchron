@@ -242,6 +242,9 @@ export const useFlowStore = create<RFState>((set, get) => ({
     })
   },
   selectElement: (elem: Node | Edge | undefined) => {
+    if (elem) {
+      const updatedNode = yDocState.nodesMap.get(elem.id)
+    }
     set({
       selectedElement: elem,
     })
@@ -254,6 +257,7 @@ export const useFlowStore = create<RFState>((set, get) => ({
           id: elem.id,
         })
       } else {
+        //Element is an edge
         yDocState.edgesMap.set(elem.id, {
           ...elem,
           id: elem.id,

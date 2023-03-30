@@ -16,6 +16,19 @@ type NodeDataFields = {
   weight: number
 }
 
+function NodeDataFieldsTypesAsStrings(field: string) {
+  //This is made for changing fields of nodes and edges
+  //We only really care about type for values textfields that should only accept numbers
+  switch (field) {
+    case 'store':
+      return 'number'
+    case 'weight':
+      return 'number'
+    default:
+      return ''
+  }
+}
+
 export const RightSidebar = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const selector = useCallback(
@@ -61,7 +74,7 @@ export const RightSidebar = () => {
         <TextField
           label={key}
           variant='outlined'
-          type={typeof value}
+          type={NodeDataFieldsTypesAsStrings(key)}
           defaultValue={value}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             updateNodeFields({ [key]: event.target.value })
