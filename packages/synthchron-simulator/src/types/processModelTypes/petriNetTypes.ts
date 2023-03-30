@@ -15,7 +15,6 @@ export interface PetriNetPlace {
   type: 'place'
   identifier: string
   name: string
-  accepting: string
   amountOfTokens: number
 }
 

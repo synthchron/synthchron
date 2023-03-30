@@ -155,7 +155,6 @@ export const useFlowStore = create<RFState>((set, get) => ({
   edges: Array.from(yDocState.edgesMap.values()),
   meta: Object.fromEntries(yDocState.metaMap.entries()),
   setMeta: (meta: object) => {
-    console.log('setMeta', meta)
     for (const [key, value] of Object.entries(meta)) {
       yDocState.metaMap.set(key, value)
     }
@@ -211,7 +210,7 @@ export const useFlowStore = create<RFState>((set, get) => ({
       ) + 1
     yDocState.nodesMap.set(newId.toString(), {
       ...node,
-      id: newId.toString(),
+      id: `${newId}`,
     })
   },
   initializeFlow: (

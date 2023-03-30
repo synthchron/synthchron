@@ -4,6 +4,7 @@ import { RFState, useFlowStore } from './ydoc/flowStore'
 import { Stack, TextField, Typography } from '@mui/material'
 import { TabbedDrawer } from './TabbedDrawer'
 import { GeneralTab } from './rightSidebar/GeneralTab'
+import { SimulationTab } from './rightSidebar/SimulationTab'
 
 export const RightSidebar = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,7 +32,7 @@ export const RightSidebar = () => {
   )
 
   return (
-    <TabbedDrawer side='right' tabs={['Properties', 'General']}>
+    <TabbedDrawer side='right' tabs={['Properties', 'General', 'Simulator']}>
       <>
         <Stack spacing={2}>
           <Typography variant='h6'>Properties</Typography>
@@ -40,6 +41,7 @@ export const RightSidebar = () => {
         </Stack>
       </>
       <GeneralTab />
+      <SimulationTab />
     </TabbedDrawer>
   )
 }

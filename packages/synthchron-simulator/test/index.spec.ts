@@ -13,13 +13,15 @@ describe('Deterministic Process Models', () => {
   describe('Petri Net 1', () => {
     it('should be accepting after one transition', () => {
       const initialState = petriNetEngine.resetActivity(petriNet1)
-      expect(petriNetEngine.isAccepting(petriNet1, initialState)).to.be.false
+      expect(petriNetEngine.isAccepting(petriNet1, initialState).isAccepting).to
+        .be.false
       const nextState = petriNetEngine.executeActivity(
         petriNet1,
         initialState,
         't1'
       )
-      expect(petriNetEngine.isAccepting(petriNet1, nextState)).to.be.true
+      expect(petriNetEngine.isAccepting(petriNet1, nextState).isAccepting).to.be
+        .true
     })
 
     it('Petri Net 1: 1.should produce the correct trace', () => {
@@ -30,6 +32,7 @@ describe('Deterministic Process Models', () => {
           petriNetEngine
         )
       ).to.deep.equal({
+        acceptingState: 'accepting',
         exitReason: 'acceptingStateReached',
         trace: {
           events: [
@@ -50,6 +53,7 @@ describe('Deterministic Process Models', () => {
           petriNetEngine
         )
       ).to.deep.equal({
+        acceptingState: 'accepting',
         exitReason: 'acceptingStateReached',
         trace: {
           events: [
@@ -70,6 +74,7 @@ describe('Deterministic Process Models', () => {
           petriNetEngine
         )
       ).to.deep.equal({
+        acceptingState: undefined,
         exitReason: 'noEnabledActivities',
         trace: {
           events: [
@@ -90,6 +95,7 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(petriNet1, { maxEvents: 0 }, petriNetEngine)
       ).to.deep.equal({
+        acceptingState: undefined,
         exitReason: 'maxStepsReached',
         trace: {
           events: [],
@@ -101,6 +107,7 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(petriNet1, { maxEvents: 0 }, petriNetEngine)
       ).to.deep.equal({
+        acceptingState: undefined,
         exitReason: 'maxStepsReached',
         trace: {
           events: [],
@@ -112,6 +119,7 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(petriNet1, { maxEvents: 1 }, petriNetEngine)
       ).to.deep.equal({
+        acceptingState: undefined,
         exitReason: 'maxStepsReached',
         trace: {
           events: [
@@ -128,13 +136,15 @@ describe('Deterministic Process Models', () => {
   describe('Petri Net 2', () => {
     it('should be accepting after one transition', () => {
       const initialState = petriNetEngine.resetActivity(petriNet2)
-      expect(petriNetEngine.isAccepting(petriNet1, initialState)).to.be.false
+      expect(petriNetEngine.isAccepting(petriNet1, initialState).isAccepting).to
+        .be.false
       const nextState = petriNetEngine.executeActivity(
         petriNet2,
         initialState,
         't1'
       )
-      expect(petriNetEngine.isAccepting(petriNet1, nextState)).to.be.true
+      expect(petriNetEngine.isAccepting(petriNet1, nextState).isAccepting).to.be
+        .true
     })
 
     it('should produce the correct trace', () => {
@@ -145,6 +155,7 @@ describe('Deterministic Process Models', () => {
           petriNetEngine
         )
       ).to.deep.equal({
+        acceptingState: 'accepting',
         exitReason: 'acceptingStateReached',
         trace: {
           events: [
@@ -165,6 +176,7 @@ describe('Deterministic Process Models', () => {
           petriNetEngine
         )
       ).to.deep.equal({
+        acceptingState: undefined,
         exitReason: 'noEnabledActivities',
         trace: {
           events: [
@@ -185,6 +197,7 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(petriNet2, { maxEvents: 0 }, petriNetEngine)
       ).to.deep.equal({
+        acceptingState: undefined,
         exitReason: 'maxStepsReached',
         trace: {
           events: [],
@@ -196,6 +209,7 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(petriNet2, { maxEvents: 1 }, petriNetEngine)
       ).to.deep.equal({
+        acceptingState: undefined,
         exitReason: 'maxStepsReached',
         trace: {
           events: [
@@ -211,13 +225,15 @@ describe('Deterministic Process Models', () => {
   describe('Petri Net 3', () => {
     it('Petri Net 3.1: should go from accepting to not accepting', () => {
       const initialState = petriNetEngine.resetActivity(petriNet3)
-      expect(petriNetEngine.isAccepting(petriNet3, initialState)).to.be.true
+      expect(petriNetEngine.isAccepting(petriNet3, initialState).isAccepting).to
+        .be.true
       const nextState = petriNetEngine.executeActivity(
         petriNet3,
         initialState,
         't1'
       )
-      expect(petriNetEngine.isAccepting(petriNet3, nextState)).to.be.false
+      expect(petriNetEngine.isAccepting(petriNet3, nextState).isAccepting).to.be
+        .false
     })
     it('Petri Net 3.2: should produce the correct trace', () => {
       expect(
@@ -227,6 +243,7 @@ describe('Deterministic Process Models', () => {
           petriNetEngine
         )
       ).to.deep.equal({
+        acceptingState: 'accepting',
         exitReason: 'acceptingStateReached',
         trace: {
           events: [],
@@ -241,6 +258,7 @@ describe('Deterministic Process Models', () => {
           petriNetEngine
         )
       ).to.deep.equal({
+        acceptingState: undefined,
         exitReason: 'noEnabledActivities',
         trace: {
           events: [
@@ -260,6 +278,7 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(petriNet3, { minEvents: 0 }, petriNetEngine)
       ).to.deep.equal({
+        acceptingState: undefined,
         exitReason: 'noEnabledActivities',
         trace: {
           events: [
@@ -283,6 +302,7 @@ describe('Deterministic Process Models', () => {
           petriNetEngine
         )
       ).to.deep.equal({
+        acceptingState: 'accepting',
         exitReason: 'acceptingStateReached',
         trace: {
           events: [],
