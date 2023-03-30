@@ -1,11 +1,11 @@
 import { Avatar, Box, Button, Chip, Container, Typography } from '@mui/material'
 import { useCallback } from 'react'
 import { shallow } from 'zustand/shallow'
-import { RFState, useFlowStore } from '../ydoc/flowStore'
+import { EditorState, useEditorStore } from '../flowStore/flowStore'
 
 export const CollaborationTab = () => {
   const selector = useCallback(
-    (state: RFState) => ({
+    (state: EditorState) => ({
       connectRoom: state.connectRoom,
       disconnectRoom: state.disconnectRoom,
       yWebRTCProvider: state.yWebRTCProvider,
@@ -23,7 +23,7 @@ export const CollaborationTab = () => {
     awareness,
     collaboratorStates,
     awarenessState,
-  } = useFlowStore(selector, shallow)
+  } = useEditorStore(selector, shallow)
 
   return (
     <Box

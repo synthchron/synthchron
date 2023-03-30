@@ -8,12 +8,12 @@ import {
   usePersistentStore,
 } from '../../common/persistentStore'
 import { transformFlowToSimulator } from '../../flowTransformer'
-import { useFlowStore } from '../ydoc/flowStore'
+import { useEditorStore } from '../flowStore/flowStore'
 
 export const ProjectTab: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>()
 
-  const saveFlow = useFlowStore((state) => state.saveFlow)
+  const saveFlow = useEditorStore((state) => state.saveFlow)
 
   const selector = useCallback(
     (state: PersistentState) => ({
@@ -91,7 +91,7 @@ export const ProjectTab: React.FC = () => {
               saveFlow(projectId)
             } else {
               const processModel = transformFlowToSimulator(
-                useFlowStore.getState()
+                useEditorStore.getState()
               )
               const id = addProject({
                 projectName: faker.animal.cow(),

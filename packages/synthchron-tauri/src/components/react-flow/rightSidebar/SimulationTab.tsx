@@ -4,7 +4,7 @@ import {
   PetriNetProcessModel,
   simulateWithEngine,
 } from '@synthchron/simulator'
-import { useFlowStore } from '../ydoc/flowStore'
+import { useEditorStore } from '../flowStore/flowStore'
 import { transformFlowToSimulator } from '../../flowTransformer'
 import { useState } from 'react'
 
@@ -15,7 +15,7 @@ export const SimulationTab: React.FC = () => {
     setSimulationResult(
       simulateWithEngine(
         transformFlowToSimulator(
-          useFlowStore.getState()
+          useEditorStore.getState()
         ) as PetriNetProcessModel,
         { endOnAcceptingState: true, minEvents: 1, maxEvents: 100 },
         petriNetEngine

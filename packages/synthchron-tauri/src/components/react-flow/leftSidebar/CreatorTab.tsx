@@ -1,9 +1,9 @@
 import { Box, Typography } from '@mui/material'
 import { NodeShapeMap } from '../processModels/NodeShapeMap'
-import { useFlowStore } from '../ydoc/flowStore'
+import { useEditorStore } from '../flowStore/flowStore'
 
 export const CreatorTab: React.FC = () => {
-  const nodeTypes = useFlowStore(
+  const nodeTypes = useEditorStore(
     (state) => state.processModelFlowConfig.nodeTypes
   )
 

@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import { usePersistentStore } from '../components/common/persistentStore'
 import { CustomAppBar } from '../components/CustomAppBar'
 import { SidebarsWrapper } from '../components/react-flow/SidebarsWrapper'
-import { useFlowStore } from '../components/react-flow/ydoc/flowStore'
+import { useEditorStore } from '../components/react-flow/flowStore/flowStore'
 import { petriNetFlowConfig } from '../components/react-flow/processModels/petriNet/petriNetFlowConfig'
 
 export const EditorPage = () => {
@@ -14,8 +14,8 @@ export const EditorPage = () => {
   const doneSaving = usePersistentStore((state) => state.doneSaving)
   const projects = usePersistentStore((state) => state.projects)
 
-  const initializeFlow = useFlowStore((state) => state.initializeFlow)
-  const saveFlow = useFlowStore((state) => state.saveFlow)
+  const initializeFlow = useEditorStore((state) => state.initializeFlow)
+  const saveFlow = useEditorStore((state) => state.saveFlow)
 
   useHotkeys(
     'ctrl+s',

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CustomAppBar } from '../components/CustomAppBar'
 import { checkRoomIsEmpty } from '../components/react-flow/ydoc/checkRoom'
-import { useFlowStore } from '../components/react-flow/ydoc/flowStore'
+import { useEditorStore } from '../components/react-flow/flowStore/flowStore'
 
 export const CollaborationPage = () => {
   const [roomId, setRoomId] = useState<string>('')
@@ -11,7 +11,7 @@ export const CollaborationPage = () => {
   const [checking, setChecking] = useState<boolean>(false)
 
   const navigate = useNavigate()
-  const connectRoom = useFlowStore((state) => state.connectRoom)
+  const connectRoom = useEditorStore((state) => state.connectRoom)
 
   return (
     <>
