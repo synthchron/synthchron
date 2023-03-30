@@ -27,6 +27,15 @@ const edgeTypes: EdgeTypes = {
   Arc: ArcEdge,
 }
 
+export type PetriNetMeta = {
+  acceptingExpressions: AcceptingExpression[]
+}
+
+type AcceptingExpression = {
+  name: string
+  expression: string
+}
+
 const isPlaceNode = (node: PetriNetNode): node is PetriNetPlace =>
   node.type === 'place'
 
@@ -74,8 +83,12 @@ export const petriNetFlowConfig: ProcessModelFlowConfig = {
       markerEnd: { type: MarkerType.ArrowClosed },
       data: { weight: edge.multiplicity },
     })),
+    meta: {
+      acceptingExpressions: (processModel as PetriNetProcessModel)
+        .acceptingExpressions,
+    },
   }),
-  serialize: (nodes: Node[], edges: Edge[]) => {
+  serialize: (nodes: Node[], edges: Edge[], meta: object) => {
     const simulatorNodes = nodes.map((node) => {
       const identifier = node.id
       const type: 'place' | 'transition' =
@@ -110,6 +123,7 @@ export const petriNetFlowConfig: ProcessModelFlowConfig = {
     })
     return {
       type: ProcessModelType.PetriNet,
+      acceptingExpressions: (meta as PetriNetMeta).acceptingExpressions,
       nodes: simulatorNodes,
       edges: simulatorEdges,
     }

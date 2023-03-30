@@ -3,6 +3,8 @@ import { shallow } from 'zustand/shallow'
 import { RFState, useFlowStore } from './ydoc/flowStore'
 import { Stack, TextField, Typography } from '@mui/material'
 import { DrawerWrapper } from './DrawerWrapper'
+import { TabbedDrawer } from './TabbedDrawer'
+import { GeneralTab } from './rightSidebar/GeneralTab'
 
 export const RightSidebar = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -30,12 +32,15 @@ export const RightSidebar = () => {
   )
 
   return (
-    <DrawerWrapper side='right'>
-      <Stack spacing={2}>
-        <Typography variant='h6'>Properties</Typography>
-        {/* TODO: Center this */}
-        {selectedElementProperties}
-      </Stack>
-    </DrawerWrapper>
+    <TabbedDrawer side='right' tabs={['Properties', 'General']}>
+      <>
+        <Stack spacing={2}>
+          <Typography variant='h6'>Properties</Typography>
+          {/* TODO: Center this */}
+          {selectedElementProperties}
+        </Stack>
+      </>
+      <GeneralTab />
+    </TabbedDrawer>
   )
 }

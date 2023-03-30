@@ -4,6 +4,7 @@ import { EdgeTypes, NodeTypes, Node, Connection, Edge } from 'reactflow'
 type RFStateInit = {
   nodes: Node[]
   edges: Edge[]
+  meta: object
 }
 
 export type ProcessModelFlowConfig = {
@@ -16,5 +17,5 @@ export type ProcessModelFlowConfig = {
     targetNode: Node
   ) => Connection | null
   generateFlow: (processModel: ProcessModel) => RFStateInit
-  serialize: (nodes: Node[], edges: Edge[]) => ProcessModel
+  serialize: (nodes: Node[], edges: Edge[], meta: object) => ProcessModel // Get a list of nodes, a list of edges, and model specific meta information, and create a ProcessModel
 }
