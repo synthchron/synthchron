@@ -4,7 +4,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { useParams } from 'react-router-dom'
 import { usePersistentStore } from '../components/common/persistentStore'
 import { CustomAppBar } from '../components/CustomAppBar'
-import { DragAndDropWrapper } from '../components/react-flow/DragAndDropWrapper'
+import { SidebarsWrapper } from '../components/react-flow/SidebarsWrapper'
 import { useFlowStore } from '../components/react-flow/ydoc/flowStore'
 import { petriNetFlowConfig } from '../components/react-flow/processModels/petriNet/petriNetFlowConfig'
 
@@ -30,10 +30,10 @@ export const EditorPage = () => {
   useEffect(() => {
     if (projectId === undefined) return // User has opened the editor window directly
     const processModelConfig = petriNetFlowConfig // TODO: Chose processFlowConfig dynamicly
-    const { nodes, edges } = processModelConfig.generateFlow(
+    const { nodes, edges, meta } = processModelConfig.generateFlow(
       projects[projectId].projectModel
     )
-    initializeFlow(nodes, edges, processModelConfig)
+    initializeFlow(nodes, edges, meta, processModelConfig)
   }, [projectId])
 
   return (
@@ -46,7 +46,7 @@ export const EditorPage = () => {
       }}
     >
       <CustomAppBar />
-      <DragAndDropWrapper />
+      <SidebarsWrapper />
       <Snackbar
         open={open}
         autoHideDuration={1000}

@@ -27,7 +27,12 @@ export const CustomAppBar: React.FC = () => {
   ]
 
   return (
-    <AppBar position='static'>
+    <AppBar
+      position='static'
+      sx={{
+        zIndex: 1, // Make sure the topbar is on top of the sidebars
+      }}
+    >
       <Container maxWidth='xl'>
         <Toolbar variant='dense' disableGutters>
           <AccountTreeRoundedIcon sx={{ mr: 1 }} />

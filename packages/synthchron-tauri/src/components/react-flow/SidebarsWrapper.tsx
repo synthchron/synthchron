@@ -1,3 +1,4 @@
+import React from 'react'
 import { useCallback, useRef, useState } from 'react'
 import { ReactFlowProvider, ReactFlowInstance } from 'reactflow'
 
@@ -5,13 +6,15 @@ import { ReactFlowProvider, ReactFlowInstance } from 'reactflow'
 import 'reactflow/dist/style.css'
 
 // 👇 Importing components
-import { Sidebar } from './Sidebar'
+import { LeftSidebar } from './LeftSidebar'
 import { StateFlow } from './StateFlow'
 import { RFState, useFlowStore } from './ydoc/flowStore'
 import { shallow } from 'zustand/shallow'
-import { PropertiesWindow } from './PropertiesWindow'
+import { RightSidebar } from './RightSidebar'
+import { Box } from '@mui/material'
 
-export const DragAndDropWrapper = () => {
+// This component includes both the left and right sidebar, and handles the drag and drop functionality
+export const SidebarsWrapper = () => {
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
 
   const [reactFlowInstance, setReactFlowInstance] =
@@ -42,6 +45,7 @@ export const DragAndDropWrapper = () => {
 
     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect()
     const type = event.dataTransfer.getData('application/reactflow')
+    if (type == '') return
 
     const position = reactFlowInstance.project({
       x: event.clientX - reactFlowBounds.left,
@@ -51,24 +55,42 @@ export const DragAndDropWrapper = () => {
       id: '', // Will be overwritten by addNode
       type: type,
       position,
-      data: { label: `${type == 'place' ? 'p' : 't'}`, store: 0 },
+      data: {
+        label: `${type == 'Transition' ? 'Transition' : 'Place'}`,
+        store: 1,
+        accepting: 'tokens >= 10',
+      },
     }
     addNode(newNode)
   }
 
   return (
-    <div className='dndflow'>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        height: '100%',
+        width: '100%',
+        flexGrow: 1,
+      }}
+    >
       <ReactFlowProvider>
-        <Sidebar />
-        <div className='reactflow-wrapper' ref={reactFlowWrapper}>
+        <LeftSidebar />
+        <Box
+          sx={{
+            flexGrow: 1,
+            height: '100%',
+          }}
+          ref={reactFlowWrapper}
+        >
           <StateFlow
             onInit={setReactFlowInstance}
             onDrop={onDrop}
             onDragOver={onDragOver}
           />
-        </div>
-        <PropertiesWindow />
+        </Box>
+        <RightSidebar />
       </ReactFlowProvider>
-    </div>
+    </Box>
   )
 }

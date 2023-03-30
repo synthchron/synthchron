@@ -7,6 +7,12 @@ export type ProcessModel =
   | DcrGraphProcessModel
   | FlowchartProcessModel
 
+export enum ProcessModelType {
+  PetriNet = 'petri-net',
+  DcrGraph = 'dcr-graph',
+  Flowchart = 'flowchart',
+}
+
 export type Point = {
   x: number
   y: number

@@ -1,10 +1,11 @@
+import React from 'react'
 import { Handle, NodeProps, Position } from 'reactflow'
 
 // import './NodeStyle.css'
 
 const config = {
-  width: 5,
-  height: 100,
+  width: 50,
+  height: 50,
   color: '#eee',
 }
 
@@ -14,23 +15,73 @@ const handleStyle = {
   backgroundColor: '#bbb',
 }
 
+interface TransitionNodeShapeProps {
+  strokeWidth: string | number | undefined
+  label: string | undefined
+}
+
+export const TransitionNodeShape: React.FC<TransitionNodeShapeProps> = (
+  NodeProps
+) => {
+  const { width, height, color } = config
+
+  const shape = (
+    <rect
+      x={0}
+      y={0}
+      rx={0}
+      width={width}
+      height={height}
+      strokeWidth={NodeProps.strokeWidth ? NodeProps.strokeWidth : 1}
+    />
+  )
+
+  const styles = {
+    fill: color,
+    stroke: '#222',
+  }
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        position: 'relative',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
+        pointerEvents: 'none',
+      }}
+    >
+      <svg
+        style={{ overflow: 'visible' }}
+        width={width}
+        height={height}
+        {...styles}
+      >
+        {shape}
+      </svg>
+      <div
+        style={{
+          textAlign: 'center',
+          position: 'absolute',
+          fontFamily: 'monospace',
+          fontWeight: 'bold',
+          color: '#222',
+          fontSize: 12,
+        }}
+      >
+        {NodeProps.label}
+      </div>
+    </div>
+  )
+}
+
 export const TransitionNode: React.FC<NodeProps> = ({
   data,
   selected,
   isConnectable,
 }) => {
-  const { width, height, color } = config
-
-  const styles = {
-    fill: color,
-    strokeWidth: selected ? 2 : 1,
-    stroke: '#222',
-  }
-
-  const shape = (
-    <rect x={0} y={0} rx={0} width={width} height={height} {...styles} />
-  )
-
   return (
     <div style={{ position: 'relative' }}>
       <Handle
@@ -53,37 +104,7 @@ export const TransitionNode: React.FC<NodeProps> = ({
           left: '-15px',
         }}
       />
-      <svg
-        style={{ display: 'block', overflow: 'visible' }}
-        width={width}
-        height={height}
-      >
-        {shape}
-      </svg>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          position: 'absolute',
-          top: -height / 2 - 10,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          pointerEvents: 'none',
-        }}
-      >
-        <div
-          style={{
-            fontFamily: 'monospace',
-            fontWeight: 'bold',
-            color: '#222',
-            fontSize: 12,
-          }}
-        >
-          {data?.label}
-        </div>
-      </div>
+      <TransitionNodeShape strokeWidth={selected ? 2 : 1} label={data?.label} />
     </div>
   )
 }

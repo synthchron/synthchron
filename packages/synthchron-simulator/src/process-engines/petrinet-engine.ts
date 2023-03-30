@@ -10,6 +10,8 @@ import {
   PetriNetProcessModel,
   PetriNetTransition,
 } from '../types/processModelTypes/petriNetTypes'
+import { compileExpression } from 'filtrex'
+import { ProcessModelType } from '../types/processModel'
 
 type PetriNetState = Map<string, number>
 
@@ -20,12 +22,21 @@ type ActivityIdentifier = string
 const isAccepting: IsAcceptingType<ProcessModel, State, ActivityIdentifier> = (
   model,
   state
-) =>
-  model.nodes
-    // We only care about the places
-    .filter((node): node is PetriNetPlace => node.type === 'place')
-    // Every place that has a token has to be accepting
-    .every((place) => place.accepting(state.get(place.identifier) || 0))
+) => {
+  const reason = model.acceptingExpressions.find(({ expression }) => {
+    const exp = compileExpression(expression)
+    return exp(
+      Object.fromEntries(
+        // The 'p' is needed, as the expression entered uses p1, p2, etc. but the ids are numerical
+        Array.from(state.entries()).map(([key, value]) => [`p${key}`, value])
+      )
+    )
+  })
+  if (reason === undefined) {
+    return { isAccepting: false }
+  }
+  return { isAccepting: true, reason: reason.name }
+}
 
 const getEnabled: GetEnabledType<ProcessModel, State, ActivityIdentifier> = (
   model,
@@ -77,7 +88,10 @@ const executeActivity: ExecuteActivityType<
     ) // Only places that are source of the activity
     .forEach((place) => {
       const newWeight =
-        (newState.get(place.identifier) || 0) - transition.weight
+        (newState.get(place.identifier) || 0) -
+        model.edges.filter(
+          (edge) => edge.source === place.identifier && edge.target === activity
+        )[0].multiplicity
 
       if (newWeight < 0)
         throw new Error(
@@ -120,7 +134,7 @@ export const petriNetEngine: ProcessEngine<
   PetriNetState,
   string
 > = {
-  processModelType: 'petri-net',
+  processModelType: ProcessModelType.PetriNet,
   isAccepting: isAccepting,
   getEnabled: getEnabled,
   executeActivity: executeActivity,

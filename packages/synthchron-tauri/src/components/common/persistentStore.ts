@@ -2,11 +2,11 @@ import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { Project } from '../../types/project'
 
-interface PersistentState {
+export interface PersistentState {
   projects: { [id: string]: Project }
   saving: boolean
   doneSaving: () => void
-  addProject: (project: Project) => void
+  addProject: (project: Project) => string
   removeProject: (id: string) => void
   updateProject: (id: string, project: Partial<Project>) => void
 }
@@ -35,6 +35,8 @@ export const usePersistentStore = create<PersistentState>()(
               },
             },
           }))
+
+          return id.toString()
         },
         removeProject: (id: string) => {
           set((state) => {

@@ -1,4 +1,4 @@
-import { ProcessModel } from '@synthchron/simulator'
+import { ProcessModel, ProcessModelType } from '@synthchron/simulator'
 import {
   PetriNetProcessModel,
   PetriNetPlace,
@@ -27,11 +27,20 @@ const edgeTypes: EdgeTypes = {
   Arc: ArcEdge,
 }
 
+export type PetriNetMeta = {
+  acceptingExpressions: AcceptingExpression[]
+}
+
+type AcceptingExpression = {
+  name: string
+  expression: string
+}
+
 const isPlaceNode = (node: PetriNetNode): node is PetriNetPlace =>
   node.type === 'place'
 
 export const petriNetFlowConfig: ProcessModelFlowConfig = {
-  processModelType: 'petri-net',
+  processModelType: ProcessModelType.PetriNet,
   nodeTypes: nodeTypes,
   edgeTypes: edgeTypes,
   checkConnect: (
@@ -60,7 +69,7 @@ export const petriNetFlowConfig: ProcessModelFlowConfig = {
       },
       data: {
         label: node.name,
-        store: isPlaceNode(node) ? node.amountOfTokens : undefined,
+        store: isPlaceNode(node) ? node.amountOfTokens : node.weight,
       },
     })),
     edges: (processModel as PetriNetProcessModel).edges.map((edge) => ({
@@ -73,14 +82,17 @@ export const petriNetFlowConfig: ProcessModelFlowConfig = {
       markerEnd: { type: MarkerType.ArrowClosed },
       data: { weight: edge.multiplicity },
     })),
+    meta: {
+      acceptingExpressions: (processModel as PetriNetProcessModel)
+        .acceptingExpressions,
+    },
   }),
-  serialize: (nodes: Node[], edges: Edge[]) => {
+  serialize: (nodes: Node[], edges: Edge[], meta: object) => {
     const simulatorNodes = nodes.map((node) => {
       const identifier = node.id
       const type: 'place' | 'transition' =
         node.type == 'Place' ? 'place' : 'transition'
       const name = node.data.label
-
       if (type == 'place') {
         return {
           identifier,
@@ -109,7 +121,8 @@ export const petriNetFlowConfig: ProcessModelFlowConfig = {
       }
     })
     return {
-      type: 'petri-net',
+      type: ProcessModelType.PetriNet,
+      acceptingExpressions: (meta as PetriNetMeta).acceptingExpressions,
       nodes: simulatorNodes,
       edges: simulatorEdges,
     }

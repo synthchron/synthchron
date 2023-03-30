@@ -1,15 +1,20 @@
-import { PositionalNode } from '../processModel'
+import { PositionalNode, ProcessModelType } from '../processModel'
 export interface PetriNetProcessModel {
-  type: 'petri-net'
+  type: ProcessModelType.PetriNet
+  acceptingExpressions: AcceptingExpression[]
   nodes: PetriNetNode[]
   edges: PetriNetEdge[]
+}
+
+export type AcceptingExpression = {
+  name: string
+  expression: string
 }
 
 export interface PetriNetPlace {
   type: 'place'
   identifier: string
   name: string
-  accepting: (numOfTokens: number) => boolean
   amountOfTokens: number
 }
 
