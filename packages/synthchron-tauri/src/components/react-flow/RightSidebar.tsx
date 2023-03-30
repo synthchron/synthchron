@@ -2,7 +2,6 @@ import { useCallback } from 'react'
 import { shallow } from 'zustand/shallow'
 import { RFState, useFlowStore } from './ydoc/flowStore'
 import { Stack, TextField, Typography } from '@mui/material'
-import { DrawerWrapper } from './DrawerWrapper'
 import { TabbedDrawer } from './TabbedDrawer'
 import { GeneralTab } from './rightSidebar/GeneralTab'
 

@@ -1,13 +1,11 @@
 import {
   Box,
-  Button,
   Container,
   IconButton,
   TextField,
   Typography,
 } from '@mui/material'
 import { ProcessModelType } from '@synthchron/simulator'
-import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { usePersistentStore } from '../../common/persistentStore'
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
