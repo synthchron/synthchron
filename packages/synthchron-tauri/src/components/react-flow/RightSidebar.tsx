@@ -35,8 +35,6 @@ export const RightSidebar = () => {
     (state: RFState) => ({
       selectedElement: state.selectedElement,
       selectElement: state.selectElement,
-      nodes: state.nodes,
-      edges: state.edges,
     }),
     []
   )
