@@ -6,16 +6,12 @@ import {
   Typography,
 } from '@mui/material'
 import { ProcessModelType } from '@synthchron/simulator'
-import { useParams } from 'react-router-dom'
-import { usePersistentStore } from '../../common/persistentStore'
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import ControlPointIcon from '@mui/icons-material/ControlPoint'
 import { useFlowStore } from '../ydoc/flowStore'
 import { PetriNetMeta } from '../processModels/petriNet/petriNetFlowConfig'
 
 export const GeneralTab: React.FC = () => {
-  const { projectId } = useParams<{ projectId: string }>()
-  const projects = usePersistentStore((state) => state.projects)
   const meta = useFlowStore((state) => state.meta)
   const setMeta = useFlowStore((state) => state.setMeta)
 
