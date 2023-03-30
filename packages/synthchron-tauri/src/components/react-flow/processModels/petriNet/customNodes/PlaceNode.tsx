@@ -116,7 +116,18 @@ export const PlaceNode: React.FC<NodeProps> = ({
           left: -diameter / 2,
         }}
       />
-      <PlaceNodeShape strokeWidth={selected ? 2 : 1} label={data?.store} />p{id}
+      <PlaceNodeShape strokeWidth={selected ? 2 : 1} label={data?.store} />
+      <div
+        style={{
+          //This does not center place names properly
+          //But there is a task to display labels, which can do it
+          position: 'absolute',
+          textAlign: 'center',
+          width: '100%',
+        }}
+      >
+        p{id}
+      </div>
     </div>
   )
 }
