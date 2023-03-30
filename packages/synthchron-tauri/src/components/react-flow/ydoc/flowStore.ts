@@ -242,24 +242,30 @@ export const useFlowStore = create<RFState>((set, get) => ({
     })
   },
   selectElement: (elem: Node | Edge | undefined) => {
-    if (elem) {
-      const updatedNode = yDocState.nodesMap.get(elem.id)
-    }
+    console.log('this ran')
     set({
       selectedElement: elem,
     })
 
     if (elem) {
       if ('position' in elem) {
+        const updatedNode = yDocState.nodesMap.get(elem.id) as Node
         //Element is a node
         yDocState.nodesMap.set(elem.id, {
-          ...elem,
+          ...updatedNode,
+          data: {
+            ...elem.data,
+          },
           id: elem.id,
         })
       } else {
+        const updatedEdge = yDocState.edgesMap.get(elem.id) as Edge
         //Element is an edge
         yDocState.edgesMap.set(elem.id, {
-          ...elem,
+          ...updatedEdge,
+          data: {
+            ...elem.data,
+          },
           id: elem.id,
         })
       }
