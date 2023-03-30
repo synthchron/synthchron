@@ -42,6 +42,7 @@ export type RFState = {
   processModelFlowConfig: ProcessModelFlowConfig
   selectedElement: Node | Edge | undefined
   selectElement: (elem: Node | Edge | undefined) => void
+  onSelectedElementChange: () => void
   onNodesChange: OnNodesChange
   onEdgesChange: OnEdgesChange
   onConnect: OnConnect
@@ -231,6 +232,25 @@ export const useFlowStore = create<RFState>((set, get) => ({
     set({
       selectedElement: elem,
     })
+
+    console.log(elem)
+    if (elem) {
+      if ('position' in elem) {
+        //Element is a node
+        yDocState.nodesMap.set(elem.id, {
+          ...elem,
+          id: elem.id,
+        })
+      } else {
+        yDocState.edgesMap.set(elem.id, {
+          ...elem,
+          id: elem.id,
+        })
+      }
+    }
+  },
+  onSelectedElementChange: () => {
+    console.log('TEST_Should deltetes')
   },
 }))
 
