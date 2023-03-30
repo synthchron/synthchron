@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, Container, Input, Typography } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
 import { usePersistentStore } from '../../common/persistentStore'
 import { transformFlowToSimulator } from '../../flowTransformer'
@@ -11,6 +11,8 @@ export const ProjectTab: React.FC = () => {
   const saveFlow = useFlowStore((state) => state.saveFlow)
 
   const addProject = usePersistentStore((state) => state.addProject)
+  const updateProject = usePersistentStore((state) => state.updateProject)
+  const projects = usePersistentStore((state) => state.projects)
 
   const navigate = useNavigate()
 
@@ -21,31 +23,77 @@ export const ProjectTab: React.FC = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         marginTop: '10px',
+        width: '100%',
       }}
     >
-      <Typography variant='h6'>Project</Typography>
-      <Button
-        onClick={() => {
-          if (projectId) {
-            saveFlow(projectId)
-          } else {
-            const processModel = transformFlowToSimulator(
-              useFlowStore.getState()
-            )
-            const id = addProject({
-              projectName: faker.animal.cow(),
-              projectDescription: faker.lorem.lines(3),
-              projectModel: processModel,
-              created: new Date().toJSON(),
-              lastEdited: new Date().toJSON(),
-            })
+      <Container>
+        <Typography variant='h6'>Project</Typography>
 
-            navigate(`/editor/${id}`)
-          }
-        }}
-      >
-        Save
-      </Button>
+        <Box
+          sx={{
+            marginTop: '1em',
+            marginBottom: '1em',
+          }}
+        >
+          <Typography variant='subtitle1'>Project Name</Typography>
+          <Input
+            value={projectId && projects[projectId].projectName}
+            onChange={(val) => {
+              if (projectId)
+                updateProject(projectId, {
+                  projectName: val.target.value,
+                })
+            }}
+            multiline
+            fullWidth
+            disabled={projectId === undefined}
+          />
+        </Box>
+
+        <Box
+          sx={{
+            marginTop: '1em',
+            marginBottom: '1em',
+          }}
+        >
+          <Typography variant='subtitle1'>Project Description</Typography>
+          <Input
+            value={projectId && projects[projectId].projectDescription}
+            onChange={(val) => {
+              if (projectId)
+                updateProject(projectId, {
+                  projectDescription: val.target.value,
+                })
+            }}
+            multiline
+            fullWidth
+            disabled={projectId === undefined}
+          />
+        </Box>
+
+        <Button
+          onClick={() => {
+            if (projectId) {
+              saveFlow(projectId)
+            } else {
+              const processModel = transformFlowToSimulator(
+                useFlowStore.getState()
+              )
+              const id = addProject({
+                projectName: faker.animal.cow(),
+                projectDescription: faker.lorem.lines(3),
+                projectModel: processModel,
+                created: new Date().toJSON(),
+                lastEdited: new Date().toJSON(),
+              })
+
+              navigate(`/editor/${id}`)
+            }
+          }}
+        >
+          Save
+        </Button>
+      </Container>
     </Box>
   )
 }
