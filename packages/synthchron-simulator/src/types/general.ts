@@ -62,10 +62,12 @@ export type SimulationResult = {
 type HasNotTerminatedType = {
   termination: false
 }
+
 type HasTerminatedType = {
   termination: true
   reason: TerminationReason
 }
+
 type TerminationReason =
   | 'maxStepsReached'
   | 'acceptingStateReached'
