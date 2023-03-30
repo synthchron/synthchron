@@ -1,6 +1,6 @@
 import { Avatar, Box, Button, Chip, Container, Typography } from '@mui/material'
 import { useCallback } from 'react'
-import shallow from 'zustand/shallow'
+import { shallow } from 'zustand/shallow'
 import { RFState, useFlowStore } from '../ydoc/flowStore'
 
 export const CollaborationTab = () => {

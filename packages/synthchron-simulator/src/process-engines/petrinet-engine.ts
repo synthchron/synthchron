@@ -22,15 +22,21 @@ type ActivityIdentifier = string
 const isAccepting: IsAcceptingType<ProcessModel, State, ActivityIdentifier> = (
   model,
   state
-) =>
-  model.nodes
-    // We only care about the places
-    .filter((node): node is PetriNetPlace => node.type === 'place')
-    // Every place that has a token has to be accepting
-    .every((place) => {
-      const exp = compileExpression(place.accepting)
-      return exp({ tokens: state.get(place.identifier) || 0 })
-    })
+) => {
+  const reason = model.acceptingExpressions.find(({ expression }) => {
+    const exp = compileExpression(expression)
+    return exp(
+      Object.fromEntries(
+        // The 'p' is needed, as the expression entered uses p1, p2, etc. but the ids are numerical
+        Array.from(state.entries()).map(([key, value]) => [`p${key}`, value])
+      )
+    )
+  })
+  if (reason === undefined) {
+    return { isAccepting: false }
+  }
+  return { isAccepting: true, reason: reason.name }
+}
 
 const getEnabled: GetEnabledType<ProcessModel, State, ActivityIdentifier> = (
   model,

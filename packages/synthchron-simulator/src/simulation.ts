@@ -93,6 +93,7 @@ export const simulateWithEngine = <
   return {
     trace,
     exitReason: terminationReason.reason,
+    acceptingState: terminationReason.acceptingState,
   }
 }
 
@@ -112,16 +113,19 @@ const checkTermination = <
   trace: Trace
 ): TerminationStatus => {
   // Check if the process is accepting (and the minimum number of events has been reached)
+  const acceptingState = processEngine.isAccepting(processModel, state)
   if (
     configuration.endOnAcceptingState &&
     (configuration.minEvents === undefined ||
       configuration.minEvents <= trace.events.length) &&
-    processEngine.isAccepting(processModel, state)
-  )
+    acceptingState.isAccepting
+  ) {
     return {
       termination: true,
       reason: 'acceptingStateReached',
+      acceptingState: acceptingState.reason,
     }
+  }
 
   // Check if the maximum number of events has been reached
   if (

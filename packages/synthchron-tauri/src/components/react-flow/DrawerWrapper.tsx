@@ -19,7 +19,7 @@ export const DrawerWrapper: React.FC<DrawerProps> = ({ children, side }) => {
       }}
       anchor={side}
     >
-      {/* This is adding a space the size of the top app bar. It is not visible but causes the children to be at the right position */}
+      {/* This is adding a space the size of the top app bar. It is not visible but causes the children to be at the right position. */}
       <Toolbar />
       {children}
     </Drawer>

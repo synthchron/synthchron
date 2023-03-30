@@ -61,7 +61,12 @@ const NewProjectModal: React.FC<{ open: boolean; onClose: () => void }> = ({
     switch (newProjectConfig.modelType) {
       default:
       case ProcessModelType.PetriNet:
-        model = { type: newProjectConfig.modelType, nodes: [], edges: [] }
+        model = {
+          type: newProjectConfig.modelType,
+          acceptingExpressions: [],
+          nodes: [],
+          edges: [],
+        }
         break
       case ProcessModelType.DcrGraph:
         model = { type: newProjectConfig.modelType, nodes: [], edges: [] }

@@ -11,10 +11,19 @@ export type Configuration = {
 export type Weight = number
 // export type ActivityIdentifier = string
 
+export type AcceptingReason =
+  | {
+      isAccepting: false
+    }
+  | {
+      isAccepting: true
+      reason: string
+    }
+
 export type IsAcceptingType<ProcessModel, StateType, _ActivityIdentifier> = (
   model: ProcessModel,
   state: StateType
-) => boolean
+) => AcceptingReason
 
 export type GetEnabledType<ProcessModel, StateType, ActivityIdentifier> = (
   model: ProcessModel,
@@ -57,6 +66,7 @@ export type Event = {
 export type SimulationResult = {
   trace: Trace
   exitReason: TerminationReason
+  acceptingState?: string
 }
 
 type HasNotTerminatedType = {
@@ -66,6 +76,7 @@ type HasNotTerminatedType = {
 type HasTerminatedType = {
   termination: true
   reason: TerminationReason
+  acceptingState?: string
 }
 
 type TerminationReason =

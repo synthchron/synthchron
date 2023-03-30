@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { Project } from '../../types/project'
 
-interface PersistentState {
+export interface PersistentState {
   projects: { [id: string]: Project }
   saving: boolean
   doneSaving: () => void
