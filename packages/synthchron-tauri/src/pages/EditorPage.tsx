@@ -30,12 +30,10 @@ export const EditorPage = () => {
   useEffect(() => {
     if (projectId === undefined) return // User has opened the editor window directly
     const processModelConfig = petriNetFlowConfig // TODO: Chose processFlowConfig dynamicly
-    const { nodes, edges } = processModelConfig.generateFlow(
+    const { nodes, edges, meta } = processModelConfig.generateFlow(
       projects[projectId].projectModel
     )
-    console.log(nodes, edges)
-    console.log(projects[projectId])
-    initializeFlow(nodes, edges, processModelConfig)
+    initializeFlow(nodes, edges, meta, processModelConfig)
   }, [projectId])
 
   return (

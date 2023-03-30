@@ -1,0 +1,39 @@
+import { Button, Container, Typography } from '@mui/material'
+import {
+  petriNetEngine,
+  PetriNetProcessModel,
+  simulateWithEngine,
+} from '@synthchron/simulator'
+import { useFlowStore } from '../ydoc/flowStore'
+import { transformFlowToSimulator } from '../../flowTransformer'
+import { useState } from 'react'
+
+export const SimulationTab: React.FC = () => {
+  const [simulationResult, setSimulationResult] = useState<object>({})
+
+  const simulate = () => {
+    setSimulationResult(
+      simulateWithEngine(
+        transformFlowToSimulator(
+          useFlowStore.getState()
+        ) as PetriNetProcessModel,
+        { endOnAcceptingState: true, minEvents: 1, maxEvents: 100 },
+        petriNetEngine
+      )
+    )
+  }
+  return (
+    <Container
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        marginTop: '1em',
+      }}
+    >
+      <Typography variant='h6'>Simulate</Typography>
+      <Button onClick={simulate}>Simulate</Button>
+      <pre>{JSON.stringify(simulationResult, null, 2)}</pre>
+    </Container>
+  )
+}
