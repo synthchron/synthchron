@@ -242,7 +242,6 @@ export const useFlowStore = create<RFState>((set, get) => ({
     })
   },
   selectElement: (elem: Node | Edge | undefined) => {
-    console.log('this ran')
     set({
       selectedElement: elem,
     })
