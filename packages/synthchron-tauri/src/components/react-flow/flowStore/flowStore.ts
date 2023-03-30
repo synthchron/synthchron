@@ -32,6 +32,7 @@ export const useEditorStore = create<EditorState>((...args) => ({
   ...createModelSlice(...args), // Process model relevant state
   ...createEditorSlice(...args), // Editor relevant state
 
+  // Initialize the editor state by setting the yDoc. The yDoc will then propagate changes to the other state variables.
   initializeFlow: (
     nodes: Node[],
     edges: Edge[],
@@ -52,6 +53,7 @@ export const useEditorStore = create<EditorState>((...args) => ({
   },
 }))
 
+// List of observers for setting Zustand state variables once yjs state changes
 const nodeObserver = () => {
   const nodes = Array.from(yDocState.nodesMap.values())
   useEditorStore.setState({
