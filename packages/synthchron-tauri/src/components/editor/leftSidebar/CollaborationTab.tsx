@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Chip, Container, Typography } from '@mui/material'
+import { Avatar, Button, Chip, Container, Typography } from '@mui/material'
 import { useCallback } from 'react'
 import { shallow } from 'zustand/shallow'
 import { EditorState, useEditorStore } from '../editorStore/flowStore'
@@ -26,7 +26,7 @@ export const CollaborationTab = () => {
   } = useEditorStore(selector, shallow)
 
   return (
-    <Box
+    <Container
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -71,6 +71,6 @@ export const CollaborationTab = () => {
             ))}
         </Container>
       )}
-    </Box>
+    </Container>
   )
 }
