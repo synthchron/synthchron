@@ -8,7 +8,7 @@ import {
 import { ProcessModelType } from '@synthchron/simulator'
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import ControlPointIcon from '@mui/icons-material/ControlPoint'
-import { useEditorStore } from '../flowStore/flowStore'
+import { useEditorStore } from '../editorStore/flowStore'
 import { PetriNetMeta } from '../processModels/petriNet/petriNetFlowConfig'
 
 const exampleExpressions = [

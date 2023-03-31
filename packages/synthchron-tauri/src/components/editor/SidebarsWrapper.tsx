@@ -8,7 +8,7 @@ import 'reactflow/dist/style.css'
 // 👇 Importing components
 import { LeftSidebar } from './LeftSidebar'
 import { StateFlow } from './StateFlow'
-import { EditorState, useEditorStore } from './flowStore/flowStore'
+import { EditorState, useEditorStore } from './editorStore/flowStore'
 import { shallow } from 'zustand/shallow'
 import { RightSidebar } from './RightSidebar'
 import { Box } from '@mui/material'

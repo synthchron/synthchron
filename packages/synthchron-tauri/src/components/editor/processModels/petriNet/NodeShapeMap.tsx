@@ -1,6 +1,5 @@
-import React from 'react'
-import { PlaceNodeShape } from './petriNet/customNodes/PlaceNode'
-import { TransitionNodeShape } from './petriNet/customNodes/TransitionNode'
+import { PlaceNodeShape } from './customNodes/PlaceNode'
+import { TransitionNodeShape } from './customNodes/TransitionNode'
 
 export function NodeShapeMap(type: string) {
   switch (type) {

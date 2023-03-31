@@ -3,12 +3,12 @@ import { Box, Button, Container, Input, Typography } from '@mui/material'
 import { useCallback } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { shallow } from 'zustand/shallow'
+import { transformFlowToSimulator } from '../../../utils/flowTransformer'
 import {
   PersistentState,
   usePersistentStore,
 } from '../../common/persistentStore'
-import { transformFlowToSimulator } from '../../flowTransformer'
-import { useEditorStore } from '../flowStore/flowStore'
+import { useEditorStore } from '../editorStore/flowStore'
 
 export const ProjectTab: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>()

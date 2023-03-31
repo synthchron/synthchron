@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material'
-import { NodeShapeMap } from '../processModels/NodeShapeMap'
-import { useEditorStore } from '../flowStore/flowStore'
+import { useEditorStore } from '../editorStore/flowStore'
+import { NodeShapeMap } from '../processModels/petriNet/NodeShapeMap'
 
 export const CreatorTab: React.FC = () => {
   const nodeTypes = useEditorStore(

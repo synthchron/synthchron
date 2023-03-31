@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { shallow } from 'zustand/shallow'
-import { EditorState, useEditorStore } from './flowStore/flowStore'
+import { EditorState, useEditorStore } from './editorStore/flowStore'
 import { Stack, TextField, Typography } from '@mui/material'
 import { TabbedDrawer } from './TabbedDrawer'
 import { GeneralTab } from './rightSidebar/GeneralTab'

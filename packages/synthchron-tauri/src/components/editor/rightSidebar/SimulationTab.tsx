@@ -4,9 +4,9 @@ import {
   PetriNetProcessModel,
   simulateWithEngine,
 } from '@synthchron/simulator'
-import { useEditorStore } from '../flowStore/flowStore'
-import { transformFlowToSimulator } from '../../flowTransformer'
+import { useEditorStore } from '../editorStore/flowStore'
 import { useState } from 'react'
+import { transformFlowToSimulator } from '../../../utils/flowTransformer'
 
 export const SimulationTab: React.FC = () => {
   const [simulationResult, setSimulationResult] = useState<object>({})

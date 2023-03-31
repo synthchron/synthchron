@@ -2,8 +2,8 @@ import { Box, TextField, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CustomAppBar } from '../components/CustomAppBar'
-import { checkRoomIsEmpty } from '../components/react-flow/ydoc/checkRoom'
-import { useEditorStore } from '../components/react-flow/flowStore/flowStore'
+import { useEditorStore } from '../components/editor/editorStore/flowStore'
+import { checkRoomIsEmpty } from '../utils/checkRoom'
 
 export const CollaborationPage = () => {
   const [roomId, setRoomId] = useState<string>('')

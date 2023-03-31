@@ -1,7 +1,7 @@
 import { Avatar, Box, Button, Chip, Container, Typography } from '@mui/material'
 import { useCallback } from 'react'
 import { shallow } from 'zustand/shallow'
-import { EditorState, useEditorStore } from '../flowStore/flowStore'
+import { EditorState, useEditorStore } from '../editorStore/flowStore'
 
 export const CollaborationTab = () => {
   const selector = useCallback(

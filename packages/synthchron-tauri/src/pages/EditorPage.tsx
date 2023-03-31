@@ -4,9 +4,9 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { useParams } from 'react-router-dom'
 import { usePersistentStore } from '../components/common/persistentStore'
 import { CustomAppBar } from '../components/CustomAppBar'
-import { SidebarsWrapper } from '../components/react-flow/SidebarsWrapper'
-import { useEditorStore } from '../components/react-flow/flowStore/flowStore'
-import { petriNetFlowConfig } from '../components/react-flow/processModels/petriNet/petriNetFlowConfig'
+import { SidebarsWrapper } from '../components/editor/SidebarsWrapper'
+import { useEditorStore } from '../components/editor/editorStore/flowStore'
+import { petriNetFlowConfig } from '../components/editor/processModels/petriNet/petriNetFlowConfig'
 
 export const EditorPage = () => {
   const { projectId } = useParams<{ projectId: string }>()

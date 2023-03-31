@@ -1,5 +1,5 @@
 import { useStore } from 'reactflow'
-import { AwarenessState, useEditorStore } from './flowStore/flowStore'
+import { AwarenessState, useEditorStore } from './editorStore/flowStore'
 import GpsFixedIcon from '@mui/icons-material/GpsFixed'
 
 // This component is responsible for drawing the awareness cursors for each user in the editor.
