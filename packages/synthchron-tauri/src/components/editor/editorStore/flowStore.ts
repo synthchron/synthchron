@@ -72,7 +72,6 @@ yDocState.edgesMap.observe(edgeObserver)
 
 const metaObserver = () => {
   const meta = Object.fromEntries(yDocState.metaMap.entries())
-  console.log(meta)
   useEditorStore.setState({
     meta,
   })
