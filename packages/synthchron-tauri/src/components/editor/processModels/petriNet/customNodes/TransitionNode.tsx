@@ -2,8 +2,6 @@ import { Typography } from '@mui/material'
 import React from 'react'
 import { Handle, NodeProps, Position } from 'reactflow'
 
-// import './NodeStyle.css'
-
 const config = {
   size: 60,
   color: '#eee',
@@ -20,9 +18,10 @@ interface TransitionNodeShapeProps {
   label: string | undefined
 }
 
-export const TransitionNodeShape: React.FC<TransitionNodeShapeProps> = (
-  NodeProps
-) => {
+export const TransitionNodeShape: React.FC<TransitionNodeShapeProps> = ({
+  strokeWidth,
+  label,
+}) => {
   const { size, color } = config
 
   const shape = (
@@ -32,7 +31,7 @@ export const TransitionNodeShape: React.FC<TransitionNodeShapeProps> = (
       rx={0}
       width={size}
       height={size}
-      strokeWidth={NodeProps.strokeWidth ? NodeProps.strokeWidth : 1}
+      strokeWidth={strokeWidth || 1}
     />
   )
 
@@ -69,7 +68,7 @@ export const TransitionNodeShape: React.FC<TransitionNodeShapeProps> = (
         }}
       >
         <Typography fontSize={8} noWrap padding={0.4}>
-          {NodeProps.label}
+          {label}
         </Typography>
       </div>
     </div>
