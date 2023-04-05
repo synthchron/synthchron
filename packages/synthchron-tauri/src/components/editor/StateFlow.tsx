@@ -10,10 +10,10 @@ import { shallow } from 'zustand/shallow'
 
 import 'reactflow/dist/style.css'
 
-import { RFState, useFlowStore } from './ydoc/flowStore'
+import { EditorState, useEditorStore } from './editorStore/flowStore'
 import { AwarenessCursors } from './AwarenessCursors'
 
-const selector = (state: RFState) => ({
+const selector = (state: EditorState) => ({
   setAwarenessState: state.setAwarenessState,
   nodes: state.nodes,
   edges: state.edges,
@@ -45,10 +45,10 @@ export const StateFlow: React.FC<StateFlowProps> = ({
     onNodesChange,
     onEdgesChange,
     onConnect,
-  } = useFlowStore(selector, shallow)
+  } = useEditorStore(selector, shallow)
 
   const fitViewOptions = { padding: 0.2 }
-  const { selectElement } = useFlowStore(selector, shallow)
+  const { selectElement } = useEditorStore(selector, shallow)
 
   const transform = useStore((store) => store.transform)
 

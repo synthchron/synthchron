@@ -1,8 +1,7 @@
 import { ProcessModel } from '../../../synthchron-simulator/src/types/processModel'
+import { EditorState } from '../components/editor/editorStore/flowStore'
 
-import { RFState } from './react-flow/ydoc/flowStore'
-
-export const transformFlowToSimulator = (flow: RFState): ProcessModel => {
+export const transformFlowToSimulator = (flow: EditorState): ProcessModel => {
   return flow.processModelFlowConfig.serialize(
     flow.nodes,
     flow.edges,

@@ -8,7 +8,7 @@ import {
 import { ProcessModelType } from '@synthchron/simulator'
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import ControlPointIcon from '@mui/icons-material/ControlPoint'
-import { useFlowStore } from '../ydoc/flowStore'
+import { useEditorStore } from '../editorStore/flowStore'
 import { PetriNetMeta } from '../processModels/petriNet/petriNetFlowConfig'
 
 const exampleExpressions = [
@@ -20,10 +20,10 @@ const exampleExpressions = [
 ]
 
 export const GeneralTab: React.FC = () => {
-  const meta = useFlowStore((state) => state.meta)
-  const setMeta = useFlowStore((state) => state.setMeta)
+  const meta = useEditorStore((state) => state.meta)
+  const setMeta = useEditorStore((state) => state.setMeta)
 
-  const processModelFlowConfig = useFlowStore(
+  const processModelFlowConfig = useEditorStore(
     (state) => state.processModelFlowConfig
   )
 
