@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material'
 import React from 'react'
 import { Handle, NodeProps, Position } from 'reactflow'
 
@@ -17,9 +18,14 @@ const handleStyle = {
 interface PlaceNodeShapeProps {
   strokeWidth: string | number | undefined
   label: string | number | undefined
+  id: string | undefined
 }
 
-export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = (NodeProps) => {
+export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = ({
+  strokeWidth,
+  label,
+  id,
+}) => {
   //There are a lot of +1's and +2's to account for strokewidth
   const { diameter, color } = config
 
@@ -33,7 +39,7 @@ export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = (NodeProps) => {
       cx={diameter + 1}
       cy={diameter + 1}
       r={diameter}
-      strokeWidth={NodeProps.strokeWidth ? NodeProps.strokeWidth : 1}
+      strokeWidth={strokeWidth ? strokeWidth : 1}
       {...styles}
     />
   )
@@ -58,9 +64,13 @@ export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = (NodeProps) => {
           textAlign: 'center',
           position: 'absolute',
           color: '#222',
+          paddingTop: 16, // Eyed size of the subtitle line, to make the tokens centered.
         }}
       >
-        {NodeProps?.label}
+        {label}
+        <Typography fontSize={8} color={'#555'} gutterBottom>
+          p{id}
+        </Typography>
       </div>
     </div>
   )
@@ -116,7 +126,11 @@ export const PlaceNode: React.FC<NodeProps> = ({
           left: -diameter / 2,
         }}
       />
-      <PlaceNodeShape strokeWidth={selected ? 2 : 1} label={data?.store} />p{id}
+      <PlaceNodeShape
+        strokeWidth={selected ? 2 : 1}
+        label={data?.store}
+        id={id}
+      />
     </div>
   )
 }

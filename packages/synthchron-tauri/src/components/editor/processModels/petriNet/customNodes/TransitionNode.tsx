@@ -1,11 +1,9 @@
+import { Typography } from '@mui/material'
 import React from 'react'
 import { Handle, NodeProps, Position } from 'reactflow'
 
-// import './NodeStyle.css'
-
 const config = {
-  width: 50,
-  height: 50,
+  size: 60,
   color: '#eee',
 }
 
@@ -20,19 +18,20 @@ interface TransitionNodeShapeProps {
   label: string | undefined
 }
 
-export const TransitionNodeShape: React.FC<TransitionNodeShapeProps> = (
-  NodeProps
-) => {
-  const { width, height, color } = config
+export const TransitionNodeShape: React.FC<TransitionNodeShapeProps> = ({
+  strokeWidth,
+  label,
+}) => {
+  const { size, color } = config
 
   const shape = (
     <rect
       x={0}
       y={0}
       rx={0}
-      width={width}
-      height={height}
-      strokeWidth={NodeProps.strokeWidth ? NodeProps.strokeWidth : 1}
+      width={size}
+      height={size}
+      strokeWidth={strokeWidth || 1}
     />
   )
 
@@ -55,23 +54,22 @@ export const TransitionNodeShape: React.FC<TransitionNodeShapeProps> = (
     >
       <svg
         style={{ overflow: 'visible' }}
-        width={width}
-        height={height}
+        width={size}
+        height={size}
         {...styles}
       >
         {shape}
       </svg>
       <div
         style={{
-          textAlign: 'center',
           position: 'absolute',
-          fontFamily: 'monospace',
-          fontWeight: 'bold',
-          color: '#222',
-          fontSize: 12,
+          maxWidth: size,
+          maxHeight: size,
         }}
       >
-        {NodeProps.label}
+        <Typography fontSize={8} noWrap padding={0.4}>
+          {label}
+        </Typography>
       </div>
     </div>
   )

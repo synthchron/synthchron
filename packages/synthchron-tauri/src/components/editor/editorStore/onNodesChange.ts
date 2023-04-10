@@ -6,7 +6,7 @@ import {
   NodeAddChange,
   NodeResetChange,
 } from 'reactflow'
-import { yDocState } from './flowStore'
+import { yDocState } from './yDoc'
 
 const isNodeAddChange = (change: NodeChange): change is NodeAddChange =>
   change.type === 'add'

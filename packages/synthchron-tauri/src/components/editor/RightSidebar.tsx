@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { shallow } from 'zustand/shallow'
-import { RFState, useFlowStore } from './ydoc/flowStore'
+import { EditorState, useEditorStore } from './editorStore/flowStore'
 import { Stack, TextField, Typography } from '@mui/material'
 import { TabbedDrawer } from './TabbedDrawer'
 import { GeneralTab } from './rightSidebar/GeneralTab'
@@ -9,13 +9,13 @@ import { SimulationTab } from './rightSidebar/SimulationTab'
 export const RightSidebar = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const selector = useCallback(
-    (state: RFState) => ({
+    (state: EditorState) => ({
       selectedElement: state.selectedElement,
     }),
     []
   )
 
-  const { selectedElement } = useFlowStore(selector, shallow)
+  const { selectedElement } = useEditorStore(selector, shallow)
 
   const selectedElementProperties = selectedElement ? (
     Object.entries(selectedElement.data).map(([key, value]) => (

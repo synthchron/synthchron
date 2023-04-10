@@ -5,10 +5,10 @@ import {
   simulateWithEngine,
   SimulationResult,
 } from '@synthchron/simulator'
-import { useFlowStore } from '../ydoc/flowStore'
-import { transformFlowToSimulator } from '../../flowTransformer'
-import { useState } from 'react'
+import { useEditorStore } from '../editorStore/flowStore'
 import { transformSimulatioResultToXESLog } from '../../../utils/simulatorToXESConverter'
+import { useState } from 'react'
+import { transformFlowToSimulator } from '../../../utils/flowTransformer'
 import { generateXES } from '@synthchron/xes'
 
 export const SimulationTab: React.FC = () => {
@@ -18,7 +18,7 @@ export const SimulationTab: React.FC = () => {
     setSimulationResult(
       simulateWithEngine(
         transformFlowToSimulator(
-          useFlowStore.getState()
+          useEditorStore.getState()
         ) as PetriNetProcessModel,
         { endOnAcceptingState: true, minEvents: 1, maxEvents: 100 },
         petriNetEngine

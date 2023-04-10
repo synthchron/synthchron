@@ -8,7 +8,7 @@ import 'reactflow/dist/style.css'
 // 👇 Importing components
 import { LeftSidebar } from './LeftSidebar'
 import { StateFlow } from './StateFlow'
-import { RFState, useFlowStore } from './ydoc/flowStore'
+import { EditorState, useEditorStore } from './editorStore/flowStore'
 import { shallow } from 'zustand/shallow'
 import { RightSidebar } from './RightSidebar'
 import { Box } from '@mui/material'
@@ -29,12 +29,12 @@ export const SidebarsWrapper = () => {
   )
 
   const selector = useCallback(
-    (state: RFState) => ({
+    (state: EditorState) => ({
       addNode: state.addNode,
     }),
     []
   )
-  const { addNode } = useFlowStore(selector, shallow)
+  const { addNode } = useEditorStore(selector, shallow)
 
   const onDrop: React.DragEventHandler<HTMLDivElement> = (
     event: React.DragEvent<HTMLDivElement>

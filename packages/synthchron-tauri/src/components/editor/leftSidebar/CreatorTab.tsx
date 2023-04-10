@@ -1,9 +1,10 @@
-import { Box, Typography } from '@mui/material'
-import { NodeShapeMap } from '../processModels/NodeShapeMap'
-import { useFlowStore } from '../ydoc/flowStore'
+import { Typography } from '@mui/material'
+import { Container } from '@mui/system'
+import { useEditorStore } from '../editorStore/flowStore'
+import { NodeShapeMap } from '../processModels/petriNet/NodeShapeMap'
 
 export const CreatorTab: React.FC = () => {
-  const nodeTypes = useFlowStore(
+  const nodeTypes = useEditorStore(
     (state) => state.processModelFlowConfig.nodeTypes
   )
 
@@ -14,7 +15,7 @@ export const CreatorTab: React.FC = () => {
   }
 
   return (
-    <Box
+    <Container
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -22,17 +23,29 @@ export const CreatorTab: React.FC = () => {
         marginTop: '10px',
       }}
     >
-      <Typography variant='h6'>Node Creator</Typography>
+      <Typography
+        variant='h6'
+        style={{
+          marginBottom: '1em',
+        }}
+      >
+        Node Creator
+      </Typography>
+
       {Object.keys(nodeTypes).map((key) => (
         <div
           key={key}
           onDragStart={(event) => onDragStart(event, key)}
           draggable
-          style={{ alignSelf: 'center', transform: 'translate(0, 0)' }}
+          style={{
+            alignSelf: 'center',
+            transform: 'translate(0, 0)',
+            padding: '10px',
+          }}
         >
           {NodeShapeMap(key)}
         </div>
       ))}
-    </Box>
+    </Container>
   )
 }
