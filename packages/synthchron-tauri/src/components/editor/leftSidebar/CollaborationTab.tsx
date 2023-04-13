@@ -1,17 +1,27 @@
-import { Avatar, Button, Chip, Container, Typography } from '@mui/material'
+import {
+  Avatar,
+  Button,
+  Chip,
+  Container,
+  TextField,
+  Typography,
+} from '@mui/material'
 import { useCallback } from 'react'
 import { shallow } from 'zustand/shallow'
 import { EditorState, useEditorStore } from '../editorStore/flowStore'
+import { faker } from '@faker-js/faker'
 
 export const CollaborationTab = () => {
   const selector = useCallback(
     (state: EditorState) => ({
       connectRoom: state.connectRoom,
       disconnectRoom: state.disconnectRoom,
+      setRoomTextfieldState: state.setRoomTextfieldState,
       yWebRTCProvider: state.yWebRTCProvider,
       awareness: state.awareness,
       collaboratorStates: state.collaboratorStates,
       awarenessState: state.awarenessState,
+      roomTextfieldState: state.roomTextfieldState,
     }),
     []
   )
@@ -19,11 +29,24 @@ export const CollaborationTab = () => {
   const {
     connectRoom,
     disconnectRoom,
+    setRoomTextfieldState,
+    roomTextfieldState,
     yWebRTCProvider,
     awareness,
     collaboratorStates,
     awarenessState,
   } = useEditorStore(selector, shallow)
+
+  function OpenRoom(KeepCurrent: boolean) {
+    !roomTextfieldState.roomCode
+      ? setRoomTextfieldState(faker.random.alpha(5), true)
+      : setRoomTextfieldState(undefined, true)
+    connectRoom(roomTextfieldState.roomCode, KeepCurrent)
+  }
+  function CloseRoom() {
+    disconnectRoom()
+    setRoomTextfieldState(undefined, false)
+  }
 
   return (
     <Container
@@ -35,14 +58,31 @@ export const CollaborationTab = () => {
       }}
     >
       <Typography variant='h6'>Collaboration</Typography>
-      <Button onClick={() => connectRoom('myroom', true)}>
+      <TextField
+        variant='standard'
+        label='Room Code'
+        sx={{
+          alignSelf: 'center',
+        }}
+        inputProps={{
+          style: {
+            textAlign: 'center',
+          },
+        }}
+        disabled={roomTextfieldState.textAvailable}
+        value={roomTextfieldState.roomCode}
+        onChange={(event) =>
+          setRoomTextfieldState(event.target.value, undefined)
+        }
+      />
+      <Button onClick={() => OpenRoom(true)}>
         {yWebRTCProvider !== null ? 'Reconnect (keep)' : 'Connect (keep)'}
       </Button>
-      <Button onClick={() => connectRoom('myroom', false)}>
+      <Button onClick={() => OpenRoom(false)}>
         {yWebRTCProvider !== null ? 'Reconnect (throw)' : 'Connect (throw)'}
       </Button>
       {yWebRTCProvider !== null && (
-        <Button onClick={disconnectRoom}>Leave Collaboration</Button>
+        <Button onClick={CloseRoom}>Leave Collaboration</Button>
       )}
       {awareness && collaboratorStates && awarenessState && (
         <Container>
