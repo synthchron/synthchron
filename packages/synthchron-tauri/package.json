@@ -35,7 +35,7 @@
     "y-protocols": "^1.0.5",
     "y-webrtc": "^10.2.5",
     "yjs": "^13.5.51",
-    "zustand": "^4.3.6"
+    "zustand": "^4.3.7"
   },
   "devDependencies": {
     "@babel/core": "^7.21.4",
