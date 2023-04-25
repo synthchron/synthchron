@@ -8,7 +8,7 @@ import {
   Edge,
   Connection,
 } from 'reactflow'
-import { yDocState } from './flowStore'
+import { yDocState } from './yDoc'
 
 const isEdgeAddChange = (change: EdgeChange): change is EdgeAddChange =>
   change.type === 'add'

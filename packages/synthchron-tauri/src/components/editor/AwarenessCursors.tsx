@@ -1,5 +1,5 @@
 import { useStore } from 'reactflow'
-import { AwarenessState, useFlowStore } from './ydoc/flowStore'
+import { AwarenessState, useEditorStore } from './editorStore/flowStore'
 import GpsFixedIcon from '@mui/icons-material/GpsFixed'
 
 // This component is responsible for drawing the awareness cursors for each user in the editor.
@@ -7,7 +7,7 @@ import GpsFixedIcon from '@mui/icons-material/GpsFixed'
 // to position the cursor at the user's location in the editor.
 
 export const AwarenessCursors = () => {
-  const collaboratorStates = useFlowStore((state) => state.collaboratorStates)
+  const collaboratorStates = useEditorStore((state) => state.collaboratorStates)
 
   const transform = useStore((store) => store.transform)
 
