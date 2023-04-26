@@ -3,10 +3,13 @@ name: Auto approve PRs by dependabot
 # Trigger the workflow on pull request
 on: pull_request_target
 
+permissions:
+    pull-requests: write
 jobs:
     autoapprove:
         name: Auto-Approve a PR by dependabot
         runs-on: ubuntu-latest
+        if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
         steps:
         -   name: Dependabot metadata
             id: metadata
@@ -15,7 +18,6 @@ jobs:
                 github-token: "${{ secrets.GITHUB_TOKEN }}"
         -   name: Auto approve
             uses: cognitedata/auto-approve-dependabot-action@v3.0.1
-            if: github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]'
             with:
                 github-token: ${{ secrets.GITHUB_TOKEN }}
         -   name: Enable auto-merge for Dependabot PRs
