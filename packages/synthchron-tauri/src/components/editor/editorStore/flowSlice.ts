@@ -71,7 +71,6 @@ export const createFlowSlice: StateCreator<EditorState, [], [], FlowSlice> = (
     _set({
       selectedElement: elem,
     })
-
     if (elem) {
       if ('position' in elem) {
         const updatedNode = yDocState.nodesMap.get(elem.id) as Node
