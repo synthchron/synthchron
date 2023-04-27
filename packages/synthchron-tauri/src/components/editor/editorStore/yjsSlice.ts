@@ -26,7 +26,6 @@ export const createYjsSlice: StateCreator<EditorState, [], [], YjsSlice> = (
   api
 ) => ({
   yWebRTCProvider: null,
-  selectedElement: undefined,
   connectRoom: async (room: string, keepChanges = true) => {
     get().yWebRTCProvider?.destroy()
     if (!keepChanges) {
