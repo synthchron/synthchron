@@ -15,6 +15,7 @@ import {
 import { ProcessModel, ProcessModelType } from '@synthchron/simulator'
 import { faker } from '@faker-js/faker'
 import { usePersistentStore } from './common/persistentStore'
+import { useNavigate } from 'react-router-dom'
 
 export type ProjectConfig = {
   name: string
@@ -34,10 +35,19 @@ const modal_style = {
   p: 4,
 }
 
-const NewProjectModal: React.FC<{ open: boolean; onClose: () => void }> = ({
+interface NewProjectModalProps {
+  open: boolean
+  onClose: () => void
+  redirect?: boolean
+}
+
+const NewProjectModal: React.FC<NewProjectModalProps> = ({
   open,
   onClose,
+  redirect = false,
 }) => {
+  const navigate = useNavigate()
+
   const addProject = usePersistentStore((state) => state.addProject)
 
   const newProjectDefault = () => {
@@ -85,7 +95,7 @@ const NewProjectModal: React.FC<{ open: boolean; onClose: () => void }> = ({
         }
         break
     }
-    addProject({
+    const projectId = addProject({
       projectName: newProjectConfig.name,
       projectDescription: newProjectConfig.description,
       projectModel: model, // TODO
@@ -93,6 +103,7 @@ const NewProjectModal: React.FC<{ open: boolean; onClose: () => void }> = ({
       lastEdited: new Date().toJSON(),
     })
     setNewProjectConfig(newProjectDefault())
+    if (redirect) navigate(`/editor/${projectId}`)
     onClose()
   }
 
