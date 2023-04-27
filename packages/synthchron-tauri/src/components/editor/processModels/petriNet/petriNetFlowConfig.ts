@@ -18,12 +18,12 @@ import ArcEdge from './customEdges/ArcEdge'
 import PlaceNode from './customNodes/PlaceNode'
 import TransitionNode from './customNodes/TransitionNode'
 
-const nodeTypes: NodeTypes = {
+export const nodeTypes: NodeTypes = {
   Place: PlaceNode,
   Transition: TransitionNode,
 }
 
-const edgeTypes: EdgeTypes = {
+export const edgeTypes: EdgeTypes = {
   Arc: ArcEdge,
 }
 
@@ -56,7 +56,7 @@ export const petriNetFlowConfig: ProcessModelFlowConfig = {
       ...connection,
       type: 'Arc',
       markerEnd: { type: MarkerType.ArrowClosed },
-      data: { weight: 1 },
+      data: { multiplicity: 1 },
     }
   },
   generateFlow: (processModel: ProcessModel) => ({
@@ -69,7 +69,7 @@ export const petriNetFlowConfig: ProcessModelFlowConfig = {
       },
       data: {
         label: node.name,
-        store: isPlaceNode(node) ? node.amountOfTokens : node.weight,
+        tokens: isPlaceNode(node) ? node.amountOfTokens : node.weight,
       },
     })),
     edges: (processModel as PetriNetProcessModel).edges.map((edge) => ({
@@ -80,7 +80,7 @@ export const petriNetFlowConfig: ProcessModelFlowConfig = {
       sourceHandle: 'left',
       targetHandle: 'left',
       markerEnd: { type: MarkerType.ArrowClosed },
-      data: { weight: edge.multiplicity },
+      data: { multiplicity: edge.multiplicity },
     })),
     meta: {
       acceptingExpressions: (processModel as PetriNetProcessModel)
@@ -99,14 +99,14 @@ export const petriNetFlowConfig: ProcessModelFlowConfig = {
           type,
           name,
           accepting: node.data.accepting,
-          amountOfTokens: node.data.store,
+          amountOfTokens: node.data.tokens,
           position: node.position,
         } as PetriNetPlace
       } else {
         return {
           identifier,
           type,
-          weight: node.data.store,
+          weight: node.data.weight,
           name,
           position: node.position,
         } as PetriNetTransition
@@ -117,7 +117,7 @@ export const petriNetFlowConfig: ProcessModelFlowConfig = {
       return {
         source: edge.source,
         target: edge.target,
-        multiplicity: edge.data.weight,
+        multiplicity: edge.data.multiplicity,
       }
     })
     return {

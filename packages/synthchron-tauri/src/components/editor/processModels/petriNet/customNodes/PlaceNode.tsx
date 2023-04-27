@@ -128,7 +128,7 @@ export const PlaceNode: React.FC<NodeProps> = ({
       />
       <PlaceNodeShape
         strokeWidth={selected ? 2 : 1}
-        label={data?.store}
+        label={data?.tokens}
         id={id}
       />
     </div>

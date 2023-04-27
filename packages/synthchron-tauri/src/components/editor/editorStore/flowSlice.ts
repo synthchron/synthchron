@@ -11,6 +11,7 @@ import { EditorState } from './flowStore'
 import { onEdgesChange } from './onEdgesChange'
 import { onNodesChanges } from './onNodesChange'
 import { yDocState } from './yDoc'
+import { GetElementType } from '../processModels/FlowUtil'
 
 const getNodeFromLabel = (nodes: Node[], label: string) => {
   return nodes.find((node) => node.id == label)
@@ -72,7 +73,8 @@ export const createFlowSlice: StateCreator<EditorState, [], [], FlowSlice> = (
       selectedElement: elem,
     })
     if (elem) {
-      if ('position' in elem) {
+      const elemType = GetElementType(elem.type)
+      if (elemType == 'node') {
         const updatedNode = yDocState.nodesMap.get(elem.id) as Node
         //Element is a node
         yDocState.nodesMap.set(elem.id, {
@@ -82,7 +84,7 @@ export const createFlowSlice: StateCreator<EditorState, [], [], FlowSlice> = (
           },
           id: elem.id,
         })
-      } else {
+      } else if (elemType == 'edge') {
         const updatedEdge = yDocState.edgesMap.get(elem.id) as Edge
         //Element is an edge
         yDocState.edgesMap.set(elem.id, {
