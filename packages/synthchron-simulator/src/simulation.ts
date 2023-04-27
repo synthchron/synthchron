@@ -7,6 +7,8 @@ import {
 } from './types/general'
 import { ProcessModel } from './types/processModel'
 
+import seedrandom from 'seedrandom'
+
 //const PROCESS_ENGINES = [petriNetEngine]
 
 /* export const simulate = <
@@ -41,7 +43,7 @@ import { ProcessModel } from './types/processModel'
 export const simulateWithEngine = <
   SpecificProcessModel extends ProcessModel,
   StateType,
-  ActivityIdentifier
+  ActivityIdentifier extends string
 >(
   processModel: SpecificProcessModel,
   configuration: Configuration,
@@ -73,7 +75,7 @@ export const simulateWithEngine = <
 
   while (!terminationReason.termination) {
     const enabledActivities = processEngine.getEnabled(processModel, state)
-    const activity = enabledActivities.keys().next().value[0] // TODO: Add random selection
+    const activity = weightedRandom(enabledActivities, configuration.randomSeed)
     state = processEngine.executeActivity(processModel, state, activity)
     trace.events.push({
       name: activity,
@@ -93,6 +95,24 @@ export const simulateWithEngine = <
     exitReason: terminationReason.reason,
     acceptingState: terminationReason.acceptingState,
   }
+}
+
+const weightedRandom = <T>(
+  activities: Set<[T, number]>,
+  randomSeed: string
+): T => {
+  const cumulativeWeights: [T, number][] = []
+  let cumulativeWeight = 0
+  for (const [activity, weight] of activities) {
+    cumulativeWeight += weight
+    cumulativeWeights.push([activity, cumulativeWeight])
+  }
+  const randomGenerator = seedrandom(randomSeed)
+  const random = randomGenerator() * cumulativeWeight
+  for (const [activity, cumulativeWeight] of cumulativeWeights) {
+    if (random <= cumulativeWeight) return activity
+  }
+  throw new Error('Weighted random failed')
 }
 
 const checkTermination = <
