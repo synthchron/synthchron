@@ -1,13 +1,14 @@
 import {
-  EdgeChange,
+  Connection,
+  Edge,
   EdgeAddChange,
-  EdgeResetChange,
+  EdgeChange,
   EdgeRemoveChange,
+  EdgeResetChange,
   OnEdgesChange,
   applyEdgeChanges,
-  Edge,
-  Connection,
 } from 'reactflow'
+
 import { yDocState } from './yDoc'
 
 const isEdgeAddChange = (change: EdgeChange): change is EdgeAddChange =>

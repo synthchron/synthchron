@@ -6,6 +6,7 @@ import {
   Typography,
 } from '@mui/material'
 import moment from 'moment'
+
 import { Project } from '../types/project'
 import { usePersistentStore } from './common/persistentStore'
 

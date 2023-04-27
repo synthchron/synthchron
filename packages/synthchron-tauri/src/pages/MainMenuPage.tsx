@@ -1,12 +1,12 @@
+import React from 'react'
+
+import AddCircleIcon from '@mui/icons-material/AddCircle'
 import { Grid, IconButton } from '@mui/material'
 
-import { usePersistentStore } from '../components/common/persistentStore'
 import { CustomAppBar } from '../components/CustomAppBar'
-import { ProjectCard } from '../components/ProjectCard'
-import AddCircleIcon from '@mui/icons-material/AddCircle'
-
-import React from 'react'
 import NewProjectModal from '../components/NewProjectModal'
+import { ProjectCard } from '../components/ProjectCard'
+import { usePersistentStore } from '../components/common/persistentStore'
 
 export const MainMenuPage = () => {
   const projects = usePersistentStore((state) => state.projects)

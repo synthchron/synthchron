@@ -1,8 +1,10 @@
 import { useCallback } from 'react'
-import { shallow } from 'zustand/shallow'
-import { EditorState, useEditorStore } from './editorStore/flowStore'
+
 import { Stack, TextField, Typography } from '@mui/material'
+import { shallow } from 'zustand/shallow'
+
 import { TabbedDrawer } from './TabbedDrawer'
+import { EditorState, useEditorStore } from './editorStore/flowStore'
 import { GeneralTab } from './rightSidebar/GeneralTab'
 import { SimulationTab } from './rightSidebar/SimulationTab'
 

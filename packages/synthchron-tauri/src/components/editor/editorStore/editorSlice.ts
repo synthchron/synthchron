@@ -1,6 +1,8 @@
-import { ProcessModel } from '@synthchron/simulator'
 import { Edge, Node } from 'reactflow'
 import { StateCreator } from 'zustand'
+
+import { ProcessModel } from '@synthchron/simulator'
+
 import { usePersistentStore } from '../../common/persistentStore'
 import { EditorState } from './flowStore'
 

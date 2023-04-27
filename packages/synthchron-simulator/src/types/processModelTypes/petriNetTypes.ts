@@ -1,4 +1,5 @@
 import { PositionalNode, ProcessModelType } from '../processModel'
+
 export interface PetriNetProcessModel {
   type: ProcessModelType.PetriNet
   acceptingExpressions: AcceptingExpression[]

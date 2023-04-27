@@ -1,10 +1,3 @@
-import { ProcessModel, ProcessModelType } from '@synthchron/simulator'
-import {
-  PetriNetProcessModel,
-  PetriNetPlace,
-  PetriNetNode,
-  PetriNetTransition,
-} from '@synthchron/simulator/src/types/processModelTypes/petriNetTypes'
 import {
   Connection,
   Edge,
@@ -13,6 +6,15 @@ import {
   Node,
   NodeTypes,
 } from 'reactflow'
+
+import { ProcessModel, ProcessModelType } from '@synthchron/simulator'
+import {
+  PetriNetNode,
+  PetriNetPlace,
+  PetriNetProcessModel,
+  PetriNetTransition,
+} from '@synthchron/simulator/src/types/processModelTypes/petriNetTypes'
+
 import { ProcessModelFlowConfig } from '../processModelFlowConfig'
 import ArcEdge from './customEdges/ArcEdge'
 import PlaceNode from './customNodes/PlaceNode'

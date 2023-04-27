@@ -1,5 +1,7 @@
 import { useCallback } from 'react'
-import { useStore, getBezierPath, EdgeProps } from 'reactflow'
+
+import { EdgeProps, getBezierPath, useStore } from 'reactflow'
+
 import { getEdgeParams } from './utils'
 
 const ArcEdge: React.FC<EdgeProps<unknown>> = ({

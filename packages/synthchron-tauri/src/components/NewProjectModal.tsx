@@ -1,4 +1,6 @@
 import React from 'react'
+
+import { faker } from '@faker-js/faker'
 import {
   Box,
   Button,
@@ -12,8 +14,9 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
+
 import { ProcessModel, ProcessModelType } from '@synthchron/simulator'
-import { faker } from '@faker-js/faker'
+
 import { usePersistentStore } from './common/persistentStore'
 
 export type ProjectConfig = {

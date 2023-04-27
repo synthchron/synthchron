@@ -1,5 +1,6 @@
 // tslint:disable: only-arrow-functions
 import { expect } from 'chai'
+
 import { main } from '../src'
 
 describe('Index module', function () {

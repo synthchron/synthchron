@@ -1,12 +1,13 @@
 import {
-  OnNodesChange,
-  OnEdgesChange,
-  OnConnect,
   Connection,
   Edge,
   Node,
+  OnConnect,
+  OnEdgesChange,
+  OnNodesChange,
 } from 'reactflow'
 import { StateCreator } from 'zustand'
+
 import { EditorState } from './flowStore'
 import { onEdgesChange } from './onEdgesChange'
 import { onNodesChanges } from './onNodesChange'
