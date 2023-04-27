@@ -13,9 +13,6 @@ type NodeDataFields = {
   accepting: string //Not used, but not problematic.
   weight: number
   multiplicity: number
-  //To be added fields:
-  //Tokens
-  //Multiplicity
 }
 
 function NodeDataFieldsTypesAsStrings(field: string) {
