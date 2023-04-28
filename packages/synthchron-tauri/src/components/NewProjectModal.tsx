@@ -1,5 +1,3 @@
-import { usePersistentStore } from './common/persistentStore'
-import { faker } from '@faker-js/faker'
 import {
   Box,
   Button,
