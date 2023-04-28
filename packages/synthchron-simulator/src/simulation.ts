@@ -73,9 +73,11 @@ export const simulateWithEngine = <
     trace
   )
 
+  const randomGenerator = seedrandom(configuration.randomSeed)
+
   while (!terminationReason.termination) {
     const enabledActivities = processEngine.getEnabled(processModel, state)
-    const activity = weightedRandom(enabledActivities, configuration.randomSeed)
+    const activity = weightedRandom(enabledActivities, randomGenerator)
     state = processEngine.executeActivity(processModel, state, activity)
     trace.events.push({
       name: activity,
@@ -99,7 +101,7 @@ export const simulateWithEngine = <
 
 const weightedRandom = <T>(
   activities: Set<[T, number]>,
-  randomSeed: string
+  randomGenerator: () => number
 ): T => {
   const cumulativeWeights: [T, number][] = []
   let cumulativeWeight = 0
@@ -107,7 +109,6 @@ const weightedRandom = <T>(
     cumulativeWeight += weight
     cumulativeWeights.push([activity, cumulativeWeight])
   }
-  const randomGenerator = seedrandom(randomSeed)
   const random = randomGenerator() * cumulativeWeight
   for (const [activity, cumulativeWeight] of cumulativeWeights) {
     if (random <= cumulativeWeight) return activity
