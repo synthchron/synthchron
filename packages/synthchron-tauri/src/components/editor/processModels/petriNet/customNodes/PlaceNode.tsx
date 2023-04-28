@@ -36,7 +36,7 @@ export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = ({
 
   const tokenSize = diameter / 4 // size of a single token circle
   const maxTokens = 4 // maximum number of tokens to show
-  const numTokens = typeof label === 'number' ? label : 0
+  const numTokens = typeof label === 'number' ? label : -1
   const tokenShapes = []
   if (numTokens <= maxTokens) {
     // create black circle shapes for each token
@@ -57,7 +57,7 @@ export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = ({
   }
 
   const labelElement =
-    numTokens > maxTokens ? (
+    numTokens == -1 || numTokens > maxTokens ? (
       <div
         style={{
           textAlign: 'center',
@@ -167,7 +167,7 @@ export const PlaceNode: React.FC<NodeProps> = ({
       />
       <PlaceNodeShape
         strokeWidth={selected ? 2 : 1}
-        label={data?.store}
+        label={data?.tokens}
         id={id}
       />
     </div>
