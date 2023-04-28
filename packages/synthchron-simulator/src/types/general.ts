@@ -4,6 +4,7 @@ export type Configuration = {
   endOnAcceptingState?: boolean
   minEvents?: number
   maxEvents?: number
+  randomSeed: string
 }
 
 // Process Engine Types
