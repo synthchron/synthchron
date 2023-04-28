@@ -58,7 +58,7 @@ export const SidebarsWrapper = () => {
       position,
       data: {
         label: `${type == 'Transition' ? 'Transition' : 'Place'}`,
-        store: 1,
+        ...(type === 'Transition' ? { weight: 1 } : { tokens: 1 }),
         accepting: 'tokens >= 10',
       },
     }

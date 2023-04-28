@@ -83,6 +83,9 @@ export const StateFlow: React.FC<StateFlowProps> = ({
       onDrop={onDrop}
       onDragOver={onDragOver}
       //OnClickEvents
+      onNodeDrag={(_, node) => {
+        selectElement(node)
+      }}
       onNodeClick={(_, node) => {
         selectElement(node)
       }}

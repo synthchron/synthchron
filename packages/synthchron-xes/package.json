@@ -40,6 +40,6 @@
   "dependencies": {
     "eslint-plugin-prettier": "^4.2.1",
     "fast-xml-parser": "^4.2.0",
-    "yaml": "^2.2.1"
+    "yaml": "^2.2.2"
   }
 }

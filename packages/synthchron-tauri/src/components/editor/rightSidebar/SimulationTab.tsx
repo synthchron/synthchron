@@ -23,7 +23,12 @@ export const SimulationTab: React.FC = () => {
         transformFlowToSimulator(
           useEditorStore.getState()
         ) as PetriNetProcessModel,
-        { endOnAcceptingState: true, minEvents: 1, maxEvents: 100 },
+        {
+          endOnAcceptingState: true,
+          minEvents: 1,
+          maxEvents: 100,
+          randomSeed: Math.floor(Math.random() * 100).toString(),
+        },
         petriNetEngine
       )
     )

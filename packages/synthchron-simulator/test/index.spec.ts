@@ -29,7 +29,7 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet1,
-          { endOnAcceptingState: true },
+          { endOnAcceptingState: true, randomSeed: '42' },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -50,7 +50,7 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet1,
-          { endOnAcceptingState: true },
+          { endOnAcceptingState: true, randomSeed: '42' },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -71,7 +71,7 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet1,
-          { endOnAcceptingState: false },
+          { endOnAcceptingState: false, randomSeed: '42' },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -94,7 +94,11 @@ describe('Deterministic Process Models', () => {
 
     it('should produce the correct trace', () => {
       expect(
-        simulateWithEngine(petriNet1, { maxEvents: 0 }, petriNetEngine)
+        simulateWithEngine(
+          petriNet1,
+          { maxEvents: 0, randomSeed: '42' },
+          petriNetEngine
+        )
       ).to.deep.equal({
         acceptingState: undefined,
         exitReason: 'maxStepsReached',
@@ -106,7 +110,11 @@ describe('Deterministic Process Models', () => {
 
     it('should produce the correct trace', () => {
       expect(
-        simulateWithEngine(petriNet1, { maxEvents: 0 }, petriNetEngine)
+        simulateWithEngine(
+          petriNet1,
+          { maxEvents: 0, randomSeed: '42' },
+          petriNetEngine
+        )
       ).to.deep.equal({
         acceptingState: undefined,
         exitReason: 'maxStepsReached',
@@ -118,7 +126,11 @@ describe('Deterministic Process Models', () => {
 
     it('should produce the correct trace', () => {
       expect(
-        simulateWithEngine(petriNet1, { maxEvents: 1 }, petriNetEngine)
+        simulateWithEngine(
+          petriNet1,
+          { maxEvents: 1, randomSeed: '42' },
+          petriNetEngine
+        )
       ).to.deep.equal({
         acceptingState: undefined,
         exitReason: 'maxStepsReached',
@@ -152,7 +164,7 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet2,
-          { endOnAcceptingState: true },
+          { endOnAcceptingState: true, randomSeed: '42' },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -173,7 +185,7 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet2,
-          { endOnAcceptingState: false },
+          { endOnAcceptingState: false, randomSeed: '42' },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -196,7 +208,11 @@ describe('Deterministic Process Models', () => {
 
     it('should produce the correct trace', () => {
       expect(
-        simulateWithEngine(petriNet2, { maxEvents: 0 }, petriNetEngine)
+        simulateWithEngine(
+          petriNet2,
+          { maxEvents: 0, randomSeed: '42' },
+          petriNetEngine
+        )
       ).to.deep.equal({
         acceptingState: undefined,
         exitReason: 'maxStepsReached',
@@ -208,7 +224,11 @@ describe('Deterministic Process Models', () => {
 
     it('should produce the correct trace', () => {
       expect(
-        simulateWithEngine(petriNet2, { maxEvents: 1 }, petriNetEngine)
+        simulateWithEngine(
+          petriNet2,
+          { maxEvents: 1, randomSeed: '42' },
+          petriNetEngine
+        )
       ).to.deep.equal({
         acceptingState: undefined,
         exitReason: 'maxStepsReached',
@@ -240,7 +260,7 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet3,
-          { endOnAcceptingState: true },
+          { endOnAcceptingState: true, randomSeed: '42' },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -255,7 +275,7 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet3,
-          { endOnAcceptingState: false },
+          { endOnAcceptingState: false, randomSeed: '42' },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -277,7 +297,11 @@ describe('Deterministic Process Models', () => {
     })
     it('Petri Net 3.4: should produce the correct trace', () => {
       expect(
-        simulateWithEngine(petriNet3, { minEvents: 0 }, petriNetEngine)
+        simulateWithEngine(
+          petriNet3,
+          { minEvents: 0, randomSeed: '42' },
+          petriNetEngine
+        )
       ).to.deep.equal({
         acceptingState: undefined,
         exitReason: 'noEnabledActivities',
@@ -299,7 +323,7 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet3,
-          { maxEvents: 3, endOnAcceptingState: true },
+          { maxEvents: 3, endOnAcceptingState: true, randomSeed: '42' },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -317,7 +341,12 @@ describe('Deterministic Process Models', () => {
       expect(() =>
         // Allow wrong types for testing purposes
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        simulateWithEngine(flowchart1, {}, petriNetEngine as any)
+        simulateWithEngine(
+          flowchart1,
+          { randomSeed: '42' },
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          petriNetEngine as any
+        )
       ).to.throw()
     })
   })

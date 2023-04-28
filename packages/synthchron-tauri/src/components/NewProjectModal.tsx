@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { usePersistentStore } from './common/persistentStore'
 import { faker } from '@faker-js/faker'
 import {
   Box,
@@ -15,9 +16,11 @@ import {
   Typography,
 } from '@mui/material'
 
-import { ProcessModel, ProcessModelType } from '@synthchron/simulator'
-
-import { usePersistentStore } from './common/persistentStore'
+import {
+  PetriNetProcessModel,
+  ProcessModel,
+  ProcessModelType,
+} from '@synthchron/simulator'
 
 export type ProjectConfig = {
   name: string
@@ -35,6 +38,60 @@ const modal_style = {
   borderRadius: '.3rem',
   boxShadow: 14,
   p: 4,
+}
+
+const examplePetriNetModel: PetriNetProcessModel = {
+  type: ProcessModelType.PetriNet,
+  acceptingExpressions: [
+    {
+      name: 'accept',
+      expression: 'p3 >= 7',
+    },
+  ],
+  nodes: [
+    {
+      type: 'place',
+      name: 'p1',
+      identifier: '1',
+      amountOfTokens: 5,
+      position: {
+        x: -200,
+        y: 0,
+      },
+    },
+    {
+      type: 'transition',
+      name: 'transition 2',
+      identifier: '2',
+      weight: 1,
+      position: {
+        x: 0,
+        y: 0,
+      },
+    },
+    {
+      type: 'place',
+      name: 'p3',
+      identifier: '3',
+      amountOfTokens: 0,
+      position: {
+        x: 200,
+        y: 0,
+      },
+    },
+  ],
+  edges: [
+    {
+      source: '1',
+      target: '2',
+      multiplicity: 1,
+    },
+    {
+      source: '2',
+      target: '3',
+      multiplicity: 2,
+    },
+  ],
 }
 
 const NewProjectModal: React.FC<{ open: boolean; onClose: () => void }> = ({
@@ -64,12 +121,7 @@ const NewProjectModal: React.FC<{ open: boolean; onClose: () => void }> = ({
     switch (newProjectConfig.modelType) {
       default:
       case ProcessModelType.PetriNet:
-        model = {
-          type: newProjectConfig.modelType,
-          acceptingExpressions: [],
-          nodes: [],
-          edges: [],
-        }
+        model = examplePetriNetModel
         break
       case ProcessModelType.DcrGraph:
         model = { type: newProjectConfig.modelType, nodes: [], edges: [] }
