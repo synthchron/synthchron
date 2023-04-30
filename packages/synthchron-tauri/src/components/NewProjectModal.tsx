@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 
 import { faker } from '@faker-js/faker'
 import {
@@ -14,6 +14,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 
 import {
   PetriNetProcessModel,
@@ -39,6 +40,12 @@ const modal_style = {
   borderRadius: '.3rem',
   boxShadow: 14,
   p: 4,
+}
+
+interface NewProjectModalProps {
+  open: boolean
+  onClose: () => void
+  redirect?: boolean
 }
 
 const examplePetriNetModel: PetriNetProcessModel = {
@@ -95,10 +102,13 @@ const examplePetriNetModel: PetriNetProcessModel = {
   ],
 }
 
-const NewProjectModal: React.FC<{ open: boolean; onClose: () => void }> = ({
+const NewProjectModal: React.FC<NewProjectModalProps> = ({
   open,
   onClose,
+  redirect = false,
 }) => {
+  const navigate = useNavigate()
+
   const addProject = usePersistentStore((state) => state.addProject)
 
   const newProjectDefault = () => {
@@ -109,7 +119,7 @@ const NewProjectModal: React.FC<{ open: boolean; onClose: () => void }> = ({
     }
   }
 
-  const [newProjectConfig, setNewProjectConfig] = React.useState<ProjectConfig>(
+  const [newProjectConfig, setNewProjectConfig] = useState<ProjectConfig>(
     newProjectDefault()
   )
 
@@ -141,7 +151,7 @@ const NewProjectModal: React.FC<{ open: boolean; onClose: () => void }> = ({
         }
         break
     }
-    addProject({
+    const projectId = addProject({
       projectName: newProjectConfig.name,
       projectDescription: newProjectConfig.description,
       projectModel: model, // TODO
@@ -149,6 +159,7 @@ const NewProjectModal: React.FC<{ open: boolean; onClose: () => void }> = ({
       lastEdited: new Date().toJSON(),
     })
     setNewProjectConfig(newProjectDefault())
+    if (redirect) navigate(`/editor/${projectId}`)
     onClose()
   }
 

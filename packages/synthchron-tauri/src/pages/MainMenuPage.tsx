@@ -30,7 +30,7 @@ export const MainMenuPage = () => {
                 <Grid item xs={4}>
                   <IconButton
                     color='primary'
-                    aria-label='add to shopping cart'
+                    aria-label='create a new project'
                     onClick={() => {
                       setNewProjectModalOpen(true)
                     }}
