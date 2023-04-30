@@ -8,11 +8,11 @@ import {
 } from 'reactflow'
 import { StateCreator } from 'zustand'
 
+import { GetElementType } from '../processModels/FlowUtil'
 import { EditorState } from './flowStore'
 import { onEdgesChange } from './onEdgesChange'
 import { onNodesChanges } from './onNodesChange'
 import { yDocState } from './yDoc'
-import { GetElementType } from '../processModels/FlowUtil'
 
 const getNodeFromLabel = (nodes: Node[], label: string) => {
   return nodes.find((node) => node.id == label)

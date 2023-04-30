@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { usePersistentStore } from './common/persistentStore'
 import { faker } from '@faker-js/faker'
 import {
   Box,
@@ -21,6 +20,8 @@ import {
   ProcessModel,
   ProcessModelType,
 } from '@synthchron/simulator'
+
+import { usePersistentStore } from './common/persistentStore'
 
 export type ProjectConfig = {
   name: string
