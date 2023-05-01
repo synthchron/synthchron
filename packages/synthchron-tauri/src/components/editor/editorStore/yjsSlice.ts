@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker'
 import { Awareness } from 'y-protocols/awareness'
 import { WebrtcProvider } from 'y-webrtc'
 import { StateCreator } from 'zustand'
+
 import { AwarenessState, EditorState } from './flowStore'
 import { yDoc, yDocState } from './yDoc'
 

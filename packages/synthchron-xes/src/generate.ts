@@ -1,4 +1,5 @@
 import { XMLBuilder } from 'fast-xml-parser'
+
 import { XESAttribute, XESEvent, XESLog, XESTrace } from './types'
 
 export const generateXES = (xesLog: XESLog, prettyPrint = true): string => {

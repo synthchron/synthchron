@@ -27,5 +27,8 @@
                 "parser": "sass"
             }
         }
-    ]
+    ],
+    "importOrder": ["^react$", "<THIRD_PARTY_MODULES>", "^@synthchron/(.*)$", "^[./]", "(css|scss|sass)$"],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true
 }

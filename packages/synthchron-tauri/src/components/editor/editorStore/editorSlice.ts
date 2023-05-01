@@ -1,5 +1,7 @@
-import { ProcessModel } from '@synthchron/simulator'
 import { StateCreator } from 'zustand'
+
+import { ProcessModel } from '@synthchron/simulator'
+
 import { usePersistentStore } from '../../common/persistentStore'
 import { EditorState } from './flowStore'
 

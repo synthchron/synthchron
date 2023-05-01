@@ -1,3 +1,5 @@
+import seedrandom from 'seedrandom'
+
 import {
   Configuration,
   ProcessEngine,
@@ -6,8 +8,6 @@ import {
   Trace,
 } from './types/general'
 import { ProcessModel } from './types/processModel'
-
-import seedrandom from 'seedrandom'
 
 //const PROCESS_ENGINES = [petriNetEngine]
 

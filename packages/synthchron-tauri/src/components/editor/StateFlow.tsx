@@ -8,10 +8,10 @@ import ReactFlow, {
 } from 'reactflow'
 import { shallow } from 'zustand/shallow'
 
-import 'reactflow/dist/style.css'
-
-import { EditorState, useEditorStore } from './editorStore/flowStore'
 import { AwarenessCursors } from './AwarenessCursors'
+import { EditorState, useEditorStore } from './editorStore/flowStore'
+
+import 'reactflow/dist/style.css'
 
 const selector = (state: EditorState) => ({
   setAwarenessState: state.setAwarenessState,

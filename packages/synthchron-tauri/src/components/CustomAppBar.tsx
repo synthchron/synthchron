@@ -1,15 +1,21 @@
-import AppBar from '@mui/material/AppBar'
-import Box from '@mui/material/Box'
-import Toolbar from '@mui/material/Toolbar'
-import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
-import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded'
-import { Container, Divider, IconButton } from '@mui/material'
-import { usePersistentStore } from './common/persistentStore'
-import NewProjectModal from './NewProjectModal'
 import { useState } from 'react'
+
+import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded'
 import AddCircleIcon from '@mui/icons-material/AddCircle'
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  Divider,
+  IconButton,
+  Toolbar,
+  Typography,
+} from '@mui/material'
 import { Link } from 'react-router-dom'
+
+import NewProjectModal from './NewProjectModal'
+import { usePersistentStore } from './common/persistentStore'
 
 const RECENT_PROJECTS_LIMIT = 5 // number of projects to show in the recent projects list
 const RECENT_PROJECTS_TIMEOUT = 60 * 60 * 1000 // time in milliseconds that projects are still considered recent

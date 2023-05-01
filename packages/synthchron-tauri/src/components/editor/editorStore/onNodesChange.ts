@@ -1,11 +1,12 @@
 import {
+  NodeAddChange,
+  NodeChange,
+  NodeResetChange,
   OnNodesChange,
   applyNodeChanges,
-  NodeChange,
   getConnectedEdges,
-  NodeAddChange,
-  NodeResetChange,
 } from 'reactflow'
+
 import { yDocState } from './yDoc'
 
 const isNodeAddChange = (change: NodeChange): change is NodeAddChange =>

@@ -1,8 +1,10 @@
+import { useCallback } from 'react'
+
 import { faker } from '@faker-js/faker'
 import { Box, Button, Container, Input, Typography } from '@mui/material'
-import { useCallback } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { shallow } from 'zustand/shallow'
+
 import { transformFlowToSimulator } from '../../../utils/flowTransformer'
 import {
   PersistentState,

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Position, internalsSymbol, Node } from 'reactflow'
+import { Node, Position, internalsSymbol } from 'reactflow'
 
 function getClosestHandle(source: Node, target: Node) {
   const targetCenter = getNodeCenter(target)

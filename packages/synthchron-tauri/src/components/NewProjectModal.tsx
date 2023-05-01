@@ -1,3 +1,6 @@
+import { useState } from 'react'
+
+import { faker } from '@faker-js/faker'
 import {
   Box,
   Button,
@@ -11,15 +14,15 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { faker } from '@faker-js/faker'
-import { usePersistentStore } from './common/persistentStore'
 import { useNavigate } from 'react-router-dom'
+
 import {
   PetriNetProcessModel,
   ProcessModel,
   ProcessModelType,
 } from '@synthchron/simulator'
-import React from 'react'
+
+import { usePersistentStore } from './common/persistentStore'
 
 export type ProjectConfig = {
   name: string
@@ -116,7 +119,7 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
     }
   }
 
-  const [newProjectConfig, setNewProjectConfig] = React.useState<ProjectConfig>(
+  const [newProjectConfig, setNewProjectConfig] = useState<ProjectConfig>(
     newProjectDefault()
   )
 

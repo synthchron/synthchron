@@ -1,13 +1,13 @@
-import { create } from 'zustand'
 import { Edge, Node } from 'reactflow'
+import { create } from 'zustand'
 
-import { ProcessModelFlowConfig } from '../processModels/processModelFlowConfig'
 import { petriNetFlowConfig } from '../processModels/petriNet/petriNetFlowConfig'
-import { createYjsSlice, YjsSlice } from './yjsSlice'
+import { ProcessModelFlowConfig } from '../processModels/processModelFlowConfig'
+import { EditorSlice, createEditorSlice } from './editorSlice'
+import { FlowSlice, createFlowSlice } from './flowSlice'
+import { ModelSlice, createModelSlice } from './modelSlice'
 import { yDoc, yDocState } from './yDoc'
-import { createFlowSlice, FlowSlice } from './flowSlice'
-import { createModelSlice, ModelSlice } from './modelSlice'
-import { createEditorSlice, EditorSlice } from './editorSlice'
+import { YjsSlice, createYjsSlice } from './yjsSlice'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AwarenessState = any

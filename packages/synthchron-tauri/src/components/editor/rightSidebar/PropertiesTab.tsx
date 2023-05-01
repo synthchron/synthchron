@@ -1,9 +1,11 @@
-import { Container, Stack, Typography, TextField } from '@mui/material'
 import { useCallback } from 'react'
-import { GetElementType, FlowFieldsToDisplay } from '../processModels/FlowUtil'
+
+import { Container, Stack, TextField, Typography } from '@mui/material'
 import { Edge, Node } from 'reactflow'
 import { shallow } from 'zustand/shallow'
+
 import { EditorState, useEditorStore } from '../editorStore/flowStore'
+import { FlowFieldsToDisplay, GetElementType } from '../processModels/FlowUtil'
 
 type NodeDataFields = {
   //List of fields that can be updated from property window.
@@ -91,7 +93,7 @@ export const PropertiesTab: React.FC = () => {
         </div>,
       ].concat(
         Object.entries(selectedElement.data)
-          .filter(([key, value]) => fieldsToDisplayL.includes(key))
+          .filter(([key, _value]) => fieldsToDisplayL.includes(key))
           .map(([key, value]) => (
             <div key={key}>
               <TextField
