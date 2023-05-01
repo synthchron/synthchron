@@ -5,6 +5,9 @@ on: pull_request_target
 
 permissions:
     pull-requests: write
+    contents: write
+    issues: write
+    packages: read
 jobs:
     autoapprove:
         name: Auto-Approve a PR by dependabot
