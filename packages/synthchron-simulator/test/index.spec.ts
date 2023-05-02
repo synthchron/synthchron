@@ -96,7 +96,7 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet1,
-          { maxEvents: 0, randomSeed: '42' },
+          { maxEvents: 0, randomSeed: '42', endOnAcceptingStateProbability: 0 },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -112,7 +112,7 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet1,
-          { maxEvents: 0, randomSeed: '42' },
+          { maxEvents: 0, randomSeed: '42', endOnAcceptingStateProbability: 0 },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -128,7 +128,7 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet1,
-          { maxEvents: 1, randomSeed: '42' },
+          { maxEvents: 1, randomSeed: '42', endOnAcceptingStateProbability: 0 },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -210,7 +210,7 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet2,
-          { maxEvents: 0, randomSeed: '42' },
+          { maxEvents: 0, randomSeed: '42', endOnAcceptingStateProbability: 0 },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -226,7 +226,7 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet2,
-          { maxEvents: 1, randomSeed: '42' },
+          { maxEvents: 1, randomSeed: '42', endOnAcceptingStateProbability: 0 },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -299,7 +299,7 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet3,
-          { minEvents: 0, randomSeed: '42' },
+          { minEvents: 0, randomSeed: '42', endOnAcceptingStateProbability: 0 },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -343,7 +343,7 @@ describe('Deterministic Process Models', () => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         simulateWithEngine(
           flowchart1,
-          { randomSeed: '42' },
+          { randomSeed: '42', endOnAcceptingStateProbability: 0 },
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           petriNetEngine as any
         )
