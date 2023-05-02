@@ -15,12 +15,11 @@ export const createEditorSlice: StateCreator<
   [],
   [],
   EditorSlice
-> = (set, get) => ({
+> = (_set, get) => ({
   saveFlow: (id: string) => {
     usePersistentStore.getState().updateProject(id, {
       projectModel: get().getProcessModel(),
     })
-    set({ unsavedChanges: false })
   },
   getProcessModel: () =>
     get().processModelFlowConfig.serialize(
