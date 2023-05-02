@@ -46,7 +46,6 @@ export const PropertiesTab: React.FC = () => {
 
   const updateNodeFields = (fields: Partial<NodeDataFields>) => {
     if (selectedElement) {
-      console.log(selectedElement.data)
       const elemType = GetElementType(selectedElement.type)
       if (elemType == 'node') {
         const updatedSelectedElement: Node = {
