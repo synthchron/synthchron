@@ -31,8 +31,8 @@ export const CustomAppBar: React.FC = () => {
       href: '/',
     },
     {
-      name: 'Debug',
-      href: '/debug',
+      name: 'Collaborate',
+      href: '/collaborate',
     },
   ]
 
@@ -152,10 +152,10 @@ export const CustomAppBar: React.FC = () => {
               color: 'white',
               display: 'block',
             }}
-            to={'/collaborate'}
+            to={'/debug'}
             component={Link}
           >
-            Collaborate
+            Debug
           </Button>
         </Toolbar>
       </Container>
