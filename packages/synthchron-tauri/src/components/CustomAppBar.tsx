@@ -61,7 +61,6 @@ export const CustomAppBar: React.FC = () => {
       <Container maxWidth='xl'>
         <Toolbar variant='dense' disableGutters>
           <AccountTreeRoundedIcon sx={{ mr: 1 }} />
-          {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
           <Typography
             variant='h6'
             noWrap

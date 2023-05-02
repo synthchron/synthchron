@@ -41,7 +41,7 @@ export const useEditorStore = create<EditorState>((set, get, api) => ({
     config: ProcessModelFlowConfig,
     projectId: string
   ) => {
-    get().saveFlow()
+    get().saveFlow() // This autosaved in case we switch projects
     useEditorStore.setState({
       projectId,
     })
