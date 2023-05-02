@@ -12,14 +12,8 @@ const router = createBrowserRouter([
     element: <MainMenuPage />,
   },
   {
-    path: 'editor',
+    path: 'editor/:projectId',
     element: <EditorPage />,
-    children: [
-      {
-        path: ':projectId',
-        element: <EditorPage />,
-      },
-    ],
   },
   {
     path: 'collaborate',
