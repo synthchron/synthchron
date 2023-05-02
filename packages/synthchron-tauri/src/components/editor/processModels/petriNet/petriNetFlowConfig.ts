@@ -71,7 +71,9 @@ export const petriNetFlowConfig: ProcessModelFlowConfig = {
       },
       data: {
         label: node.name,
-        tokens: isPlaceNode(node) ? node.amountOfTokens : node.weight,
+        ...(isPlaceNode(node)
+          ? { tokens: node.amountOfTokens }
+          : { weight: node.weight }),
       },
     })),
     edges: (processModel as PetriNetProcessModel).edges.map((edge) => ({
