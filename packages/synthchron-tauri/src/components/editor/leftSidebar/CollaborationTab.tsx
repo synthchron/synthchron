@@ -48,9 +48,8 @@ export const CollaborationTab = () => {
 
     const isEmpty = await checkRoomIsEmpty(roomTextfieldState.roomCode)
     if (isEmpty) {
-      setTimeout(() => {
-        connectRoom(roomTextfieldState.roomCode, KeepCurrent)
-      }, 500)
+      connectRoom(roomTextfieldState.roomCode, KeepCurrent)
+      setConnectError('')
     } else {
       setConnectError('Room already exists')
       setRoomTextfieldState(undefined, false)
