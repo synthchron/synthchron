@@ -1,4 +1,6 @@
-import React from 'react'
+import { useState } from 'react'
+
+import { faker } from '@faker-js/faker'
 import {
   Box,
   Button,
@@ -12,8 +14,14 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { ProcessModel, ProcessModelType } from '@synthchron/simulator'
-import { faker } from '@faker-js/faker'
+import { useNavigate } from 'react-router-dom'
+
+import {
+  PetriNetProcessModel,
+  ProcessModel,
+  ProcessModelType,
+} from '@synthchron/simulator'
+
 import { usePersistentStore } from './common/persistentStore'
 
 export type ProjectConfig = {
@@ -34,10 +42,73 @@ const modal_style = {
   p: 4,
 }
 
-const NewProjectModal: React.FC<{ open: boolean; onClose: () => void }> = ({
+interface NewProjectModalProps {
+  open: boolean
+  onClose: () => void
+  redirect?: boolean
+}
+
+const examplePetriNetModel: PetriNetProcessModel = {
+  type: ProcessModelType.PetriNet,
+  acceptingExpressions: [
+    {
+      name: 'accept',
+      expression: 'p3 >= 7',
+    },
+  ],
+  nodes: [
+    {
+      type: 'place',
+      name: 'p1',
+      identifier: '1',
+      amountOfTokens: 5,
+      position: {
+        x: -200,
+        y: 0,
+      },
+    },
+    {
+      type: 'transition',
+      name: 'transition 2',
+      identifier: '2',
+      weight: 1,
+      position: {
+        x: 0,
+        y: 0,
+      },
+    },
+    {
+      type: 'place',
+      name: 'p3',
+      identifier: '3',
+      amountOfTokens: 0,
+      position: {
+        x: 200,
+        y: 0,
+      },
+    },
+  ],
+  edges: [
+    {
+      source: '1',
+      target: '2',
+      multiplicity: 1,
+    },
+    {
+      source: '2',
+      target: '3',
+      multiplicity: 2,
+    },
+  ],
+}
+
+const NewProjectModal: React.FC<NewProjectModalProps> = ({
   open,
   onClose,
+  redirect = false,
 }) => {
+  const navigate = useNavigate()
+
   const addProject = usePersistentStore((state) => state.addProject)
 
   const newProjectDefault = () => {
@@ -48,7 +119,7 @@ const NewProjectModal: React.FC<{ open: boolean; onClose: () => void }> = ({
     }
   }
 
-  const [newProjectConfig, setNewProjectConfig] = React.useState<ProjectConfig>(
+  const [newProjectConfig, setNewProjectConfig] = useState<ProjectConfig>(
     newProjectDefault()
   )
 
@@ -61,12 +132,7 @@ const NewProjectModal: React.FC<{ open: boolean; onClose: () => void }> = ({
     switch (newProjectConfig.modelType) {
       default:
       case ProcessModelType.PetriNet:
-        model = {
-          type: newProjectConfig.modelType,
-          acceptingExpressions: [],
-          nodes: [],
-          edges: [],
-        }
+        model = examplePetriNetModel
         break
       case ProcessModelType.DcrGraph:
         model = { type: newProjectConfig.modelType, nodes: [], edges: [] }
@@ -85,7 +151,7 @@ const NewProjectModal: React.FC<{ open: boolean; onClose: () => void }> = ({
         }
         break
     }
-    addProject({
+    const projectId = addProject({
       projectName: newProjectConfig.name,
       projectDescription: newProjectConfig.description,
       projectModel: model, // TODO
@@ -93,6 +159,7 @@ const NewProjectModal: React.FC<{ open: boolean; onClose: () => void }> = ({
       lastEdited: new Date().toJSON(),
     })
     setNewProjectConfig(newProjectDefault())
+    if (redirect) navigate(`/editor/${projectId}`)
     onClose()
   }
 

@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
+
 import { Project } from '../../types/project'
 
 export interface PersistentState {

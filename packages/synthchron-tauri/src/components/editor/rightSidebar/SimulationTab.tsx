@@ -1,15 +1,18 @@
-import { Button, Container, Typography } from '@mui/material'
-import {
-  petriNetEngine,
-  PetriNetProcessModel,
-  simulateWithEngine,
-  SimulationResult,
-} from '@synthchron/simulator'
-import { useEditorStore } from '../editorStore/flowStore'
-import { transformSimulatioResultToXESLog } from '../../../utils/simulatorToXESConverter'
 import { useState } from 'react'
-import { transformFlowToSimulator } from '../../../utils/flowTransformer'
+
+import { Button, Container, Typography } from '@mui/material'
+
+import {
+  PetriNetProcessModel,
+  SimulationResult,
+  petriNetEngine,
+  simulateWithEngine,
+} from '@synthchron/simulator'
 import { generateXES } from '@synthchron/xes'
+
+import { transformFlowToSimulator } from '../../../utils/flowTransformer'
+import { transformSimulatioResultToXESLog } from '../../../utils/simulatorToXESConverter'
+import { useEditorStore } from '../editorStore/flowStore'
 
 export const SimulationTab: React.FC = () => {
   const [simulationResult, setSimulationResult] = useState<SimulationResult>()
@@ -20,7 +23,12 @@ export const SimulationTab: React.FC = () => {
         transformFlowToSimulator(
           useEditorStore.getState()
         ) as PetriNetProcessModel,
-        { endOnAcceptingState: true, minEvents: 1, maxEvents: 100 },
+        {
+          endOnAcceptingState: true,
+          minEvents: 1,
+          maxEvents: 100,
+          randomSeed: Math.floor(Math.random() * 100).toString(),
+        },
         petriNetEngine
       )
     )

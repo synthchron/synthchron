@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker'
 import { Awareness } from 'y-protocols/awareness'
 import { WebrtcProvider } from 'y-webrtc'
 import { StateCreator } from 'zustand'
+
 import { AwarenessState, EditorState } from './flowStore'
 import { yDoc, yDocState } from './yDoc'
 
@@ -35,7 +36,6 @@ export const createYjsSlice: StateCreator<EditorState, [], [], YjsSlice> = (
   api
 ) => ({
   yWebRTCProvider: null,
-  selectedElement: undefined,
   connectRoom: async (room: string, keepChanges = true) => {
     get().yWebRTCProvider?.destroy()
     if (!keepChanges) {

@@ -1,9 +1,11 @@
-import { Alert, Box, Snackbar } from '@mui/material'
 import { useEffect } from 'react'
+
+import { Alert, Box, Snackbar } from '@mui/material'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useParams } from 'react-router-dom'
-import { usePersistentStore } from '../components/common/persistentStore'
+
 import { CustomAppBar } from '../components/CustomAppBar'
+import { usePersistentStore } from '../components/common/persistentStore'
 import { SidebarsWrapper } from '../components/editor/SidebarsWrapper'
 import { useEditorStore } from '../components/editor/editorStore/flowStore'
 import { petriNetFlowConfig } from '../components/editor/processModels/petriNet/petriNetFlowConfig'

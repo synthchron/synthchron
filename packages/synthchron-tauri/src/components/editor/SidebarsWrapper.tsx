@@ -1,17 +1,18 @@
 import React from 'react'
 import { useCallback, useRef, useState } from 'react'
-import { ReactFlowProvider, ReactFlowInstance } from 'reactflow'
 
-// 👇 you need to import the reactflow styles
-import 'reactflow/dist/style.css'
+import { Box } from '@mui/material'
+import { ReactFlowInstance, ReactFlowProvider } from 'reactflow'
+import { shallow } from 'zustand/shallow'
 
 // 👇 Importing components
 import { LeftSidebar } from './LeftSidebar'
+import { RightSidebar } from './RightSidebar'
 import { StateFlow } from './StateFlow'
 import { EditorState, useEditorStore } from './editorStore/flowStore'
-import { shallow } from 'zustand/shallow'
-import { RightSidebar } from './RightSidebar'
-import { Box } from '@mui/material'
+
+// 👇 you need to import the reactflow styles
+import 'reactflow/dist/style.css'
 
 // This component includes both the left and right sidebar, and handles the drag and drop functionality
 export const SidebarsWrapper = () => {
@@ -57,7 +58,7 @@ export const SidebarsWrapper = () => {
       position,
       data: {
         label: `${type == 'Transition' ? 'Transition' : 'Place'}`,
-        store: 1,
+        ...(type === 'Transition' ? { weight: 1 } : { tokens: 1 }),
         accepting: 'tokens >= 10',
       },
     }

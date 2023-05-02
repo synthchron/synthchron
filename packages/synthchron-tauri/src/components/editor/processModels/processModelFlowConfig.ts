@@ -1,5 +1,6 @@
+import { Connection, Edge, EdgeTypes, Node, NodeTypes } from 'reactflow'
+
 import { ProcessModel } from '@synthchron/simulator'
-import { EdgeTypes, NodeTypes, Node, Connection, Edge } from 'reactflow'
 
 type RFStateInit = {
   nodes: Node[]

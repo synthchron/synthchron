@@ -1,12 +1,14 @@
 import {
-  OnNodesChange,
-  OnEdgesChange,
-  OnConnect,
   Connection,
   Edge,
   Node,
+  OnConnect,
+  OnEdgesChange,
+  OnNodesChange,
 } from 'reactflow'
 import { StateCreator } from 'zustand'
+
+import { GetElementType } from '../processModels/FlowUtil'
 import { EditorState } from './flowStore'
 import { onEdgesChange } from './onEdgesChange'
 import { onNodesChanges } from './onNodesChange'
@@ -17,6 +19,8 @@ const getNodeFromLabel = (nodes: Node[], label: string) => {
 }
 
 export type FlowSlice = {
+  selectedElement: Node | Edge | undefined
+  selectElement: (elem: Node | Edge | undefined) => void
   onNodesChange: OnNodesChange
   onEdgesChange: OnEdgesChange
   onConnect: OnConnect
@@ -26,6 +30,7 @@ export const createFlowSlice: StateCreator<EditorState, [], [], FlowSlice> = (
   _set,
   get
 ) => ({
+  selectedElement: undefined,
   onNodesChange: onNodesChanges,
   onEdgesChange: onEdgesChange,
   onConnect: (connection: Connection) => {
@@ -63,5 +68,34 @@ export const createFlowSlice: StateCreator<EditorState, [], [], FlowSlice> = (
       id,
       ...modelSpecificConnection,
     } as Edge)
+  },
+  selectElement: (elem: Node | Edge | undefined) => {
+    _set({
+      selectedElement: elem,
+    })
+    if (elem) {
+      const elemType = GetElementType(elem.type)
+      if (elemType == 'node') {
+        const updatedNode = yDocState.nodesMap.get(elem.id) as Node
+        //Element is a node
+        yDocState.nodesMap.set(elem.id, {
+          ...updatedNode,
+          data: {
+            ...elem.data,
+          },
+          id: elem.id,
+        })
+      } else if (elemType == 'edge') {
+        const updatedEdge = yDocState.edgesMap.get(elem.id) as Edge
+        //Element is an edge
+        yDocState.edgesMap.set(elem.id, {
+          ...updatedEdge,
+          data: {
+            ...elem.data,
+          },
+          id: elem.id,
+        })
+      }
+    }
   },
 })

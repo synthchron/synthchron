@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
+
 import { Debug } from './components/Debug'
 import { CollaborationPage } from './pages/CollaborationPage'
 import { EditorPage } from './pages/EditorPage'

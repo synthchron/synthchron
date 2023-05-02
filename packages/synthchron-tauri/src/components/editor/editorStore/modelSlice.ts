@@ -1,5 +1,6 @@
 import { Edge, Node } from 'reactflow'
 import { StateCreator } from 'zustand'
+
 import { petriNetFlowConfig } from '../processModels/petriNet/petriNetFlowConfig'
 import { ProcessModelFlowConfig } from '../processModels/processModelFlowConfig'
 import { EditorState } from './flowStore'

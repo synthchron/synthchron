@@ -1,5 +1,6 @@
-import { Typography } from '@mui/material'
 import React from 'react'
+
+import { Typography } from '@mui/material'
 import { Handle, NodeProps, Position } from 'reactflow'
 
 //import styles from './Nodes.module.scss'
@@ -23,10 +24,10 @@ interface PlaceNodeShapeProps {
 
 export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = ({
   strokeWidth,
-  label,
   id,
+  label = 0,
 }) => {
-  //There are a lot of +1's and +2's to account for strokewidth
+  // There are a lot of +1's and +2's to account for strokewidth
   const { diameter, color } = config
 
   const styles = {
@@ -34,15 +35,47 @@ export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = ({
     stroke: '#222',
   }
 
-  const shape = (
-    <circle
-      cx={diameter + 1}
-      cy={diameter + 1}
-      r={diameter}
-      strokeWidth={strokeWidth ? strokeWidth : 1}
-      {...styles}
-    />
-  )
+  const tokenSize = diameter / 4 // size of a single token circle
+  const maxTokens = 4 // maximum number of tokens to show
+  const numTokens = typeof label === 'number' ? label : -1
+  const tokenShapes = []
+  if (numTokens <= maxTokens) {
+    // create black circle shapes for each token
+    const totalWidth = numTokens * tokenSize * 1.5
+    // console.log(diameter, ' ', totalWidth, ' ', label)
+    const startX = diameter + 5 - totalWidth / 2
+    for (let i = 0; i < numTokens; i++) {
+      tokenShapes.push(
+        <circle
+          key={`token-${i}`}
+          cx={startX + i * (tokenSize + tokenSize / 2)}
+          cy={diameter + 1}
+          r={tokenSize / 2}
+          fill='black'
+        />
+      )
+    }
+  }
+
+  const labelElement =
+    numTokens == -1 || numTokens > maxTokens ? (
+      <div
+        style={{
+          textAlign: 'center',
+          position: 'absolute',
+          color: '#222',
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        {label}
+      </div>
+    ) : null
 
   return (
     <div
@@ -57,7 +90,14 @@ export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = ({
         width={diameter * 2 + 2}
         height={diameter * 2 + 2}
       >
-        {shape}
+        <circle
+          cx={diameter + 1}
+          cy={diameter + 1}
+          r={diameter}
+          strokeWidth={strokeWidth ?? 1}
+          {...styles}
+        />
+        {tokenShapes}
       </svg>
       <div
         style={{
@@ -67,8 +107,8 @@ export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = ({
           paddingTop: 16, // Eyed size of the subtitle line, to make the tokens centered.
         }}
       >
-        {label}
-        <Typography fontSize={8} color={'#555'} gutterBottom>
+        {labelElement}
+        <Typography fontSize={8} color={'#555'} marginTop={3} gutterBottom>
           p{id}
         </Typography>
       </div>
@@ -128,7 +168,7 @@ export const PlaceNode: React.FC<NodeProps> = ({
       />
       <PlaceNodeShape
         strokeWidth={selected ? 2 : 1}
-        label={data?.store}
+        label={data?.tokens}
         id={id}
       />
     </div>

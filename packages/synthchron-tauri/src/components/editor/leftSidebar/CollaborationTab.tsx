@@ -1,3 +1,6 @@
+import { useCallback, useState } from 'react'
+
+import { faker } from '@faker-js/faker'
 import {
   Avatar,
   Button,
@@ -6,10 +9,10 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { useCallback } from 'react'
 import { shallow } from 'zustand/shallow'
+
+import { checkRoomIsEmpty } from '../../../utils/checkRoom'
 import { EditorState, useEditorStore } from '../editorStore/flowStore'
-import { faker } from '@faker-js/faker'
 
 export const CollaborationTab = () => {
   const selector = useCallback(
@@ -25,6 +28,7 @@ export const CollaborationTab = () => {
     }),
     []
   )
+  const [connectError, setConnectError] = useState<string>('')
 
   const {
     connectRoom,
@@ -37,11 +41,20 @@ export const CollaborationTab = () => {
     awarenessState,
   } = useEditorStore(selector, shallow)
 
-  function OpenRoom(KeepCurrent: boolean) {
+  async function OpenRoom(KeepCurrent: boolean) {
     !roomTextfieldState.roomCode
       ? setRoomTextfieldState(faker.random.alpha(5), true)
       : setRoomTextfieldState(undefined, true)
-    connectRoom(roomTextfieldState.roomCode, KeepCurrent)
+
+    const isEmpty = await checkRoomIsEmpty(roomTextfieldState.roomCode)
+    if (isEmpty) {
+      setTimeout(() => {
+        connectRoom(roomTextfieldState.roomCode, KeepCurrent)
+      }, 500)
+    } else {
+      setConnectError('Room already exists')
+      setRoomTextfieldState(undefined, false)
+    }
   }
   function CloseRoom() {
     disconnectRoom()
@@ -74,12 +87,11 @@ export const CollaborationTab = () => {
         onChange={(event) =>
           setRoomTextfieldState(event.target.value, undefined)
         }
+        error={connectError !== ''}
+        helperText={connectError}
       />
       <Button onClick={() => OpenRoom(true)}>
-        {yWebRTCProvider !== null ? 'Reconnect (keep)' : 'Connect (keep)'}
-      </Button>
-      <Button onClick={() => OpenRoom(false)}>
-        {yWebRTCProvider !== null ? 'Reconnect (throw)' : 'Connect (throw)'}
+        {yWebRTCProvider !== null ? 'Reconnect' : 'Open room for collaboration'}
       </Button>
       {yWebRTCProvider !== null && (
         <Button onClick={CloseRoom}>Leave Collaboration</Button>

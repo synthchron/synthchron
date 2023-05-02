@@ -1,13 +1,14 @@
 import {
-  EdgeChange,
+  Connection,
+  Edge,
   EdgeAddChange,
-  EdgeResetChange,
+  EdgeChange,
   EdgeRemoveChange,
+  EdgeResetChange,
   OnEdgesChange,
   applyEdgeChanges,
-  Edge,
-  Connection,
 } from 'reactflow'
+
 import { yDocState } from './yDoc'
 
 const isEdgeAddChange = (change: EdgeChange): change is EdgeAddChange =>
@@ -24,10 +25,8 @@ export const onEdgesChange: OnEdgesChange = (changes) => {
     if (isEdgeRemoveChange(change)) {
       yDocState.edgesMap.delete(change.id)
     } else if (!isEdgeAddChange(change) && !isEdgeResetChange(change)) {
-      yDocState.edgesMap.set(
-        change.id,
-        nextEdges.find((n) => n.id === change.id) as Edge
-      )
+      const edge = nextEdges.find((n) => n.id === change.id) as Edge
+      yDocState.edgesMap.set(change.id, edge)
     }
   })
 }

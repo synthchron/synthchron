@@ -1,3 +1,5 @@
+import ControlPointIcon from '@mui/icons-material/ControlPoint'
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import {
   Box,
   Container,
@@ -5,9 +7,9 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
+
 import { ProcessModelType } from '@synthchron/simulator'
-import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
-import ControlPointIcon from '@mui/icons-material/ControlPoint'
+
 import { useEditorStore } from '../editorStore/flowStore'
 import { PetriNetMeta } from '../processModels/petriNet/petriNetFlowConfig'
 

@@ -1,4 +1,4 @@
-import { Node, Edge } from 'reactflow'
+import { Edge, Node } from 'reactflow'
 import { Doc } from 'yjs'
 
 // This is the only global yDoc used. It is the single source of truth for the whole app.

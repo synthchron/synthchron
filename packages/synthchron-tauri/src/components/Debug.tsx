@@ -1,6 +1,7 @@
-import { CustomAppBar } from './CustomAppBar'
-import { Offline, Online } from 'react-detect-offline'
 import { Button } from '@mui/material'
+import { Offline, Online } from 'react-detect-offline'
+
+import { CustomAppBar } from './CustomAppBar'
 import { usePersistentStore } from './common/persistentStore'
 
 export const Debug = () => {
