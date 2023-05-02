@@ -100,7 +100,6 @@ export const petriNetFlowConfig: ProcessModelFlowConfig = {
           identifier,
           type,
           name,
-          accepting: node.data.accepting,
           amountOfTokens: node.data.tokens,
           position: node.position,
         } as PetriNetPlace
