@@ -1,7 +1,7 @@
 import React from 'react'
 
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, RouterProvider } from 'react-router-dom'
 
 import { Routing } from './Routing'
 import './style.css'
@@ -13,8 +13,6 @@ import '@fontsource/roboto/700.css'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routing />
-    </BrowserRouter>
+    <Routing />
   </React.StrictMode>
 )
