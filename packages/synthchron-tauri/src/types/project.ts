@@ -15,4 +15,7 @@ export type Project = {
 
   // When the data has last been saved
   lastEdited: string
+
+  // When the project was last opened
+  lastOpened: string
 }

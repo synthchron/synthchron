@@ -6,8 +6,11 @@ import { usePersistentStore } from '../../common/persistentStore'
 import { EditorState } from './flowStore'
 
 export type EditorSlice = {
-  saveFlow: (id: string) => void
+  saveFlow: () => void
   getProcessModel: () => ProcessModel
+  projectId: string | undefined
+  setProjectId: (id: string) => void
+  sessionStart: number
 }
 
 export const createEditorSlice: StateCreator<
@@ -15,9 +18,11 @@ export const createEditorSlice: StateCreator<
   [],
   [],
   EditorSlice
-> = (_set, get) => ({
-  saveFlow: (id: string) => {
-    usePersistentStore.getState().updateProject(id, {
+> = (set, get) => ({
+  saveFlow: async () => {
+    const projectId = get().projectId
+    if (projectId === undefined) return
+    usePersistentStore.getState().updateProject(projectId, {
       projectModel: get().getProcessModel(),
     })
   },
@@ -27,4 +32,9 @@ export const createEditorSlice: StateCreator<
       get().edges,
       get().meta
     ),
+  projectId: undefined,
+  setProjectId: (id: string) => {
+    set({ projectId: id })
+  },
+  sessionStart: new Date().getTime(),
 })
