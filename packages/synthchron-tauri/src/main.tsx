@@ -1,7 +1,6 @@
 import React from 'react'
 
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter, RouterProvider } from 'react-router-dom'
 
 import { Routing } from './Routing'
 import './style.css'
