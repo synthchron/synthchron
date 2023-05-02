@@ -62,7 +62,21 @@ export const EditorPage = () => {
       }}
     >
       <CustomAppBar />
-      <SidebarsWrapper />
+      {projectId !== undefined && projects[projectId] === undefined ? (
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexGrow: 1,
+          }}
+        >
+          <Alert severity='error'>Project with id {projectId} not found</Alert>
+        </Box>
+      ) : (
+        <SidebarsWrapper />
+      )}
       <Snackbar
         open={open}
         autoHideDuration={1000}
