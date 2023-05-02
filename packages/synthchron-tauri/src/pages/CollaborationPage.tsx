@@ -1,9 +1,11 @@
-import { Box, TextField, Typography } from '@mui/material'
 import { useState } from 'react'
+
+import { Box, TextField, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
+
 import { CustomAppBar } from '../components/CustomAppBar'
-import { checkRoomIsEmpty } from '../components/react-flow/ydoc/checkRoom'
-import { useFlowStore } from '../components/react-flow/ydoc/flowStore'
+import { useEditorStore } from '../components/editor/editorStore/flowStore'
+import { checkRoomIsEmpty } from '../utils/checkRoom'
 
 export const CollaborationPage = () => {
   const [roomId, setRoomId] = useState<string>('')
@@ -11,7 +13,7 @@ export const CollaborationPage = () => {
   const [checking, setChecking] = useState<boolean>(false)
 
   const navigate = useNavigate()
-  const connectRoom = useFlowStore((state) => state.connectRoom)
+  const connectRoom = useEditorStore((state) => state.connectRoom)
 
   return (
     <>

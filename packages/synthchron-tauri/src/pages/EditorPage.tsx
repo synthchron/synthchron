@@ -1,12 +1,14 @@
-import { Alert, Box, Snackbar } from '@mui/material'
 import { useEffect } from 'react'
+
+import { Alert, Box, Snackbar } from '@mui/material'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useParams } from 'react-router-dom'
-import { usePersistentStore } from '../components/common/persistentStore'
+
 import { CustomAppBar } from '../components/CustomAppBar'
-import { SidebarsWrapper } from '../components/react-flow/SidebarsWrapper'
-import { useFlowStore } from '../components/react-flow/ydoc/flowStore'
-import { petriNetFlowConfig } from '../components/react-flow/processModels/petriNet/petriNetFlowConfig'
+import { usePersistentStore } from '../components/common/persistentStore'
+import { SidebarsWrapper } from '../components/editor/SidebarsWrapper'
+import { useEditorStore } from '../components/editor/editorStore/flowStore'
+import { petriNetFlowConfig } from '../components/editor/processModels/petriNet/petriNetFlowConfig'
 
 export const EditorPage = () => {
   const { projectId } = useParams<{ projectId: string }>()
@@ -14,8 +16,8 @@ export const EditorPage = () => {
   const doneSaving = usePersistentStore((state) => state.doneSaving)
   const projects = usePersistentStore((state) => state.projects)
 
-  const initializeFlow = useFlowStore((state) => state.initializeFlow)
-  const saveFlow = useFlowStore((state) => state.saveFlow)
+  const initializeFlow = useEditorStore((state) => state.initializeFlow)
+  const saveFlow = useEditorStore((state) => state.saveFlow)
 
   useHotkeys(
     'ctrl+s',

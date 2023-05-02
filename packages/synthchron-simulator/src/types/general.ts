@@ -4,6 +4,7 @@ export type Configuration = {
   endOnAcceptingState?: boolean
   minEvents?: number
   maxEvents?: number
+  randomSeed: string
 }
 
 // Process Engine Types
@@ -72,11 +73,13 @@ export type SimulationResult = {
 type HasNotTerminatedType = {
   termination: false
 }
+
 type HasTerminatedType = {
   termination: true
   reason: TerminationReason
   acceptingState?: string
 }
+
 type TerminationReason =
   | 'maxStepsReached'
   | 'acceptingStateReached'

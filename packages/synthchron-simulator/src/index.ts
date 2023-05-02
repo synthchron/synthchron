@@ -11,3 +11,5 @@ export * from './model-examples/flowchartExamples'
 export * from './process-engines/petrinet-engine'
 
 export * from './types/processModelTypes/petriNetTypes'
+
+export * from './types/general'
