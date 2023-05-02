@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
 
 import { Alert, Box, Snackbar } from '@mui/material'
+import _ from 'lodash'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { useParams } from 'react-router-dom'
+import { unstable_usePrompt, useParams } from 'react-router-dom'
 
 import { CustomAppBar } from '../components/CustomAppBar'
 import { usePersistentStore } from '../components/common/persistentStore'
@@ -18,6 +19,19 @@ export const EditorPage = () => {
 
   const initializeFlow = useEditorStore((state) => state.initializeFlow)
   const saveFlow = useEditorStore((state) => state.saveFlow)
+  const getProcessModel = useEditorStore((state) => state.getProcessModel)
+
+  unstable_usePrompt({
+    // The following lines are needed because the types for unstable_usePrompt are wrong.
+    // They claim to only take a boolean, but can actually take a function that returns a boolean.
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    when: () =>
+      projectId !== undefined &&
+      !_.isEqual(projects[projectId].projectModel, getProcessModel()),
+    message: 'You have unsaved changes, are you sure you want to leave?',
+  })
 
   useHotkeys(
     'ctrl+s',
