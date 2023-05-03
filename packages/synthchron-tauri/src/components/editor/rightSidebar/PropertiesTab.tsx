@@ -109,7 +109,11 @@ export const PropertiesTab: React.FC = () => {
                     ) {
                       event.preventDefault
                     } else {
-                      updateNodeFields({ [key]: Number(event.target.value) })
+                      const resNumber = Number(event.target.value) * 1
+                      updateNodeFields({
+                        [key]: resNumber,
+                      })
+                      event.target.value = resNumber.toString()
                     }
                   } else {
                     updateNodeFields({ [key]: event.target.value })
