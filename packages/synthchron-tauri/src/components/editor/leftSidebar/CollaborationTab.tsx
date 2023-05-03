@@ -54,13 +54,11 @@ export const CollaborationTab = () => {
       setConnectError('')
     } else {
       setConnectError('Room already exists')
-      setRoomTextfieldState(undefined, false)
     }
     setChecking(false)
   }
   function CloseRoom() {
     disconnectRoom()
-    setRoomTextfieldState(undefined, false)
   }
 
   return (

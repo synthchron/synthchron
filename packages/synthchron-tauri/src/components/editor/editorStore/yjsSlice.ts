@@ -79,6 +79,10 @@ export const createYjsSlice: StateCreator<EditorState, [], [], YjsSlice> = (
     set({
       yWebRTCProvider: webrtcProvider,
       awareness: webrtcProvider.awareness,
+      roomTextfieldState: {
+        roomCode: room,
+        textAvailable: true,
+      },
     })
   },
   awareness: null,
@@ -100,6 +104,10 @@ export const createYjsSlice: StateCreator<EditorState, [], [], YjsSlice> = (
       awareness: null,
       collaboratorStates: new Map(),
       awarenessState: {},
+      roomTextfieldState: {
+        ...get().roomTextfieldState,
+        textAvailable: false,
+      },
     })
   },
   roomTextfieldState: {
