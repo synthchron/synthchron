@@ -1,10 +1,13 @@
 // Configuration Types for the simulation
 export type Configuration = {
-  // TODO: Add configuration options here
   endOnAcceptingStateProbability: number
   minEvents?: number
   maxEvents?: number
   randomSeed: string
+	uniqueTraces?: boolean
+	maxTraces?: number
+	// number between 0 - 1
+	coverage?: number
 }
 
 // Process Engine Types
