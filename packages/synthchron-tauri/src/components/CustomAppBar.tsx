@@ -16,14 +16,17 @@ import { Link } from 'react-router-dom'
 
 import NewProjectModal from './NewProjectModal'
 import { usePersistentStore } from './common/persistentStore'
+import { useEditorStore } from './editor/editorStore/flowStore'
 
 const RECENT_PROJECTS_LIMIT = 5 // number of projects to show in the recent projects list
-const RECENT_PROJECTS_TIMEOUT = 60 * 60 * 1000 // time in milliseconds that projects are still considered recent
+//const RECENT_PROJECTS_TIMEOUT = 60 * 60 * 1000 // time in milliseconds that projects are still considered recent
 
 export const CustomAppBar: React.FC = () => {
   const [isNewProjectModalOpen, setNewProjectModalOpen] = useState(false)
 
   const projects = usePersistentStore((state) => state.projects)
+
+  const sessionStart = useEditorStore((state) => state.sessionStart)
 
   const pages = [
     {
@@ -31,19 +34,17 @@ export const CustomAppBar: React.FC = () => {
       href: '/',
     },
     {
-      name: 'Debug',
-      href: '/debug',
+      name: 'Collaborate',
+      href: '/collaborate',
     },
   ]
 
   const projectButtons = Object.entries(projects)
     .sort(
       ([_key1, x], [_key2, y]) =>
-        -(Date.parse(x.lastEdited) - Date.parse(y.lastEdited))
+        -(Date.parse(x.lastOpened) - Date.parse(y.lastOpened))
     )
-    .filter(
-      ([, y]) => Date.now() - Date.parse(y.lastEdited) < RECENT_PROJECTS_TIMEOUT
-    )
+    .filter(([, y]) => sessionStart < Date.parse(y.lastOpened))
     .slice(0, RECENT_PROJECTS_LIMIT)
     .map(([x, y]) => ({
       name: y.projectName.slice(0, 25),
@@ -60,7 +61,6 @@ export const CustomAppBar: React.FC = () => {
       <Container maxWidth='xl'>
         <Toolbar variant='dense' disableGutters>
           <AccountTreeRoundedIcon sx={{ mr: 1 }} />
-          {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
           <Typography
             variant='h6'
             noWrap
@@ -152,10 +152,10 @@ export const CustomAppBar: React.FC = () => {
               color: 'white',
               display: 'block',
             }}
-            to={'/collaborate'}
+            to={'/debug'}
             component={Link}
           >
-            Collaborate
+            Debug
           </Button>
         </Toolbar>
       </Container>

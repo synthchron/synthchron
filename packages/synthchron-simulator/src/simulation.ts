@@ -65,15 +65,16 @@ export const simulateWithEngine = <
 
   let state = processEngine.resetActivity(processModel)
 
+  const randomGenerator = seedrandom(configuration.randomSeed)
+
   let terminationReason = checkTermination(
     processModel,
     configuration,
     state,
     processEngine,
-    trace
+    trace,
+    randomGenerator
   )
-
-  const randomGenerator = seedrandom(configuration.randomSeed)
 
   while (!terminationReason.termination) {
     const enabledActivities = processEngine.getEnabled(processModel, state)
@@ -88,7 +89,8 @@ export const simulateWithEngine = <
       configuration,
       state,
       processEngine,
-      trace
+      trace,
+      randomGenerator
     )
   }
 
@@ -101,7 +103,7 @@ export const simulateWithEngine = <
 
 const weightedRandom = <T>(
   activities: Set<[T, number]>,
-  randomGenerator: () => number
+  randomGenerator: seedrandom.PRNG
 ): T => {
   const cumulativeWeights: [T, number][] = []
   let cumulativeWeight = 0
@@ -129,15 +131,19 @@ const checkTermination = <
     StateType,
     ActivityIdentifier
   >,
-  trace: Trace
+  trace: Trace,
+  randomGenerator: seedrandom.PRNG
 ): TerminationStatus => {
   // Check if the process is accepting (and the minimum number of events has been reached)
   const acceptingState = processEngine.isAccepting(processModel, state)
   if (
-    configuration.endOnAcceptingState &&
     (configuration.minEvents === undefined ||
       configuration.minEvents <= trace.events.length) &&
-    acceptingState.isAccepting
+    acceptingState.isAccepting &&
+    isEndOnAcceptingState(
+      configuration.endOnAcceptingStateProbability,
+      randomGenerator
+    )
   ) {
     return {
       termination: true,
@@ -167,4 +173,11 @@ const checkTermination = <
   return {
     termination: false,
   }
+}
+
+const isEndOnAcceptingState = (
+  probability: number,
+  randomGenerator: seedrandom.PRNG
+): boolean => {
+  return randomGenerator() < probability
 }

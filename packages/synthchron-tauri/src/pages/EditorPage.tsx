@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
 
 import { Alert, Box, Snackbar } from '@mui/material'
+import _ from 'lodash'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { useParams } from 'react-router-dom'
+import { useBeforeUnload, useParams } from 'react-router-dom'
 
 import { CustomAppBar } from '../components/CustomAppBar'
 import { usePersistentStore } from '../components/common/persistentStore'
@@ -15,16 +16,31 @@ export const EditorPage = () => {
   const open = usePersistentStore((state) => state.saving)
   const doneSaving = usePersistentStore((state) => state.doneSaving)
   const projects = usePersistentStore((state) => state.projects)
+  const updateProject = usePersistentStore((state) => state.updateProject)
 
   const initializeFlow = useEditorStore((state) => state.initializeFlow)
   const saveFlow = useEditorStore((state) => state.saveFlow)
+  const sessionStart = useEditorStore((state) => state.sessionStart)
+
+  useBeforeUnload(() => {
+    // This autosaves in case we leave the application without saving
+    saveFlow()
+  })
+
+  useEffect(
+    // This autosaves in case we leave the editor page without saving
+    () => () => {
+      saveFlow()
+    },
+    []
+  )
 
   useHotkeys(
     'ctrl+s',
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (event: any) => {
       event.preventDefault()
-      if (projectId !== undefined) saveFlow(projectId)
+      if (projectId !== undefined) saveFlow()
     },
     [saveFlow, projectId]
   )
@@ -35,7 +51,10 @@ export const EditorPage = () => {
     const { nodes, edges, meta } = processModelConfig.generateFlow(
       projects[projectId].projectModel
     )
-    initializeFlow(nodes, edges, meta, processModelConfig)
+    if (Date.parse(projects[projectId].lastOpened) < sessionStart + 1000) {
+      updateProject(projectId, { lastOpened: new Date().toJSON() })
+    }
+    initializeFlow(nodes, edges, meta, processModelConfig, projectId)
   }, [projectId])
 
   return (
@@ -48,7 +67,21 @@ export const EditorPage = () => {
       }}
     >
       <CustomAppBar />
-      <SidebarsWrapper />
+      {projectId !== undefined && projects[projectId] === undefined ? (
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexGrow: 1,
+          }}
+        >
+          <Alert severity='error'>Project with id {projectId} not found</Alert>
+        </Box>
+      ) : (
+        <SidebarsWrapper />
+      )}
       <Snackbar
         open={open}
         autoHideDuration={1000}
