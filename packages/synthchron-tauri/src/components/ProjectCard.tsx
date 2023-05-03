@@ -6,6 +6,7 @@ import {
   Typography,
 } from '@mui/material'
 import moment from 'moment'
+import { Link } from 'react-router-dom'
 
 import { Project } from '../types/project'
 import { usePersistentStore } from './common/persistentStore'
@@ -20,6 +21,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   projectId,
 }) => {
   const removeProject = usePersistentStore((state) => state.removeProject)
+
+  const updateProject = usePersistentStore((state) => state.updateProject)
 
   return (
     <Card sx={{ minWidth: 275 }}>
@@ -60,7 +63,17 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           alignSelf: 'flex-end',
         }}
       >
-        <Button href={`/editor/${projectId}`}>Edit</Button>
+        <Button
+          to={`/editor/${projectId}`}
+          component={Link}
+          onClick={() => {
+            updateProject(projectId, {
+              lastOpened: new Date().toJSON(),
+            })
+          }}
+        >
+          Edit
+        </Button>
         <Button onClick={() => alert('Not implemented')}>Clone</Button>
         <Button onClick={() => removeProject(projectId)} color='error'>
           Delete

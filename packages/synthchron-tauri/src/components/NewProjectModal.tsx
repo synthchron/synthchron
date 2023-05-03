@@ -157,6 +157,7 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
       projectModel: model, // TODO
       created: new Date().toJSON(),
       lastEdited: new Date().toJSON(),
+      lastOpened: (redirect ? new Date() : new Date(0)).toJSON(),
     })
     setNewProjectConfig(newProjectDefault())
     if (redirect) navigate(`/editor/${projectId}`)
