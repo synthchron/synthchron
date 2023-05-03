@@ -4,10 +4,10 @@ export type Configuration = {
   minEvents?: number
   maxEvents?: number
   randomSeed: string
-	uniqueTraces?: boolean
-	maxTraces?: number
-	// number between 0 - 1
-	coverage?: number
+  uniqueTraces?: boolean
+  maxTraces?: number
+  // number between 0 - 1
+  coverage?: number
 }
 
 // Process Engine Types
