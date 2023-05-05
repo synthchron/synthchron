@@ -29,6 +29,7 @@ export const EditorPageWrapped = () => {
   const saveFlow = useEditorStore((state) => state.saveFlow)
   const sessionStart = useEditorStore((state) => state.sessionStart)
   const setViewport = useEditorStore((state) => state.setViewPort)
+  const disconnectRoom = useEditorStore((state) => state.disconnectRoom)
 
   const reactFlow = useReactFlow()
 
@@ -41,6 +42,7 @@ export const EditorPageWrapped = () => {
   useEffect(
     // This autosaves in case we leave the editor page without saving
     () => () => {
+      disconnectRoom()
       saveFlow()
     },
     []
@@ -77,7 +79,6 @@ export const EditorPageWrapped = () => {
       reactFlow.setViewport(project.projectModel.viewPort)
       setViewport(project.projectModel.viewPort)
     }
-    console.log('Loaded project', project)
   }, [projectId])
 
   useOnViewportChange({ onEnd: setViewport }) // Store the viewport, for saving it later
