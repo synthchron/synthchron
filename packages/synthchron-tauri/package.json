@@ -21,6 +21,8 @@
     "@mui/material": "^5.12.2",
     "@synthchron/simulator": "*",
     "@synthchron/xes": "*",
+    "@synthchron/postprocessor": "*",
+    "@synthchron/types": "*",
     "@tauri-apps/api": "^1.2.0",
     "filtrex": "^3.0.0",
     "moment": "^2.29.4",
