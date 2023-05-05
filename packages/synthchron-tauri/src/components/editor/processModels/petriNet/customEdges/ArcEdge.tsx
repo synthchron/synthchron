@@ -1,14 +1,16 @@
 import { useCallback } from 'react'
 
-import { EdgeProps, getBezierPath, useStore } from 'reactflow'
+import { BaseEdge, EdgeProps, getBezierPath, useStore } from 'reactflow'
 
+import { PetriNetArcData } from '../petriNetTypes'
 import { getEdgeParams } from './utils'
 
-const ArcEdge: React.FC<EdgeProps<unknown>> = ({
+const ArcEdge: React.FC<EdgeProps<PetriNetArcData>> = ({
   id,
   source,
   target,
   markerEnd,
+  data,
 }) => {
   const sourceNode = useStore(
     useCallback((store) => store.nodeInternals.get(source), [source])
@@ -26,7 +28,7 @@ const ArcEdge: React.FC<EdgeProps<unknown>> = ({
     targetNode
   )
 
-  const [edgePath] = getBezierPath({
+  const [edgePath, labelX, labelY] = getBezierPath({
     sourceX: sx,
     sourceY: sy,
     sourcePosition: sourcePos,
@@ -36,15 +38,17 @@ const ArcEdge: React.FC<EdgeProps<unknown>> = ({
   })
 
   return (
-    <path
-      id={id}
-      className='react-flow__edge-path'
-      d={edgePath}
-      strokeWidth={5}
+    <BaseEdge
+      path={edgePath}
+      labelX={labelX}
+      labelY={labelY}
+      label={data?.multiplicity}
+      labelShowBg={true}
+      labelBgStyle={{ fill: '#f7f7f7' }}
+      labelStyle={{ fill: 'black' }}
+      labelBgBorderRadius={3}
       markerEnd={markerEnd}
-      style={{
-        strokeWidth: 2,
-      }}
+      interactionWidth={10} // For larger clickable area
     />
   )
 }
