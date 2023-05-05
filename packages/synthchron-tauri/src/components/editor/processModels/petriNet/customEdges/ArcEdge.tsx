@@ -6,7 +6,6 @@ import { PetriNetArcData } from '../petriNetTypes'
 import { getEdgeParams } from './utils'
 
 const ArcEdge: React.FC<EdgeProps<PetriNetArcData>> = ({
-  id,
   source,
   target,
   markerEnd,

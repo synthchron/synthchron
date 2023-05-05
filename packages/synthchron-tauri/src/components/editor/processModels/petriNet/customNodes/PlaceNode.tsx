@@ -3,6 +3,8 @@ import React from 'react'
 import { Typography } from '@mui/material'
 import { Handle, NodeProps, Position } from 'reactflow'
 
+import { PetriNetPlaceData } from '../petriNetTypes'
+
 //import styles from './Nodes.module.scss'
 
 const config = {
@@ -116,7 +118,7 @@ export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = ({
   )
 }
 
-export const PlaceNode: React.FC<NodeProps> = ({
+export const PlaceNode: React.FC<NodeProps<PetriNetPlaceData>> = ({
   data,
   id,
   selected,
