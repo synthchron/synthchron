@@ -42,7 +42,6 @@ export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = ({
   if (numTokens <= maxTokens && numTokens > -1) {
     // create black circle shapes for each token
     const totalWidth = numTokens * tokenSize * 1.5
-    // console.log(diameter, ' ', totalWidth, ' ', label)
     const startX = diameter + 5 - totalWidth / 2
     for (let i = 0; i < numTokens; i++) {
       tokenShapes.push(
