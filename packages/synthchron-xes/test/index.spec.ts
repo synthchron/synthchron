@@ -542,4 +542,448 @@ describe('Index module', function () {
       expect(deserialize(serialize(xesLog))).to.deep.equal(xesLog)
     })
   })
+
+  describe("comments don't change the result", () => {
+    it('should return itself', () => {
+      const xesLog: XESLog = {
+        traces: [
+          {
+            events: [
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'A',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+                ],
+              },
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'B',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            events: [
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'C',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+                ],
+              },
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'D',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      }
+      const comment = 'This is a comment'
+      expect(deserialize(serialize(xesLog, comment))).to.deep.equal(xesLog)
+    })
+  })
+
+  describe('A comment with control characters', () => {
+    it('should return itself', () => {
+      const xesLog: XESLog = {
+        traces: [
+          {
+            events: [
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'A',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+                ],
+              },
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'B',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            events: [
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'C',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+                ],
+              },
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'D',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      }
+      const comment =
+        'This is a comment with control characters: \n \r \t \b \f'
+      expect(deserialize(serialize(xesLog, comment))).to.deep.equal(xesLog)
+    })
+  })
+
+  describe('A comment with special characters', () => {
+    it('should return itself', () => {
+      const xesLog: XESLog = {
+        traces: [
+          {
+            events: [
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'A',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+                  {
+                    key: 'key',
+                    value: 'value',
+                  },
+                ],
+              },
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'B',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+
+                  {
+                    key: 'key',
+                    value: 'value',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            events: [
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'C',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+                ],
+              },
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'D',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      }
+      const comment = 'This is a comment with special characters: " \' & < >'
+      expect(deserialize(serialize(xesLog, comment))).to.deep.equal(xesLog)
+    })
+  })
+
+  describe('A comment with xml control sequences (e.g. -->, <!--, <html/>, <div>, <div/>)', () => {
+    it('should return itself', () => {
+      const xesLog: XESLog = {
+        traces: [
+          {
+            events: [
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'A',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+
+                  {
+                    key: 'key',
+                    value: 'value',
+                  },
+                ],
+              },
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'B',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+                  {
+                    key: 'key',
+                    value: 'value',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            events: [
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'C',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+                ],
+              },
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'D',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      }
+      const comment =
+        'This is a comment with xml control sequences (e.g. -->, <!--, <html/>, <div>, <div/>)'
+      expect(deserialize(serialize(xesLog, comment))).to.deep.equal(xesLog)
+    })
+  })
+
+  describe('A comment with invalid xml control sequences (e.g. --!>, <!-, <html, <div, <div/)', () => {
+    it('should return itself', () => {
+      const xesLog: XESLog = {
+        traces: [
+          {
+            events: [
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'A',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+                  {
+                    key: 'key',
+                    value: 'value',
+                  },
+                ],
+              },
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'B',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+                  {
+                    key: 'key',
+                    value: 'value',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            events: [
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'C',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+                ],
+              },
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'D',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      }
+      const comment =
+        'This is a comment with invalid xml control sequences (e.g. --!>, <!-, <html, <div, <div/)'
+      expect(deserialize(serialize(xesLog, comment))).to.deep.equal(xesLog)
+    })
+  })
+
+  describe('A comment with multiple comments', () => {
+    it('should return itself', () => {
+      const xesLog: XESLog = {
+        traces: [
+          {
+            events: [
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'A',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+                  {
+                    key: 'key',
+                    value: 'value',
+                  },
+                ],
+              },
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'B',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+                  {
+                    key: 'key',
+                    value: 'value',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            events: [
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'C',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+                ],
+              },
+              {
+                attributes: [
+                  {
+                    key: 'concept:name',
+                    value: 'D',
+                  },
+                  {
+                    key: 'time:timestamp',
+                    value: '1970-01-01T00:00:00.000+01:00',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      }
+      const comment = [
+        'This is a comment with multiple comments <!-- --> <!-- -->',
+        '<!-- --> <!-- -->',
+        'hellp world',
+        'synthchron is a nice application',
+      ]
+      expect(deserialize(serialize(xesLog, comment))).to.deep.equal(xesLog)
+    })
+  })
 })

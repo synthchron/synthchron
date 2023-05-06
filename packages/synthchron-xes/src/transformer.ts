@@ -24,10 +24,31 @@ export type XESLogObject = {
   log: XESTraceObject[]
 }
 
-export const serialize = (log: XESLog): string => {
+/**
+ * This function serialied a given XES JS object.
+ * @param log XESLog object
+ * @param comment, and optional list or string of comment(s). May not include -->, which will be replaced by -- >.
+ * @returns a string representation of the XESLog object
+ */
+export const serialize = (
+  log: XESLog,
+  comment: string | string[] | undefined = undefined
+): string => {
   const builder = new xml2js.Builder()
   const xml = builder.buildObject(toXESobj(log))
-  return xml
+  if (comment === undefined) return xml
+  const [head, ...tail] = xml.split('\n')
+  if (typeof comment === 'string') {
+    // ensure comment does not contain -->
+    const commentLine = `<!-- ${comment.replace('-->', '-- >')} -->`
+    return [head, commentLine, ...tail].join('\n')
+  } else {
+    // ensure comment does not contain -->
+    const commentLines = comment.map(
+      (line) => `<!-- ${line.replace('-->', '-- >')} -->`
+    )
+    return [head, ...commentLines, ...tail].join('\n')
+  }
 }
 
 export const deserialize = (xml: string): XESLog => {
