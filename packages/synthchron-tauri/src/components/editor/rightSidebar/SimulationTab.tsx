@@ -8,7 +8,7 @@ import {
   petriNetEngine,
   simulateWithEngine,
 } from '@synthchron/simulator'
-import { generateXES } from '@synthchron/xes'
+import { serialize } from '@synthchron/xes'
 
 import { transformFlowToSimulator } from '../../../utils/flowTransformer'
 import { transformSimulatioResultToXESLog } from '../../../utils/simulatorToXESConverter'
@@ -36,7 +36,7 @@ export const SimulationTab: React.FC = () => {
   const exportSimulation = () => {
     if (simulationResult === undefined) return
     const xesLog = transformSimulatioResultToXESLog(simulationResult)
-    const xesString = generateXES(xesLog)
+    const xesString = serialize(xesLog)
     const xmlData = `data:text/xml;charset=utf-8,${encodeURIComponent(
       xesString
     )}`

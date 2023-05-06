@@ -78,8 +78,8 @@ const parseXML = (xml: string): XESLogObject => {
                     const attribute: XESAttributeObject = {
                       string: {
                         $: {
-                          key: $(el).attr('key'),
-                          value: $(el).attr('value'),
+                          key: $(el).attr('key') as string,
+                          value: $(el).attr('value') as string,
                         },
                       },
                     }
