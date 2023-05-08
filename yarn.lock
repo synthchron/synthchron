@@ -5609,10 +5609,10 @@ react-element-to-jsx-string@^15.0.0:
     is-plain-object "5.0.0"
     react-is "18.1.0"
 
-react-hotkeys-hook@^4.3.8:
-  version "4.3.8"
-  resolved "https://registry.npmjs.org/react-hotkeys-hook/-/react-hotkeys-hook-4.3.8.tgz"
-  integrity sha512-RmrIQ3M259c84MnYVEAQsmHkD6s7XUgLG0rW6S7qjt1Lh7q+SPIz5b6obVU8OJw1Utsj1mUCj6twtBPaK/ytww==
+react-hotkeys-hook@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/react-hotkeys-hook/-/react-hotkeys-hook-4.4.0.tgz#e7c55bb13ecb6ffb447e90ca5525403a5a3ac7b8"
+  integrity sha512-wOaCWLwgT/f895CMJrR9hmzVf+gfL8IpjWDXWXKngBp9i6Xqzf0tvLv4VI8l3Vlsg/cc4C/Iik3Ck76L/Hj0tw==
 
 react-inspector@^6.0.0:
   version "6.0.1"
