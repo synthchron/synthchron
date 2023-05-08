@@ -3,6 +3,8 @@ import React from 'react'
 import { Typography } from '@mui/material'
 import { Handle, NodeProps, Position } from 'reactflow'
 
+import { PetriNetTransitionData } from '../petriNetTypes'
+
 const config = {
   size: 60,
   color: '#eee',
@@ -15,13 +17,15 @@ const handleStyle = {
 }
 
 interface TransitionNodeShapeProps {
-  strokeWidth: string | number | undefined
-  label: string | undefined
+  strokeWidth?: string | number
+  label?: string
+  data?: PetriNetTransitionData
 }
 
 export const TransitionNodeShape: React.FC<TransitionNodeShapeProps> = ({
   strokeWidth,
   label,
+  data,
 }) => {
   const { size, color } = config
 
@@ -68,15 +72,28 @@ export const TransitionNodeShape: React.FC<TransitionNodeShapeProps> = ({
           maxHeight: size,
         }}
       >
-        <Typography fontSize={8} noWrap padding={0.4}>
+        <Typography fontSize={10} noWrap padding={0.4}>
           {label}
+        </Typography>
+      </div>
+      <div
+        style={{
+          position: 'absolute',
+          maxWidth: size,
+          maxHeight: size,
+          transform: 'translate(0, -1em)',
+          color: '#222',
+        }}
+      >
+        <Typography fontSize={8} noWrap padding={0.4}>
+          {data?.weight}
         </Typography>
       </div>
     </div>
   )
 }
 
-export const TransitionNode: React.FC<NodeProps> = ({
+export const TransitionNode: React.FC<NodeProps<PetriNetTransitionData>> = ({
   data,
   selected,
   isConnectable,
@@ -103,7 +120,11 @@ export const TransitionNode: React.FC<NodeProps> = ({
           left: '-15px',
         }}
       />
-      <TransitionNodeShape strokeWidth={selected ? 2 : 1} label={data?.label} />
+      <TransitionNodeShape
+        strokeWidth={selected ? 2 : 1}
+        label={data?.label}
+        data={data}
+      />
     </div>
   )
 }
