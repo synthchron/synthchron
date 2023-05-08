@@ -7,7 +7,7 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
-    "lib0": "^0.2.73",
+    "lib0": "^0.2.74",
     "ws": "^8.13.0"
   }
 }
