@@ -19,6 +19,15 @@ export type YjsSlice = {
   setAwarenessState: (state: Partial<AwarenessState>) => void
   connectRoom: (room: string, keepChanges: boolean) => void
   disconnectRoom: () => void
+  //Room name fields
+  roomTextfieldState: {
+    roomCode: string
+    textAvailable: boolean
+  }
+  setRoomTextfieldState: (
+    roomName: string | undefined,
+    availability: boolean | undefined
+  ) => void
 }
 
 export const createYjsSlice: StateCreator<EditorState, [], [], YjsSlice> = (
@@ -70,6 +79,10 @@ export const createYjsSlice: StateCreator<EditorState, [], [], YjsSlice> = (
     set({
       yWebRTCProvider: webrtcProvider,
       awareness: webrtcProvider.awareness,
+      roomTextfieldState: {
+        roomCode: room,
+        textAvailable: true,
+      },
     })
   },
   awareness: null,
@@ -91,6 +104,29 @@ export const createYjsSlice: StateCreator<EditorState, [], [], YjsSlice> = (
       awareness: null,
       collaboratorStates: new Map(),
       awarenessState: {},
+      roomTextfieldState: {
+        ...get().roomTextfieldState,
+        textAvailable: false,
+      },
+    })
+  },
+  roomTextfieldState: {
+    roomCode: '',
+    textAvailable: false,
+  },
+  setRoomTextfieldState: (
+    roomName: string | undefined,
+    availability: boolean | undefined
+  ) => {
+    const previousState = get().roomTextfieldState
+    set({
+      roomTextfieldState: {
+        roomCode: roomName === undefined ? previousState.roomCode : roomName,
+        textAvailable:
+          availability === undefined
+            ? previousState.textAvailable
+            : availability,
+      },
     })
   },
 })
