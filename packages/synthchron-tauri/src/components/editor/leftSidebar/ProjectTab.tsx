@@ -90,7 +90,7 @@ export const ProjectTab: React.FC = () => {
         <Button
           onClick={() => {
             if (projectId) {
-              saveFlow(projectId)
+              saveFlow()
             } else {
               const processModel = transformFlowToSimulator(
                 useEditorStore.getState()
@@ -101,6 +101,7 @@ export const ProjectTab: React.FC = () => {
                 projectModel: processModel,
                 created: new Date().toJSON(),
                 lastEdited: new Date().toJSON(),
+                lastOpened: new Date(0).toJSON(),
               })
 
               navigate(`/editor/${id}`)
