@@ -14,21 +14,18 @@ import { generateXES } from '@synthchron/xes'
 import { transformFlowToSimulator } from '../../../utils/flowTransformer'
 import { transformSimulatioResultToXESLog } from '../../../utils/simulatorToXESConverter'
 import { useEditorStore } from '../editorStore/flowStore'
-import { SimulationConfiguration } from './SimulationConfiguration'
+import {
+  SimulationConfiguration,
+  defaultConfiguration,
+} from './SimulationConfiguration'
 
 export const SimulationTab: React.FC = () => {
   const [simulationResult, setSimulationResult] = useState<SimulationResult>()
-  const [config, setConfig] = useState<Configuration>({
-    endOnAcceptingState: true,
-    minEvents: 1,
-    maxEvents: 100,
-    //Min and max events are handled sepperately
-    randomSeed: '',
-  })
+  const [config, setConfig] = useState<Configuration>(defaultConfiguration)
 
   const simulate = () => {
-    console.log('sim')
-    console.log(config.minEvents)
+    console.log(config)
+    /*
     setSimulationResult(
       simulateWithEngine(
         transformFlowToSimulator(
@@ -36,13 +33,14 @@ export const SimulationTab: React.FC = () => {
         ) as PetriNetProcessModel,
         {
           endOnAcceptingState: true,
-          minEvents: config.minEvents,
-          maxEvents: config.maxEvents,
+          minEvents: 1,
+          maxEvents: 100,
           randomSeed: Math.floor(Math.random() * 100).toString(),
         },
         petriNetEngine
       )
     )
+    */
   }
   const exportSimulation = () => {
     if (simulationResult === undefined) return
