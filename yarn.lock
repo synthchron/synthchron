@@ -1023,7 +1023,7 @@
   resolved "https://registry.npmjs.org/@sinonjs/text-encoding/-/text-encoding-0.7.2.tgz"
   integrity sha512-sXXKG+uL9IrKqViTtao2Ws6dy0znu9sOaP1di/jKGW1M6VssO8vlpXCQcpZ+jisQ1tTFAC5Jo/EOzFbggBagFQ==
 
-"@storybook/addon-actions@7.0.8", "@storybook/addon-actions@^7.0.7":
+"@storybook/addon-actions@7.0.8":
   version "7.0.8"
   resolved "https://registry.yarnpkg.com/@storybook/addon-actions/-/addon-actions-7.0.8.tgz#a1fe35fe1a37955b23b572b993d1ee5a2c0e25a4"
   integrity sha512-9DRkofKfGvVa2xESovXP5gCjpv0rvMwZJ16IqD/o1sRPRETsCeidTBMgrSX8wJq0TtJPen663DAdIrVuVXezlA==
@@ -1036,6 +1036,28 @@
     "@storybook/preview-api" "7.0.8"
     "@storybook/theming" "7.0.8"
     "@storybook/types" "7.0.8"
+    dequal "^2.0.2"
+    lodash "^4.17.21"
+    polished "^4.2.2"
+    prop-types "^15.7.2"
+    react-inspector "^6.0.0"
+    telejson "^7.0.3"
+    ts-dedent "^2.0.0"
+    uuid "^9.0.0"
+
+"@storybook/addon-actions@^7.0.9":
+  version "7.0.9"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-actions/-/addon-actions-7.0.9.tgz#820edc3a88a8b7c78c1a42343dc4d8c8519813f6"
+  integrity sha512-xEO/Ekj6m6p1l4CXGh75BNBD/sqF7TqnUA/f2T3UCtLf9xVMoGEczxNi28iZq2RHoIAaV2aKArqjM+qTwoLjZw==
+  dependencies:
+    "@storybook/client-logger" "7.0.9"
+    "@storybook/components" "7.0.9"
+    "@storybook/core-events" "7.0.9"
+    "@storybook/global" "^5.0.0"
+    "@storybook/manager-api" "7.0.9"
+    "@storybook/preview-api" "7.0.9"
+    "@storybook/theming" "7.0.9"
+    "@storybook/types" "7.0.9"
     dequal "^2.0.2"
     lodash "^4.17.21"
     polished "^4.2.2"
@@ -1382,6 +1404,20 @@
     "@storybook/global" "^5.0.0"
     "@storybook/theming" "7.0.8"
     "@storybook/types" "7.0.8"
+    memoizerific "^1.11.3"
+    use-resize-observer "^9.1.0"
+    util-deprecate "^1.0.2"
+
+"@storybook/components@7.0.9":
+  version "7.0.9"
+  resolved "https://registry.yarnpkg.com/@storybook/components/-/components-7.0.9.tgz#fd27d20886c44e9f0a2f370fcc6deee2dc9aa016"
+  integrity sha512-60TcZSHYjHkJ6YyheL5SQ8zWi4zmefUKzjcRdIJwMQ57PyEK0LL7wKv63xD3ePbKHTZaQaIB3yOJSF/HQ1BHcQ==
+  dependencies:
+    "@storybook/client-logger" "7.0.9"
+    "@storybook/csf" "^0.1.0"
+    "@storybook/global" "^5.0.0"
+    "@storybook/theming" "7.0.9"
+    "@storybook/types" "7.0.9"
     memoizerific "^1.11.3"
     use-resize-observer "^9.1.0"
     util-deprecate "^1.0.2"
