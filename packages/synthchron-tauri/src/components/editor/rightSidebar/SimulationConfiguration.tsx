@@ -43,7 +43,6 @@ export const defaultConfiguration = {
 export const SimulationConfiguration: React.FC<
   SimulationConfigurationProperty
 > = ({ onUpdate }) => {
-  //const [eventAmount, setEventAmout] = useState<number[]>(minMaxEvents)
   const [config, setConfig] = useState<Configuration>(defaultConfiguration)
 
   function UpdateConfig(): void {
@@ -51,13 +50,12 @@ export const SimulationConfiguration: React.FC<
       ...config,
       endOnAcceptingStateProbability:
         config.endOnAcceptingStateProbability / 100,
-      randomSeed: config.randomSeed,
     }
     onUpdate(configuration)
   }
 
   useEffect(() => {
-    // When event amount changes, also change simulation configuration
+    // When config is changed in this file, push the changes to the simulation tab
     UpdateConfig()
   }, [config])
 
@@ -82,7 +80,6 @@ export const SimulationConfiguration: React.FC<
               [configKeys[1]]: newValue[1],
             })
           : undefined
-        //setFunction(newValue as number[])
         break
     }
   }
@@ -105,7 +102,7 @@ export const SimulationConfiguration: React.FC<
         <Grid container spacing={2} alignItems='center'>
           <Grid item xs={3}>
             <Input
-              value={stateValue[0]}
+              value={(stateValue[0] * 1).toString()}
               size='small'
               onChange={(event) =>
                 handleChangeToDoubleSlider(
@@ -139,7 +136,7 @@ export const SimulationConfiguration: React.FC<
           </Grid>
           <Grid item xs={3}>
             <Input
-              value={stateValue[1]}
+              value={(stateValue[1] * 1).toString()}
               size='small'
               onChange={(event) =>
                 handleChangeToDoubleSlider(
@@ -219,7 +216,7 @@ export const SimulationConfiguration: React.FC<
                     return (
                       <Input
                         fullWidth
-                        value={value}
+                        value={(value * 1).toString()}
                         onChange={(newValue) =>
                           setConfig({
                             ...config,
