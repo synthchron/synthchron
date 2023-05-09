@@ -28,6 +28,7 @@ export const SimulationTab: React.FC = () => {
           minEvents: 1,
           maxEvents: 100,
           randomSeed: Math.floor(Math.random() * 100).toString(),
+          terminationType: 'standard',
         },
         petriNetEngine
       )
