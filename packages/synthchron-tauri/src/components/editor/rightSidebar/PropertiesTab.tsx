@@ -102,7 +102,22 @@ export const PropertiesTab: React.FC = () => {
                 type={NodeDataFieldsTypesAsStrings(key)}
                 value={value}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  updateNodeFields({ [key]: event.target.value })
+                  if (NodeDataFieldsTypesAsStrings(key) === 'number') {
+                    if (
+                      Number.isNaN(parseInt(event.target.value)) &&
+                      !(event.target.value === '')
+                    ) {
+                      event.preventDefault
+                    } else {
+                      const resNumber = Number(event.target.value) * 1
+                      updateNodeFields({
+                        [key]: resNumber,
+                      })
+                      event.target.value = resNumber.toString()
+                    }
+                  } else {
+                    updateNodeFields({ [key]: event.target.value })
+                  }
                 }}
               ></TextField>
             </div>

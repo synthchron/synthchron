@@ -32,7 +32,7 @@ export const SimulationTab: React.FC = () => {
           useEditorStore.getState()
         ) as PetriNetProcessModel,
         {
-          endOnAcceptingState: true,
+          endOnAcceptingStateProbability: 0.5,
           minEvents: 1,
           maxEvents: 100,
           randomSeed: Math.floor(Math.random() * 100).toString(),

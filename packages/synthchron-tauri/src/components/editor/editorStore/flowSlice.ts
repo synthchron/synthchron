@@ -77,24 +77,28 @@ export const createFlowSlice: StateCreator<EditorState, [], [], FlowSlice> = (
       const elemType = GetElementType(elem.type)
       if (elemType == 'node') {
         const updatedNode = yDocState.nodesMap.get(elem.id) as Node
-        //Element is a node
-        yDocState.nodesMap.set(elem.id, {
-          ...updatedNode,
-          data: {
-            ...elem.data,
-          },
-          id: elem.id,
-        })
+        if (updatedNode) {
+          //Element is a node
+          yDocState.nodesMap.set(elem.id, {
+            ...updatedNode,
+            data: {
+              ...elem.data,
+            },
+            id: elem.id,
+          })
+        }
       } else if (elemType == 'edge') {
         const updatedEdge = yDocState.edgesMap.get(elem.id) as Edge
-        //Element is an edge
-        yDocState.edgesMap.set(elem.id, {
-          ...updatedEdge,
-          data: {
-            ...elem.data,
-          },
-          id: elem.id,
-        })
+        if (updatedEdge) {
+          //Element is an edge
+          yDocState.edgesMap.set(elem.id, {
+            ...updatedEdge,
+            data: {
+              ...elem.data,
+            },
+            id: elem.id,
+          })
+        }
       }
     }
   },

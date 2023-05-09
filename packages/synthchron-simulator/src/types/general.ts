@@ -1,7 +1,7 @@
 // Configuration Types for the simulation
 export type Configuration = {
   // TODO: Add configuration options here
-  endOnAcceptingState?: boolean
+  endOnAcceptingStateProbability: number
   minEvents?: number
   maxEvents?: number
   randomSeed: string

@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import { Debug } from './components/Debug'
 import { CollaborationPage } from './pages/CollaborationPage'
@@ -6,18 +6,33 @@ import { EditorPage } from './pages/EditorPage'
 import { MainMenuPage } from './pages/MainMenuPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 
-export const Routing: React.FC = () => {
-  return (
-    <Routes>
-      <Route index element={<MainMenuPage />} />
-      <Route path='editor/' element={<EditorPage />}>
-        <Route path=':projectId/' element={<EditorPage />} />
-      </Route>
-      <Route path='collaborate/' element={<CollaborationPage />}>
-        <Route path=':roomId/' element={<CollaborationPage />} />
-      </Route>
-      <Route path='debug/' element={<Debug />} />
-      <Route path='*' element={<NotFoundPage />} />
-    </Routes>
-  )
-}
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <MainMenuPage />,
+  },
+  {
+    path: 'editor/',
+    element: <EditorPage />,
+    children: [
+      {
+        path: ':projectId',
+        element: <EditorPage />,
+      },
+    ],
+  },
+  {
+    path: 'collaborate',
+    element: <CollaborationPage />,
+  },
+  {
+    path: 'debug',
+    element: <Debug />,
+  },
+  {
+    path: '*',
+    element: <NotFoundPage />,
+  },
+])
+
+export const Routing: React.FC = () => <RouterProvider router={router} />
