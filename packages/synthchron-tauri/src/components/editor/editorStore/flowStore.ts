@@ -102,6 +102,12 @@ export const useEditorStore = create<EditorState>((set, get, api) => ({
     processModelType.observe(processModelTypeObserver)
 
     set({
+      // Setting initial state
+      nodes,
+      edges,
+      meta,
+
+      // Setting yDoc state for collaboration
       yDoc,
       yNodesMap: nodesMap,
       yEdgesMap: edgesMap,
