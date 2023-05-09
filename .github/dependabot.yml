@@ -19,3 +19,23 @@ updates:
     directory: "/packages/synthchron-simulator"
     schedule:
       interval: "weekly"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/synthchron-xes"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/synthchron-postprocessor"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/synthchron-types"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/eslint-config"
+    schedule:
+      interval: "weekly"

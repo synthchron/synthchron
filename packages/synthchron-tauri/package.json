@@ -21,6 +21,8 @@
     "@mui/material": "^5.12.3",
     "@synthchron/simulator": "*",
     "@synthchron/xes": "*",
+    "@synthchron/postprocessor": "*",
+    "@synthchron/types": "*",
     "@tauri-apps/api": "^1.2.0",
     "filtrex": "^3.0.0",
     "moment": "^2.29.4",
@@ -41,7 +43,7 @@
   "devDependencies": {
     "@babel/core": "^7.21.8",
     "@faker-js/faker": "^7.6.0",
-    "@storybook/addon-actions": "^7.0.7",
+    "@storybook/addon-actions": "^7.0.9",
     "@storybook/addon-essentials": "^7.0.7",
     "@storybook/addon-interactions": "^7.0.7",
     "@storybook/addon-links": "^7.0.8",

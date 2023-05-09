@@ -1023,7 +1023,7 @@
   resolved "https://registry.npmjs.org/@sinonjs/text-encoding/-/text-encoding-0.7.2.tgz"
   integrity sha512-sXXKG+uL9IrKqViTtao2Ws6dy0znu9sOaP1di/jKGW1M6VssO8vlpXCQcpZ+jisQ1tTFAC5Jo/EOzFbggBagFQ==
 
-"@storybook/addon-actions@7.0.8", "@storybook/addon-actions@^7.0.7":
+"@storybook/addon-actions@7.0.8":
   version "7.0.8"
   resolved "https://registry.yarnpkg.com/@storybook/addon-actions/-/addon-actions-7.0.8.tgz#a1fe35fe1a37955b23b572b993d1ee5a2c0e25a4"
   integrity sha512-9DRkofKfGvVa2xESovXP5gCjpv0rvMwZJ16IqD/o1sRPRETsCeidTBMgrSX8wJq0TtJPen663DAdIrVuVXezlA==
@@ -1036,6 +1036,28 @@
     "@storybook/preview-api" "7.0.8"
     "@storybook/theming" "7.0.8"
     "@storybook/types" "7.0.8"
+    dequal "^2.0.2"
+    lodash "^4.17.21"
+    polished "^4.2.2"
+    prop-types "^15.7.2"
+    react-inspector "^6.0.0"
+    telejson "^7.0.3"
+    ts-dedent "^2.0.0"
+    uuid "^9.0.0"
+
+"@storybook/addon-actions@^7.0.9":
+  version "7.0.9"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-actions/-/addon-actions-7.0.9.tgz#820edc3a88a8b7c78c1a42343dc4d8c8519813f6"
+  integrity sha512-xEO/Ekj6m6p1l4CXGh75BNBD/sqF7TqnUA/f2T3UCtLf9xVMoGEczxNi28iZq2RHoIAaV2aKArqjM+qTwoLjZw==
+  dependencies:
+    "@storybook/client-logger" "7.0.9"
+    "@storybook/components" "7.0.9"
+    "@storybook/core-events" "7.0.9"
+    "@storybook/global" "^5.0.0"
+    "@storybook/manager-api" "7.0.9"
+    "@storybook/preview-api" "7.0.9"
+    "@storybook/theming" "7.0.9"
+    "@storybook/types" "7.0.9"
     dequal "^2.0.2"
     lodash "^4.17.21"
     polished "^4.2.2"
@@ -1382,6 +1404,20 @@
     "@storybook/global" "^5.0.0"
     "@storybook/theming" "7.0.8"
     "@storybook/types" "7.0.8"
+    memoizerific "^1.11.3"
+    use-resize-observer "^9.1.0"
+    util-deprecate "^1.0.2"
+
+"@storybook/components@7.0.9":
+  version "7.0.9"
+  resolved "https://registry.yarnpkg.com/@storybook/components/-/components-7.0.9.tgz#fd27d20886c44e9f0a2f370fcc6deee2dc9aa016"
+  integrity sha512-60TcZSHYjHkJ6YyheL5SQ8zWi4zmefUKzjcRdIJwMQ57PyEK0LL7wKv63xD3ePbKHTZaQaIB3yOJSF/HQ1BHcQ==
+  dependencies:
+    "@storybook/client-logger" "7.0.9"
+    "@storybook/csf" "^0.1.0"
+    "@storybook/global" "^5.0.0"
+    "@storybook/theming" "7.0.9"
+    "@storybook/types" "7.0.9"
     memoizerific "^1.11.3"
     use-resize-observer "^9.1.0"
     util-deprecate "^1.0.2"
@@ -2403,9 +2439,9 @@
   integrity sha512-rUDO6s9Q/El1R1I21HG4qw/LstTHCPO/oQNAwI/4b2f9EWvMnqt4d3HJwPMawfZ3UvodB8516Yg+VAq54YM+eA==
 
 "@types/node@^20.1.0":
-  version "20.1.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.1.1.tgz#afc492e8dbe7f672dd3a13674823522b467a45ad"
-  integrity sha512-uKBEevTNb+l6/aCQaKVnUModfEMjAl98lw2Si9P5y4hLu9tm6AlX2ZIoXZX6Wh9lJueYPrGPKk5WMCNHg/u6/A==
+  version "20.1.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.1.0.tgz#258805edc37c327cf706e64c6957f241ca4c4c20"
+  integrity sha512-O+z53uwx64xY7D6roOi4+jApDGFg0qn6WHcxe5QeqjMaTezBO/mxdfFXIVAVVyNWKx84OmPB3L8kbVYOTeN34A==
 
 "@types/npmlog@^4.1.2":
   version "4.1.4"
@@ -3811,7 +3847,7 @@ eslint-visitor-keys@^3.3.0, eslint-visitor-keys@^3.4.1:
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-3.4.1.tgz#c22c48f48942d08ca824cc526211ae400478a994"
   integrity sha512-pZnmmLwYzf+kWaM/Qgrvpen51upAktaaiI01nsJD/Yr3lMOdNtq0cxkrrg16w64VtisN6okbs7Q8AfGqj4c9fA==
 
-eslint@^8.40.0:
+eslint@^8.37.0, eslint@^8.40.0:
   version "8.40.0"
   resolved "https://registry.yarnpkg.com/eslint/-/eslint-8.40.0.tgz#a564cd0099f38542c4e9a2f630fa45bf33bc42a4"
   integrity sha512-bvR+TsP9EHL3TqNtj9sCNJVAFK3fBN8Q7g5waghxyRsPLIMwL73XSKnZFK0hk/O2ANC+iAoq6PWMQ+IfBAJIiQ==
