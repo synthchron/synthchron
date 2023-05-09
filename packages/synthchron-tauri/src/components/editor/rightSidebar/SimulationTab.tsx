@@ -24,24 +24,23 @@ export const SimulationTab: React.FC = () => {
   const [config, setConfig] = useState<Configuration>(defaultConfiguration)
 
   const simulate = () => {
-    console.log(config)
-    /*
     setSimulationResult(
       simulateWithEngine(
         transformFlowToSimulator(
           useEditorStore.getState()
         ) as PetriNetProcessModel,
         {
-          endOnAcceptingStateProbability: 0.5,
-          minEvents: 1,
-          maxEvents: 100,
-          randomSeed: Math.floor(Math.random() * 100).toString(),
+          ...config,
+          randomSeed:
+            config.randomSeed === ''
+              ? Math.floor(Math.random() * 100).toString()
+              : config.randomSeed,
         },
         petriNetEngine
       )
     )
-    */
   }
+
   const exportSimulation = () => {
     if (simulationResult === undefined) return
     const xesLog = transformSimulatioResultToXESLog(simulationResult)
