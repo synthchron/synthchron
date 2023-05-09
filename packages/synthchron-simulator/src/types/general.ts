@@ -1,13 +1,43 @@
 // Configuration Types for the simulation
-export type Configuration = {
+type Configuration = {
+  configurationName: string
   endOnAcceptingStateProbability: number
   minEvents?: number
   maxEvents?: number
   randomSeed: string
   uniqueTraces?: boolean
-  maxTraces?: number
-  // number between 0 - 1
+  terminationType:
+    | StandardConfigurationTerminationType
+    | CoverageTerminationType
+    | MaximumTracesTerminationType
+    | SpecifiedAmountOfTracesTerminationType
+}
+
+enum terminationType {
+  Standard = 'standard',
+  MaximumTraces = 'maximumTraces',
+  Coverage = 'coverage',
+  SpecifiedAmountOfTraces = 'specifiedAmountOfTraces',
+}
+
+type StandardConfigurationTerminationType = {
+  type: terminationType.Standard
+}
+
+type CoverageTerminationType = {
+  type: terminationType.Coverage
+  coverage: number
+}
+
+type MaximumTracesTerminationType = {
+  type: terminationType.MaximumTraces
+  maximumTraces: number
   coverage?: number
+}
+
+type SpecifiedAmountOfTracesTerminationType = {
+  type: terminationType.SpecifiedAmountOfTraces
+  amountOfTraces: number
 }
 
 // Process Engine Types
