@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Button, Container, Typography } from '@mui/material'
 
 import {
+  Configuration,
   PetriNetProcessModel,
   SimulationResult,
   petriNetEngine,
@@ -13,9 +14,14 @@ import { generateXES } from '@synthchron/xes'
 import { transformFlowToSimulator } from '../../../utils/flowTransformer'
 import { transformSimulatioResultToXESLog } from '../../../utils/simulatorToXESConverter'
 import { useEditorStore } from '../editorStore/flowStore'
+import {
+  SimulationConfiguration,
+  defaultConfiguration,
+} from './SimulationConfiguration'
 
 export const SimulationTab: React.FC = () => {
   const [simulationResult, setSimulationResult] = useState<SimulationResult>()
+  const [config, setConfig] = useState<Configuration>(defaultConfiguration)
 
   const simulate = () => {
     setSimulationResult(
@@ -24,15 +30,17 @@ export const SimulationTab: React.FC = () => {
           useEditorStore.getState()
         ) as PetriNetProcessModel,
         {
-          endOnAcceptingStateProbability: 0.5,
-          minEvents: 1,
-          maxEvents: 100,
-          randomSeed: Math.floor(Math.random() * 100).toString(),
+          ...config,
+          randomSeed:
+            config.randomSeed === ''
+              ? Math.floor(Math.random() * 100).toString()
+              : config.randomSeed,
         },
         petriNetEngine
       )
     )
   }
+
   const exportSimulation = () => {
     if (simulationResult === undefined) return
     const xesLog = transformSimulatioResultToXESLog(simulationResult)
@@ -55,6 +63,7 @@ export const SimulationTab: React.FC = () => {
       }}
     >
       <Typography variant='h6'>Simulate</Typography>
+      <SimulationConfiguration onUpdate={setConfig} />
       <Button onClick={simulate}>Simulate</Button>
       <Button onClick={exportSimulation}>Export</Button>
       <pre>{JSON.stringify(simulationResult, null, 2)}</pre>
