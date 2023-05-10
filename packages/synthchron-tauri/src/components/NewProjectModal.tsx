@@ -60,7 +60,7 @@ const examplePetriNetModel: PetriNetProcessModel = {
     {
       type: 'place',
       name: 'p1',
-      identifier: '1',
+      identifier: 'p1',
       amountOfTokens: 5,
       position: {
         x: -200,
@@ -70,7 +70,7 @@ const examplePetriNetModel: PetriNetProcessModel = {
     {
       type: 'transition',
       name: 'transition 2',
-      identifier: '2',
+      identifier: 't1',
       weight: 1,
       position: {
         x: 0,
@@ -80,7 +80,7 @@ const examplePetriNetModel: PetriNetProcessModel = {
     {
       type: 'place',
       name: 'p3',
-      identifier: '3',
+      identifier: 'p2',
       amountOfTokens: 0,
       position: {
         x: 200,

@@ -1,4 +1,4 @@
-import { Edge, Node } from 'reactflow'
+import { Edge, Node, NodeTypes } from 'reactflow'
 import { StateCreator } from 'zustand'
 
 import { petriNetFlowConfig } from '../processModels/petriNet/petriNetFlowConfig'
@@ -13,6 +13,10 @@ export type ModelSlice = {
   setMeta: (meta: object) => void
   processModelFlowConfig: ProcessModelFlowConfig
   addNode: (node: Node) => void
+}
+
+const GetNextNodeId = (nodeType: string) => {
+  return 0
 }
 
 export const createModelSlice: StateCreator<
@@ -31,14 +35,24 @@ export const createModelSlice: StateCreator<
   },
   processModelFlowConfig: petriNetFlowConfig, // TODO: Add switch on process model type from ydoc
   addNode: (node: Node) => {
+    const TypeLetterID = node.type === 'Place' ? 'p' : 't'
     // Get new node id
     const newId =
-      Math.max(
+      TypeLetterID +
+      (Math.max(
         0,
         ...Array.from(yDocState.nodesMap.values())
-          .map((node) => parseInt(node.id))
+          .map((node) =>
+            parseInt(
+              //Differentiate between places and transitions, so place ids are in order
+              node.id.charAt(0) === TypeLetterID
+                ? node.id.substring(1)
+                : node.id
+            )
+          )
           .filter((id) => !isNaN(id))
-      ) + 1
+      ) +
+        1)
     yDocState.nodesMap.set(newId.toString(), {
       ...node,
       id: `${newId}`,
