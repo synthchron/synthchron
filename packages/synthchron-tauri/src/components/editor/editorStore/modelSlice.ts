@@ -15,10 +15,6 @@ export type ModelSlice = {
   addNode: (node: Node) => void
 }
 
-const GetNextNodeId = (nodeType: string) => {
-  return 0
-}
-
 export const createModelSlice: StateCreator<
   EditorState,
   [],
