@@ -1,8 +1,11 @@
-import { Edge, Node, NodeTypes } from 'reactflow'
+import { Edge, Node } from 'reactflow'
 import { StateCreator } from 'zustand'
+
+import { Configuration } from '@synthchron/simulator'
 
 import { petriNetFlowConfig } from '../processModels/petriNet/petriNetFlowConfig'
 import { ProcessModelFlowConfig } from '../processModels/processModelFlowConfig'
+import { defaultConfiguration } from '../rightSidebar/SimulationConfiguration'
 import { EditorState } from './flowStore'
 import { yDocState } from './yDoc'
 
@@ -13,14 +16,14 @@ export type ModelSlice = {
   setMeta: (meta: object) => void
   processModelFlowConfig: ProcessModelFlowConfig
   addNode: (node: Node) => void
+  config: Configuration
+  setConfig: (newConfig: Configuration) => void
 }
 
-export const createModelSlice: StateCreator<
-  EditorState,
-  [],
-  [],
-  ModelSlice
-> = () => ({
+export const createModelSlice: StateCreator<EditorState, [], [], ModelSlice> = (
+  set
+) => ({
+  config: defaultConfiguration,
   nodes: Array.from(yDocState.nodesMap.values()),
   edges: Array.from(yDocState.edgesMap.values()),
   meta: Object.fromEntries(yDocState.metaMap.entries()),
@@ -53,5 +56,8 @@ export const createModelSlice: StateCreator<
       ...node,
       id: `${newId}`,
     })
+  },
+  setConfig: (newConfig: Configuration) => {
+    set({ config: newConfig })
   },
 })

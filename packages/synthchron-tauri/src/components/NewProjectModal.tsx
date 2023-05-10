@@ -53,7 +53,7 @@ const examplePetriNetModel: PetriNetProcessModel = {
   acceptingExpressions: [
     {
       name: 'accept',
-      expression: 'p3 >= 7',
+      expression: 'p2 >= 7',
     },
   ],
   nodes: [
@@ -69,7 +69,7 @@ const examplePetriNetModel: PetriNetProcessModel = {
     },
     {
       type: 'transition',
-      name: 'transition 2',
+      name: 'transition',
       identifier: 't1',
       weight: 1,
       position: {
@@ -79,7 +79,7 @@ const examplePetriNetModel: PetriNetProcessModel = {
     },
     {
       type: 'place',
-      name: 'p3',
+      name: 'p2',
       identifier: 'p2',
       amountOfTokens: 0,
       position: {
@@ -90,13 +90,13 @@ const examplePetriNetModel: PetriNetProcessModel = {
   ],
   edges: [
     {
-      source: '1',
-      target: '2',
+      source: 'p1',
+      target: 't1',
       multiplicity: 1,
     },
     {
-      source: '2',
-      target: '3',
+      source: 't1',
+      target: 'p2',
       multiplicity: 2,
     },
   ],
