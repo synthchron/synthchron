@@ -21,6 +21,7 @@ const getNodeFromLabel = (nodes: Node[], label: string) => {
 export type FlowSlice = {
   selectedElement: Node | Edge | undefined
   selectElement: (elem: Node | Edge | undefined) => void
+  changeIdOfSelectedElement: (newID: string) => boolean
   onNodesChange: OnNodesChange
   onEdgesChange: OnEdgesChange
   onConnect: OnConnect
@@ -100,6 +101,21 @@ export const createFlowSlice: StateCreator<EditorState, [], [], FlowSlice> = (
           })
         }
       }
+    }
+  },
+  changeIdOfSelectedElement: (newID: string) => {
+    if (!(yDocState.nodesMap.get(newID) as Node) && get().selectedElement) {
+      yDocState.nodesMap.set(newID, {
+        ...(get().selectedElement as Node),
+        id: newID,
+      })
+      //Reselect element?
+      //Remeber handling transitions and edges
+      //Delete old node?
+      //Don't use ids :(
+      return true
+    } else {
+      return false
     }
   },
 })

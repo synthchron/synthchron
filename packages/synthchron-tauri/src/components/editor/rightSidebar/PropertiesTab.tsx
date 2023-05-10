@@ -1,6 +1,15 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { Container, Stack, TextField, Typography } from '@mui/material'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import {
+  Container,
+  Divider,
+  IconButton,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material'
 import { Edge, Node } from 'reactflow'
 import { shallow } from 'zustand/shallow'
 
@@ -38,11 +47,23 @@ export const PropertiesTab: React.FC = () => {
     (state: EditorState) => ({
       selectedElement: state.selectedElement,
       selectElement: state.selectElement,
+      changeIdOfSelectedElement: state.changeIdOfSelectedElement,
     }),
     []
   )
 
-  const { selectedElement, selectElement } = useEditorStore(selector, shallow)
+  const { selectedElement, selectElement, changeIdOfSelectedElement } =
+    useEditorStore(selector, shallow)
+  const [idValue, setIdValue] = useState(selectedElement?.id ?? '')
+  const prevNodeRef = useRef(idValue)
+
+  useEffect(() => {
+    //When new node is selected, change the value of the ID-textfield
+    if (selectedElement && selectedElement?.id !== idValue) {
+      setIdValue(selectedElement.id)
+      prevNodeRef.current = selectedElement.id
+    }
+  }, [selectedElement])
 
   const updateNodeFields = (fields: Partial<NodeDataFields>) => {
     if (selectedElement) {
@@ -75,14 +96,14 @@ export const PropertiesTab: React.FC = () => {
       ? FlowFieldsToDisplay[selectedElement.type]
       : null
 
-  const fieldsToDisplayL = displayData
+  const fieldsToDisplay = displayData
     ? displayData
     : selectedElement
     ? Object.keys(selectedElement.data)
     : []
 
   const selectedElementProperties =
-    selectedElement && fieldsToDisplayL ? (
+    selectedElement && fieldsToDisplay ? (
       [
         <div key='NodeLabel'>
           <TextField
@@ -91,9 +112,39 @@ export const PropertiesTab: React.FC = () => {
             variant='standard'
           ></TextField>
         </div>,
+        <div key='NodeID'>
+          <Paper
+            elevation={1}
+            sx={{
+              p: '2px 20px',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <TextField
+              sx={{ flex: 1 }}
+              defaultValue={selectedElement.id}
+              variant='standard'
+              label={'ID'}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                event.target.value
+                  ? changeIdOfSelectedElement(event.target.value)
+                  : null
+              }
+              //onKeyDown={Call ID Change}
+            ></TextField>
+            <Divider sx={{ height: 28, m: 2 }} orientation='vertical' />
+            <IconButton
+              //onClick={() => console.log('Awesome')}
+              component='button'
+            >
+              <CheckCircleIcon transform='scale(1.3)' color='primary' />
+            </IconButton>
+          </Paper>
+        </div>,
       ].concat(
         Object.entries(selectedElement.data)
-          .filter(([key, _value]) => fieldsToDisplayL.includes(key))
+          .filter(([key, _value]) => fieldsToDisplay.includes(key))
           .map(([key, value]) => (
             <div key={key}>
               <TextField
@@ -119,6 +170,36 @@ export const PropertiesTab: React.FC = () => {
                     updateNodeFields({ [key]: event.target.value })
                   }
                 }}
+                /*{...(key === 'label' && selectedElement.type === 'Place'
+                  ? {
+                      onChange: (
+                        event: React.ChangeEvent<HTMLInputElement>
+                      ) => {
+                        console.log('test')
+                      },
+                    }
+                  : {
+                      onChange: (
+                        event: React.ChangeEvent<HTMLInputElement>
+                      ) => {
+                        if (NodeDataFieldsTypesAsStrings(key) === 'number') {
+                          if (
+                            Number.isNaN(parseInt(event.target.value)) &&
+                            !(event.target.value === '')
+                          ) {
+                            event.preventDefault
+                          } else {
+                            const resNumber = Number(event.target.value) * 1
+                            updateNodeFields({
+                              [key]: resNumber,
+                            })
+                            event.target.value = resNumber.toString()
+                          }
+                        } else {
+                          updateNodeFields({ [key]: event.target.value })
+                        }
+                      },
+                    })}*/
               ></TextField>
             </div>
           ))
@@ -138,7 +219,6 @@ export const PropertiesTab: React.FC = () => {
     >
       <Stack spacing={2}>
         <Typography variant='h6'>Properties</Typography>
-        {/* TODO: Center this */}
         {selectedElementProperties}
       </Stack>
     </Container>
