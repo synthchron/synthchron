@@ -11,6 +11,8 @@ export type EditorSlice = {
   projectId: string | undefined
   setProjectId: (id: string) => void
   sessionStart: number
+  viewPort?: { x: number; y: number; zoom: number }
+  setViewPort: (viewPort: { x: number; y: number; zoom: number }) => void
 }
 
 export const createEditorSlice: StateCreator<
@@ -26,15 +28,20 @@ export const createEditorSlice: StateCreator<
       projectModel: get().getProcessModel(),
     })
   },
-  getProcessModel: () =>
-    get().processModelFlowConfig.serialize(
+  getProcessModel: () => ({
+    ...get().processModelFlowConfig.serialize(
       get().nodes,
       get().edges,
       get().meta
     ),
+    viewPort: get().viewPort,
+  }),
   projectId: undefined,
   setProjectId: (id: string) => {
     set({ projectId: id })
   },
   sessionStart: new Date().getTime(),
+  viewPort: undefined,
+  setViewPort: (viewPort: { x: number; y: number; zoom: number }) =>
+    set({ viewPort }),
 })

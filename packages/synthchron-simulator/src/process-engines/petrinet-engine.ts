@@ -1,18 +1,18 @@
 import { compileExpression } from 'filtrex'
 
+import { ProcessModelType } from '../types/processModelTypes'
+import {
+  PetriNetPlace,
+  PetriNetProcessModel,
+  PetriNetTransition,
+} from '../types/processModelTypes/petriNetTypes'
 import {
   ExecuteActivityType,
   GetEnabledType,
   IsAcceptingType,
   ProcessEngine,
   ResetActivityType,
-} from '../types/general'
-import { ProcessModelType } from '../types/processModel'
-import {
-  PetriNetPlace,
-  PetriNetProcessModel,
-  PetriNetTransition,
-} from '../types/processModelTypes/petriNetTypes'
+} from '../types/simulationTypes'
 
 type PetriNetState = Map<string, number>
 

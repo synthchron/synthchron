@@ -48,6 +48,9 @@ export const usePersistentStore = create<PersistentState>()(
           })
         },
         updateProject: (id: string, project: Partial<Project>) => {
+          if (id in get().projects === false) {
+            return
+          }
           set((state) => ({
             saving: true,
             projects: {
