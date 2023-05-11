@@ -3,6 +3,7 @@ import { create } from 'zustand'
 
 import { petriNetFlowConfig } from '../processModels/petriNet/petriNetFlowConfig'
 import { ProcessModelFlowConfig } from '../processModels/processModelFlowConfig'
+import { defaultConfiguration } from '../rightSidebar/SimulationConfiguration'
 import { EditorSlice, createEditorSlice } from './editorSlice'
 import { FlowSlice, createFlowSlice } from './flowSlice'
 import { ModelSlice, createModelSlice } from './modelSlice'
@@ -41,6 +42,7 @@ export const useEditorStore = create<EditorState>((set, get, api) => ({
     config: ProcessModelFlowConfig,
     projectId: string
   ) => {
+    get().setConfig(defaultConfiguration)
     get().saveFlow() // This autosaved in case we switch projects
     useEditorStore.setState({
       projectId,
