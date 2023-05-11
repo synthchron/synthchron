@@ -13,7 +13,7 @@ export type Configuration = {
     | SpecifiedAmountOfTracesTerminationType
 }
 
-enum terminationType {
+export enum terminationType {
   Standard = 'standard',
   MaximumTraces = 'maximumTraces',
   Coverage = 'coverage',
