@@ -12,7 +12,6 @@ import { GetElementType } from '../processModels/FlowUtil'
 import { EditorState } from './flowStore'
 import { onEdgesChange } from './onEdgesChange'
 import { onNodesChanges } from './onNodesChange'
-import { yDocState } from './yDoc'
 
 const getNodeFromLabel = (nodes: Node[], label: string) => {
   return nodes.find((node) => node.id == label)
@@ -64,22 +63,24 @@ export const createFlowSlice: StateCreator<EditorState, [], [], FlowSlice> = (
     const id = `edge-${source}${sourceHandle || ''}-${target}${
       targetHandle || ''
     }`
-    yDocState.edgesMap.set(id, {
+    get().yEdgesMap.set(id, {
       id,
       ...modelSpecificConnection,
     } as Edge)
   },
   selectElement: (elem: Node | Edge | undefined) => {
+    const nodesMap = get().yNodesMap
+    const edgesMap = get().yEdgesMap
     _set({
       selectedElement: elem,
     })
     if (elem) {
       const elemType = GetElementType(elem.type)
       if (elemType == 'node') {
-        const updatedNode = yDocState.nodesMap.get(elem.id) as Node
+        const updatedNode = nodesMap.get(elem.id) as Node
         if (updatedNode) {
           //Element is a node
-          yDocState.nodesMap.set(elem.id, {
+          nodesMap.set(elem.id, {
             ...updatedNode,
             data: {
               ...elem.data,
@@ -88,10 +89,10 @@ export const createFlowSlice: StateCreator<EditorState, [], [], FlowSlice> = (
           })
         }
       } else if (elemType == 'edge') {
-        const updatedEdge = yDocState.edgesMap.get(elem.id) as Edge
+        const updatedEdge = edgesMap.get(elem.id) as Edge
         if (updatedEdge) {
           //Element is an edge
-          yDocState.edgesMap.set(elem.id, {
+          edgesMap.set(elem.id, {
             ...updatedEdge,
             data: {
               ...elem.data,

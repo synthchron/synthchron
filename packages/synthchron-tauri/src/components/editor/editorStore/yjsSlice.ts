@@ -1,13 +1,25 @@
 import { faker } from '@faker-js/faker'
+import { Edge, Node } from 'reactflow'
 import { Awareness } from 'y-protocols/awareness'
 import { WebrtcProvider } from 'y-webrtc'
+import { Doc, Map as YMap, Text as YText } from 'yjs'
 import { StateCreator } from 'zustand'
 
+import { petriNetFlowConfig } from '../processModels/petriNet/petriNetFlowConfig'
 import { AwarenessState, EditorState } from './flowStore'
-import { yDoc, yDocState } from './yDoc'
 
 export type YjsSlice = {
+  yDoc: Doc
   yWebRTCProvider: WebrtcProvider | null
+  resetState: () => void
+
+  // State
+  yNodesMap: YMap<Node>
+  yEdgesMap: YMap<Edge>
+  yMetaMap: YMap<unknown>
+  yProcessModelType: YText
+
+  // Awareness (cursors, etc.)
   awareness: Awareness | null
   collaboratorStates: Map<
     number,
@@ -17,6 +29,8 @@ export type YjsSlice = {
   >
   awarenessState: AwarenessState
   setAwarenessState: (state: Partial<AwarenessState>) => void
+
+  // Connection
   connectRoom: (room: string, keepChanges: boolean) => void
   disconnectRoom: () => void
   //Room name fields
@@ -30,23 +44,83 @@ export type YjsSlice = {
   ) => void
 }
 
+const initialYDoc = new Doc()
+
 export const createYjsSlice: StateCreator<EditorState, [], [], YjsSlice> = (
   set,
-  get,
-  api
+  get
 ) => ({
+  yDoc: initialYDoc,
   yWebRTCProvider: null,
+  resetState: async () => {
+    get().yWebRTCProvider?.destroy()
+    get().disconnectRoom()
+
+    const yDoc = new Doc()
+    const nodesMap = yDoc.getMap<Node>('nodes')
+    const edgesMap = yDoc.getMap<Edge>('edges')
+    const metaMap = yDoc.getMap('meta')
+    const processModelType = yDoc.getText('processModelType')
+
+    const nodeObserver = () => {
+      const nodes = Array.from(nodesMap.values())
+      set({
+        nodes,
+      })
+    }
+    nodesMap.observe(nodeObserver)
+
+    const edgeObserver = () => {
+      const edges = Array.from(edgesMap.values())
+      set({
+        edges,
+      })
+    }
+    edgesMap.observe(edgeObserver)
+
+    const metaObserver = () => {
+      const meta = Object.fromEntries(metaMap.entries())
+      set({
+        meta,
+      })
+    }
+    metaMap.observe(metaObserver)
+
+    const processModelTypeObserver = () => {
+      switch (processModelType.toString()) {
+        case 'petriNet':
+          set({
+            processModelFlowConfig: petriNetFlowConfig,
+          })
+          break
+        default:
+          break
+      }
+    }
+    processModelType.observe(processModelTypeObserver)
+
+    set({
+      yDoc,
+      yNodesMap: nodesMap,
+      yEdgesMap: edgesMap,
+      yMetaMap: metaMap,
+      yProcessModelType: processModelType,
+      yWebRTCProvider: null,
+    })
+  },
+
+  // State
+  yNodesMap: initialYDoc.getMap<Node>('nodes'),
+  yEdgesMap: initialYDoc.getMap<Edge>('edges'),
+  yMetaMap: initialYDoc.getMap('meta'),
+  yProcessModelType: initialYDoc.getText('processModelType'),
+
   connectRoom: async (room: string, keepChanges = true) => {
     get().yWebRTCProvider?.destroy()
     if (!keepChanges) {
-      yDocState.nodesMap.clear()
-      yDocState.edgesMap.clear()
-      yDocState.processModelType.delete(0, yDocState.processModelType.length)
-    } /* else { // This feature would wait for the document to be loaded before allowing changes, but it might now work at this point
-        yDoc.autoLoad = false
-        yDoc.shouldLoad = false
-      } */
-    const webrtcProvider = new WebrtcProvider(room, yDoc, {
+      await get().resetState()
+    }
+    const webrtcProvider = new WebrtcProvider(room, get().yDoc, {
       signaling: ['wss://netcup.lenny.codes/signaling/'],
       peerOpts: {
         config: {
@@ -65,7 +139,7 @@ export const createYjsSlice: StateCreator<EditorState, [], [], YjsSlice> = (
     webrtcProvider.awareness.on('change', () => {
       const allCollaborators = new Map(webrtcProvider.awareness.getStates())
       allCollaborators.delete(webrtcProvider.awareness.clientID)
-      api.setState({
+      set({
         collaboratorStates: allCollaborators,
         awarenessState: webrtcProvider.awareness.getLocalState(),
       })
