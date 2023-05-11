@@ -1,5 +1,5 @@
 // Configuration Types for the simulation
-type Configuration = {
+export type Configuration = {
   configurationName: string
   endOnAcceptingStateProbability: number
   minEvents?: number
