@@ -8,8 +8,8 @@ import {
   petriNetEngine,
   simulateWithEngine,
 } from '@synthchron/simulator'
-import { generateXES } from '@synthchron/xes'
 import { terminationType } from '@synthchron/simulator'
+import { generateXES } from '@synthchron/xes'
 
 import { transformFlowToSimulator } from '../../../utils/flowTransformer'
 import { transformSimulatioResultToXESLog } from '../../../utils/simulatorToXESConverter'
@@ -25,14 +25,14 @@ export const SimulationTab: React.FC = () => {
           useEditorStore.getState()
         ) as PetriNetProcessModel,
         {
-					configurationName: 'example',
+          configurationName: 'example',
           endOnAcceptingStateProbability: 0.5,
           minEvents: 1,
           maxEvents: 100,
           randomSeed: Math.floor(Math.random() * 100).toString(),
           terminationType: {
-						type: terminationType.Standard
-					},
+            type: terminationType.Standard,
+          },
         },
         petriNetEngine
       )
