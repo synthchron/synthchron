@@ -1,5 +1,5 @@
 {
-  "name": "@synthchron/simulator",
+  "name": "@synthchron/postprocessor",
   "version": "0.0.1",
   "description": "",
   "main": "src/index.ts",
@@ -23,13 +23,13 @@
     "@types/chai": "^4.3.4",
     "@types/lodash": "^4.14.194",
     "@types/mocha": "^10.0.0",
-    "@types/node": "^20.1.0",
+    "@types/node": "^20.1.1",
     "@types/sinon": "^10.0.13",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.59.5",
-    "@synthchron/eslint-config": "*",
     "chai": "^4.3.7",
-    "eslint": "^8.40.0",
+    "eslint": "^8.37.0",
+    "@synthchron/eslint-config": "*",
     "mocha": "^10.1.0",
     "rimraf": "^5.0.0",
     "sinon": "^15.0.3",
@@ -38,6 +38,6 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "yaml": "^2.2.2"
+    "eslint-plugin-prettier": "^4.2.1"
   }
 }

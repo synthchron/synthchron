@@ -1,6 +1,6 @@
 // Configuration Types for the simulation
 export type Configuration = {
-  configurationName: string
+  configurationName?: string
   endOnAcceptingStateProbability: number
   minEvents?: number
   maxEvents?: number
@@ -20,22 +20,22 @@ export enum terminationType {
   SpecifiedAmountOfTraces = 'specifiedAmountOfTraces',
 }
 
-type StandardConfigurationTerminationType = {
+export type StandardConfigurationTerminationType = {
   type: terminationType.Standard
 }
 
-type CoverageTerminationType = {
+export type CoverageTerminationType = {
   type: terminationType.Coverage
   coverage: number
 }
 
-type MaximumTracesTerminationType = {
+export type MaximumTracesTerminationType = {
   type: terminationType.MaximumTraces
   maximumTraces: number
   coverage?: number
 }
 
-type SpecifiedAmountOfTracesTerminationType = {
+export type SpecifiedAmountOfTracesTerminationType = {
   type: terminationType.SpecifiedAmountOfTraces
   amountOfTraces: number
 }
