@@ -18,7 +18,7 @@ export const TabbedDrawer: React.FC<DrawerProps> = ({
   const [value, setValue] = useState(0)
 
   return (
-    <DrawerWrapper side={side}>
+    <div>
       <Box
         sx={{
           borderBottom: 1,
@@ -36,7 +36,7 @@ export const TabbedDrawer: React.FC<DrawerProps> = ({
           {child}
         </TabPanel>
       ))}
-    </DrawerWrapper>
+    </div>
   )
 }
 

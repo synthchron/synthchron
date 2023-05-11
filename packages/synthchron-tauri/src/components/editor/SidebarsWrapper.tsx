@@ -1,7 +1,8 @@
 import React from 'react'
 import { useCallback, useRef, useState } from 'react'
 
-import { Box } from '@mui/material'
+import { Box, Button } from '@mui/material'
+import { SplitPane } from 'react-collapse-pane'
 import { ReactFlowInstance, ReactFlowProvider } from 'reactflow'
 import { shallow } from 'zustand/shallow'
 
@@ -75,21 +76,53 @@ export const SidebarsWrapper = () => {
       }}
     >
       <ReactFlowProvider>
-        <LeftSidebar />
-        <Box
-          sx={{
-            flexGrow: 1,
-            height: '100%',
+        <SplitPane
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          size={300}
+          split='vertical'
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          collapse={{
+            beforeToggleButton: <Button>⬅</Button>,
+            afterToggleButton: <Button>➡</Button>,
+            overlayCss: { backgroundColor: 'black' },
+            buttonTransition: 'zoom',
+            buttonPositionOffset: -20,
+            collapsedSize: 50,
+            collapseTransitionTimeout: 350,
+            collapseDirection: 'right',
           }}
-          ref={reactFlowWrapper}
         >
-          <StateFlow
-            onInit={setReactFlowInstance}
-            onDrop={onDrop}
-            onDragOver={onDragOver}
-          />
-        </Box>
-        <RightSidebar />
+          <SplitPane
+            split='vertical'
+            collapse={{
+              beforeToggleButton: <Button>⬅</Button>,
+              afterToggleButton: <Button>➡</Button>,
+              overlayCss: { backgroundColor: 'black' },
+              buttonTransition: 'zoom',
+              buttonPositionOffset: -20,
+              collapsedSize: 50,
+              collapseTransitionTimeout: 350,
+            }}
+          >
+            <LeftSidebar />
+            <Box
+              sx={{
+                flexGrow: 1,
+                height: '100%',
+              }}
+              ref={reactFlowWrapper}
+            >
+              <StateFlow
+                onInit={setReactFlowInstance}
+                onDrop={onDrop}
+                onDragOver={onDragOver}
+              />
+            </Box>
+          </SplitPane>
+          <RightSidebar />
+        </SplitPane>
       </ReactFlowProvider>
     </Box>
   )

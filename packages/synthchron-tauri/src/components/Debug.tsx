@@ -1,4 +1,5 @@
 import { Button } from '@mui/material'
+import { SplitPane } from 'react-collapse-pane'
 import { Offline, Online } from 'react-detect-offline'
 
 import { CustomAppBar } from './CustomAppBar'
@@ -10,20 +11,12 @@ export const Debug = () => {
 
   return (
     <>
-      <CustomAppBar />
-      Hello World! You are{' '}
-      <i>
-        <Online>online</Online>
-        <Offline>offline</Offline>
-      </i>
-      <Button
-        onClick={() => {
-          // Remove all projects
-          Object.keys(projects).forEach((k) => removeProject(k))
-        }}
-      >
-        Remove all projects
-      </Button>
+      <SplitPane split='vertical' collapse={true}>
+        <div>This is the first div</div>
+        <div>This is the second div</div>
+        <div>This is the third div</div>
+        This is the fourth but not a div!
+      </SplitPane>
     </>
   )
 }
