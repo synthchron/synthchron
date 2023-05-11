@@ -42,9 +42,6 @@ export const useEditorStore = create<EditorState>((set, get, api) => ({
     projectId: string
   ) => {
     get().saveFlow() // This autosaved in case we switch projects
-    useEditorStore.setState({
-      projectId,
-    })
     get().disconnectRoom()
 
     const yDoc = new Doc()
@@ -106,6 +103,7 @@ export const useEditorStore = create<EditorState>((set, get, api) => ({
       nodes,
       edges,
       meta,
+      projectId,
 
       // Setting yDoc state for collaboration
       yDoc,
