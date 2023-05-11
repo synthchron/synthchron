@@ -6,6 +6,12 @@ export function NodeShapeMap(type: string) {
     case 'Place':
       return <PlaceNodeShape strokeWidth={undefined} label={type} id={'id'} />
     case 'Transition':
-      return <TransitionNodeShape strokeWidth={undefined} label={type} />
+      return (
+        <TransitionNodeShape
+          strokeWidth={undefined}
+          label={type}
+          data={{ weight: 'weight', label: 'label' }}
+        />
+      )
   }
 }
