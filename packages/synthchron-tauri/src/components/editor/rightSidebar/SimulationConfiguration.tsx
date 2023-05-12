@@ -30,19 +30,19 @@ type SimulationConfigurationProperty = {
 const minMaxEvents = [1, 100]
 const partialNotAutoConfiguration = {
   //These are values that should not be automatically generated
-  configurationName: 'Default',
   endOnAcceptingStateProbability: 50,
   minEvents: minMaxEvents[0],
   maxEvents: minMaxEvents[1],
-
-  terminationType: {
-    type: terminationType.Standard,
-  } as StandardConfigurationTerminationType,
 }
 const partialAutoConfiguration = {
   //These are values that can be automatically generated
   randomSeed: '',
   //Add other configuration options here
+  configurationName: 'Default',
+
+  terminationType: {
+    type: terminationType.Standard,
+  } as StandardConfigurationTerminationType,
 }
 export const defaultConfiguration = {
   ...partialAutoConfiguration,
