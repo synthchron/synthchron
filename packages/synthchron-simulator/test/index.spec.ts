@@ -1,10 +1,6 @@
 // tslint:disable: only-arrow-functions
 import { expect } from 'chai'
 
-import {
-  terminationType,
-} from '../src/types/simulationTypes'
-
 import { simulateWithEngine } from '../src'
 import { flowchart1 } from '../src/model-examples/flowchartExamples'
 import {
@@ -13,6 +9,7 @@ import {
   petriNet3,
 } from '../src/model-examples/petriNetExamples'
 import { petriNetEngine } from '../src/process-engines/petrinet-engine'
+import { terminationType } from '../src/types/simulationTypes'
 
 describe('Deterministic Process Models', () => {
   describe('Petri Net 1', () => {

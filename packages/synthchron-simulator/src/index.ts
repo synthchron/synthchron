@@ -1,4 +1,4 @@
-export const main = () : string => 'Hello World'
+export const main = (): string => 'Hello World'
 
 // Top level simulate command. Can take a configuration dictionary
 export { simulateWithEngine } from './simulation'
