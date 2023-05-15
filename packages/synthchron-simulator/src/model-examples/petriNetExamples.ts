@@ -1,4 +1,4 @@
-import { ProcessModelType } from '../types/processModel'
+import { ProcessModelType } from '../types/processModelTypes'
 import { PetriNetProcessModel } from '../types/processModelTypes/petriNetTypes'
 
 // This petri net should simulate as follows:

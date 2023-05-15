@@ -2,7 +2,7 @@ import React from 'react'
 import { useCallback, useRef, useState } from 'react'
 
 import { Box } from '@mui/material'
-import { ReactFlowInstance, ReactFlowProvider } from 'reactflow'
+import { ReactFlowInstance } from 'reactflow'
 import { shallow } from 'zustand/shallow'
 
 // 👇 Importing components
@@ -74,23 +74,21 @@ export const SidebarsWrapper = () => {
         flexGrow: 1,
       }}
     >
-      <ReactFlowProvider>
-        <LeftSidebar />
-        <Box
-          sx={{
-            flexGrow: 1,
-            height: '100%',
-          }}
-          ref={reactFlowWrapper}
-        >
-          <StateFlow
-            onInit={setReactFlowInstance}
-            onDrop={onDrop}
-            onDragOver={onDragOver}
-          />
-        </Box>
-        <RightSidebar />
-      </ReactFlowProvider>
+      <LeftSidebar />
+      <Box
+        sx={{
+          flexGrow: 1,
+          height: '100%',
+        }}
+        ref={reactFlowWrapper}
+      >
+        <StateFlow
+          onInit={setReactFlowInstance}
+          onDrop={onDrop}
+          onDragOver={onDragOver}
+        />
+      </Box>
+      <RightSidebar />
     </Box>
   )
 }

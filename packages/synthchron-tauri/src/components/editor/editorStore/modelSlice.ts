@@ -7,7 +7,6 @@ import { petriNetFlowConfig } from '../processModels/petriNet/petriNetFlowConfig
 import { ProcessModelFlowConfig } from '../processModels/processModelFlowConfig'
 import { defaultConfiguration } from '../rightSidebar/SimulationConfiguration'
 import { EditorState } from './flowStore'
-import { yDocState } from './yDoc'
 
 export type ModelSlice = {
   nodes: Node[]
@@ -21,26 +20,28 @@ export type ModelSlice = {
 }
 
 export const createModelSlice: StateCreator<EditorState, [], [], ModelSlice> = (
-  set
+  set,
+  get
 ) => ({
   config: defaultConfiguration,
-  nodes: Array.from(yDocState.nodesMap.values()),
-  edges: Array.from(yDocState.edgesMap.values()),
-  meta: Object.fromEntries(yDocState.metaMap.entries()),
+  nodes: [],
+  edges: [],
+  meta: {},
   setMeta: (meta: object) => {
     for (const [key, value] of Object.entries(meta)) {
-      yDocState.metaMap.set(key, value)
+      get().yMetaMap.set(key, value)
     }
   },
   processModelFlowConfig: petriNetFlowConfig, // TODO: Add switch on process model type from ydoc
   addNode: (node: Node) => {
     const TypeLetterID = node.type === 'Place' ? 'p' : 't'
+    const nodesMap = get().yNodesMap
     // Get new node id
     const newId =
       TypeLetterID +
       (Math.max(
         0,
-        ...Array.from(yDocState.nodesMap.values())
+        ...Array.from(nodesMap.values())
           .map((node) =>
             parseInt(
               //Differentiate between places and transitions, so place ids are in order
@@ -52,7 +53,7 @@ export const createModelSlice: StateCreator<EditorState, [], [], ModelSlice> = (
           .filter((id) => !isNaN(id))
       ) +
         1)
-    yDocState.nodesMap.set(newId.toString(), {
+    nodesMap.set(newId.toString(), {
       ...node,
       id: `${newId}`,
     })
