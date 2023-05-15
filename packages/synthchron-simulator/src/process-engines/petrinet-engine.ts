@@ -28,7 +28,6 @@ const isAccepting: IsAcceptingType<ProcessModel, State, ActivityIdentifier> = (
     const exp = compileExpression(expression)
     return exp(
       Object.fromEntries(
-        // The 'p' is needed, as the expression entered uses p1, p2, etc. but the ids are numerical
         Array.from(state.entries()).map(([key, value]) => [`${key}`, value])
       )
     )
