@@ -2,9 +2,8 @@
 import { expect } from 'chai'
 
 import {
-  StandardConfigurationTerminationType,
   terminationType,
-} from '@synthchron/simulator'
+} from '../src/types/simulationTypes'
 
 import { simulateWithEngine } from '../src'
 import { flowchart1 } from '../src/model-examples/flowchartExamples'
