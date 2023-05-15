@@ -1,4 +1,5 @@
 import { Edge, Node } from 'reactflow'
+import { Doc } from 'yjs'
 import { create } from 'zustand'
 
 import { petriNetFlowConfig } from '../processModels/petriNet/petriNetFlowConfig'
@@ -6,7 +7,6 @@ import { ProcessModelFlowConfig } from '../processModels/processModelFlowConfig'
 import { EditorSlice, createEditorSlice } from './editorSlice'
 import { FlowSlice, createFlowSlice } from './flowSlice'
 import { ModelSlice, createModelSlice } from './modelSlice'
-import { yDoc, yDocState } from './yDoc'
 import { YjsSlice, createYjsSlice } from './yjsSlice'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -42,62 +42,75 @@ export const useEditorStore = create<EditorState>((set, get, api) => ({
     projectId: string
   ) => {
     get().saveFlow() // This autosaved in case we switch projects
-    useEditorStore.setState({
-      projectId,
-    })
-    yDoc.destroy()
-    yDocState.nodesMap.clear()
+    get().disconnectRoom()
+
+    const yDoc = new Doc()
+    const nodesMap = yDoc.getMap<Node>('nodes')
+    const edgesMap = yDoc.getMap<Edge>('edges')
+    const metaMap = yDoc.getMap('meta')
+    const processModelType = yDoc.getText('processModelType')
+
+    const nodeObserver = () => {
+      const nodes = Array.from(nodesMap.values())
+      useEditorStore.setState({
+        nodes,
+      })
+    }
+    nodesMap.observe(nodeObserver)
+
     nodes.forEach((node) => {
-      yDocState.nodesMap.set(node.id, node)
+      nodesMap.set(node.id, node)
     })
-    yDocState.edgesMap.clear()
+
     edges.forEach((edge) => {
-      yDocState.edgesMap.set(edge.id, edge)
+      edgesMap.set(edge.id, edge)
     })
-    yDocState.metaMap.clear()
+    const edgeObserver = () => {
+      const edges = Array.from(edgesMap.values())
+      useEditorStore.setState({
+        edges,
+      })
+    }
+    edgesMap.observe(edgeObserver)
+
     Object.entries(meta).forEach(([key, value]) => {
-      yDocState.metaMap.set(key, value)
+      metaMap.set(key, value)
     })
-    yDocState.processModelType.delete(0, yDocState.processModelType.length)
-    yDocState.processModelType.insert(0, config.processModelType)
+    const metaObserver = () => {
+      const meta = Object.fromEntries(metaMap.entries())
+      useEditorStore.setState({
+        meta,
+      })
+    }
+    metaMap.observe(metaObserver)
+
+    processModelType.insert(0, config.processModelType)
+    const processModelTypeObserver = () => {
+      switch (processModelType.toString()) {
+        case 'petriNet':
+          useEditorStore.setState({
+            processModelFlowConfig: petriNetFlowConfig,
+          })
+          break
+        default:
+          break
+      }
+    }
+    processModelType.observe(processModelTypeObserver)
+
+    set({
+      // Setting initial state
+      nodes,
+      edges,
+      meta,
+      projectId,
+
+      // Setting yDoc state for collaboration
+      yDoc,
+      yNodesMap: nodesMap,
+      yEdgesMap: edgesMap,
+      yMetaMap: metaMap,
+      yProcessModelType: processModelType,
+    })
   },
 }))
-
-// List of observers for setting Zustand state variables once yjs state changes
-const nodeObserver = () => {
-  const nodes = Array.from(yDocState.nodesMap.values())
-  useEditorStore.setState({
-    nodes,
-  })
-}
-yDocState.nodesMap.observe(nodeObserver)
-
-const edgeObserver = () => {
-  const edges = Array.from(yDocState.edgesMap.values())
-  useEditorStore.setState({
-    edges,
-  })
-}
-yDocState.edgesMap.observe(edgeObserver)
-
-const metaObserver = () => {
-  const meta = Object.fromEntries(yDocState.metaMap.entries())
-  useEditorStore.setState({
-    meta,
-  })
-}
-yDocState.metaMap.observe(metaObserver)
-
-const processModelTypeObserver = () => {
-  const processModelType = yDocState.processModelType.toString()
-  switch (processModelType) {
-    case 'petriNet':
-      useEditorStore.setState({
-        processModelFlowConfig: petriNetFlowConfig,
-      })
-      break
-    default:
-      break
-  }
-}
-yDocState.processModelType.observe(processModelTypeObserver)
