@@ -1,13 +1,13 @@
 import seedrandom from 'seedrandom'
 
+import { ProcessModel } from './types/processModelTypes'
 import {
   Configuration,
   ProcessEngine,
   SimulationResult,
   TerminationStatus,
   Trace,
-} from './types/general'
-import { ProcessModel } from './types/processModel'
+} from './types/simulationTypes'
 
 //const PROCESS_ENGINES = [petriNetEngine]
 

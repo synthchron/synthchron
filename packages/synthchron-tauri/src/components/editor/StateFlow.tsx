@@ -1,10 +1,14 @@
+import { useCallback } from 'react'
+
 import ReactFlow, {
   Background,
   ConnectionMode,
   Controls,
+  Edge,
   MiniMap,
+  Node,
   OnInit,
-  useStore,
+  useReactFlow,
 } from 'reactflow'
 import { shallow } from 'zustand/shallow'
 
@@ -45,25 +49,42 @@ export const StateFlow: React.FC<StateFlowProps> = ({
     onNodesChange,
     onEdgesChange,
     onConnect,
+    selectElement,
   } = useEditorStore(selector, shallow)
 
   const fitViewOptions = { padding: 0.2 }
-  const { selectElement } = useEditorStore(selector, shallow)
 
-  const transform = useStore((store) => store.transform)
+  const reactFlow = useReactFlow()
 
-  const setAwarenessCursor: React.PointerEventHandler<HTMLDivElement> = (
-    event
-  ) => {
-    setAwarenessState({
-      x:
-        (event.clientX - event.currentTarget.offsetLeft - transform[0]) /
-        transform[2],
-      y:
-        (event.clientY - event.currentTarget.offsetTop - transform[1]) /
-        transform[2],
-    })
-  }
+  const setAwarenessCursor: React.PointerEventHandler<HTMLDivElement> =
+    useCallback(
+      (event) => {
+        const viewport = reactFlow.getViewport()
+        setAwarenessState({
+          x:
+            (event.clientX - event.currentTarget.offsetLeft - viewport.x) /
+            viewport.zoom,
+          y:
+            (event.clientY - event.currentTarget.offsetTop - viewport.y) /
+            viewport.zoom,
+        })
+      },
+      [reactFlow, setAwarenessState]
+    )
+
+  const selectElementCallback = useCallback(
+    (_: unknown, clickable: Node | Edge | undefined) => {
+      selectElement(clickable)
+    },
+    [selectElement]
+  )
+
+  const selectPaneCallback = useCallback(
+    (_: unknown) => {
+      selectElement(undefined)
+    },
+    [selectElement]
+  )
 
   return (
     <ReactFlow
@@ -83,18 +104,10 @@ export const StateFlow: React.FC<StateFlowProps> = ({
       onDrop={onDrop}
       onDragOver={onDragOver}
       //OnClickEvents
-      onNodeDrag={(_, node) => {
-        selectElement(node)
-      }}
-      onNodeClick={(_, node) => {
-        selectElement(node)
-      }}
-      onEdgeClick={(_, edge) => {
-        selectElement(edge)
-      }}
-      onPaneClick={(_) => {
-        selectElement(undefined)
-      }}
+      onNodeDrag={selectElementCallback}
+      onNodeClick={selectElementCallback}
+      onEdgeClick={selectElementCallback}
+      onPaneClick={selectPaneCallback}
       onPointerMove={setAwarenessCursor}
     >
       <AwarenessCursors />
