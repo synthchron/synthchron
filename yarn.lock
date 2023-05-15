@@ -1014,19 +1014,19 @@
     ts-dedent "^2.0.0"
     uuid "^9.0.0"
 
-"@storybook/addon-actions@^7.0.9":
-  version "7.0.9"
-  resolved "https://registry.yarnpkg.com/@storybook/addon-actions/-/addon-actions-7.0.9.tgz#820edc3a88a8b7c78c1a42343dc4d8c8519813f6"
-  integrity sha512-xEO/Ekj6m6p1l4CXGh75BNBD/sqF7TqnUA/f2T3UCtLf9xVMoGEczxNi28iZq2RHoIAaV2aKArqjM+qTwoLjZw==
+"@storybook/addon-actions@^7.0.11":
+  version "7.0.11"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-actions/-/addon-actions-7.0.11.tgz#359f964036d50bc498b5dcd58e0a592dffb5e1bb"
+  integrity sha512-kh5z6L5r5BOWVt0+xZgdMZjDJQkJIVcAOxahRS9MwWkw0NDpXjcPS7HsVXZ1DlnnzhfjLFr0BXadVdcc2FLj7A==
   dependencies:
-    "@storybook/client-logger" "7.0.9"
-    "@storybook/components" "7.0.9"
-    "@storybook/core-events" "7.0.9"
+    "@storybook/client-logger" "7.0.11"
+    "@storybook/components" "7.0.11"
+    "@storybook/core-events" "7.0.11"
     "@storybook/global" "^5.0.0"
-    "@storybook/manager-api" "7.0.9"
-    "@storybook/preview-api" "7.0.9"
-    "@storybook/theming" "7.0.9"
-    "@storybook/types" "7.0.9"
+    "@storybook/manager-api" "7.0.11"
+    "@storybook/preview-api" "7.0.11"
+    "@storybook/theming" "7.0.11"
+    "@storybook/types" "7.0.11"
     dequal "^2.0.2"
     lodash "^4.17.21"
     polished "^4.2.2"
@@ -1348,6 +1348,20 @@
   integrity sha512-EJnXWvpTFEj462ixZbDouTN9X/FinRgaKKN6zXdhSSZUnm5PcZBtnoX5S+982z3LiAjdNIuAdZE/4vwBIAF88A==
   dependencies:
     "@storybook/global" "^5.0.0"
+
+"@storybook/components@7.0.11":
+  version "7.0.11"
+  resolved "https://registry.yarnpkg.com/@storybook/components/-/components-7.0.11.tgz#4d710869014b369d347fcc3f9e41a5ecf352b036"
+  integrity sha512-U8JyhFppGTv7ul3gofQqIzlrAx1NEF0ckTMAwtbE6ke4AIbcoPvpWwwH5EoLR1cAVwoNjYeah/pVdG9IZSlyJA==
+  dependencies:
+    "@storybook/client-logger" "7.0.11"
+    "@storybook/csf" "^0.1.0"
+    "@storybook/global" "^5.0.0"
+    "@storybook/theming" "7.0.11"
+    "@storybook/types" "7.0.11"
+    memoizerific "^1.11.3"
+    use-resize-observer "^9.1.0"
+    util-deprecate "^1.0.2"
 
 "@storybook/components@7.0.8":
   version "7.0.8"
