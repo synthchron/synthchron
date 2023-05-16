@@ -2,6 +2,7 @@ import React from 'react'
 import { useCallback, useRef, useState } from 'react'
 
 import { Box } from '@mui/material'
+import { Allotment, AllotmentHandle, LayoutPriority } from 'allotment'
 import { ReactFlowInstance } from 'reactflow'
 import { shallow } from 'zustand/shallow'
 
@@ -11,6 +12,7 @@ import { RightSidebar } from './RightSidebar'
 import { StateFlow } from './StateFlow'
 import { EditorState, useEditorStore } from './editorStore/flowStore'
 
+import 'allotment/dist/style.css'
 // 👇 you need to import the reactflow styles
 import 'reactflow/dist/style.css'
 
@@ -63,6 +65,24 @@ export const SidebarsWrapper = () => {
     }
     addNode(newNode)
   }
+  const sidebarMinSize = 30
+  const leftSidebarMaxSize = 300
+  const rightSidebarMaxSize = 400
+  const [leftSidebarPreferredSize, setLeftSidebarPreferredSize] =
+    useState(leftSidebarMaxSize)
+  const [rightSidebarPreferredSize, setRightSidebarPreferredSize] =
+    useState(rightSidebarMaxSize)
+  const getResetSidebarSize = (
+    currentSize: number,
+    maxSize: number,
+    minSize: number
+  ) => {
+    if (currentSize === minSize) {
+      return maxSize
+    }
+    return minSize
+  }
+  const ref = useRef<AllotmentHandle>(null)
 
   return (
     <Box
@@ -74,21 +94,82 @@ export const SidebarsWrapper = () => {
         flexGrow: 1,
       }}
     >
-      <LeftSidebar />
-      <Box
-        sx={{
-          flexGrow: 1,
-          height: '100%',
+      <Allotment
+        ref={ref}
+        proportionalLayout={false}
+        defaultSizes={[leftSidebarMaxSize, 1, rightSidebarMaxSize]}
+        onChange={(sizes) => {
+          const leftSidebarSize = sizes[0]
+          const rightSidebarSize = sizes[2]
+          const newLeftSidebarPreferredSize = getResetSidebarSize(
+            leftSidebarSize,
+            leftSidebarMaxSize,
+            sidebarMinSize
+          )
+          const newRightSidebarPreferredSize = getResetSidebarSize(
+            rightSidebarSize,
+            rightSidebarMaxSize,
+            sidebarMinSize
+          )
+          setLeftSidebarPreferredSize(newLeftSidebarPreferredSize)
+          setRightSidebarPreferredSize(newRightSidebarPreferredSize)
         }}
-        ref={reactFlowWrapper}
       >
-        <StateFlow
-          onInit={setReactFlowInstance}
-          onDrop={onDrop}
-          onDragOver={onDragOver}
-        />
-      </Box>
-      <RightSidebar />
+        <Allotment.Pane
+          maxSize={leftSidebarMaxSize}
+          preferredSize={leftSidebarPreferredSize}
+          priority={LayoutPriority.Low}
+        >
+          <div
+            style={{
+              height: '100%',
+              filter:
+                leftSidebarPreferredSize === leftSidebarMaxSize
+                  ? 'brightness(0.7) blur(5px)'
+                  : '',
+              backgroundColor: 'white',
+              transitionDuration: '0.25s',
+            }}
+          >
+            <LeftSidebar />
+          </div>
+        </Allotment.Pane>
+
+        <Allotment.Pane priority={LayoutPriority.High}>
+          <Box
+            sx={{
+              flexGrow: 1,
+              height: '100%',
+            }}
+            ref={reactFlowWrapper}
+          >
+            <StateFlow
+              onInit={setReactFlowInstance}
+              onDrop={onDrop}
+              onDragOver={onDragOver}
+            />
+          </Box>
+        </Allotment.Pane>
+        <Allotment.Pane
+          maxSize={rightSidebarMaxSize}
+          preferredSize={rightSidebarPreferredSize}
+          priority={LayoutPriority.Low}
+        >
+          <div
+            style={{
+              height: '100%',
+              filter:
+                rightSidebarPreferredSize === rightSidebarMaxSize
+                  ? 'brightness(0.7) blur(5px)'
+                  : '',
+              backgroundColor: 'white',
+              transitionDuration: '0.25s',
+            }}
+          >
+            <RightSidebar />
+          </div>
+        </Allotment.Pane>
+      </Allotment>
     </Box>
   )
 }
