@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect } from 'react'
 
 import {
   Checkbox,
@@ -9,8 +9,15 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
+import { shallow } from 'zustand/shallow'
 
+import {
+  StandardConfigurationTerminationType,
+  TerminationType,
+} from '@synthchron/simulator'
 import { Configuration } from '@synthchron/simulator'
+
+import { EditorState, useEditorStore } from '../editorStore/flowStore'
 
 enum rangeSliderElement {
   Min,
@@ -26,7 +33,7 @@ type SimulationConfigurationProperty = {
 const minMaxEvents = [1, 100]
 const partialNotAutoConfiguration = {
   //These are values that should not be automatically generated
-  endOnAcceptingStateProbability: 50,
+  endOnAcceptingStateProbability: 100,
   minEvents: minMaxEvents[0],
   maxEvents: minMaxEvents[1],
 }
@@ -34,6 +41,12 @@ const partialAutoConfiguration = {
   //These are values that can be automatically generated
   randomSeed: '',
   //Add other configuration options here
+  configurationName: 'Default',
+  maximumTraces: 1,
+
+  terminationType: {
+    type: TerminationType.Standard,
+  } as StandardConfigurationTerminationType,
 }
 export const defaultConfiguration = {
   ...partialAutoConfiguration,
@@ -43,7 +56,16 @@ export const defaultConfiguration = {
 export const SimulationConfiguration: React.FC<
   SimulationConfigurationProperty
 > = ({ onUpdate }) => {
-  const [config, setConfig] = useState<Configuration>(defaultConfiguration)
+  const selector = useCallback(
+    (state: EditorState) => ({
+      config: state.config,
+      setConfig: state.setConfig,
+    }),
+    []
+  )
+  const { config, setConfig } = useEditorStore(selector, shallow)
+
+  //const [config, setConfig] = useState<Configuration>(defaultConfiguration)
 
   function UpdateConfig(): void {
     const configuration: Configuration = {

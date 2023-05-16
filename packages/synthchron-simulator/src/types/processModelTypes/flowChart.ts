@@ -1,21 +1,22 @@
-import { ProcessModelType } from '../processModel'
+import {
+  AbstractEdge,
+  AbstractNode,
+  ProcessModelType,
+} from '../processModelTypes'
 
-export interface FlowchartProcessModel {
+export type FlowchartProcessModel = {
   type: ProcessModelType.Flowchart
   nodes: FlowchartNode[]
   edges: FlowchartEdge[]
   initialNode: string
 }
 
-export interface FlowchartNode {
+export type FlowchartNode = AbstractNode & {
   type: 'terminal' | 'decision'
-  identifier: string
   name?: string
 }
 
-export interface FlowchartEdge {
-  source: string
-  target: string
+export type FlowchartEdge = AbstractEdge & {
   weight: number
   name?: string
 }

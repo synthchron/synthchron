@@ -1,4 +1,4 @@
-import { ProcessModelType } from '../types/processModel'
+import { ProcessModelType } from '../types/processModelTypes'
 import { PetriNetProcessModel } from '../types/processModelTypes/petriNetTypes'
 
 // This petri net should simulate as follows:
@@ -40,7 +40,7 @@ export const petriNet1: PetriNetProcessModel = {
   acceptingExpressions: [
     {
       name: 'accepting',
-      expression: 'pp1 >= 1 and pp2 >= 1',
+      expression: 'p1 >= 1 and p2 >= 1',
     },
   ],
 }
@@ -95,7 +95,7 @@ export const petriNet2: PetriNetProcessModel = {
   acceptingExpressions: [
     {
       name: 'accepting',
-      expression: 'pp1 >= 1 and pp2 >= 1 and pp3 >= 1',
+      expression: 'p1 >= 1 and p2 >= 1 and p3 >= 1',
     },
   ],
 }
@@ -137,7 +137,7 @@ export const petriNet3: PetriNetProcessModel = {
   acceptingExpressions: [
     {
       name: 'accepting',
-      expression: 'pp1 mod 2 == 0 and pp2 mod 2 == 1',
+      expression: 'p1 mod 2 == 0 and p2 mod 2 == 1',
     },
   ],
 }

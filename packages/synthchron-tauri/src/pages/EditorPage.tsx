@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 
 import { Alert, Box, Snackbar } from '@mui/material'
-import _ from 'lodash'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useBeforeUnload, useParams } from 'react-router-dom'
+import { ReactFlowProvider, useOnViewportChange, useReactFlow } from 'reactflow'
 
 import { CustomAppBar } from '../components/CustomAppBar'
 import { usePersistentStore } from '../components/common/persistentStore'
@@ -11,7 +11,14 @@ import { SidebarsWrapper } from '../components/editor/SidebarsWrapper'
 import { useEditorStore } from '../components/editor/editorStore/flowStore'
 import { petriNetFlowConfig } from '../components/editor/processModels/petriNet/petriNetFlowConfig'
 
-export const EditorPage = () => {
+// Wrapper to provide the react flow interface
+export const EditorPage = () => (
+  <ReactFlowProvider>
+    <EditorPageWrapped />
+  </ReactFlowProvider>
+)
+
+export const EditorPageWrapped = () => {
   const { projectId } = useParams<{ projectId: string }>()
   const open = usePersistentStore((state) => state.saving)
   const doneSaving = usePersistentStore((state) => state.doneSaving)
@@ -21,7 +28,12 @@ export const EditorPage = () => {
   const initializeFlow = useEditorStore((state) => state.initializeFlow)
   const saveFlow = useEditorStore((state) => state.saveFlow)
   const sessionStart = useEditorStore((state) => state.sessionStart)
+  const setViewport = useEditorStore((state) => state.setViewPort)
+  const disconnectRoom = useEditorStore((state) => state.disconnectRoom)
 
+  const reactFlow = useReactFlow()
+
+  // ############# Autosave #############
   useBeforeUnload(() => {
     // This autosaves in case we leave the application without saving
     saveFlow()
@@ -30,11 +42,13 @@ export const EditorPage = () => {
   useEffect(
     // This autosaves in case we leave the editor page without saving
     () => () => {
+      disconnectRoom()
       saveFlow()
     },
     []
   )
 
+  // ############# Hotkeys #############
   useHotkeys(
     'ctrl+s',
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -45,17 +59,29 @@ export const EditorPage = () => {
     [saveFlow, projectId]
   )
 
+  // ############# Model Initialization #############
   useEffect(() => {
     if (projectId === undefined) return // User has opened the editor window directly
     const processModelConfig = petriNetFlowConfig // TODO: Chose processFlowConfig dynamicly
+    const project = projects[projectId]
     const { nodes, edges, meta } = processModelConfig.generateFlow(
-      projects[projectId].projectModel
-    )
-    if (Date.parse(projects[projectId].lastOpened) < sessionStart + 1000) {
+      project.projectModel
+    ) // Get react flow compatible data
+    initializeFlow(nodes, edges, meta, processModelConfig, projectId) // Load the flow into zustand
+
+    if (Date.parse(project.lastOpened) < sessionStart + 1000) {
+      // If the project was opened before the session started, update the lastOpened date so it is part of the session
       updateProject(projectId, { lastOpened: new Date().toJSON() })
     }
-    initializeFlow(nodes, edges, meta, processModelConfig, projectId)
+
+    if (project.projectModel.viewPort !== undefined) {
+      // If there is a saved viewport, load it
+      reactFlow.setViewport(project.projectModel.viewPort)
+      setViewport(project.projectModel.viewPort)
+    }
   }, [projectId])
+
+  useOnViewportChange({ onEnd: setViewport }) // Store the viewport, for saving it later
 
   return (
     <Box
