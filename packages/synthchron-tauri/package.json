@@ -31,7 +31,7 @@
     "react-detect-offline": "^2.4.5",
     "react-dom": "^18.2.0",
     "react-hotkeys-hook": "^4.4.0",
-    "react-router-dom": "^6.9.0",
+    "react-router-dom": "^6.11.1",
     "reactflow": "^11.7.0",
     "seedrandom": "^3.0.5",
     "styled-components": "^5.3.10",
