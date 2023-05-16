@@ -11,6 +11,10 @@ import {
 } from '@mui/material'
 import { shallow } from 'zustand/shallow'
 
+import {
+  StandardConfigurationTerminationType,
+  TerminationType,
+} from '@synthchron/simulator'
 import { Configuration } from '@synthchron/simulator'
 
 import { EditorState, useEditorStore } from '../editorStore/flowStore'
@@ -37,6 +41,12 @@ const partialAutoConfiguration = {
   //These are values that can be automatically generated
   randomSeed: '',
   //Add other configuration options here
+  configurationName: 'Default',
+  maximumTraces: 1,
+
+  terminationType: {
+    type: TerminationType.Standard,
+  } as StandardConfigurationTerminationType,
 }
 export const defaultConfiguration = {
   ...partialAutoConfiguration,
