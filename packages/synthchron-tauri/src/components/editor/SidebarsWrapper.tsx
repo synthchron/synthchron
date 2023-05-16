@@ -129,6 +129,7 @@ export const SidebarsWrapper = () => {
                   : '',
               backgroundColor: 'white',
               transitionDuration: '0.25s',
+              overflow: 'auto',
             }}
           >
             <LeftSidebar />
@@ -164,6 +165,7 @@ export const SidebarsWrapper = () => {
                   : '',
               backgroundColor: 'white',
               transitionDuration: '0.25s',
+              overflow: 'auto',
             }}
           >
             <RightSidebar />
