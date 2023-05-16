@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded'
 import AddCircleIcon from '@mui/icons-material/AddCircle'
@@ -16,17 +16,38 @@ import { Link } from 'react-router-dom'
 
 import NewProjectModal from './NewProjectModal'
 import { usePersistentStore } from './common/persistentStore'
+import { PreventExitModel } from './editor/PreventExitModel'
 import { useEditorStore } from './editor/editorStore/flowStore'
 
 const RECENT_PROJECTS_LIMIT = 5 // number of projects to show in the recent projects list
-//const RECENT_PROJECTS_TIMEOUT = 60 * 60 * 1000 // time in milliseconds that projects are still considered recent
 
 export const CustomAppBar: React.FC = () => {
   const [isNewProjectModalOpen, setNewProjectModalOpen] = useState(false)
 
+  const [
+    isPreventCollaborationExitModelOpen,
+    setPreventCollaborationExitModelOpen,
+  ] = useState(false)
+
   const projects = usePersistentStore((state) => state.projects)
 
   const sessionStart = useEditorStore((state) => state.sessionStart)
+
+  const isCollaborating = useEditorStore(
+    (state) => state.yWebRTCProvider !== null
+  )
+
+  const preventExit = useCallback(
+    (
+      e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement, MouseEvent>
+    ) => {
+      if (isCollaborating) {
+        e.preventDefault()
+        setPreventCollaborationExitModelOpen(true)
+      }
+    },
+    [isCollaborating]
+  )
 
   const pages = [
     {
@@ -66,6 +87,7 @@ export const CustomAppBar: React.FC = () => {
             noWrap
             to='/'
             component={Link}
+            onClick={preventExit}
             sx={{
               mr: 2,
               display: 'flex',
@@ -83,9 +105,7 @@ export const CustomAppBar: React.FC = () => {
             {pages.map((page) => (
               <Button
                 key={page.name}
-                onClick={() => {
-                  // Do nothing
-                }}
+                onClick={preventExit}
                 sx={{
                   my: 2,
                   alignSelf: 'right',
@@ -113,6 +133,7 @@ export const CustomAppBar: React.FC = () => {
             {projectButtons.map((page) => (
               <Button
                 key={page.name}
+                onClick={preventExit}
                 disabled={page.href === window.location.pathname}
                 sx={{
                   my: 2,
@@ -133,7 +154,10 @@ export const CustomAppBar: React.FC = () => {
               color: 'white',
             }}
             aria-label='create a new project'
-            onClick={() => {
+            onClick={(e) => {
+              preventExit(e)
+              // TODO: Check manually if this should be prevented
+              if (isCollaborating) return
               setNewProjectModalOpen(true)
             }}
           >
@@ -152,6 +176,7 @@ export const CustomAppBar: React.FC = () => {
               color: 'white',
               display: 'block',
             }}
+            onClick={preventExit}
             to={'/debug'}
             component={Link}
           >
@@ -165,6 +190,12 @@ export const CustomAppBar: React.FC = () => {
           setNewProjectModalOpen(false)
         }}
         redirect
+      />
+      <PreventExitModel
+        open={isPreventCollaborationExitModelOpen}
+        onClose={() => {
+          setPreventCollaborationExitModelOpen(false)
+        }}
       />
     </AppBar>
   )
