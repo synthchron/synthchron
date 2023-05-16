@@ -2,7 +2,7 @@ import React from 'react'
 import { useCallback, useRef, useState } from 'react'
 
 import { Box, Button } from '@mui/material'
-import { Allotment } from 'allotment'
+import { Allotment, AllotmentHandle, LayoutPriority } from 'allotment'
 import { ReactFlowInstance, ReactFlowProvider } from 'reactflow'
 import { shallow } from 'zustand/shallow'
 
@@ -65,6 +65,25 @@ export const SidebarsWrapper = () => {
     }
     addNode(newNode)
   }
+  const sidebarMinSize = 30
+  const leftSidebarMaxSize = 300
+  const rightSidebarMaxSize = 400
+  const [leftSidebarPreferredSize, setLeftSidebarPreferredSize] =
+    useState(leftSidebarMaxSize)
+  const [rightSidebarPreferredSize, setRightSidebarPreferredSize] =
+    useState(rightSidebarMaxSize)
+
+  const getResetSidebarSize = (
+    currentSize: number,
+    maxSize: number,
+    minSize: number
+  ) => {
+    if (currentSize === minSize) {
+      return maxSize
+    }
+    return minSize
+  }
+  const ref = useRef<AllotmentHandle>(null)
 
   return (
     <Box
@@ -76,12 +95,50 @@ export const SidebarsWrapper = () => {
         flexGrow: 1,
       }}
     >
-        <Allotment>
-          <Allotment.Pane>
-          <LeftSidebar />
-          </Allotment.Pane>
+      <Allotment
+        ref={ref}
+        proportionalLayout={false}
+        onChange={(sizes) => {
+          console.log(sizes)
+          const leftSidebarSize = sizes[0]
+          const rightSidebarSize = sizes[2]
+          const newLeftSidebarPreferredSize = getResetSidebarSize(
+            leftSidebarSize,
+            leftSidebarMaxSize,
+            sidebarMinSize
+          )
+          const newRightSidebarPreferredSize = getResetSidebarSize(
+            rightSidebarSize,
+            rightSidebarMaxSize,
+            sidebarMinSize
+          )
+          setLeftSidebarPreferredSize(newLeftSidebarPreferredSize)
+          setRightSidebarPreferredSize(newRightSidebarPreferredSize)
+          console.log(leftSidebarPreferredSize, rightSidebarPreferredSize)
+        }}
+      >
+        <Allotment.Pane
+          maxSize={leftSidebarMaxSize}
+          preferredSize={leftSidebarPreferredSize}
+          priority={LayoutPriority.Low}
+        >
+          <div
+            style={{
+              height: '100%',
+              filter:
+                leftSidebarPreferredSize === leftSidebarMaxSize
+                  ? 'brightness(0.7) blur(5px)'
+                  : '',
+              backgroundColor: 'white',
+              transitionDuration: '0.25s',
+              // leftSidebarPreferredSize === 30 ? 'grey' : 'initial',
+            }}
+          >
+            <LeftSidebar />
+          </div>
+        </Allotment.Pane>
 
-          <Allotment.Pane>
+        <Allotment.Pane priority={LayoutPriority.High}>
           <Box
             sx={{
               flexGrow: 1,
@@ -95,11 +152,28 @@ export const SidebarsWrapper = () => {
               onDragOver={onDragOver}
             />
           </Box>
-          </Allotment.Pane>
-          <Allotment.Pane>
-          <RightSidebar />
-          </Allotment.Pane>
-        </Allotment>
+        </Allotment.Pane>
+        <Allotment.Pane
+          maxSize={rightSidebarMaxSize}
+          preferredSize={rightSidebarPreferredSize}
+          priority={LayoutPriority.Low}
+        >
+          <div
+            style={{
+              height: '100%',
+              filter:
+                rightSidebarPreferredSize === rightSidebarMaxSize
+                  ? 'brightness(0.7) blur(5px)'
+                  : '',
+              backgroundColor: 'white',
+              transitionDuration: '0.25s',
+              // leftSidebarPreferredSize === 30 ? 'grey' : 'initial',
+            }}
+          >
+            <RightSidebar />
+          </div>
+        </Allotment.Pane>
+      </Allotment>
     </Box>
   )
 }
