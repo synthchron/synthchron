@@ -1,20 +1,33 @@
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
+import { Configuration } from '@synthchron/simulator'
+
 import { Project } from '../../types/project'
 
 export interface PersistentState {
+  // Project storage
   projects: { [id: string]: Project }
-  saving: boolean
-  doneSaving: () => void
   addProject: (project: Project) => string
   removeProject: (id: string) => void
   updateProject: (id: string, project: Partial<Project>) => void
+  // Saving project state
+  saving: boolean
+  doneSaving: () => void
+  // Configuration storage
+  configurations: Configuration[]
+  addConfiguration: (configuration: Configuration) => void
+  removeConfiguration: (name: string) => void
+  updateConfiguration: (
+    sourcename: string,
+    targetname: string,
+    updatedConfiguration: Partial<Configuration>
+  ) => void
 }
 
 export const usePersistentStore = create<PersistentState>()(
   devtools(
-    persist(
+    persist<PersistentState>(
       (set, get) => ({
         projects: {}, // Initial state
         saving: false,
@@ -36,7 +49,6 @@ export const usePersistentStore = create<PersistentState>()(
               },
             },
           }))
-
           return id.toString()
         },
         removeProject: (id: string) => {
@@ -61,6 +73,44 @@ export const usePersistentStore = create<PersistentState>()(
                 lastEdited: new Date().toJSON(),
               },
             },
+          }))
+        },
+        configurations: [],
+        addConfiguration: (configuration: Configuration) => {
+          set((state) => ({
+            configurations: [
+              ...state.configurations,
+              {
+                ...configuration,
+                created: new Date().toJSON(),
+              },
+            ],
+          }))
+        },
+        removeConfiguration: (name: string) => {
+          set((state) => ({
+            configurations: state.configurations.filter(
+              (configuration) => configuration.configurationName !== name
+            ),
+          }))
+        },
+        updateConfiguration: (
+          sourcename: string,
+          targetname: string,
+          updatedConfiguration: Partial<Configuration>
+        ) => {
+          set((state) => ({
+            configurations: state.configurations.map((configuration) => {
+              if (configuration.configurationName === sourcename) {
+                return {
+                  ...configuration,
+                  ...updatedConfiguration,
+                  configurationName: targetname,
+                  lastEdited: new Date().toJSON(),
+                }
+              }
+              return configuration
+            }),
           }))
         },
       }),
