@@ -72,7 +72,6 @@ export const SidebarsWrapper = () => {
     useState(leftSidebarMaxSize)
   const [rightSidebarPreferredSize, setRightSidebarPreferredSize] =
     useState(rightSidebarMaxSize)
-
   const getResetSidebarSize = (
     currentSize: number,
     maxSize: number,
@@ -98,8 +97,8 @@ export const SidebarsWrapper = () => {
       <Allotment
         ref={ref}
         proportionalLayout={false}
+        defaultSizes={[leftSidebarMaxSize, 1, rightSidebarMaxSize]}
         onChange={(sizes) => {
-          console.log(sizes)
           const leftSidebarSize = sizes[0]
           const rightSidebarSize = sizes[2]
           const newLeftSidebarPreferredSize = getResetSidebarSize(
@@ -114,7 +113,6 @@ export const SidebarsWrapper = () => {
           )
           setLeftSidebarPreferredSize(newLeftSidebarPreferredSize)
           setRightSidebarPreferredSize(newRightSidebarPreferredSize)
-          console.log(leftSidebarPreferredSize, rightSidebarPreferredSize)
         }}
       >
         <Allotment.Pane
@@ -131,7 +129,6 @@ export const SidebarsWrapper = () => {
                   : '',
               backgroundColor: 'white',
               transitionDuration: '0.25s',
-              // leftSidebarPreferredSize === 30 ? 'grey' : 'initial',
             }}
           >
             <LeftSidebar />
@@ -167,7 +164,6 @@ export const SidebarsWrapper = () => {
                   : '',
               backgroundColor: 'white',
               transitionDuration: '0.25s',
-              // leftSidebarPreferredSize === 30 ? 'grey' : 'initial',
             }}
           >
             <RightSidebar />
