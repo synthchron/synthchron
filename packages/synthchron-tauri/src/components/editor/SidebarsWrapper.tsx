@@ -1,9 +1,9 @@
 import React from 'react'
 import { useCallback, useRef, useState } from 'react'
 
-import { Box, Button } from '@mui/material'
+import { Box } from '@mui/material'
 import { Allotment, AllotmentHandle, LayoutPriority } from 'allotment'
-import { ReactFlowInstance, ReactFlowProvider } from 'reactflow'
+import { ReactFlowInstance } from 'reactflow'
 import { shallow } from 'zustand/shallow'
 
 // 👇 Importing components
