@@ -9,6 +9,7 @@ import {
   petriNet3,
 } from '../src/model-examples/petriNetExamples'
 import { petriNetEngine } from '../src/process-engines/petrinet-engine'
+import { TerminationType } from '../src/types/simulationTypes'
 
 describe('Deterministic Process Models', () => {
   describe('Petri Net 1', () => {
@@ -29,7 +30,11 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet1,
-          { endOnAcceptingStateProbability: 1, randomSeed: '42' },
+          {
+            endOnAcceptingStateProbability: 1,
+            randomSeed: '42',
+            terminationType: { type: TerminationType.Standard },
+          },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -50,7 +55,11 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet1,
-          { endOnAcceptingStateProbability: 1, randomSeed: '42' },
+          {
+            endOnAcceptingStateProbability: 1,
+            randomSeed: '42',
+            terminationType: { type: TerminationType.Standard },
+          },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -71,7 +80,11 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet1,
-          { endOnAcceptingStateProbability: 0, randomSeed: '42' },
+          {
+            endOnAcceptingStateProbability: 0,
+            randomSeed: '42',
+            terminationType: { type: TerminationType.Standard },
+          },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -96,7 +109,12 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet1,
-          { maxEvents: 0, randomSeed: '42', endOnAcceptingStateProbability: 0 },
+          {
+            maxEvents: 0,
+            randomSeed: '42',
+            endOnAcceptingStateProbability: 0,
+            terminationType: { type: TerminationType.Standard },
+          },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -112,7 +130,12 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet1,
-          { maxEvents: 0, randomSeed: '42', endOnAcceptingStateProbability: 0 },
+          {
+            maxEvents: 0,
+            randomSeed: '42',
+            endOnAcceptingStateProbability: 0,
+            terminationType: { type: TerminationType.Standard },
+          },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -128,7 +151,12 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet1,
-          { maxEvents: 1, randomSeed: '42', endOnAcceptingStateProbability: 0 },
+          {
+            maxEvents: 1,
+            randomSeed: '42',
+            endOnAcceptingStateProbability: 0,
+            terminationType: { type: TerminationType.Standard },
+          },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -164,7 +192,11 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet2,
-          { endOnAcceptingStateProbability: 1, randomSeed: '42' },
+          {
+            endOnAcceptingStateProbability: 1,
+            randomSeed: '42',
+            terminationType: { type: TerminationType.Standard },
+          },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -185,7 +217,11 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet2,
-          { endOnAcceptingStateProbability: 0, randomSeed: '42' },
+          {
+            endOnAcceptingStateProbability: 0,
+            randomSeed: '42',
+            terminationType: { type: TerminationType.Standard },
+          },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -210,7 +246,12 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet2,
-          { maxEvents: 0, randomSeed: '42', endOnAcceptingStateProbability: 0 },
+          {
+            maxEvents: 0,
+            randomSeed: '42',
+            endOnAcceptingStateProbability: 0,
+            terminationType: { type: TerminationType.Standard },
+          },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -226,7 +267,12 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet2,
-          { maxEvents: 1, randomSeed: '42', endOnAcceptingStateProbability: 0 },
+          {
+            maxEvents: 1,
+            randomSeed: '42',
+            endOnAcceptingStateProbability: 0,
+            terminationType: { type: TerminationType.Standard },
+          },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -260,7 +306,11 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet3,
-          { endOnAcceptingStateProbability: 1, randomSeed: '42' },
+          {
+            endOnAcceptingStateProbability: 1,
+            randomSeed: '42',
+            terminationType: { type: TerminationType.Standard },
+          },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -275,7 +325,11 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet3,
-          { endOnAcceptingStateProbability: 0, randomSeed: '42' },
+          {
+            endOnAcceptingStateProbability: 0,
+            randomSeed: '42',
+            terminationType: { type: TerminationType.Standard },
+          },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -299,7 +353,12 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet3,
-          { minEvents: 0, randomSeed: '42', endOnAcceptingStateProbability: 0 },
+          {
+            minEvents: 0,
+            randomSeed: '42',
+            endOnAcceptingStateProbability: 0,
+            terminationType: { type: TerminationType.Standard },
+          },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -323,7 +382,12 @@ describe('Deterministic Process Models', () => {
       expect(
         simulateWithEngine(
           petriNet3,
-          { maxEvents: 3, endOnAcceptingStateProbability: 1, randomSeed: '42' },
+          {
+            maxEvents: 3,
+            endOnAcceptingStateProbability: 1,
+            randomSeed: '42',
+            terminationType: { type: TerminationType.Standard },
+          },
           petriNetEngine
         )
       ).to.deep.equal({
@@ -343,7 +407,11 @@ describe('Deterministic Process Models', () => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         simulateWithEngine(
           flowchart1,
-          { randomSeed: '42', endOnAcceptingStateProbability: 0 },
+          {
+            randomSeed: '42',
+            endOnAcceptingStateProbability: 0,
+            terminationType: { type: TerminationType.Standard },
+          },
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           petriNetEngine as any
         )

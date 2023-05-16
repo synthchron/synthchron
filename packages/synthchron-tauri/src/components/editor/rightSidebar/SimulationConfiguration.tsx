@@ -10,6 +10,10 @@ import {
   Typography,
 } from '@mui/material'
 
+import {
+  StandardConfigurationTerminationType,
+  TerminationType,
+} from '@synthchron/simulator'
 import { Configuration } from '@synthchron/simulator'
 
 enum rangeSliderElement {
@@ -34,6 +38,12 @@ const partialAutoConfiguration = {
   //These are values that can be automatically generated
   randomSeed: '',
   //Add other configuration options here
+  configurationName: 'Default',
+  maximumTraces: 1,
+
+  terminationType: {
+    type: TerminationType.Standard,
+  } as StandardConfigurationTerminationType,
 }
 export const defaultConfiguration = {
   ...partialAutoConfiguration,
