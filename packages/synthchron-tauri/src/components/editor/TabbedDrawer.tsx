@@ -2,23 +2,17 @@ import { useState } from 'react'
 
 import { Box, Tab, Tabs } from '@mui/material'
 
-import { DrawerWrapper } from './DrawerWrapper'
-
 interface DrawerProps {
   side: 'left' | 'right'
   children: React.ReactNode[]
   tabs: string[]
 }
 
-export const TabbedDrawer: React.FC<DrawerProps> = ({
-  children,
-  side,
-  tabs,
-}) => {
+export const TabbedDrawer: React.FC<DrawerProps> = ({ children, tabs }) => {
   const [value, setValue] = useState(0)
 
   return (
-    <DrawerWrapper side={side}>
+    <div>
       <Box
         sx={{
           borderBottom: 1,
@@ -36,7 +30,7 @@ export const TabbedDrawer: React.FC<DrawerProps> = ({
           {child}
         </TabPanel>
       ))}
-    </DrawerWrapper>
+    </div>
   )
 }
 
