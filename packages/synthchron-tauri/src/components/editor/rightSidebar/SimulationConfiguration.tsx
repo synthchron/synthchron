@@ -12,7 +12,7 @@ import {
 
 import {
   StandardConfigurationTerminationType,
-  terminationType,
+  TerminationType,
 } from '@synthchron/simulator'
 import { Configuration } from '@synthchron/simulator'
 
@@ -39,9 +39,10 @@ const partialAutoConfiguration = {
   randomSeed: '',
   //Add other configuration options here
   configurationName: 'Default',
+  maximumTraces: 1,
 
   terminationType: {
-    type: terminationType.Standard,
+    type: TerminationType.Standard,
   } as StandardConfigurationTerminationType,
 }
 export const defaultConfiguration = {
