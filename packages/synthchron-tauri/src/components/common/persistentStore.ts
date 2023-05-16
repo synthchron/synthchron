@@ -79,7 +79,11 @@ export const usePersistentStore = create<PersistentState>()(
         addConfiguration: (configuration: Configuration) => {
           set((state) => ({
             configurations: [
-              ...state.configurations,
+              ...state.configurations.filter(
+                (configuration) =>
+                  configuration.configurationName !==
+                  configuration.configurationName
+              ),
               {
                 ...configuration,
                 created: new Date().toJSON(),
