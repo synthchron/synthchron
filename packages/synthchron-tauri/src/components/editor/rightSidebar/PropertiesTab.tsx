@@ -1,22 +1,15 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback } from 'react'
 
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import {
-  Container,
-  Divider,
-  IconButton,
-  Paper,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Container, Stack, TextField, Typography } from '@mui/material'
 import { Edge, Node } from 'reactflow'
 import { shallow } from 'zustand/shallow'
 
 import { EditorState, useEditorStore } from '../editorStore/flowStore'
 import { FlowFieldsToDisplay, GetElementType } from '../processModels/FlowUtil'
+import { OtherProperty } from './CustomProperties/OtherProperties'
+import { LabelProperty } from './CustomProperties/PlaceLabelProperty'
 
-type NodeDataFields = {
+export type NodeDataFields = {
   //List of fields that can be updated from property window.
   //They are all under the data field of both nodes and edges.
   label: string
@@ -47,23 +40,13 @@ export const PropertiesTab: React.FC = () => {
     (state: EditorState) => ({
       selectedElement: state.selectedElement,
       selectElement: state.selectElement,
-      changeIdOfSelectedElement: state.changeIdOfSelectedElement,
+      changeSelectedPlaceLabel: state.changeSelectedPlaceLabel,
     }),
     []
   )
 
-  const { selectedElement, selectElement, changeIdOfSelectedElement } =
+  const { selectedElement, selectElement, changeSelectedPlaceLabel } =
     useEditorStore(selector, shallow)
-  const [idValue, setIdValue] = useState(selectedElement?.id ?? '')
-  const prevNodeRef = useRef(idValue)
-
-  useEffect(() => {
-    //When new node is selected, change the value of the ID-textfield
-    if (selectedElement && selectedElement?.id !== idValue) {
-      setIdValue(selectedElement.id)
-      prevNodeRef.current = selectedElement.id
-    }
-  }, [selectedElement])
 
   const updateNodeFields = (fields: Partial<NodeDataFields>) => {
     if (selectedElement) {
@@ -112,95 +95,24 @@ export const PropertiesTab: React.FC = () => {
             variant='standard'
           ></TextField>
         </div>,
-        <div key='NodeID'>
-          <Paper
-            elevation={1}
-            sx={{
-              p: '2px 20px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <TextField
-              sx={{ flex: 1 }}
-              defaultValue={selectedElement.id}
-              variant='standard'
-              label={'ID'}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                event.target.value
-                  ? changeIdOfSelectedElement(event.target.value)
-                  : null
-              }
-              //onKeyDown={Call ID Change}
-            ></TextField>
-            <Divider sx={{ height: 28, m: 2 }} orientation='vertical' />
-            <IconButton
-              //onClick={() => console.log('Awesome')}
-              component='button'
-            >
-              <CheckCircleIcon transform='scale(1.3)' color='primary' />
-            </IconButton>
-          </Paper>
-        </div>,
       ].concat(
         Object.entries(selectedElement.data)
           .filter(([key, _value]) => fieldsToDisplay.includes(key))
           .map(([key, value]) => (
             <div key={key}>
-              <TextField
-                label={key}
-                variant='outlined'
-                type={NodeDataFieldsTypesAsStrings(key)}
-                value={value}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  if (NodeDataFieldsTypesAsStrings(key) === 'number') {
-                    if (
-                      Number.isNaN(parseInt(event.target.value)) &&
-                      !(event.target.value === '')
-                    ) {
-                      event.preventDefault
-                    } else {
-                      const resNumber = Number(event.target.value) * 1
-                      updateNodeFields({
-                        [key]: resNumber,
-                      })
-                      event.target.value = resNumber.toString()
-                    }
-                  } else {
-                    updateNodeFields({ [key]: event.target.value })
-                  }
-                }}
-                /*{...(key === 'label' && selectedElement.type === 'Place'
-                  ? {
-                      onChange: (
-                        event: React.ChangeEvent<HTMLInputElement>
-                      ) => {
-                        console.log('test')
-                      },
-                    }
-                  : {
-                      onChange: (
-                        event: React.ChangeEvent<HTMLInputElement>
-                      ) => {
-                        if (NodeDataFieldsTypesAsStrings(key) === 'number') {
-                          if (
-                            Number.isNaN(parseInt(event.target.value)) &&
-                            !(event.target.value === '')
-                          ) {
-                            event.preventDefault
-                          } else {
-                            const resNumber = Number(event.target.value) * 1
-                            updateNodeFields({
-                              [key]: resNumber,
-                            })
-                            event.target.value = resNumber.toString()
-                          }
-                        } else {
-                          updateNodeFields({ [key]: event.target.value })
-                        }
-                      },
-                    })}*/
-              ></TextField>
+              {key === 'label' && selectedElement.type === 'Place' ? (
+                <LabelProperty
+                  value={value as string}
+                  changeSelectedPlaceLabel={changeSelectedPlaceLabel}
+                />
+              ) : (
+                <OtherProperty
+                  value={value as string}
+                  NonReactKey={key}
+                  type={NodeDataFieldsTypesAsStrings(key)}
+                  updateNodeFields={updateNodeFields}
+                />
+              )}
             </div>
           ))
       )

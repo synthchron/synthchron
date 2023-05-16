@@ -29,6 +29,7 @@ export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = ({
   id,
   label = 0,
 }) => {
+  // !Id here refers to the label of the node
   // There are a lot of +1's and +2's to account for strokewidth
   const { diameter, color } = config
 
@@ -170,7 +171,7 @@ export const PlaceNode: React.FC<NodeProps<PetriNetPlaceData>> = ({
       <PlaceNodeShape
         strokeWidth={selected ? 2 : 1}
         label={data?.tokens}
-        id={id}
+        id={data?.label}
       />
     </div>
   )

@@ -14,7 +14,9 @@ import {
   ResetActivityType,
 } from '../types/simulationTypes'
 
-type PetriNetState = Map<string, number>
+//import { stat } from 'fs'
+
+type PetriNetState = Map<string, [string, number]> //ID, Label, weight
 
 type ProcessModel = PetriNetProcessModel
 type State = PetriNetState
@@ -24,14 +26,28 @@ const isAccepting: IsAcceptingType<ProcessModel, State, ActivityIdentifier> = (
   model,
   state
 ) => {
+  const errorStore: string[] = []
   const reason = model.acceptingExpressions.find(({ expression }) => {
     const exp = compileExpression(expression)
-    return exp(
+    const resultReason = exp(
       Object.fromEntries(
-        Array.from(state.entries()).map(([key, value]) => [`${key}`, value])
+        Array.from(state.entries()).map(([_key, [name, value]]) => [
+          //Should key be used here?
+          `${name}`,
+          value,
+        ])
       )
     )
+    if (resultReason.toString().startsWith('ReferenceError:')) {
+      errorStore.push(resultReason.toString())
+    } else {
+      resultReason
+    }
   })
+  if (errorStore.length !== 0) {
+    throw errorStore
+  }
+
   if (reason === undefined) {
     return { isAccepting: false }
   }
@@ -52,14 +68,21 @@ const getEnabled: GetEnabledType<ProcessModel, State, ActivityIdentifier> = (
           // We only care about the edges that have the transition as target
           .filter((edge) => edge.target === transition.identifier)
           // We only care about the edges that have enough tokens in the source place
-          .filter((edge) => (state.get(edge.source) || 0) >= edge.multiplicity)
+          .filter(
+            (edge) => (state.get(edge.source)[1] || 0) >= edge.multiplicity
+            //[1] gets the value of the node
+          )
         return (
           enabledEdges.length ===
           model.edges.filter((edge) => edge.target === transition.identifier)
             .length
         )
       })
-      .map((transition) => [transition.identifier, transition.weight])
+      .map((transition) => [
+        transition.identifier,
+        transition.name,
+        transition.weight,
+      ])
   )
 
 const executeActivity: ExecuteActivityType<
@@ -88,7 +111,7 @@ const executeActivity: ExecuteActivityType<
     ) // Only places that are source of the activity
     .forEach((place) => {
       const newWeight =
-        (newState.get(place.identifier) || 0) -
+        (newState.get(place.identifier)[1] || 0) -
         model.edges.filter(
           (edge) => edge.source === place.identifier && edge.target === activity
         )[0].multiplicity
@@ -98,7 +121,7 @@ const executeActivity: ExecuteActivityType<
           `Attempted activities ${activity} with not enough tokens in place ${place.identifier}}`
         )
 
-      newState.set(place.identifier, newWeight)
+      newState.set(place.identifier, [place.name, newWeight])
     })
 
   // Add tokens to target places
@@ -113,8 +136,9 @@ const executeActivity: ExecuteActivityType<
       const edgeMultiplicity = model.edges.filter(
         (edge) => edge.target === place.identifier && edge.source === activity
       )[0].multiplicity
-      const newWeight = (newState.get(place.identifier) || 0) + edgeMultiplicity
-      newState.set(place.identifier, newWeight)
+      const newWeight =
+        (newState.get(place.identifier)[1] || 0) + edgeMultiplicity
+      newState.set(place.identifier, [place.name, newWeight])
     })
   return newState
 }
@@ -124,10 +148,12 @@ const resetActivity: ResetActivityType<
   State,
   ActivityIdentifier
 > = (model) => {
-  const newState = new Map<string, number>()
+  const newState: Map<string, [string, number]> = new Map() // PetriNetState
   model.nodes
     .filter((node): node is PetriNetPlace => node.type === 'place')
-    .forEach((place) => newState.set(place.identifier, place.amountOfTokens))
+    .forEach((place) =>
+      newState.set(place.identifier, [place.name, place.amountOfTokens])
+    )
   return newState
 }
 

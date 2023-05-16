@@ -20,7 +20,7 @@ const getNodeFromLabel = (nodes: Node[], label: string) => {
 export type FlowSlice = {
   selectedElement: Node | Edge | undefined
   selectElement: (elem: Node | Edge | undefined) => void
-  changeIdOfSelectedElement: (newID: string) => boolean
+  changeSelectedPlaceLabel: (newLabel: string, oldLabel: string) => boolean
   onNodesChange: OnNodesChange
   onEdgesChange: OnEdgesChange
   onConnect: OnConnect
@@ -86,7 +86,6 @@ export const createFlowSlice: StateCreator<EditorState, [], [], FlowSlice> = (
             data: {
               ...elem.data,
             },
-            id: elem.id,
           })
         }
       } else if (elemType == 'edge') {
@@ -98,25 +97,36 @@ export const createFlowSlice: StateCreator<EditorState, [], [], FlowSlice> = (
             data: {
               ...elem.data,
             },
-            id: elem.id,
           })
         }
       }
     }
   },
-  changeIdOfSelectedElement: (newID: string) => {
-    if (!(yDocState.nodesMap.get(newID) as Node) && get().selectedElement) {
-      yDocState.nodesMap.set(newID, {
-        ...(get().selectedElement as Node),
-        id: newID,
-      })
-      //Reselect element?
-      //Remeber handling transitions and edges
-      //Delete old node?
-      //Don't use ids :(
+  changeSelectedPlaceLabel: (newLabel: string, oldLabel: string) => {
+    if (newLabel === oldLabel) {
       return true
-    } else {
-      return false
     }
+
+    const nodesMap = get().yNodesMap
+    const labelAvailable = !Array.from(nodesMap.values())
+      .filter((node) => node.type === 'Place') //Allows transitions and places to share labels
+      .some((node) => node.data.label === newLabel)
+    const selectedELem = get().selectedElement
+
+    if (labelAvailable && selectedELem) {
+      const updatedNode = nodesMap.get(selectedELem.id) as Node
+      if (updatedNode) {
+        //Element is a node
+        nodesMap.set(selectedELem.id, {
+          ...updatedNode,
+          data: {
+            ...selectedELem.data,
+            label: newLabel,
+          },
+        })
+        return true
+      }
+    }
+    return false
   },
 })

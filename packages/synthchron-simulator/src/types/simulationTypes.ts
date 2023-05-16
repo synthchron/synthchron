@@ -10,6 +10,7 @@ export type Configuration = {
 // Process Engine Types
 
 export type Weight = number
+export type ActivityName = string
 // export type ActivityIdentifier = string
 
 export type AcceptingReason =
@@ -29,7 +30,7 @@ export type IsAcceptingType<ProcessModel, StateType, _ActivityIdentifier> = (
 export type GetEnabledType<ProcessModel, StateType, ActivityIdentifier> = (
   model: ProcessModel,
   state: StateType
-) => Set<[ActivityIdentifier, Weight]>
+) => Set<[ActivityIdentifier, ActivityName, Weight]>
 
 export type ExecuteActivityType<ProcessModel, StateType, ActivityIdentifier> = (
   model: ProcessModel,

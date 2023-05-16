@@ -34,25 +34,15 @@ export const createModelSlice: StateCreator<EditorState, [], [], ModelSlice> = (
   },
   processModelFlowConfig: petriNetFlowConfig, // TODO: Add switch on process model type from ydoc
   addNode: (node: Node) => {
-    const TypeLetterID = node.type === 'Place' ? 'p' : 't'
     const nodesMap = get().yNodesMap
     // Get new node id
     const newId =
-      TypeLetterID +
-      (Math.max(
+      Math.max(
         0,
         ...Array.from(nodesMap.values())
-          .map((node) =>
-            parseInt(
-              //Differentiate between places and transitions, so place ids are in order
-              node.id.charAt(0) === TypeLetterID
-                ? node.id.substring(1)
-                : node.id
-            )
-          )
+          .map((node) => parseInt(node.id))
           .filter((id) => !isNaN(id))
-      ) +
-        1)
+      ) + 1
     nodesMap.set(newId.toString(), {
       ...node,
       id: `${newId}`,
