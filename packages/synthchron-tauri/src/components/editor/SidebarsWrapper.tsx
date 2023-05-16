@@ -76,32 +76,30 @@ export const SidebarsWrapper = () => {
         flexGrow: 1,
       }}
     >
-      <ReactFlowProvider>
         <Allotment>
           <Allotment.Pane>
-            <LeftSidebar />
+          <LeftSidebar />
           </Allotment.Pane>
 
           <Allotment.Pane>
-            <Box
-              sx={{
-                flexGrow: 1,
-                height: '100%',
-              }}
-              ref={reactFlowWrapper}
-            >
-              <StateFlow
-                onInit={setReactFlowInstance}
-                onDrop={onDrop}
-                onDragOver={onDragOver}
-              />
-            </Box>
+          <Box
+            sx={{
+              flexGrow: 1,
+              height: '100%',
+            }}
+            ref={reactFlowWrapper}
+          >
+            <StateFlow
+              onInit={setReactFlowInstance}
+              onDrop={onDrop}
+              onDragOver={onDragOver}
+            />
+          </Box>
           </Allotment.Pane>
           <Allotment.Pane>
-            <RightSidebar />
+          <RightSidebar />
           </Allotment.Pane>
         </Allotment>
-      </ReactFlowProvider>
     </Box>
   )
 }
