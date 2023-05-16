@@ -1,10 +1,15 @@
 // tslint:disable: only-arrow-functions
 import { expect } from 'chai'
 
+import {
+  StandardConfigurationTerminationType,
+  TerminationType,
+  Trace,
+} from '@synthchron/simulator'
+
 import { main } from '../src'
-import {StandardConfigurationTerminationType, TerminationType, Trace} from "@synthchron/simulator";
-import {PostProcessingStepType} from "../src/types";
-import {postprocess} from "../src/postprocess";
+import { postprocess } from '../src/postprocess'
+import { PostProcessingStepType } from '../src/types'
 
 describe('Index module', function () {
   describe('expected behavior', function () {
