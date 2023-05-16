@@ -120,7 +120,6 @@ export const createFlowSlice: StateCreator<EditorState, [], [], FlowSlice> = (
         nodesMap.set(selectedELem.id, {
           ...updatedNode,
           data: {
-            ...selectedELem.data,
             label: newLabel,
           },
         })

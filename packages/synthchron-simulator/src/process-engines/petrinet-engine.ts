@@ -14,8 +14,6 @@ import {
   ResetActivityType,
 } from '../types/simulationTypes'
 
-//import { stat } from 'fs'
-
 type PetriNetState = Map<string, [string, number]> //ID, Label, weight
 
 type ProcessModel = PetriNetProcessModel
@@ -32,7 +30,6 @@ const isAccepting: IsAcceptingType<ProcessModel, State, ActivityIdentifier> = (
     const resultReason = exp(
       Object.fromEntries(
         Array.from(state.entries()).map(([_key, [name, value]]) => [
-          //Should key be used here?
           `${name}`,
           value,
         ])
@@ -111,6 +108,7 @@ const executeActivity: ExecuteActivityType<
     ) // Only places that are source of the activity
     .forEach((place) => {
       const newWeight =
+        //[1] gets the value of the node
         (newState.get(place.identifier)[1] || 0) -
         model.edges.filter(
           (edge) => edge.source === place.identifier && edge.target === activity
@@ -137,6 +135,7 @@ const executeActivity: ExecuteActivityType<
         (edge) => edge.target === place.identifier && edge.source === activity
       )[0].multiplicity
       const newWeight =
+        //[1] gets the value of the node
         (newState.get(place.identifier)[1] || 0) + edgeMultiplicity
       newState.set(place.identifier, [place.name, newWeight])
     })
