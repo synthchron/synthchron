@@ -2,7 +2,7 @@ import React from 'react'
 import { useCallback, useRef, useState } from 'react'
 
 import { Box, Button } from '@mui/material'
-import { SplitPane } from 'react-collapse-pane'
+import { Allotment } from 'allotment'
 import { ReactFlowInstance, ReactFlowProvider } from 'reactflow'
 import { shallow } from 'zustand/shallow'
 
@@ -12,6 +12,7 @@ import { RightSidebar } from './RightSidebar'
 import { StateFlow } from './StateFlow'
 import { EditorState, useEditorStore } from './editorStore/flowStore'
 
+import 'allotment/dist/style.css'
 // 👇 you need to import the reactflow styles
 import 'reactflow/dist/style.css'
 
@@ -76,37 +77,12 @@ export const SidebarsWrapper = () => {
       }}
     >
       <ReactFlowProvider>
-        <SplitPane
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          size={300}
-          split='vertical'
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          collapse={{
-            beforeToggleButton: <Button>⬅</Button>,
-            afterToggleButton: <Button>➡</Button>,
-            overlayCss: { backgroundColor: 'black' },
-            buttonTransition: 'zoom',
-            buttonPositionOffset: -20,
-            collapsedSize: 50,
-            collapseTransitionTimeout: 350,
-            collapseDirection: 'right',
-          }}
-        >
-          <SplitPane
-            split='vertical'
-            collapse={{
-              beforeToggleButton: <Button>⬅</Button>,
-              afterToggleButton: <Button>➡</Button>,
-              overlayCss: { backgroundColor: 'black' },
-              buttonTransition: 'zoom',
-              buttonPositionOffset: -20,
-              collapsedSize: 50,
-              collapseTransitionTimeout: 350,
-            }}
-          >
+        <Allotment>
+          <Allotment.Pane>
             <LeftSidebar />
+          </Allotment.Pane>
+
+          <Allotment.Pane>
             <Box
               sx={{
                 flexGrow: 1,
@@ -120,9 +96,11 @@ export const SidebarsWrapper = () => {
                 onDragOver={onDragOver}
               />
             </Box>
-          </SplitPane>
-          <RightSidebar />
-        </SplitPane>
+          </Allotment.Pane>
+          <Allotment.Pane>
+            <RightSidebar />
+          </Allotment.Pane>
+        </Allotment>
       </ReactFlowProvider>
     </Box>
   )
