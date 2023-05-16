@@ -7,7 +7,6 @@ interface DrawerProps {
 
 export const DrawerWrapper: React.FC<DrawerProps> = ({ children, side }) => {
   const size = 300
-
   return (
     <Drawer
       variant='permanent'
