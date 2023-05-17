@@ -10,6 +10,7 @@ import { shallow } from 'zustand/shallow'
 import { LeftSidebar } from './LeftSidebar'
 import { RightSidebar } from './RightSidebar'
 import { StateFlow } from './StateFlow'
+import { BottomDrawer } from './bottomDrawer/BottomDrawer'
 import { EditorState, useEditorStore } from './editorStore/flowStore'
 
 import 'allotment/dist/style.css'
@@ -172,6 +173,12 @@ export const SidebarsWrapper = () => {
           </div>
         </Allotment.Pane>
       </Allotment>
+      <BottomDrawer
+        open={true}
+        onClose={() => {
+          console.log('closed')
+        }}
+      />
     </Box>
   )
 }
