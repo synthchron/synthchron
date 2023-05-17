@@ -47,36 +47,32 @@ export type AcceptingReason =
       reason: string
     }
 
-export type IsAcceptingType<ProcessModel, StateType, _ActivityIdentifier> = (
+export type IsAcceptingType<ProcessModel, StateType> = (
   model: ProcessModel,
   state: StateType
 ) => AcceptingReason
 
-export type GetEnabledType<ProcessModel, StateType, ActivityIdentifier> = (
+export type GetEnabledType<ProcessModel, StateType> = (
   model: ProcessModel,
   state: StateType
-) => Set<[ActivityIdentifier, Weight]>
+) => Set<[string, Weight]>
 
-export type ExecuteActivityType<ProcessModel, StateType, ActivityIdentifier> = (
+export type ExecuteActivityType<ProcessModel, StateType> = (
   model: ProcessModel,
   state: StateType,
-  activity: ActivityIdentifier
+  activity: string
 ) => StateType
 
-export type ResetActivityType<ProcessModel, StateType, _ActivityIdentifier> = (
+export type ResetActivityType<ProcessModel, StateType> = (
   model: ProcessModel
 ) => StateType
 
-export type ProcessEngine<ProcessModel, StateType, ActivityIdentifier> = {
+export type ProcessEngine<ProcessModel, StateType> = {
   processModelType: string
-  isAccepting: IsAcceptingType<ProcessModel, StateType, ActivityIdentifier>
-  getEnabled: GetEnabledType<ProcessModel, StateType, ActivityIdentifier>
-  executeActivity: ExecuteActivityType<
-    ProcessModel,
-    StateType,
-    ActivityIdentifier
-  >
-  resetActivity: ResetActivityType<ProcessModel, StateType, ActivityIdentifier>
+  isAccepting: IsAcceptingType<ProcessModel, StateType>
+  getEnabled: GetEnabledType<ProcessModel, StateType>
+  executeActivity: ExecuteActivityType<ProcessModel, StateType>
+  resetActivity: ResetActivityType<ProcessModel, StateType>
 }
 
 // Generation Result Types
