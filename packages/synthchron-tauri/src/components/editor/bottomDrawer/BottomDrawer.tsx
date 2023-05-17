@@ -2,12 +2,14 @@ import React, { useState } from 'react'
 
 import { BarChart, PlayArrow, Settings } from '@mui/icons-material'
 import {
+  Box,
   Button,
   Dialog,
   DialogContent,
   Step,
   StepLabel,
   Stepper,
+  Typography,
 } from '@mui/material'
 
 import { ConfigurationPanel } from './ConfigurationPanel'
@@ -42,7 +44,7 @@ export const BottomDrawer: React.FC<BottomDrawerProps> = ({
       label: 'Configure',
       description: 'Configure the settings for the simulation',
       icon: <Settings color='primary' />,
-      component: <ConfigurationPanel />,
+      component: <ConfigurationPanel nextStep={handleNext} />,
     },
     {
       label: 'Simulate',
@@ -86,20 +88,24 @@ export const BottomDrawer: React.FC<BottomDrawerProps> = ({
             <div>
               <div>
                 <h2>{steps[activeStep].label}</h2>
-                <p>{steps[activeStep].description}</p>
+                <Typography variant='body2' color='textSecondary'>
+                  {steps[activeStep].description}
+                </Typography>
               </div>
               <div>{steps[activeStep].component}</div>
               <div>
-                <Button disabled={activeStep === 0} onClick={handleBack}>
-                  Back
-                </Button>
-                <Button
-                  variant='contained'
-                  onClick={handleNext}
-                  disabled={activeStep === steps.length - 1}
-                >
-                  {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                </Button>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <Button disabled={activeStep === 0} onClick={handleBack}>
+                    Back
+                  </Button>
+                  <Button
+                    variant='contained'
+                    onClick={handleNext}
+                    disabled={activeStep === steps.length - 1}
+                  >
+                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                  </Button>
+                </Box>
               </div>
             </div>
           )}
