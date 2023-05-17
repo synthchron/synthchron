@@ -68,7 +68,8 @@ const getEnabled: GetEnabledType<ProcessModel, State, ActivityIdentifier> = (
           .filter((edge) => edge.target === transition.identifier)
           // We only care about the edges that have enough tokens in the source place
           .filter(
-            (edge) => (state.get(edge.source)[1] || 0) >= edge.multiplicity
+            (edge) =>
+              ((state.get(edge.source) ?? [])[1] || 0) >= edge.multiplicity
             //[1] gets the value of the node
           )
         return (
@@ -111,7 +112,7 @@ const executeActivity: ExecuteActivityType<
     .forEach((place) => {
       const newWeight =
         //[1] gets the value of the node
-        (newState.get(place.identifier)[1] || 0) -
+        ((newState.get(place.identifier) ?? [])[1] || 0) -
         model.edges.filter(
           (edge) => edge.source === place.identifier && edge.target === activity
         )[0].multiplicity
@@ -138,7 +139,7 @@ const executeActivity: ExecuteActivityType<
       )[0].multiplicity
       const newWeight =
         //[1] gets the value of the node
-        (newState.get(place.identifier)[1] || 0) + edgeMultiplicity
+        ((newState.get(place.identifier) ?? [])[1] || 0) + edgeMultiplicity
       newState.set(place.identifier, [place.name, newWeight])
     })
   return newState
