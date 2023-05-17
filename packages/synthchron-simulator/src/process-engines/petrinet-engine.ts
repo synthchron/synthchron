@@ -25,6 +25,7 @@ const isAccepting: IsAcceptingType<ProcessModel, State, ActivityIdentifier> = (
   state
 ) => {
   const errorStore: string[] = []
+
   const reason = model.acceptingExpressions.find(({ expression }) => {
     const exp = compileExpression(expression)
     const resultReason = exp(
@@ -38,9 +39,10 @@ const isAccepting: IsAcceptingType<ProcessModel, State, ActivityIdentifier> = (
     if (resultReason.toString().startsWith('ReferenceError:')) {
       errorStore.push(resultReason.toString())
     } else {
-      resultReason
+      return resultReason
     }
   })
+
   if (errorStore.length !== 0) {
     throw errorStore
   }
