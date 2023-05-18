@@ -1,8 +1,9 @@
 import React from 'react'
 
-import AddCircleIcon from '@mui/icons-material/AddCircle'
-import { Grid, IconButton } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add'
+import { Grid, IconButton, Paper } from '@mui/material'
 
+import { BottomAppBar } from '../components/BottomAppBar'
 import { CustomAppBar } from '../components/CustomAppBar'
 import NewProjectModal from '../components/NewProjectModal'
 import { ProjectCard } from '../components/ProjectCard'
@@ -15,7 +16,14 @@ export const MainMenuPage = () => {
   return (
     <>
       <CustomAppBar />
-      <Grid sx={{ flexGrow: 1 }} container spacing={2}>
+      <Grid
+        sx={{ flexGrow: 1 }}
+        container
+        spacing={2}
+        style={{
+          marginBottom: '3em',
+        }}
+      >
         <Grid
           item
           sx={{
@@ -28,15 +36,23 @@ export const MainMenuPage = () => {
             <Grid item xs={9}>
               <Grid container spacing={2}>
                 <Grid item xs={4}>
-                  <IconButton
-                    color='primary'
-                    aria-label='create a new project'
+                  <Paper
+                    style={{
+                      height: '100%',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: '#f5f5f5',
+                      cursor: 'pointer',
+                    }}
                     onClick={() => {
                       setNewProjectModalOpen(true)
                     }}
                   >
-                    <AddCircleIcon fontSize='large' />
-                  </IconButton>
+                    <IconButton>
+                      <AddIcon fontSize='large' />
+                    </IconButton>
+                  </Paper>
                 </Grid>
                 {Object.entries(projects)
                   .sort(([, p1], [, p2]) => {
@@ -59,6 +75,7 @@ export const MainMenuPage = () => {
           setNewProjectModalOpen(false)
         }}
       />
+      <BottomAppBar />
     </>
   )
 }

@@ -2,8 +2,8 @@ import { useState } from 'react'
 
 import { Button, LinearProgress, Paper, Stack } from '@mui/material'
 
-import FlowPreview from '../../common/FlowPreview'
 import { TablePreview } from '../../common/TablePreview'
+import { ZustandFlowPreview } from '../../common/ZustandFlowPreview'
 import { useEditorStore } from '../editorStore/flowStore'
 
 interface SimulationPanelProps {
@@ -52,7 +52,7 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
           <TablePreview object={configuration} />
         </Paper>
         <Paper style={{ paddingRight: '5px', flexGrow: 1 }}>
-          <FlowPreview />
+          <ZustandFlowPreview />
         </Paper>
       </Stack>
       {!inSimulation ? (

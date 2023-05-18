@@ -1,60 +1,81 @@
-import React, { useCallback } from 'react'
+import React, { useEffect, useId } from 'react'
 
 import {
   Background,
   ConnectionMode,
+  Edge,
+  EdgeTypes,
+  FitViewOptions,
+  Node,
+  NodeTypes,
   ReactFlow,
   ReactFlowProvider,
+  useReactFlow,
+  useStore,
 } from 'reactflow'
-import { shallow } from 'zustand/shallow'
 
 import { AwarenessCursors } from '../editor/AwarenessCursors'
-import { EditorState, useEditorStore } from '../editor/editorStore/flowStore'
 
-const FlowPreview: React.FC = () => {
-  const selector = useCallback(
-    (state: EditorState) => ({
-      nodes: state.nodes,
-      edges: state.edges,
-      nodeTypes: state.processModelFlowConfig.nodeTypes,
-      edgeTypes: state.processModelFlowConfig.edgeTypes,
-    }),
-    []
-  )
+interface FlowPreviewProps {
+  nodes: Node[]
+  edges: Edge[]
+  nodeTypes: NodeTypes
+  edgeTypes: EdgeTypes
+  fitViewOptions?: FitViewOptions
+  awarenessCursors?: boolean
+}
 
-  const { nodes, edges, nodeTypes, edgeTypes } = useEditorStore(
-    selector,
-    shallow
-  )
-
-  const fitViewOptions = { padding: 0.05, minZoom: 0, maxZoom: 100 }
-
+export const FlowPreview: React.FC<FlowPreviewProps> = (props) => {
   return (
-    // Define your component's JSX here
     <ReactFlowProvider>
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        nodeTypes={nodeTypes}
-        edgeTypes={edgeTypes}
-        // Defaults
-        fitView
-        fitViewOptions={fitViewOptions}
-        connectionMode={ConnectionMode.Loose}
-        // Interaction blockers
-        nodesDraggable={false}
-        nodesConnectable={false}
-        elementsSelectable={false}
-        panOnDrag={false}
-        zoomOnScroll={false}
-      >
-        <AwarenessCursors />
-        {/* <MiniMap />
-      <Controls /> */}
-        <Background />
-      </ReactFlow>
+      <InnerFlow {...props} />
     </ReactFlowProvider>
   )
 }
 
-export default FlowPreview
+const InnerFlow: React.FC<FlowPreviewProps> = ({
+  nodes,
+  edges,
+  nodeTypes,
+  edgeTypes,
+  fitViewOptions,
+  awarenessCursors,
+}) => {
+  const id = useId()
+  const reactFlowInstance = useReactFlow()
+
+  const width = useStore((state) => state.width)
+  const height = useStore((state) => state.height)
+
+  useEffect(() => {
+    reactFlowInstance?.fitView(fitViewOptions)
+  }, [width, height])
+
+  return (
+    <ReactFlow
+      id={id}
+      nodes={nodes}
+      edges={edges}
+      nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes}
+      // Defaults
+      fitView
+      fitViewOptions={fitViewOptions}
+      connectionMode={ConnectionMode.Loose}
+      // Interaction blockers
+      nodesDraggable={false}
+      nodesConnectable={false}
+      elementsSelectable={false}
+      panOnDrag={false}
+      zoomOnScroll={false}
+      zoomOnDoubleClick={false}
+      // Thank you @react-flow developers
+      proOptions={{
+        hideAttribution: true,
+      }}
+    >
+      {awarenessCursors && <AwarenessCursors />}
+      <Background />
+    </ReactFlow>
+  )
+}

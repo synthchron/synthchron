@@ -3,13 +3,18 @@ import {
   Card,
   CardActions,
   CardContent,
+  CardMedia,
   Typography,
 } from '@mui/material'
 import moment from 'moment'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { Project } from '../types/project'
+import { FlowPreview } from './common/FlowPreview'
 import { usePersistentStore } from './common/persistentStore'
+import { petriNetFlowConfig } from './editor/processModels/petriNet/petriNetFlowConfig'
+
+const fitViewOptions = { padding: 0.1, minZoom: 0.1, maxZoom: 100 }
 
 interface ProjectCardProps {
   projectId: string
@@ -24,11 +29,35 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 
   const updateProject = usePersistentStore((state) => state.updateProject)
 
+  const flow = petriNetFlowConfig.generateFlow(project.projectModel)
+
+  const navigate = useNavigate()
+
   return (
     <Card sx={{ minWidth: 275 }}>
+      <CardMedia
+        component='div'
+        style={{
+          height: 150,
+        }}
+        onClick={() => {
+          updateProject(projectId, {
+            lastEdited: new Date().toJSON(),
+          })
+          navigate(`/editor/${projectId}`)
+        }}
+      >
+        <FlowPreview
+          nodes={flow.nodes}
+          edges={flow.edges}
+          nodeTypes={petriNetFlowConfig.nodeTypes}
+          edgeTypes={petriNetFlowConfig.edgeTypes}
+          fitViewOptions={fitViewOptions}
+        />
+      </CardMedia>
       <CardContent
         sx={{
-          height: 150,
+          height: 100,
         }}
       >
         <Typography
