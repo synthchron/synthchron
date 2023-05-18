@@ -1,5 +1,13 @@
-import { Button, Typography } from '@mui/material'
+import { useState } from 'react'
 
+import { Button, Stack, Typography } from '@mui/material'
+
+import {
+  insertDuplicate,
+  insertEvent,
+  insertExisting,
+} from '@synthchron/postprocessor/src/insert'
+import { example } from '@synthchron/xes/src/exampleTrace'
 import {
   XESAttribute,
   XESEvent,
@@ -9,7 +17,31 @@ import {
 
 import { CustomAppBar } from './CustomAppBar'
 
+function XESlogToString(log: XESLog) {
+  return log.traces
+    .map((trace: XESTrace) =>
+      trace.events.map((event: XESEvent) =>
+        event.attributes.map(
+          (attribute: XESAttribute) =>
+            '{\n  key: ' +
+            attribute.key +
+            '\n  value: ' +
+            attribute.value +
+            '\n}'
+        )
+      )
+    )
+    .flat()
+    .join('\n')
+}
+
 export const PostProcessing = () => {
+  const [processingResult, setProcessingResult] = useState('')
+
+  const exampleEvent: XESEvent = {
+    attributes: [{ value: 'Chungus', key: 'Big' }],
+  }
+
   return (
     <>
       <CustomAppBar />
@@ -29,19 +61,7 @@ export const PostProcessing = () => {
       </Typography>
       <div style={{ display: 'flex', height: '100vh', color: 'white' }}>
         <div style={{ flex: 1, backgroundColor: 'red', padding: '20px' }}>
-          {exampleTrace.traces.map((trace: XESTrace, id1: number) =>
-            trace.events.map((event: XESEvent, id2: number) =>
-              event.attributes.map((attribute: XESAttribute, id3: number) => (
-                <pre key={id1 + id2 + id3}>
-                  {'{\n  key: '}
-                  {attribute.key}
-                  {'\n  value: '}
-                  {attribute.value}
-                  {'\n}'}
-                </pre>
-              ))
-            )
-          )}
+          <pre>{XESlogToString(example)}</pre>
         </div>
         <div style={{ flex: 3, backgroundColor: 'green', padding: '20px' }}>
           {/* Content for the second column */}
@@ -53,53 +73,48 @@ export const PostProcessing = () => {
               height: '100vh',
             }}
           >
-            <Button variant='contained' color='primary'>
-              Centered Button
-            </Button>
+            <Stack direction='column' spacing={2}>
+              <Button
+                variant='contained'
+                color='primary'
+                onClick={() => {
+                  setProcessingResult(
+                    XESlogToString(insertDuplicate(example, 20))
+                  )
+                }}
+              >
+                Insert Duplicate
+              </Button>
+              <Button
+                variant='contained'
+                color='primary'
+                onClick={() => {
+                  setProcessingResult(
+                    XESlogToString(insertEvent(example, 20, exampleEvent))
+                  )
+                }}
+              >
+                Insert Event {'{'}key: Big, value: Chungus {'}'}
+              </Button>
+              <Button
+                variant='contained'
+                color='primary'
+                onClick={() => {
+                  setProcessingResult(
+                    XESlogToString(insertExisting(example, 20))
+                  )
+                }}
+              >
+                Insert Existing
+              </Button>
+            </Stack>
           </div>
         </div>
         <div style={{ flex: 1, backgroundColor: 'blue', padding: '20px' }}>
           {/* Content for the third column */}
-          Third Column
+          <pre>{processingResult}</pre>
         </div>
       </div>
     </>
   )
-}
-
-export const exampleTrace: XESLog = {
-  traces: [
-    {
-      events: [
-        {
-          attributes: [
-            {
-              key: 'name',
-              value: 'Event 1',
-            },
-          ],
-        },
-        {
-          attributes: [
-            {
-              key: 'name',
-              value: 'Event 2',
-            },
-          ],
-        },
-      ],
-    },
-    {
-      events: [
-        {
-          attributes: [
-            {
-              key: 'name',
-              value: 'Event 3',
-            },
-          ],
-        },
-      ],
-    },
-  ],
 }
