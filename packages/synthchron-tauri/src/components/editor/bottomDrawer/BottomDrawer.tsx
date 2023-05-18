@@ -13,6 +13,7 @@ import {
 } from '@mui/material'
 
 import { ConfigurationPanel } from './ConfigurationPanel'
+import { SimulationPanel } from './SimulationPanel'
 
 export interface BottomDrawerProps {
   open: boolean
@@ -48,9 +49,10 @@ export const BottomDrawer: React.FC<BottomDrawerProps> = ({
     },
     {
       label: 'Simulate',
-      description: 'Run the simulation with the configured settings',
+      description:
+        'Verify the model and configuration, and start your simulation',
       icon: <PlayArrow color='primary' />,
-      component: <></>,
+      component: <SimulationPanel nextStep={handleNext} />,
     },
     {
       label: 'Analyze',
@@ -93,7 +95,7 @@ export const BottomDrawer: React.FC<BottomDrawerProps> = ({
                 </Typography>
               </div>
               <div>{steps[activeStep].component}</div>
-              <div>
+              {/* <div>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <Button disabled={activeStep === 0} onClick={handleBack}>
                     Back
@@ -106,7 +108,7 @@ export const BottomDrawer: React.FC<BottomDrawerProps> = ({
                     {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                   </Button>
                 </Box>
-              </div>
+              </div> */}
             </div>
           )}
         </div>
