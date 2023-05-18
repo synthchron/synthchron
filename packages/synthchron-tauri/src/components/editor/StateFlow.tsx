@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useRef } from 'react'
 
 import ReactFlow, {
   Background,
@@ -54,6 +54,8 @@ export const StateFlow: React.FC<StateFlowProps> = ({
 
   const fitViewOptions = { padding: 0.2 }
 
+  const divRef = useRef<HTMLDivElement>(null) // Create a ref to a div wrapping around react flow. This div is used to compute the position of the flow.
+
   const reactFlow = useReactFlow()
 
   const setAwarenessCursor: React.PointerEventHandler<HTMLDivElement> =
@@ -62,10 +64,16 @@ export const StateFlow: React.FC<StateFlowProps> = ({
         const viewport = reactFlow.getViewport()
         setAwarenessState({
           x:
-            (event.clientX - event.currentTarget.offsetLeft - viewport.x) /
+            (event.clientX -
+              event.currentTarget.offsetLeft -
+              (divRef.current?.getClientRects()[0].x ?? 0) -
+              viewport.x) /
             viewport.zoom,
           y:
-            (event.clientY - event.currentTarget.offsetTop - viewport.y) /
+            (event.clientY -
+              event.currentTarget.offsetTop -
+              (divRef.current?.getClientRects()[0].y ?? 0) -
+              viewport.y) /
             viewport.zoom,
         })
       },
@@ -87,33 +95,41 @@ export const StateFlow: React.FC<StateFlowProps> = ({
   )
 
   return (
-    <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      nodeTypes={nodeTypes}
-      edgeTypes={edgeTypes}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      // Defaults
-      fitView
-      fitViewOptions={fitViewOptions}
-      connectionMode={ConnectionMode.Loose}
-      // Drag events
-      onInit={onInit}
-      onDrop={onDrop}
-      onDragOver={onDragOver}
-      //OnClickEvents
-      onNodeDrag={selectElementCallback}
-      onNodeClick={selectElementCallback}
-      onEdgeClick={selectElementCallback}
-      onPaneClick={selectPaneCallback}
-      onPointerMove={setAwarenessCursor}
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+      }}
+      ref={divRef}
     >
-      <AwarenessCursors />
-      <MiniMap />
-      <Controls />
-      <Background />
-    </ReactFlow>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        // Defaults
+        fitView
+        fitViewOptions={fitViewOptions}
+        connectionMode={ConnectionMode.Loose}
+        // Drag events
+        onInit={onInit}
+        onDrop={onDrop}
+        onDragOver={onDragOver}
+        //OnClickEvents
+        onNodeDrag={selectElementCallback}
+        onNodeClick={selectElementCallback}
+        onEdgeClick={selectElementCallback}
+        onPaneClick={selectPaneCallback}
+        onPointerMove={setAwarenessCursor}
+      >
+        <AwarenessCursors />
+        <MiniMap />
+        <Controls />
+        <Background />
+      </ReactFlow>
+    </div>
   )
 }
