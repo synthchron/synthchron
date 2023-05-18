@@ -2,10 +2,10 @@
 import { expect } from 'chai'
 
 import {
-	Configuration,
-	StandardConfigurationTerminationType,
-	TerminationType,
-	Trace,
+  Configuration,
+  StandardConfigurationTerminationType,
+  TerminationType,
+  Trace,
 } from '@synthchron/simulator'
 
 import { main } from '../src/index'
@@ -27,7 +27,7 @@ describe('Testing delete', function () {
   describe('Should delete all events', function () {
     it('Should delete all events in the log', function () {
       expect(true).to.equal(true)
-			const traces: Trace[] = [
+      const traces: Trace[] = [
         {
           events: [
             { name: 'a', meta: {} },
@@ -47,15 +47,15 @@ describe('Testing delete', function () {
         ],
       }
 
-			const config: Configuration = {
-				endOnAcceptingStateProbability: 1,
-				randomSeed: 'abc',
-				terminationType: {
-					type: TerminationType.Standard,
-				}
-			}
+      const config: Configuration = {
+        endOnAcceptingStateProbability: 1,
+        randomSeed: 'abc',
+        terminationType: {
+          type: TerminationType.Standard,
+        },
+      }
 
-			expect(true).to.equal(true)
+      expect(true).to.equal(true)
 
       /*expect(postprocess(traces, steps, config)).to.deep.equal([
         {
@@ -66,7 +66,6 @@ describe('Testing delete', function () {
           ],
         },
       ])*/
-
     })
   })
 })
