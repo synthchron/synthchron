@@ -16,13 +16,12 @@ import {
   Typography,
 } from '@mui/material'
 
+import { Configuration } from '@synthchron/simulator'
+
 import { usePersistentStore } from '../../common/persistentStore'
 import { useEditorStore } from '../editorStore/flowStore'
 import { ConfigPreview } from './ConfigPreview'
-import {
-  SimulationConfiguration,
-  defaultConfiguration,
-} from './SimulationConfiguration'
+import { ConfigurationForm, defaultConfiguration } from './ConfigurationForm'
 
 interface ConfigurationPanelProps {
   nextStep: () => void
@@ -119,7 +118,10 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
                     {c.configurationName !== config.configurationName && (
                       <IconButton
                         aria-label='delete'
-                        onClick={() => handleDelete(c.configurationName)}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleDelete(c.configurationName)
+                        }}
                         style={{
                           marginLeft: 'auto',
                           display:
@@ -163,9 +165,9 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
             <Typography variant='h6' color='grey' gutterBottom>
               Configuration Editor
             </Typography>
-            <SimulationConfiguration
+            <ConfigurationForm
               config={config}
-              setConfig={(newConfig) => {
+              setConfig={(newConfig: Configuration) => {
                 setConfigurations(
                   configurations.map((c) =>
                     c.configurationName === config.configurationName
