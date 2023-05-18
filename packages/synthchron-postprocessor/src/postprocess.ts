@@ -1,7 +1,6 @@
 import seedrandom from 'seedrandom'
 
 import { Configuration, Trace } from '@synthchron/simulator'
-import { weightedRandom } from '@synthchron/simulator/dist/src'
 
 import {
   PostProcessingConfiguration,
@@ -62,4 +61,21 @@ const performSwap = (trace: Trace, _event_id: number): Trace => {
 
 const performInsertion = (trace: Trace, _event_id: number): Trace => {
   return trace
+}
+
+export const weightedRandom = <T>(
+  activities: Set<[T, number]>,
+  randomGenerator: seedrandom.PRNG
+): T => {
+  const cumulativeWeights: [T, number][] = []
+  let cumulativeWeight = 0
+  for (const [activity, weight] of activities) {
+    cumulativeWeight += weight
+    cumulativeWeights.push([activity, cumulativeWeight])
+  }
+  const random = randomGenerator() * cumulativeWeight
+  for (const [activity, cumulativeWeight] of cumulativeWeights) {
+    if (random <= cumulativeWeight) return activity
+  }
+  throw new Error('Weighted random failed')
 }
