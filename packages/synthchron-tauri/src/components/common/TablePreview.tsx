@@ -10,10 +10,8 @@ import {
   TableRow,
 } from '@mui/material'
 
-import { Configuration } from '@synthchron/simulator'
-
-interface ConfigurationPreviewProps {
-  configuration: Configuration
+interface TablePreviewProps {
+  object: object
 }
 
 const toRow = (
@@ -76,14 +74,14 @@ const toRow = (
   return <></>
 }
 
-export const ConfigurationPreview: React.FC<ConfigurationPreviewProps> = ({
-  configuration,
+export const TablePreview: React.FC<TablePreviewProps> = ({
+  object: configuration,
 }) => (
   <TableContainer component={Paper}>
     <Table sx={{ minWidth: 20 }} aria-label='simple table'>
       <TableHead>
         <TableRow>
-          <TableCell>Configuration Name</TableCell>
+          <TableCell>Key</TableCell>
           <TableCell align='right'>Value</TableCell>
         </TableRow>
       </TableHead>

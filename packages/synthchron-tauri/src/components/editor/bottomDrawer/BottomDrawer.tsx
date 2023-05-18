@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 
 import { BarChart, PlayArrow, Settings } from '@mui/icons-material'
 import {
-  Box,
   Button,
   Dialog,
   DialogContent,
@@ -12,6 +11,7 @@ import {
   Typography,
 } from '@mui/material'
 
+import { AnalysisPanel } from './AnalysisPanel'
 import { ConfigurationPanel } from './ConfigurationPanel'
 import { SimulationPanel } from './SimulationPanel'
 
@@ -30,7 +30,7 @@ export const BottomDrawer: React.FC<BottomDrawerProps> = ({
     setActiveStep((prevActiveStep) => prevActiveStep + 1)
   }
 
-  const handleBack = () => {
+  const _handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1)
   }
 
@@ -58,7 +58,7 @@ export const BottomDrawer: React.FC<BottomDrawerProps> = ({
       label: 'Analyze',
       description: 'Analyze the results of the simulation',
       icon: <BarChart color='primary' />,
-      component: <></>,
+      component: <AnalysisPanel nextStep={handleNext} />,
     },
   ]
 

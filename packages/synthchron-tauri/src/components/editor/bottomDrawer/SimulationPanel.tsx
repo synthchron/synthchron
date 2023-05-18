@@ -2,8 +2,8 @@ import { useState } from 'react'
 
 import { Button, LinearProgress, Paper, Stack } from '@mui/material'
 
-import { ConfigurationPreview } from '../../common/ConfigurationPreview'
 import FlowPreview from '../../common/FlowPreview'
+import { TablePreview } from '../../common/TablePreview'
 import { useEditorStore } from '../editorStore/flowStore'
 
 interface SimulationPanelProps {
@@ -20,7 +20,10 @@ async function* simulatorDummy() {
   }
   yield {
     progress: 100,
-    result: 'Simulation finished',
+    result: {
+      'number of events': 500,
+      'number of traces': 1200,
+    },
   }
 }
 
@@ -28,6 +31,7 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
   nextStep,
 }) => {
   const configuration = useEditorStore((state) => state.config)
+  const setResult = useEditorStore((state) => state.setResult)
 
   const [inSimulation, setInSimulation] = useState(false)
   const [progress, setProgress] = useState(0)
@@ -45,7 +49,7 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
     <>
       <Stack direction='row' spacing={2} marginTop={3} marginBottom={3}>
         <Paper style={{ padding: '16px' }}>
-          <ConfigurationPreview configuration={configuration} />
+          <TablePreview object={configuration} />
         </Paper>
         <Paper style={{ paddingRight: '5px', flexGrow: 1 }}>
           <FlowPreview />
@@ -60,7 +64,12 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
             setInSimulation(true)
             setProgress(0)
             simulationDummy().then(async (result) => {
-              console.log(result) //TODO: do something with the result
+              setResult({
+                log: {
+                  traces: [],
+                },
+                statistics: result ?? {},
+              })
               await new Promise((resolve) => setTimeout(resolve, 2500))
               setInSimulation(false)
               nextStep()
