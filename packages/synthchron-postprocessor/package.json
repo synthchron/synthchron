@@ -39,6 +39,6 @@
     "eslint-plugin-prettier": "^4.2.1"
   },
   "dependencies": {
-    "@synthchron/simulator": "^0.0.1"
+    "@synthchron/simulator": "*"
   }
 }
