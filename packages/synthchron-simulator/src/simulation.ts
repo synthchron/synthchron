@@ -65,7 +65,7 @@ export const simulateWithEngine = <
   }
 }
 
-export const weightedRandom = <T>(
+const weightedRandom = <T>(
   activities: Set<[T, number]>,
   randomGenerator: seedrandom.PRNG
 ): T => {

@@ -11,14 +11,14 @@ import {
 export const postprocess = (
   traces: Trace[],
   postProcessingConfiguration: PostProcessingConfiguration,
-  configuration: Configuration
+  config: Configuration
 ): Trace[] => {
-  const randomGenerator = seedrandom(configuration.randomSeed)
+  const randomGenerator = seedrandom(config.randomSeed)
   traces.forEach((trace) => {
     // using for loop, to get the correct index to identify the event
     for (let i = 0; i < trace.events.length; i++) {
       const random = randomGenerator()
-      if (random < postProcessingConfiguration.stepProbability) {
+      if (random > postProcessingConfiguration.stepProbability) {
         const postProcessingSteps: Set<[SimpleSteps, number]> = new Set()
         for (const x of postProcessingConfiguration.postProcessingSteps) {
           postProcessingSteps.add([x, x.weight])
@@ -73,10 +73,10 @@ const performDeletion = (trace: Trace, event_id: number): Trace => {
   return trace
 }
 
-const performSwap = (trace: Trace, event_id: number): Trace => {
+const performSwap = (trace: Trace, _event_id: number): Trace => {
   return trace
 }
 
-const performInsertion = (trace: Trace, event_id: number): Trace => {
+const performInsertion = (trace: Trace, _event_id: number): Trace => {
   return trace
 }
