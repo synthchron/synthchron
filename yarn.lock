@@ -366,7 +366,7 @@
     source-map "^0.5.7"
     stylis "4.2.0"
 
-"@emotion/cache@^11.10.8", "@emotion/cache@^11.11.0":
+"@emotion/cache@^11.11.0":
   version "11.11.0"
   resolved "https://registry.npmjs.org/@emotion/cache/-/cache-11.11.0.tgz"
   integrity sha512-P34z9ssTCBi3e9EI1ZsWpNHcfY1r09ZO0rZbRO2ob3ZQMnFI35jB536qoXbkdesr5EUhYi22anuEJuyxifaqAQ==
@@ -757,6 +757,11 @@
   resolved "https://registry.npmjs.org/@juggle/resize-observer/-/resize-observer-3.4.0.tgz"
   integrity sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==
 
+"@kurkle/color@^0.3.0":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@kurkle/color/-/color-0.3.2.tgz#5acd38242e8bde4f9986e7913c8fdf49d3aa199f"
+  integrity sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==
+
 "@mdx-js/react@^2.1.5":
   version "2.3.0"
   resolved "https://registry.npmjs.org/@mdx-js/react/-/react-2.3.0.tgz"
@@ -818,14 +823,12 @@
     "@mui/utils" "^5.12.3"
     prop-types "^15.8.1"
 
-"@mui/styled-engine@^5.12.3":
-  version "5.12.3"
-  resolved "https://registry.yarnpkg.com/@mui/styled-engine/-/styled-engine-5.12.3.tgz#3307643d52c81947a624cdd0437536cc8109c4f0"
-  integrity sha512-AhZtiRyT8Bjr7fufxE/mLS+QJ3LxwX1kghIcM2B2dvJzSSg9rnIuXDXM959QfUVIM3C8U4x3mgVoPFMQJvc4/g==
+"@mui/styled-engine@^5.12.3", "@mui/styled-engine@npm:@mui/styled-engine-sc@latest":
+  version "5.12.0"
+  resolved "https://registry.yarnpkg.com/@mui/styled-engine-sc/-/styled-engine-sc-5.12.0.tgz#41040fb27667efab46e9200cec9657e62b544c48"
+  integrity sha512-3MgYoY2YG5tx0E5oKqvCv94oL0ABVBr+qpcyvciXW/v0wzPG6bXvuZV80GHYlJfasgnnRa1AbRWf5a9FcX8v6g==
   dependencies:
     "@babel/runtime" "^7.21.0"
-    "@emotion/cache" "^11.10.8"
-    csstype "^3.1.2"
     prop-types "^15.8.1"
 
 "@mui/system@^5.12.3":
@@ -3180,6 +3183,13 @@ chalk@^4.0.0, chalk@^4.1.0:
   dependencies:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
+
+chart.js@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-4.3.0.tgz#ac363030ab3fec572850d2d872956f32a46326a1"
+  integrity sha512-ynG0E79xGfMaV2xAHdbhwiPLczxnNNnasrmPEXriXsPJGjmhOBYzFVEsB65w2qMDz+CaBJJuJD0inE/ab/h36g==
+  dependencies:
+    "@kurkle/color" "^0.3.0"
 
 check-error@^1.0.2:
   version "1.0.2"
@@ -5868,6 +5878,11 @@ raw-body@2.5.1:
     http-errors "2.0.0"
     iconv-lite "0.4.24"
     unpipe "1.0.0"
+
+react-chartjs-2@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/react-chartjs-2/-/react-chartjs-2-5.2.0.tgz#43c1e3549071c00a1a083ecbd26c1ad34d385f5d"
+  integrity sha512-98iN5aguJyVSxp5U3CblRLH67J8gkfyGNbiK3c+l1QI/G4irHMPQw44aEPmjVag+YKTyQ260NcF82GTQ3bdscA==
 
 react-colorful@^5.1.2:
   version "5.6.1"
