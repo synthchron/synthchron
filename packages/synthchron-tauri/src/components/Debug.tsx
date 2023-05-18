@@ -1,4 +1,3 @@
-import { faker } from '@faker-js/faker'
 import { Button } from '@mui/material'
 import { Offline, Online } from 'react-detect-offline'
 
@@ -33,10 +32,30 @@ export const Debug = () => {
           { name: 'f', meta: {} },
         ],
       },
+      {
+        events: [
+          { name: 'g', meta: {} },
+          { name: 'h', meta: {} },
+          { name: 'i', meta: {} },
+          { name: 'j', meta: {} },
+          { name: 'k', meta: {} },
+          { name: 'l', meta: {} },
+        ],
+      },
+      {
+        events: [
+          { name: 'm', meta: {} },
+          { name: 'n', meta: {} },
+          { name: 'o', meta: {} },
+          { name: 'p', meta: {} },
+          { name: 'q', meta: {} },
+          { name: 'r', meta: {} },
+        ],
+      },
     ]
 
     const steps: PostProcessingConfiguration = {
-      stepProbability: 0.5,
+      stepProbability: 0.3,
       postProcessingSteps: [
         { type: PostProcessingStepType.DeletionStep, weight: 1 },
       ],
@@ -44,7 +63,7 @@ export const Debug = () => {
 
     const config: Configuration = {
       endOnAcceptingStateProbability: 1,
-      randomSeed: 'abc',
+      randomSeed: 'new',
       terminationType: {
         type: TerminationType.Standard,
       } as StandardConfigurationTerminationType,

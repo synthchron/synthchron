@@ -4,29 +4,18 @@ import { expect } from 'chai'
 import {
   Configuration,
   StandardConfigurationTerminationType,
-  TerminationType,
   Trace,
 } from '@synthchron/simulator'
 
-import { main } from '../src/index'
-import { postprocess } from '../src/postprocess'
+import { postprocess } from '../src'
 import {
   PostProcessingConfiguration,
   PostProcessingStepType,
 } from '../src/types'
 
-describe('Index module', function () {
-  describe('expected behavior', function () {
-    it('should return hello world', function () {
-      expect(main()).to.equal('Hello World')
-    })
-  })
-})
-
-describe('Testing delete', function () {
-  describe('Should delete all events', function () {
-    it('Should delete all events in the log', function () {
-      expect(true).to.equal(true)
+describe('Testing delete functionality', function () {
+  describe('Should delete 3 events', function () {
+    it('Should delete 3 events from a single trace', function () {
       const traces: Trace[] = [
         {
           events: [
@@ -49,178 +38,219 @@ describe('Testing delete', function () {
 
       const config: Configuration = {
         endOnAcceptingStateProbability: 1,
-        randomSeed: 'abc',
+        randomSeed: 'word',
         terminationType: {
-          type: TerminationType.Standard,
-        },
+          type: 'standard',
+        } as StandardConfigurationTerminationType,
       }
 
-      expect(true).to.equal(true)
+      const result = postprocess(traces, steps, config)
 
-      /*expect(postprocess(traces, steps, config)).to.deep.equal([
+      expect(result).to.deep.equal([
         {
           events: [
-            { name: 'c', meta: {} },
+            { name: 'a', meta: {} },
             { name: 'd', meta: {} },
             { name: 'f', meta: {} },
           ],
         },
-      ])*/
+      ])
     })
   })
 })
 
-/*
-describe('Testing delete not 100%', function () {
-	describe('Should delete all events', function () {
-		it('should delete an event', function () {
-			let traces: Trace[];
-			traces = [
-				{
-					events: [
-						{
-							name: 'a',
-							meta: {}
-						},
-						{
-							name: 'b',
-							meta: {}
-						},
-						{
-							name: 'c',
-							meta: {}
-						},
-						{
-							name: 'd',
-							meta: {}
-						},
-						{
-							name: 'e',
-							meta: {}
-						},
-						{
-							name: 'f',
-							meta: {}
-						},
-						{
-							name: 'g',
-							meta: {}
-						},
-						{
-							name: 'h',
-							meta: {}
-						},
-						{
-							name: 'i',
-							meta: {}
-						},
-						{
-							name: 'j',
-							meta: {}
-						},
-						{
-							name: 'k',
-							meta: {}
-						},
-						{
-							name: 'l',
-							meta: {}
-						},
+describe('Testing delete functionality', function () {
+  describe('Should delete all 6 events', function () {
+    it('Should delete all events in the log on a single trace', function () {
+      const traces: Trace[] = [
+        {
+          events: [
+            { name: 'a', meta: {} },
+            { name: 'b', meta: {} },
+            { name: 'c', meta: {} },
+            { name: 'd', meta: {} },
+            { name: 'e', meta: {} },
+            { name: 'f', meta: {} },
+          ],
+        },
+      ]
 
-					]
-				}
-			];
+      const steps: PostProcessingConfiguration = {
+        stepProbability: 1,
+        postProcessingSteps: [
+          { type: PostProcessingStepType.DeletionStep, weight: 1 },
+        ],
+      }
 
-			let steps = {
-				stepProbability: 1,
-				postProcessingSteps: [
-					{
-						type: PostProcessingStepType.DeletionStep,
-						weight: 1
-					}
-				]
-			}
+      const config: Configuration = {
+        endOnAcceptingStateProbability: 1,
+        randomSeed: 'abc',
+        terminationType: {
+          type: 'standard',
+        } as StandardConfigurationTerminationType,
+      }
 
-			let config = {
-				endOnAcceptingStateProbability: 1,
-				randomSeed: '',
-				terminationType: {
-					type: TerminationType.Standard,
-				} as StandardConfigurationTerminationType
-			}
+      const result = postprocess(traces, steps, config)
+      expect(result[0].events.length).to.equal(0)
 
-			let answer = postprocess(traces, steps, config)
-
-			expect(answer[0].events.length).to.lt(12)
-		})
-	})
+      expect(result).to.deep.equal([
+        {
+          events: [],
+        },
+      ])
+    })
+  })
 })
 
+describe('Testing delete functionality', function () {
+  describe('Should delete events on multiple traces', function () {
+    it('Should delete events on multiple traces', function () {
+      const traces: Trace[] = [
+        {
+          events: [
+            { name: 'a', meta: {} },
+            { name: 'b', meta: {} },
+            { name: 'c', meta: {} },
+            { name: 'd', meta: {} },
+            { name: 'e', meta: {} },
+            { name: 'f', meta: {} },
+          ],
+        },
+        {
+          events: [
+            { name: 'g', meta: {} },
+            { name: 'h', meta: {} },
+            { name: 'i', meta: {} },
+            { name: 'j', meta: {} },
+            { name: 'k', meta: {} },
+            { name: 'l', meta: {} },
+          ],
+        },
+        {
+          events: [
+            { name: 'm', meta: {} },
+            { name: 'n', meta: {} },
+            { name: 'o', meta: {} },
+            { name: 'p', meta: {} },
+            { name: 'q', meta: {} },
+            { name: 'r', meta: {} },
+          ],
+        },
+      ]
 
-describe('Testing delete multiple traces', function () {
-	describe('Should delete all event in both traces', function () {
-		it('should delete all events', function () {
-			let traces: Trace[];
-			traces = [
-				{
-					events: [
-						{
-							name: 'a',
-							meta: {}
-						},
-						{
-							name: 'b',
-							meta: {}
-						},
-						{
-							name: 'c',
-							meta: {}
-						},
-					]
-				},
-				{
-					events: [
-						{
-							name: 'd',
-							meta: {}
-						},
-						{
-							name: 'e',
-							meta: {}
-						},
-						{
-							name: 'f',
-							meta: {}
-						},
-					]
-				}
-			];
+      const steps: PostProcessingConfiguration = {
+        stepProbability: 0.3,
+        postProcessingSteps: [
+          { type: PostProcessingStepType.DeletionStep, weight: 1 },
+        ],
+      }
 
-			let steps = {
-				stepProbability: 1,
-				postProcessingSteps: [
-					{
-						type: PostProcessingStepType.DeletionStep,
-						weight: 1
-					}
-				]
-			}
+      const config: Configuration = {
+        endOnAcceptingStateProbability: 1,
+        randomSeed: 'new',
+        terminationType: {
+          type: 'standard',
+        } as StandardConfigurationTerminationType,
+      }
 
-			let config = {
-				endOnAcceptingStateProbability: 1,
-				randomSeed: '',
-				terminationType: {
-					type: TerminationType.Standard,
-				} as StandardConfigurationTerminationType
-			}
+      const result = postprocess(traces, steps, config)
 
-			let answer = postprocess(traces, steps, config)
+      expect(result).to.deep.equal([
+        {
+          events: [
+            { name: 'c', meta: {} },
+            { name: 'd', meta: {} },
+            { name: 'e', meta: {} },
+          ],
+        },
+        {
+          events: [
+            { name: 'g', meta: {} },
+            { name: 'h', meta: {} },
+            { name: 'i', meta: {} },
+            { name: 'j', meta: {} },
+            { name: 'k', meta: {} },
+            { name: 'l', meta: {} },
+          ],
+        },
+        {
+          events: [
+            { name: 'm', meta: {} },
+            { name: 'n', meta: {} },
+            { name: 'p', meta: {} },
+            { name: 'r', meta: {} },
+          ],
+        },
+      ])
+    })
+  })
+})
 
-			expect(answer.length).to.equal(2)
+describe('Testing delete functionality', function () {
+  describe('Should delete all events', function () {
+    it('Should delete all events in the log on all traces', function () {
+      const traces: Trace[] = [
+        {
+          events: [
+            { name: 'a', meta: {} },
+            { name: 'b', meta: {} },
+            { name: 'c', meta: {} },
+            { name: 'd', meta: {} },
+            { name: 'e', meta: {} },
+            { name: 'f', meta: {} },
+          ],
+        },
+        {
+          events: [
+            { name: 'g', meta: {} },
+            { name: 'h', meta: {} },
+            { name: 'i', meta: {} },
+            { name: 'j', meta: {} },
+            { name: 'k', meta: {} },
+            { name: 'l', meta: {} },
+          ],
+        },
+        {
+          events: [
+            { name: 'm', meta: {} },
+            { name: 'n', meta: {} },
+            { name: 'o', meta: {} },
+            { name: 'p', meta: {} },
+            { name: 'q', meta: {} },
+            { name: 'r', meta: {} },
+          ],
+        },
+      ]
 
-			expect(answer[0].events.length).to.equal(0)
-			expect(answer[1].events.length).to.equal(0)
+      const steps: PostProcessingConfiguration = {
+        stepProbability: 1,
+        postProcessingSteps: [
+          { type: PostProcessingStepType.DeletionStep, weight: 1 },
+        ],
+      }
 
-		})
-	})
-})*/
+      const config: Configuration = {
+        endOnAcceptingStateProbability: 1,
+        randomSeed: 'random number',
+        terminationType: {
+          type: 'standard',
+        } as StandardConfigurationTerminationType,
+      }
+
+      const result = postprocess(traces, steps, config)
+      expect(result[0].events.length).to.equal(0)
+
+      expect(result).to.deep.equal([
+        {
+          events: [],
+        },
+        {
+          events: [],
+        },
+        {
+          events: [],
+        },
+      ])
+    })
+  })
+})
