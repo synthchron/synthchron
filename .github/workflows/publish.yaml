@@ -1,9 +1,11 @@
 name: Build and Deploy to Netlify
+
 on:
   push:
-    branches:
-      - main
+    branches: ["main"]
   pull_request:
+    types: [opened, synchronize]
+
 jobs:
   build:
     runs-on: ubuntu-latest
