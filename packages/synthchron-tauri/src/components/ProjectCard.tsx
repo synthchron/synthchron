@@ -74,7 +74,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         <Typography
           sx={{ textTransform: 'capitalize', mb: 0 }}
           color='text.secondary'
-          fontSize={10}
+          fontSize={14}
           gutterBottom
         >
           {project.projectModel.type}
@@ -82,7 +82,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         <Typography variant='h5' component='div' noWrap>
           {project.projectName}
         </Typography>
-        <Typography sx={{ mb: 1.5 }} color='text.secondary' fontSize={10}>
+        <Typography sx={{ mb: 1.5 }} color='text.secondary' fontSize={14}>
           last edited {moment(project.lastEdited).fromNow()}
         </Typography>
         <Typography
