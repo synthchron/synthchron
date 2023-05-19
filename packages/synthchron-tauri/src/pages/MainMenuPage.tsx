@@ -30,6 +30,7 @@ export const MainMenuPage = () => {
       >
         <Box
           sx={{
+            width: '100%',
             maxWidth: ['90%', '90%', '90%', '1200px'],
             margin: '2em auto',
           }}
