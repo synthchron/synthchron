@@ -1,6 +1,7 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import { Debug } from './components/Debug'
+import { PostProcessing } from './components/PostProcessing'
 import { CollaborationPage } from './pages/CollaborationPage'
 import { EditorPage } from './pages/EditorPage'
 import { MainMenuPage } from './pages/MainMenuPage'
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: 'debug',
     element: <Debug />,
+  },
+  {
+    path: 'postprocessing',
+    element: <PostProcessing />,
   },
   {
     path: '*',
