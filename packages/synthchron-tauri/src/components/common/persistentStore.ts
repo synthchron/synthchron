@@ -16,6 +16,7 @@ export interface PersistentState {
   doneSaving: () => void
   // Configuration storage
   configurations: Configuration[]
+  setConfigurations: (configurations: Configuration[]) => void
   addConfiguration: (configuration: Configuration) => void
   removeConfiguration: (name: string) => void
   updateConfiguration: (
@@ -76,6 +77,9 @@ export const usePersistentStore = create<PersistentState>()(
           }))
         },
         configurations: [],
+        setConfigurations: (configurations: Configuration[]) => {
+          set({ configurations })
+        },
         addConfiguration: (configuration: Configuration) => {
           set((state) => ({
             configurations: [

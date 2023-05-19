@@ -1,7 +1,14 @@
 import { useCallback } from 'react'
 
 import { faker } from '@faker-js/faker'
-import { Box, Button, Container, Input, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  Container,
+  Input,
+  TextField,
+  Typography,
+} from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
 import { shallow } from 'zustand/shallow'
 
@@ -51,8 +58,8 @@ export const ProjectTab: React.FC = () => {
             marginBottom: '1em',
           }}
         >
-          <Typography variant='subtitle1'>Project Name</Typography>
-          <Input
+          <TextField
+            label='Project Name'
             value={projectId && projects[projectId].projectName}
             onChange={(val) => {
               if (projectId)
@@ -61,6 +68,7 @@ export const ProjectTab: React.FC = () => {
                 })
             }}
             multiline
+            maxRows={4}
             fullWidth
             disabled={projectId === undefined}
           />
@@ -68,12 +76,12 @@ export const ProjectTab: React.FC = () => {
 
         <Box
           sx={{
-            marginTop: '1em',
+            marginTop: '2em',
             marginBottom: '1em',
           }}
         >
-          <Typography variant='subtitle1'>Project Description</Typography>
-          <Input
+          <TextField
+            label='Project Description'
             value={projectId && projects[projectId].projectDescription}
             onChange={(val) => {
               if (projectId)

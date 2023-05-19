@@ -1,7 +1,8 @@
 import React from 'react'
 import { useCallback, useRef, useState } from 'react'
 
-import { Box } from '@mui/material'
+import DoubleArrowIcon from '@mui/icons-material/DoubleArrow'
+import { Box, Fab } from '@mui/material'
 import { Allotment, AllotmentHandle, LayoutPriority } from 'allotment'
 import { ReactFlowInstance } from 'reactflow'
 import { shallow } from 'zustand/shallow'
@@ -10,6 +11,7 @@ import { shallow } from 'zustand/shallow'
 import { LeftSidebar } from './LeftSidebar'
 import { RightSidebar } from './RightSidebar'
 import { StateFlow } from './StateFlow'
+import { BottomDrawer } from './bottomDrawer/BottomDrawer'
 import { EditorState, useEditorStore } from './editorStore/flowStore'
 
 import 'allotment/dist/style.css'
@@ -84,6 +86,8 @@ export const SidebarsWrapper = () => {
   }
   const ref = useRef<AllotmentHandle>(null)
 
+  const [bottomDrawerOpen, setBottomDrawerOpen] = useState(false)
+
   return (
     <Box
       sx={{
@@ -150,6 +154,23 @@ export const SidebarsWrapper = () => {
               onDragOver={onDragOver}
             />
           </Box>
+          {/* Render the FAB */}
+          {
+            <Fab
+              size='small'
+              aria-label='add'
+              sx={{
+                position: 'absolute',
+                bottom: '8px',
+                right: '50%',
+              }}
+              onClick={() => {
+                setBottomDrawerOpen(true)
+              }}
+            >
+              <DoubleArrowIcon />
+            </Fab>
+          }
         </Allotment.Pane>
         <Allotment.Pane
           maxSize={rightSidebarMaxSize}
@@ -172,6 +193,12 @@ export const SidebarsWrapper = () => {
           </div>
         </Allotment.Pane>
       </Allotment>
+      <BottomDrawer
+        open={bottomDrawerOpen}
+        onClose={() => {
+          setBottomDrawerOpen(false)
+        }}
+      />
     </Box>
   )
 }
