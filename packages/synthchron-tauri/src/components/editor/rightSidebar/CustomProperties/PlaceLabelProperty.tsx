@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 
 import { TextField } from '@mui/material'
-import { text } from 'stream/consumers'
 
 type LabelPropertyProperties = {
   value: string
