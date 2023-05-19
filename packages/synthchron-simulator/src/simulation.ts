@@ -9,49 +9,13 @@ import {
   Trace,
 } from './types/simulationTypes'
 
-//const PROCESS_ENGINES = [petriNetEngine]
-
-/* export const simulate = <
-  SpecificProcessModel extends ProcessModel,
-  StateType,
-  ActivityIdentifier
->(
-  processModel: SpecificProcessModel,
-  configuration: Configuration
-): SimulationResult => {
-  // TODO: This currently finds the process engine to use. If we want to make this more flexible, we can add a processEngine field to be specified instead.
-  const processEngine = PROCESS_ENGINES.find(
-    (engine) => engine.processModelType === processModel.type
-  )
-
-  if (processEngine === undefined)
-    throw new Error(
-      `No process engine found for process model type ${processModel.type}`
-    )
-
-  return simulateWithEngine(
-    processModel,
-    configuration,
-    processEngine as ProcessEngine<
-      SpecificProcessModel,
-      StateType,
-      ActivityIdentifier
-    >
-  )
-}
- */
 export const simulateWithEngine = <
   SpecificProcessModel extends ProcessModel,
-  StateType,
-  ActivityIdentifier extends string
+  StateType
 >(
   processModel: SpecificProcessModel,
   configuration: Configuration,
-  processEngine: ProcessEngine<
-    SpecificProcessModel,
-    StateType,
-    ActivityIdentifier
-  >
+  processEngine: ProcessEngine<SpecificProcessModel, StateType>
 ): SimulationResult => {
   // Validate the used engine with the used model
   if (processEngine.processModelType !== processModel.type)
@@ -121,19 +85,11 @@ const weightedRandom = <T>(
   throw new Error('Weighted random failed')
 }
 
-const checkTermination = <
-  SpecificProcessModel extends ProcessModel,
-  StateType,
-  ActivityIdentifier
->(
+const checkTermination = <SpecificProcessModel extends ProcessModel, StateType>(
   processModel: SpecificProcessModel,
   configuration: Configuration,
   state: StateType,
-  processEngine: ProcessEngine<
-    SpecificProcessModel,
-    StateType,
-    ActivityIdentifier
-  >,
+  processEngine: ProcessEngine<SpecificProcessModel, StateType>,
   trace: Trace,
   randomGenerator: seedrandom.PRNG
 ): TerminationStatus => {

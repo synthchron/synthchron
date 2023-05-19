@@ -6,11 +6,11 @@
     },
     "build": {
       "dependsOn": ["lint", "^build"],
-      "outputs": ["/dist/**"]
+      "outputs": ["./dist/**"]
     },
     "build:tauri": {
       "dependsOn": ["^build", "^build:tauri"],
-      "outputs": ["/dist/**", "/src-tauri/target/**"]
+      "outputs": ["./dist/**", "./src-tauri/target/**"]
     },
     "lint": {},
     "lint:fix": {}

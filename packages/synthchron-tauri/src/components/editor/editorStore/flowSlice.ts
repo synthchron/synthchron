@@ -114,17 +114,10 @@ export const createFlowSlice: StateCreator<EditorState, [], [], FlowSlice> = (
     const selectedELem = get().selectedElement
 
     if (labelAvailable && selectedELem) {
-      const updatedNode = nodesMap.get(selectedELem.id) as Node
-      if (updatedNode) {
-        //Element is a node
-        nodesMap.set(selectedELem.id, {
-          ...updatedNode,
-          data: {
-            label: newLabel,
-          },
-        })
-        return true
-      }
+      selectedELem.data.label = newLabel
+      get().selectElement(selectedELem)
+
+      return true
     }
     return false
   },

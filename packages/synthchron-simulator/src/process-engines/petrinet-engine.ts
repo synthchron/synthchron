@@ -18,12 +18,8 @@ type PetriNetState = Map<string, [string, number]> //ID, Label, weight
 
 type ProcessModel = PetriNetProcessModel
 type State = PetriNetState
-type ActivityIdentifier = string
 
-const isAccepting: IsAcceptingType<ProcessModel, State, ActivityIdentifier> = (
-  model,
-  state
-) => {
+const isAccepting: IsAcceptingType<ProcessModel, State> = (model, state) => {
   const errorStore: string[] = []
 
   const reason = model.acceptingExpressions.find(({ expression }) => {
@@ -53,10 +49,7 @@ const isAccepting: IsAcceptingType<ProcessModel, State, ActivityIdentifier> = (
   return { isAccepting: true, reason: reason.name }
 }
 
-const getEnabled: GetEnabledType<ProcessModel, State, ActivityIdentifier> = (
-  model,
-  state
-) =>
+const getEnabled: GetEnabledType<ProcessModel, State> = (model, state) =>
   new Set(
     model.nodes
       // We only care about the transitions
@@ -85,11 +78,11 @@ const getEnabled: GetEnabledType<ProcessModel, State, ActivityIdentifier> = (
       ])
   )
 
-const executeActivity: ExecuteActivityType<
-  ProcessModel,
-  State,
-  ActivityIdentifier
-> = (model, state, activity) => {
+const executeActivity: ExecuteActivityType<ProcessModel, State> = (
+  model,
+  state,
+  activity
+) => {
   const newState = new Map(state)
 
   // Find activity
@@ -145,11 +138,7 @@ const executeActivity: ExecuteActivityType<
   return newState
 }
 
-const resetActivity: ResetActivityType<
-  ProcessModel,
-  State,
-  ActivityIdentifier
-> = (model) => {
+const resetActivity: ResetActivityType<ProcessModel, State> = (model) => {
   const newState: Map<string, [string, number]> = new Map() // PetriNetState
   model.nodes
     .filter((node): node is PetriNetPlace => node.type === 'place')
@@ -161,8 +150,7 @@ const resetActivity: ResetActivityType<
 
 export const petriNetEngine: ProcessEngine<
   PetriNetProcessModel,
-  PetriNetState,
-  string
+  PetriNetState
 > = {
   processModelType: ProcessModelType.PetriNet,
   isAccepting: isAccepting,
