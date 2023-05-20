@@ -44,16 +44,17 @@ export const CollaborationTab = () => {
 
   async function OpenRoom(KeepCurrent: boolean) {
     setChecking(true)
-    !roomTextfieldState.roomCode
-      ? setRoomTextfieldState(faker.random.alpha(5), true)
-      : setRoomTextfieldState(undefined, true)
 
-    const isEmpty = await checkRoomIsEmpty(roomTextfieldState.roomCode)
+    const roomCode = roomTextfieldState.roomCode || faker.random.alpha(5)
+    setRoomTextfieldState(roomCode, true)
+
+    const isEmpty = await checkRoomIsEmpty(roomCode)
     if (isEmpty) {
-      connectRoom(roomTextfieldState.roomCode, KeepCurrent)
+      connectRoom(roomCode, KeepCurrent)
       setConnectError('')
     } else {
       setConnectError('Room already exists')
+      setRoomTextfieldState(undefined, false)
     }
     setChecking(false)
   }
