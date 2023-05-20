@@ -7,6 +7,9 @@ import { usePersistentStore } from './common/persistentStore'
 export const Debug = () => {
   const projects = usePersistentStore((state) => state.projects)
   const removeProject = usePersistentStore((state) => state.removeProject)
+  const setConfigurations = usePersistentStore(
+    (state) => state.setConfigurations
+  )
 
   return (
     <>
@@ -23,6 +26,14 @@ export const Debug = () => {
         }}
       >
         Remove all projects
+      </Button>
+      <Button
+        onClick={() => {
+          // Remove all configs
+          setConfigurations([])
+        }}
+      >
+        Remove all configurations
       </Button>
     </>
   )

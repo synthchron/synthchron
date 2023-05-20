@@ -1,8 +1,9 @@
 import seedrandom from 'seedrandom'
 
+import { Configuration } from '@synthchron/types'
+
 import { ProcessModel } from './types/processModelTypes'
 import {
-  Configuration,
   ProcessEngine,
   SimulationResult,
   TerminationStatus,

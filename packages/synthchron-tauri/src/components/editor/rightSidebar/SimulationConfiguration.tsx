@@ -12,10 +12,10 @@ import {
 import { shallow } from 'zustand/shallow'
 
 import {
+  Configuration,
   StandardConfigurationTerminationType,
   TerminationType,
-} from '@synthchron/simulator'
-import { Configuration } from '@synthchron/simulator'
+} from '@synthchron/types'
 
 import { EditorState, useEditorStore } from '../editorStore/flowStore'
 
@@ -31,13 +31,17 @@ type SimulationConfigurationProperty = {
 
 //Default values of configuration for simulation.
 const minMaxEvents = [1, 100]
-const partialNotAutoConfiguration = {
+const partialNotAutoConfiguration: Partial<Configuration> = {
   //These are values that should not be automatically generated
   endOnAcceptingStateProbability: 100,
   minEvents: minMaxEvents[0],
   maxEvents: minMaxEvents[1],
+  postprocessing: {
+    stepProbability: 0.1,
+    postProcessingSteps: [],
+  },
 }
-const partialAutoConfiguration = {
+const partialAutoConfiguration: Partial<Configuration> = {
   //These are values that can be automatically generated
   randomSeed: '',
   //Add other configuration options here
@@ -48,10 +52,10 @@ const partialAutoConfiguration = {
     type: TerminationType.Standard,
   } as StandardConfigurationTerminationType,
 }
-export const defaultConfiguration = {
+export const defaultConfiguration: Configuration = {
   ...partialAutoConfiguration,
   ...partialNotAutoConfiguration,
-}
+} as Configuration // Needed, as we don't know whether the two partials are complete
 
 export const SimulationConfiguration: React.FC<
   SimulationConfigurationProperty
