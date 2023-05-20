@@ -5,7 +5,6 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import {
   Button,
   Divider,
-  FormControl,
   IconButton,
   InputLabel,
   MenuItem,
@@ -15,8 +14,6 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-
-import { Configuration } from '@synthchron/simulator'
 
 import { usePersistentStore } from '../../common/persistentStore'
 import { useEditorStore } from '../editorStore/flowStore'
@@ -83,7 +80,7 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
 
   return (
     <>
-      <FormControl
+      <div
         style={{
           width: '100%',
           margin: '6em 0',
@@ -167,7 +164,7 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
             </Typography>
             <ConfigurationForm
               config={config}
-              setConfig={(newConfig: Configuration) => {
+              setConfig={(newConfig) => {
                 setConfigurations(
                   configurations.map((c) =>
                     c.configurationName === config.configurationName
@@ -180,8 +177,20 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
             />
           </Paper>
           <ConfigPreview config={config} />
+          <Button
+            onClick={nextStep}
+            disabled={
+              config.configurationName == null ||
+              !configurations
+                .map((c) => c.configurationName)
+                .find((val) => val == config.configurationName)
+            }
+            variant='contained'
+          >
+            Continue to Simulation
+          </Button>
         </Stack>
-      </FormControl>
+      </div>
     </>
   )
 }

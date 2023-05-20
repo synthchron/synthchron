@@ -1,6 +1,6 @@
 import { StateCreator } from 'zustand'
 
-import { Configuration } from '@synthchron/simulator'
+import { Configuration } from '@synthchron/types'
 import { XESLog } from '@synthchron/xes'
 
 import { defaultConfiguration } from '../rightSidebar/SimulationConfiguration'

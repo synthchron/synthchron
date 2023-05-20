@@ -1,17 +1,27 @@
 // tslint:disable: only-arrow-functions
 import { expect } from 'chai'
 
+import { Trace } from '@synthchron/simulator'
 import {
   Configuration,
+  PostprocessingConfiguration,
   StandardConfigurationTerminationType,
-  Trace,
-} from '@synthchron/simulator'
+} from '@synthchron/types'
 
 import { postprocess } from '../src'
-import {
-  PostProcessingConfiguration,
-  PostProcessingStepType,
-} from '../src/types'
+import { PostprocessingStepType } from '../src/enumTypes'
+
+const configTemplate: Configuration = {
+  endOnAcceptingStateProbability: 1,
+  randomSeed: 'word',
+  terminationType: {
+    type: 'standard',
+  } as StandardConfigurationTerminationType,
+  postprocessing: {
+    stepProbability: 0.5,
+    postProcessingSteps: [],
+  },
+}
 
 describe('Testing delete functionality', function () {
   describe('Delete x events from traces', function () {
@@ -29,19 +39,16 @@ describe('Testing delete functionality', function () {
         },
       ]
 
-      const steps: PostProcessingConfiguration = {
+      const steps: PostprocessingConfiguration = {
         stepProbability: 0.5,
         postProcessingSteps: [
-          { type: PostProcessingStepType.DeletionStep, weight: 1 },
+          { type: PostprocessingStepType.DeletionStep, weight: 1 },
         ],
       }
 
       const config: Configuration = {
-        endOnAcceptingStateProbability: 1,
+        ...configTemplate,
         randomSeed: 'word',
-        terminationType: {
-          type: 'standard',
-        } as StandardConfigurationTerminationType,
       }
 
       const result = postprocess(traces, steps, config)
@@ -91,19 +98,16 @@ describe('Testing delete functionality', function () {
         },
       ]
 
-      const steps: PostProcessingConfiguration = {
+      const steps: PostprocessingConfiguration = {
         stepProbability: 0.3,
         postProcessingSteps: [
-          { type: PostProcessingStepType.DeletionStep, weight: 1 },
+          { type: PostprocessingStepType.DeletionStep, weight: 1 },
         ],
       }
 
       const config: Configuration = {
-        endOnAcceptingStateProbability: 1,
+        ...configTemplate,
         randomSeed: 'new',
-        terminationType: {
-          type: 'standard',
-        } as StandardConfigurationTerminationType,
       }
 
       const result = postprocess(traces, steps, config)
@@ -153,19 +157,16 @@ describe('Testing delete functionality', function () {
         },
       ]
 
-      const steps: PostProcessingConfiguration = {
+      const steps: PostprocessingConfiguration = {
         stepProbability: 1,
         postProcessingSteps: [
-          { type: PostProcessingStepType.DeletionStep, weight: 1 },
+          { type: PostprocessingStepType.DeletionStep, weight: 1 },
         ],
       }
 
       const config: Configuration = {
-        endOnAcceptingStateProbability: 1,
+        ...configTemplate,
         randomSeed: 'abc',
-        terminationType: {
-          type: 'standard',
-        } as StandardConfigurationTerminationType,
       }
 
       const result = postprocess(traces, steps, config)
@@ -212,19 +213,16 @@ describe('Testing delete functionality', function () {
         },
       ]
 
-      const steps: PostProcessingConfiguration = {
+      const steps: PostprocessingConfiguration = {
         stepProbability: 1,
         postProcessingSteps: [
-          { type: PostProcessingStepType.DeletionStep, weight: 1 },
+          { type: PostprocessingStepType.DeletionStep, weight: 1 },
         ],
       }
 
       const config: Configuration = {
-        endOnAcceptingStateProbability: 1,
+        ...configTemplate,
         randomSeed: 'random number',
-        terminationType: {
-          type: 'standard',
-        } as StandardConfigurationTerminationType,
       }
 
       const result = postprocess(traces, steps, config)

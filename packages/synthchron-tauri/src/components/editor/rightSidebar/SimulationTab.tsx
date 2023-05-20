@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { Button, Container, Typography } from '@mui/material'
 
 import {
-  Configuration,
   PetriNetProcessModel,
   SimulationLog,
   TraceSimulationResult,
@@ -11,6 +10,7 @@ import {
   simulateTraceWithEngine,
   simulateWithEngine,
 } from '@synthchron/simulator'
+import { Configuration } from '@synthchron/types'
 import { serialize } from '@synthchron/xes'
 
 import { transformFlowToSimulator } from '../../../utils/flowTransformer'

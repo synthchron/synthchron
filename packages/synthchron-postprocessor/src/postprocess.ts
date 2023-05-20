@@ -1,16 +1,16 @@
 import seedrandom from 'seedrandom'
 
-import { Configuration, Trace } from '@synthchron/simulator'
-
+import { Trace } from '@synthchron/simulator'
 import {
-  PostProcessingConfiguration,
-  PostProcessingStepType,
+  Configuration,
+  PostprocessingConfiguration,
+  PostprocessingStepType,
   SimpleSteps,
-} from './types'
+} from '@synthchron/types'
 
 export const postprocess = (
   traces: Trace[],
-  postProcessingConfiguration: PostProcessingConfiguration,
+  postProcessingConfiguration: PostprocessingConfiguration,
   config: Configuration
 ): Trace[] => {
   const postProcessingSteps: Set<[SimpleSteps, number]> = new Set()
@@ -30,15 +30,15 @@ export const postprocess = (
         )
 
         switch (postProcessingStep.type) {
-          case PostProcessingStepType.DeletionStep:
+          case PostprocessingStepType.DeletionStep:
             trace = performDeletion(trace, i)
             i = i - 1
             break
-          case PostProcessingStepType.SwapStep:
+          case PostprocessingStepType.SwapStep:
             trace = performSwap(trace, i)
             i = i + 1
             break
-          case PostProcessingStepType.InsertionStep:
+          case PostprocessingStepType.InsertionStep:
             trace = performInsertion(trace, i)
             i = i + 1
             break

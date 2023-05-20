@@ -30,6 +30,7 @@
     "chai": "^4.3.7",
     "eslint": "^8.37.0",
     "@synthchron/eslint-config": "*",
+    "@synthchron/types": "*",
     "mocha": "^10.1.0",
     "rimraf": "^5.0.0",
     "sinon": "^15.0.3",
@@ -37,8 +38,5 @@
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.0.4",
     "eslint-plugin-prettier": "^4.2.1"
-  },
-  "dependencies": {
-    "@synthchron/simulator": "*"
   }
 }
