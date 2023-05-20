@@ -20,6 +20,7 @@ const getNodeFromLabel = (nodes: Node[], label: string) => {
 export type FlowSlice = {
   selectedElement: Node | Edge | undefined
   selectElement: (elem: Node | Edge | undefined) => void
+  changeSelectedPlaceLabel: (newLabel: string, oldLabel: string) => boolean
   onNodesChange: OnNodesChange
   onEdgesChange: OnEdgesChange
   onConnect: OnConnect
@@ -85,7 +86,6 @@ export const createFlowSlice: StateCreator<EditorState, [], [], FlowSlice> = (
             data: {
               ...elem.data,
             },
-            id: elem.id,
           })
         }
       } else if (elemType == 'edge') {
@@ -97,10 +97,28 @@ export const createFlowSlice: StateCreator<EditorState, [], [], FlowSlice> = (
             data: {
               ...elem.data,
             },
-            id: elem.id,
           })
         }
       }
     }
+  },
+  changeSelectedPlaceLabel: (newLabel: string, oldLabel: string) => {
+    if (newLabel === oldLabel) {
+      return true
+    }
+
+    const nodesMap = get().yNodesMap
+    const labelAvailable = !Array.from(nodesMap.values())
+      .filter((node) => node.type === 'Place') //Allows transitions and places to share labels
+      .some((node) => node.data.label === newLabel)
+    const selectedELem = get().selectedElement
+
+    if (labelAvailable && selectedELem) {
+      selectedELem.data.label = newLabel
+      get().selectElement(selectedELem)
+
+      return true
+    }
+    return false
   },
 })

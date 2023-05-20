@@ -6,8 +6,10 @@ import { shallow } from 'zustand/shallow'
 
 import { EditorState, useEditorStore } from '../editorStore/flowStore'
 import { FlowFieldsToDisplay, GetElementType } from '../processModels/FlowUtil'
+import { OtherProperty } from './CustomProperties/OtherProperties'
+import { LabelProperty } from './CustomProperties/PlaceLabelProperty'
 
-type NodeDataFields = {
+export type NodeDataFields = {
   //List of fields that can be updated from property window.
   //They are all under the data field of both nodes and edges.
   label: string
@@ -38,11 +40,13 @@ export const PropertiesTab: React.FC = () => {
     (state: EditorState) => ({
       selectedElement: state.selectedElement,
       selectElement: state.selectElement,
+      changeSelectedPlaceLabel: state.changeSelectedPlaceLabel,
     }),
     []
   )
 
-  const { selectedElement, selectElement } = useEditorStore(selector, shallow)
+  const { selectedElement, selectElement, changeSelectedPlaceLabel } =
+    useEditorStore(selector, shallow)
 
   const updateNodeFields = (fields: Partial<NodeDataFields>) => {
     if (selectedElement) {
@@ -75,14 +79,14 @@ export const PropertiesTab: React.FC = () => {
       ? FlowFieldsToDisplay[selectedElement.type]
       : null
 
-  const fieldsToDisplayL = displayData
+  const fieldsToDisplay = displayData
     ? displayData
     : selectedElement
     ? Object.keys(selectedElement.data)
     : []
 
   const selectedElementProperties =
-    selectedElement && fieldsToDisplayL ? (
+    selectedElement && fieldsToDisplay ? (
       [
         <div key='NodeLabel'>
           <TextField
@@ -93,33 +97,22 @@ export const PropertiesTab: React.FC = () => {
         </div>,
       ].concat(
         Object.entries(selectedElement.data)
-          .filter(([key, _value]) => fieldsToDisplayL.includes(key))
+          .filter(([key, _value]) => fieldsToDisplay.includes(key))
           .map(([key, value]) => (
             <div key={key}>
-              <TextField
-                label={key}
-                variant='outlined'
-                type={NodeDataFieldsTypesAsStrings(key)}
-                value={value}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  if (NodeDataFieldsTypesAsStrings(key) === 'number') {
-                    if (
-                      Number.isNaN(parseInt(event.target.value)) &&
-                      !(event.target.value === '')
-                    ) {
-                      event.preventDefault
-                    } else {
-                      const resNumber = Number(event.target.value) * 1
-                      updateNodeFields({
-                        [key]: resNumber,
-                      })
-                      event.target.value = resNumber.toString()
-                    }
-                  } else {
-                    updateNodeFields({ [key]: event.target.value })
-                  }
-                }}
-              ></TextField>
+              {key === 'label' && selectedElement.type === 'Place' ? (
+                <LabelProperty
+                  value={value as string}
+                  changeSelectedPlaceLabel={changeSelectedPlaceLabel}
+                />
+              ) : (
+                <OtherProperty
+                  value={value as string}
+                  NonReactKey={key}
+                  type={NodeDataFieldsTypesAsStrings(key)}
+                  updateNodeFields={updateNodeFields}
+                />
+              )}
             </div>
           ))
       )
@@ -138,7 +131,6 @@ export const PropertiesTab: React.FC = () => {
     >
       <Stack spacing={2}>
         <Typography variant='h6'>Properties</Typography>
-        {/* TODO: Center this */}
         {selectedElementProperties}
       </Stack>
     </Container>
