@@ -167,7 +167,7 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
             </Typography>
             <ConfigurationForm
               config={config}
-              setConfig={(newConfig: Configuration) => {
+              setConfig={(newConfig) => {
                 setConfigurations(
                   configurations.map((c) =>
                     c.configurationName === config.configurationName
@@ -180,6 +180,18 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
             />
           </Paper>
           <ConfigPreview config={config} />
+          <Button
+            onClick={nextStep}
+            disabled={
+              config.configurationName == null ||
+              !configurations
+                .map((c) => c.configurationName)
+                .find((val) => val == config.configurationName)
+            }
+            variant='contained'
+          >
+            Continue to Simulation
+          </Button>
         </Stack>
       </div>
     </>

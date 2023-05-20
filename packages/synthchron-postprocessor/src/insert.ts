@@ -1,9 +1,4 @@
-import {
-  XESAttribute,
-  XESEvent,
-  XESLog,
-  XESTrace,
-} from '@synthchron/xes/src/types'
+import { XESEvent, XESLog, XESTrace } from '@synthchron/xes/src/types'
 
 export function insertDuplicate(log: XESLog, chance: number): XESLog {
   if (chance > 100 || chance < 0) {

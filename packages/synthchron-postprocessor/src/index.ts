@@ -2,5 +2,3 @@
 export const main = (): string => 'Hello World'
 
 export * from './postprocess'
-
-export * from './types'

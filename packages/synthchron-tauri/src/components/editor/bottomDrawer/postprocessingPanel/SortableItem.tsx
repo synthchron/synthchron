@@ -13,7 +13,7 @@ import {
   TextField,
 } from '@mui/material'
 
-import { PostProcessingStepType, SimpleSteps } from './PostprocessingPanel'
+import { PostprocessingStepType, SimpleSteps } from '@synthchron/postprocessor'
 
 function toTitleCase(str: string) {
   return str.replace(/\w\S*/g, function (txt: string) {
@@ -48,13 +48,13 @@ export const SortableItem: React.FC<SortableItemProps> = ({
             value={step.type}
             onChange={(event) => {
               setStep({
-                type: event.target.value as PostProcessingStepType,
+                type: event.target.value as PostprocessingStepType,
                 weight: step.weight,
               })
             }}
             size='small'
           >
-            {Object.values(PostProcessingStepType).map((type, index) => (
+            {Object.values(PostprocessingStepType).map((type, index) => (
               <MenuItem key={index} value={type}>
                 {toTitleCase(type as string)}
               </MenuItem>

@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 import { Stack } from '@mui/material'
 
+import { PostprocessingConfiguration } from '@synthchron/postprocessor'
 import {
   StandardConfigurationTerminationType,
   TerminationType,
@@ -12,10 +13,7 @@ import { MinMaxSlider } from './configurationPanel/MinMaxSlider'
 import { NameField } from './configurationPanel/NameField'
 import { ObjectForm } from './configurationPanel/ObjectForm'
 import { PercentSlider } from './configurationPanel/PercentSlider'
-import PostprocessingPanel, {
-  PostProcessingConfiguration,
-  PostProcessingStepType,
-} from './postprocessingPanel/PostprocessingPanel'
+import PostprocessingPanel from './postprocessingPanel/PostprocessingPanel'
 
 type ConfigurationFormProps = {
   config: Configuration
@@ -23,14 +21,18 @@ type ConfigurationFormProps = {
 }
 
 //Default values of configuration for simulation.
-const minMaxEvents = [0, 500]
-const partialNotAutoConfiguration = {
+const minMaxEvents = [1, 100]
+const partialNotAutoConfiguration: Partial<Configuration> = {
   //These are values that should not be automatically generated
   endOnAcceptingStateProbability: 100,
   minEvents: minMaxEvents[0],
   maxEvents: minMaxEvents[1],
+  postprocessing: {
+    stepProbability: 0.1,
+    postProcessingSteps: [],
+  },
 }
-const partialAutoConfiguration = {
+const partialAutoConfiguration: Partial<Configuration> = {
   //These are values that can be automatically generated
   randomSeed: '',
   //Add other configuration options here
@@ -41,47 +43,27 @@ const partialAutoConfiguration = {
     type: TerminationType.Standard,
   } as StandardConfigurationTerminationType,
 }
-export const defaultConfiguration = {
+
+export const defaultConfiguration: Configuration = {
   ...partialAutoConfiguration,
   ...partialNotAutoConfiguration,
-}
+} as Configuration // Needed, as we don't know whether the two partials are complete
 
 export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
   config,
   setConfig,
 }) => {
-  const [postprocessing, setPostprocessing] =
-    useState<PostProcessingConfiguration>({
-      postProcessingSteps: [],
-      stepProbability: 0,
+  const postprocessing = config.postprocessing
+  const setPostprocessing = (
+    f: (
+      postprocessing: PostprocessingConfiguration
+    ) => PostprocessingConfiguration
+  ) => {
+    setConfig({
+      ...config,
+      postprocessing: f(config.postprocessing),
     })
-
-  useEffect(() => {
-    setPostprocessing(
-      config.configurationName == 'Second'
-        ? {
-            postProcessingSteps: [
-              {
-                type: PostProcessingStepType.InsertionStep,
-                weight: 1,
-              },
-              {
-                type: PostProcessingStepType.DeletionStep,
-                weight: 1,
-              },
-              {
-                type: PostProcessingStepType.SwapStep,
-                weight: 1,
-              },
-            ],
-            stepProbability: 0.5,
-          }
-        : {
-            postProcessingSteps: [],
-            stepProbability: 0,
-          }
-    )
-  }, [config.configurationName])
+  }
 
   return (
     <Stack spacing={3} sx={{ marginTop: '30px', marginBottom: '30px' }}>
@@ -114,6 +96,7 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
           'minEvents',
           'maxEvents',
           'configurationName',
+          'postprocessing',
         ]}
       />
 

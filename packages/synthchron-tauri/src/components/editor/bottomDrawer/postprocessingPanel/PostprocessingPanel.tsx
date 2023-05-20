@@ -19,28 +19,12 @@ import HelpIcon from '@mui/icons-material/Help'
 // Temporary
 import { IconButton, Paper, Tooltip, Typography } from '@mui/material'
 
+import {
+  PostprocessingConfiguration,
+  PostprocessingStepType,
+} from '@synthchron/postprocessor'
+
 import { SortableItem } from './SortableItem'
-
-export type PostProcessingConfiguration = {
-  postProcessingSteps: PostProcessingSteps
-  stepProbability: number
-}
-
-type PostProcessingSteps = SimpleSteps[]
-
-export enum PostProcessingStepType {
-  DeletionStep = 'deletion',
-  SwapStep = 'swap',
-  InsertionStep = 'insertion',
-}
-
-export type SimpleSteps = {
-  type:
-    | PostProcessingStepType.DeletionStep
-    | PostProcessingStepType.SwapStep
-    | PostProcessingStepType.InsertionStep
-  weight: number
-}
 
 const postprocessingText = `Apply postprocessing steps to the generated traces to add noise. 
 The weight chooses which postprocessing step should be applied. 
@@ -48,8 +32,10 @@ Currently, only one type of noise can be applied to each event.`
 
 interface PostprocessingPanelProps {
   // Define props here
-  postprocessing: PostProcessingConfiguration
-  setPostprocessing: Dispatch<SetStateAction<PostProcessingConfiguration>>
+  postprocessing: PostprocessingConfiguration
+  setPostprocessing: (
+    f: (p: PostprocessingConfiguration) => PostprocessingConfiguration
+  ) => void
 }
 
 const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
@@ -68,8 +54,6 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
       ), // Fill with new elements
     ])
   }, [postprocessing])
-
-  console.log(order.toString())
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -105,8 +89,8 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
               setStep={(step) => {
                 if (step === undefined) {
                   setPostprocessing(
-                    (postprocessing: PostProcessingConfiguration) => {
-                      const newPostprocessing: PostProcessingConfiguration = {
+                    (postprocessing: PostprocessingConfiguration) => {
+                      const newPostprocessing: PostprocessingConfiguration = {
                         postProcessingSteps: [
                           ...postprocessing.postProcessingSteps.slice(0, index),
                           ...postprocessing.postProcessingSteps.slice(
@@ -127,8 +111,8 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
                   return
                 }
                 setPostprocessing(
-                  (postprocessing: PostProcessingConfiguration) => {
-                    const newPostprocessing: PostProcessingConfiguration = {
+                  (postprocessing: PostprocessingConfiguration) => {
+                    const newPostprocessing: PostprocessingConfiguration = {
                       postProcessingSteps: [
                         ...postprocessing.postProcessingSteps.slice(0, index),
                         step,
@@ -157,17 +141,17 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
             height: '2rem',
           }}
           onClick={() => {
-            setPostprocessing((postprocessing: PostProcessingConfiguration) => {
-              const newPostprocessing: PostProcessingConfiguration = {
+            setPostprocessing((postprocessing: PostprocessingConfiguration) => {
+              const newPostprocessing: PostprocessingConfiguration = {
                 postProcessingSteps: [
                   ...postprocessing.postProcessingSteps,
                   {
                     type:
                       Math.random() < 0.33
-                        ? PostProcessingStepType.DeletionStep
+                        ? PostprocessingStepType.DeletionStep
                         : Math.random() < 0.5
-                        ? PostProcessingStepType.InsertionStep
-                        : PostProcessingStepType.SwapStep,
+                        ? PostprocessingStepType.InsertionStep
+                        : PostprocessingStepType.SwapStep,
                     weight: 1,
                   },
                 ],
@@ -191,7 +175,7 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
       const oldIndex = order.indexOf(active.id)
       const newIndex = order.indexOf(over.id)
 
-      setPostprocessing((postprocessing: PostProcessingConfiguration) => ({
+      setPostprocessing((postprocessing: PostprocessingConfiguration) => ({
         postProcessingSteps: arrayMove(
           postprocessing.postProcessingSteps,
           oldIndex,
