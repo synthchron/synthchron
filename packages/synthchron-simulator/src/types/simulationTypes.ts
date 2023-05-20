@@ -38,6 +38,7 @@ export type SpecifiedAmountOfTracesTerminationType = {
 // Process Engine Types
 
 export type Weight = number
+// export type ActivityName = string
 // export type ActivityIdentifier = string
 
 export type AcceptingReason =
@@ -57,7 +58,7 @@ export type IsAcceptingType<ProcessModel, StateType> = (
 export type GetEnabledType<ProcessModel, StateType> = (
   model: ProcessModel,
   state: StateType
-) => Set<[string, Weight]>
+) => Set<[string, string, Weight]>
 
 export type ExecuteActivityType<ProcessModel, StateType> = (
   model: ProcessModel,
