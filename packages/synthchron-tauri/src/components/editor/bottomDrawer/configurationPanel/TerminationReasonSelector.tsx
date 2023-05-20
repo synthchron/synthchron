@@ -1,21 +1,19 @@
 import { MenuItem, Select, TextField, Typography } from '@mui/material'
 
-import { TerminationTypeUnion } from '@synthchron/simulator'
-
-export enum TerminationType {
-  Standard = 'standard',
-  Coverage = 'coverage',
-  SpecifiedAmountOfTraces = 'specifiedAmountOfTraces',
-}
+import { TerminationType, TerminationTypeUnion } from '@synthchron/types'
 
 const terminationTypeDefaults: {
-  [key in TerminationType]: Omit<TerminationTypeUnion, 'type'>
+  [key in TerminationType]: TerminationTypeUnion
 } = {
-  [TerminationType.Standard]: {},
+  [TerminationType.Standard]: {
+    type: TerminationType.Standard,
+  },
   [TerminationType.Coverage]: {
+    type: TerminationType.Coverage,
     coverage: 100,
   },
   [TerminationType.SpecifiedAmountOfTraces]: {
+    type: TerminationType.SpecifiedAmountOfTraces,
     amountOfTraces: 1,
   },
 }
@@ -38,13 +36,14 @@ export const TerminationReasonSelecter: React.FC<
       value={terminationType.type}
       onChange={(event) => {
         const newType = event.target.value as TerminationType
-        setTerminationType({
-          type: newType,
-          ...terminationTypeDefaults[newType],
-        } as TerminationTypeUnion)
+        setTerminationType(terminationTypeDefaults[newType])
       }}
     >
-      {Object.entries(TerminationType).map(([key, value]) => (
+      {[
+        TerminationType.Standard,
+        TerminationType.Coverage,
+        TerminationType.SpecifiedAmountOfTraces,
+      ].map(([key, value]) => (
         <MenuItem key={key} value={value}>
           {camelCaseToString(key)}
         </MenuItem>
