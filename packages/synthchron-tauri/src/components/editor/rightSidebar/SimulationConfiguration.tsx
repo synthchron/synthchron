@@ -12,10 +12,10 @@ import {
 import { shallow } from 'zustand/shallow'
 
 import {
+  Configuration,
   StandardConfigurationTerminationType,
   TerminationType,
-} from '@synthchron/simulator'
-import { Configuration } from '@synthchron/simulator'
+} from '@synthchron/types'
 
 import { EditorState, useEditorStore } from '../editorStore/flowStore'
 
