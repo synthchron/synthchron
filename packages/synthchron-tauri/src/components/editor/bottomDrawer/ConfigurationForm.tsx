@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 import { Stack } from '@mui/material'
 
 import {
@@ -10,6 +12,10 @@ import { MinMaxSlider } from './configurationPanel/MinMaxSlider'
 import { NameField } from './configurationPanel/NameField'
 import { ObjectForm } from './configurationPanel/ObjectForm'
 import { PercentSlider } from './configurationPanel/PercentSlider'
+import PostprocessingPanel, {
+  PostProcessingConfiguration,
+  PostProcessingStepType,
+} from './postprocessingPanel/PostprocessingPanel'
 
 type ConfigurationFormProps = {
   config: Configuration
@@ -43,38 +49,78 @@ export const defaultConfiguration = {
 export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
   config,
   setConfig,
-}) => (
-  <Stack spacing={3} sx={{ marginTop: '30px', marginBottom: '30px' }}>
-    <NameField
-      name={config.configurationName ?? 'Default'}
-      setName={(value) => setConfig({ ...config, configurationName: value })}
-    />
+}) => {
+  const [postprocessing, setPostprocessing] =
+    useState<PostProcessingConfiguration>({
+      postProcessingSteps: [],
+      stepProbability: 0,
+    })
 
-    <PercentSlider
-      value={config.endOnAcceptingStateProbability}
-      setValue={(value) =>
-        setConfig({ ...config, endOnAcceptingStateProbability: value })
-      }
-      title='Chance to terminate on accepting state'
-    />
+  useEffect(() => {
+    setPostprocessing(
+      config.configurationName == 'Second'
+        ? {
+            postProcessingSteps: [
+              {
+                type: PostProcessingStepType.InsertionStep,
+                weight: 1,
+              },
+              {
+                type: PostProcessingStepType.DeletionStep,
+                weight: 1,
+              },
+              {
+                type: PostProcessingStepType.SwapStep,
+                weight: 1,
+              },
+            ],
+            stepProbability: 0.5,
+          }
+        : {
+            postProcessingSteps: [],
+            stepProbability: 0,
+          }
+    )
+  }, [config.configurationName])
 
-    <MinMaxSlider
-      value={[config.minEvents ?? 0, config.maxEvents ?? 100]}
-      setValue={(value) =>
-        setConfig({ ...config, minEvents: value[0], maxEvents: value[1] })
-      }
-      title='Minimum and maximum Events:'
-    />
+  return (
+    <Stack spacing={3} sx={{ marginTop: '30px', marginBottom: '30px' }}>
+      <NameField
+        name={config.configurationName ?? 'Default'}
+        setName={(value) => setConfig({ ...config, configurationName: value })}
+      />
 
-    <ObjectForm
-      object={config}
-      set={(key, value) => setConfig({ ...config, [key]: value })}
-      ignoreKeys={[
-        'endOnAcceptingStateProbability',
-        'minEvents',
-        'maxEvents',
-        'configurationName',
-      ]}
-    />
-  </Stack>
-)
+      <PercentSlider
+        value={config.endOnAcceptingStateProbability}
+        setValue={(value) =>
+          setConfig({ ...config, endOnAcceptingStateProbability: value })
+        }
+        title='Chance to terminate on accepting state'
+      />
+
+      <MinMaxSlider
+        value={[config.minEvents ?? 0, config.maxEvents ?? 100]}
+        setValue={(value) =>
+          setConfig({ ...config, minEvents: value[0], maxEvents: value[1] })
+        }
+        title='Minimum and maximum Events:'
+      />
+
+      <ObjectForm
+        object={config}
+        set={(key, value) => setConfig({ ...config, [key]: value })}
+        ignoreKeys={[
+          'endOnAcceptingStateProbability',
+          'minEvents',
+          'maxEvents',
+          'configurationName',
+        ]}
+      />
+
+      <PostprocessingPanel
+        postprocessing={postprocessing}
+        setPostprocessing={setPostprocessing}
+      />
+    </Stack>
+  )
+}

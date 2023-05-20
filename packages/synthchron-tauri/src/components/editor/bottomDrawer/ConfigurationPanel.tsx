@@ -83,7 +83,7 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
 
   return (
     <>
-      <FormControl
+      <div
         style={{
           width: '100%',
           margin: '6em 0',
@@ -181,7 +181,7 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
           </Paper>
           <ConfigPreview config={config} />
         </Stack>
-      </FormControl>
+      </div>
     </>
   )
 }
