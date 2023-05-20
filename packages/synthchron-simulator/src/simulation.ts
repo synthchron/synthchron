@@ -42,7 +42,7 @@ export const simulateWithEngine = <
 
   while (!terminationReason.termination) {
     const enabledActivities = processEngine.getEnabled(processModel, state)
-    const [activity, activityName] = weightedRandom(
+    const [activity, activityName] = weightedRandomWithName(
       enabledActivities,
       randomGenerator
     )
@@ -68,7 +68,7 @@ export const simulateWithEngine = <
   }
 }
 
-const weightedRandom = <T>(
+export const weightedRandomWithName = <T>(
   activities: Set<[T, string, number]>,
   randomGenerator: seedrandom.PRNG
 ): [T, string] => {
