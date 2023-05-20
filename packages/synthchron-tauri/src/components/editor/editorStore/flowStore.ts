@@ -8,6 +8,7 @@ import { defaultConfiguration } from '../rightSidebar/SimulationConfiguration'
 import { EditorSlice, createEditorSlice } from './editorSlice'
 import { FlowSlice, createFlowSlice } from './flowSlice'
 import { ModelSlice, createModelSlice } from './modelSlice'
+import { SimulatorSlice, createSimulatorSlice } from './simulatorSlice'
 import { YjsSlice, createYjsSlice } from './yjsSlice'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -16,7 +17,8 @@ export type AwarenessState = any
 export type EditorState = YjsSlice &
   FlowSlice &
   ModelSlice &
-  EditorSlice & {
+  EditorSlice &
+  SimulatorSlice & {
     initializeFlow: (
       nodes: Node[],
       edges: Edge[],
@@ -33,6 +35,7 @@ export const useEditorStore = create<EditorState>((set, get, api) => ({
   ...createFlowSlice(set, get, api), // React Flow relevant state
   ...createModelSlice(set, get, api), // Process model relevant state
   ...createEditorSlice(set, get, api), // Editor relevant state
+  ...createSimulatorSlice(set, get, api), // Simulator relevant state
 
   // Initialize the editor state by setting the yDoc. The yDoc will then propagate changes to the other state variables.
   initializeFlow: (

@@ -7,10 +7,7 @@ export type Configuration = {
   randomSeed: string
   uniqueTraces?: boolean
   maximumTraces?: number
-  terminationType:
-    | StandardConfigurationTerminationType
-    | CoverageTerminationType
-    | SpecifiedAmountOfTracesTerminationType
+  terminationType: TerminationTypeUnion
 }
 
 export enum TerminationType {
@@ -18,6 +15,11 @@ export enum TerminationType {
   Coverage = 'coverage',
   SpecifiedAmountOfTraces = 'specifiedAmountOfTraces',
 }
+
+export type TerminationTypeUnion =
+  | StandardConfigurationTerminationType
+  | CoverageTerminationType
+  | SpecifiedAmountOfTracesTerminationType
 
 export type StandardConfigurationTerminationType = {
   type: TerminationType.Standard

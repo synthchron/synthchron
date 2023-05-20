@@ -1,8 +1,9 @@
 import React from 'react'
 
-import AddCircleIcon from '@mui/icons-material/AddCircle'
-import { Grid, IconButton } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add'
+import { Box, Grid, IconButton, Paper } from '@mui/material'
 
+import { BottomAppBar } from '../components/BottomAppBar'
 import { CustomAppBar } from '../components/CustomAppBar'
 import NewProjectModal from '../components/NewProjectModal'
 import { ProjectCard } from '../components/ProjectCard'
@@ -13,52 +14,75 @@ export const MainMenuPage = () => {
   const [isNewProjectModalOpen, setNewProjectModalOpen] = React.useState(false)
 
   return (
-    <>
+    <div
+      style={{
+        minHeight: '100vh',
+      }}
+    >
       <CustomAppBar />
-      <Grid sx={{ flexGrow: 1 }} container spacing={2}>
-        <Grid
-          item
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          minHeight: 'calc(100vh - 72px)',
+        }}
+      >
+        <Box
           sx={{
-            xs: 12,
-            height: 20,
+            width: '100%',
+            maxWidth: ['90%', '90%', '90%', '1200px'],
+            margin: '2em auto',
+          }}
+        >
+          <Grid container spacing={2}>
+            <Grid item xs={6} md={4} lg={3}>
+              <Paper
+                style={{
+                  minHeight: 250,
+                  height: '100%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: '#f5f5f5',
+                  cursor: 'pointer',
+                }}
+                onClick={() => {
+                  setNewProjectModalOpen(true)
+                }}
+              >
+                <IconButton>
+                  <AddIcon fontSize='large' />
+                </IconButton>
+              </Paper>
+            </Grid>
+            {Object.entries(projects)
+              .sort(([, p1], [, p2]) => {
+                return Date.parse(p1.lastEdited) - Date.parse(p2.lastEdited)
+              })
+              .reverse()
+              .map(([k, v], i) => (
+                <Grid key={i} item xs={6} md={4} lg={3}>
+                  <ProjectCard projectId={k} project={v} />
+                </Grid>
+              ))}
+          </Grid>
+        </Box>
+        <NewProjectModal
+          open={isNewProjectModalOpen}
+          onClose={() => {
+            setNewProjectModalOpen(false)
           }}
         />
-        <Grid item justifyContent={'center'} xs={12}>
-          <Grid container justifyContent={'center'} spacing={2}>
-            <Grid item xs={9}>
-              <Grid container spacing={2}>
-                <Grid item xs={4}>
-                  <IconButton
-                    color='primary'
-                    aria-label='create a new project'
-                    onClick={() => {
-                      setNewProjectModalOpen(true)
-                    }}
-                  >
-                    <AddCircleIcon fontSize='large' />
-                  </IconButton>
-                </Grid>
-                {Object.entries(projects)
-                  .sort(([, p1], [, p2]) => {
-                    return Date.parse(p1.lastEdited) - Date.parse(p2.lastEdited)
-                  })
-                  .reverse()
-                  .map(([k, v], i) => (
-                    <Grid key={i} item xs={4}>
-                      <ProjectCard projectId={k} project={v} />
-                    </Grid>
-                  ))}
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-      <NewProjectModal
-        open={isNewProjectModalOpen}
-        onClose={() => {
-          setNewProjectModalOpen(false)
-        }}
-      />
-    </>
+        <div
+          style={{
+            justifySelf: 'flex-end',
+            backgroundColor: 'red',
+          }}
+        >
+          <BottomAppBar />
+        </div>
+      </div>
+    </div>
   )
 }
