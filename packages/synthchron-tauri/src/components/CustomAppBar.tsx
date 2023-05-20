@@ -58,6 +58,10 @@ export const CustomAppBar: React.FC = () => {
       name: 'Collaborate',
       href: '/collaborate',
     },
+    {
+      name: 'Post-processing',
+      href: '/postprocessing',
+    },
   ]
 
   const projectButtons = Object.entries(projects)

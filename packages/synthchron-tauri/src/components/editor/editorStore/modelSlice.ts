@@ -15,8 +15,6 @@ export type ModelSlice = {
   setMeta: (meta: object) => void
   processModelFlowConfig: ProcessModelFlowConfig
   addNode: (node: Node) => void
-  config: Configuration
-  setConfig: (newConfig: Configuration) => void
 }
 
 export const createModelSlice: StateCreator<EditorState, [], [], ModelSlice> = (
