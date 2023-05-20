@@ -120,7 +120,6 @@ export const PlaceNodeShape: React.FC<PlaceNodeShapeProps> = ({
 
 export const PlaceNode: React.FC<NodeProps<PetriNetPlaceData>> = ({
   data,
-  id,
   selected,
   isConnectable,
 }) => {

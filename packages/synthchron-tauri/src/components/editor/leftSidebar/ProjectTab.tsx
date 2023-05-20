@@ -1,14 +1,7 @@
 import { useCallback } from 'react'
 
 import { faker } from '@faker-js/faker'
-import {
-  Box,
-  Button,
-  Container,
-  Input,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Box, Button, Container, TextField, Typography } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
 import { shallow } from 'zustand/shallow'
 
