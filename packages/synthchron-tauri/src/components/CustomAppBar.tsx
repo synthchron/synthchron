@@ -33,6 +33,10 @@ export const CustomAppBar: React.FC = () => {
 
   const sessionStart = useEditorStore((state) => state.sessionStart)
 
+  const setRoomTextfieldState = useEditorStore(
+    (state) => state.setRoomTextfieldState
+  )
+
   const isCollaborating = useEditorStore(
     (state) => state.yWebRTCProvider !== null
   )
@@ -44,6 +48,8 @@ export const CustomAppBar: React.FC = () => {
       if (isCollaborating) {
         e.preventDefault()
         setPreventCollaborationExitModelOpen(true)
+      } else {
+        setRoomTextfieldState('', false)
       }
     },
     [isCollaborating]
