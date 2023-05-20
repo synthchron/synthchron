@@ -43,8 +43,8 @@ export const TerminationReasonSelecter: React.FC<
         TerminationType.Standard,
         TerminationType.Coverage,
         TerminationType.SpecifiedAmountOfTraces,
-      ].map(([key, value]) => (
-        <MenuItem key={key} value={value}>
+      ].map((key) => (
+        <MenuItem key={key} value={key}>
           {camelCaseToString(key)}
         </MenuItem>
       ))}
