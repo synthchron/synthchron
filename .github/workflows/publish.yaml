@@ -34,7 +34,7 @@ jobs:
           overwrites-pull-request-comment: true
           netlify-config-path: ./netlify.toml
           alias: deploy-preview-${{ github.event.number }}
-          github-deployment-environment: Netlify
+          github-deployment-environment: ${{ github.ref == 'refs/heads/main' && 'Netlify' || format('deploy-preview-{0}', github.event.number)  }}
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
