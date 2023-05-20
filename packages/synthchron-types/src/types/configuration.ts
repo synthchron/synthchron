@@ -7,8 +7,8 @@ export type Configuration = {
   minEvents?: number
   maxEvents?: number
   randomSeed: string
-  uniqueTraces?: boolean
-  maximumTraces?: number
+  uniqueTraces: boolean
+  maximumTraces: number
   terminationType: TerminationTypeUnion
   postprocessing: PostprocessingConfiguration
 }

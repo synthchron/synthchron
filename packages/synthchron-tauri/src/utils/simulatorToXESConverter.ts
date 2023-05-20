@@ -1,14 +1,26 @@
-import { Event, SimulationResult } from '@synthchron/simulator'
-import { XESEvent, XESLog } from '@synthchron/xes'
+import {
+  Event,
+  SimulationLog,
+  TraceSimulationResult,
+} from '@synthchron/simulator'
+import { XESEvent, XESLog, XESTrace } from '@synthchron/xes'
 
-export const transformSimulatioResultToXESLog = (
-  simulationResult: SimulationResult
-): XESLog => {
+const transformSimulationResultToXESLog = (
+  simulationResult: TraceSimulationResult
+): XESTrace => {
   const XESTrace = {
     events: simulationResult.trace.events.map(convertEventToXESEvent),
   }
+  return XESTrace
+}
+
+export const transformSimulationLogToXESLog = (
+  simulationLog: SimulationLog
+): XESLog => {
   const XESLog = {
-    traces: [XESTrace],
+    traces: simulationLog.simulationResults.map(
+      transformSimulationResultToXESLog
+    ),
   }
   return XESLog
 }

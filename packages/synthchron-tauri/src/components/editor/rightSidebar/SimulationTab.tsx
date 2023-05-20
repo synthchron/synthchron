@@ -14,7 +14,7 @@ import { Configuration } from '@synthchron/types'
 import { serialize } from '@synthchron/xes'
 
 import { transformFlowToSimulator } from '../../../utils/flowTransformer'
-import { transformSimulatioResultToXESLog } from '../../../utils/simulatorToXESConverter'
+import { transformSimulationLogToXESLog } from '../../../utils/simulatorToXESConverter'
 import { useEditorStore } from '../editorStore/flowStore'
 import {
   SimulationConfiguration,
@@ -26,26 +26,30 @@ export const SimulationTab: React.FC = () => {
   const [config, setConfig] = useState<Configuration>(defaultConfiguration)
 
   const simulate = async () => {
-    setSimulationResult(
-      await simulateWithEngine(
-        transformFlowToSimulator(
-          useEditorStore.getState()
-        ) as PetriNetProcessModel,
-        {
-          ...config,
-          randomSeed:
-            config.randomSeed === ''
-              ? Math.floor(Math.random() * 100).toString()
-              : config.randomSeed,
-        },
-        petriNetEngine
-      )
+    let result
+    const simulator = simulateWithEngine(
+      transformFlowToSimulator(
+        useEditorStore.getState()
+      ) as PetriNetProcessModel,
+      {
+        ...config,
+        randomSeed:
+          config.randomSeed === ''
+            ? Math.floor(Math.random() * 100).toString()
+            : config.randomSeed,
+      },
+      petriNetEngine
     )
+    for await (const { progress, simulationLog } of simulator) {
+      console.log(progress, simulationLog)
+      result = simulationLog
+    }
+    setSimulationResult(result)
   }
 
   const exportSimulation = () => {
     if (simulationResult === undefined) return
-    const xesLog = transformSimulatioResultToXESLog(simulationResult)
+    const xesLog = transformSimulationLogToXESLog(simulationResult)
     const xesString = serialize(xesLog)
     const xmlData = `data:text/xml;charset=utf-8,${encodeURIComponent(
       xesString

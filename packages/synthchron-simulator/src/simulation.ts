@@ -1,13 +1,13 @@
 import seedrandom from 'seedrandom'
 
 import { Configuration } from '@synthchron/types'
+import { TerminationType } from '@synthchron/types'
 
 import { ProcessModel } from './types/processModelTypes'
 import {
   ProcessEngine,
   SimulationLog,
   TerminationStatus,
-  TerminationType,
   Trace,
   TraceSimulationResult,
 } from './types/simulationTypes'
@@ -24,6 +24,9 @@ const calculateCoverage = <SpecificProcessModel, StateType>(
       )
     ),
   ]
+  if (processEngine.getActivities === undefined) {
+    throw new Error('Get Activities Function not implemented in Process Engine')
+  }
   const activitiesList = processEngine.getActivities(processModel)
   return reachedTransitions.length / activitiesList.length
 }
@@ -35,54 +38,81 @@ const getSimulationProgress = <SpecificProcessModel, StateType>(
   simulationResults: TraceSimulationResult[]
 ): number => {
   const resultLength = simulationResults.length
-  if (resultLength >= simulationConfiguration.maximumTraces) return 1
+  console.log(
+    'resultLength',
+    resultLength,
+    'simulationResults',
+    simulationResults
+  )
+  if (resultLength >= simulationConfiguration.maximumTraces) return 100
   switch (simulationConfiguration.terminationType.type) {
     case TerminationType.Standard:
-      return resultLength / simulationConfiguration.maximumTraces
+      return (100 * resultLength) / simulationConfiguration.maximumTraces
     case TerminationType.Coverage:
       return (
-        calculateCoverage(simulationResults, processEngine, processModel) /
+        (100 *
+          calculateCoverage(simulationResults, processEngine, processModel)) /
         simulationConfiguration.terminationType.coverage
       )
     case TerminationType.SpecifiedAmountOfTraces:
       return (
-        resultLength / simulationConfiguration.terminationType.amountOfTraces
+        (100 * resultLength) /
+        simulationConfiguration.terminationType.amountOfTraces
       )
   }
 }
 // TODO:
 // - Add support for random seed
-// - Rewrite as function generator
-// - Integrate with simulation panel
-export const simulateWithEngine = async <
+// - Add Unique traces
+
+// export const simulateWithEngine = async <
+//   SpecificProcessModel extends ProcessModel,
+//   StateType
+// >(
+//   processModel: SpecificProcessModel,
+//   simulationConfiguration: Configuration,
+//   processEngine: ProcessEngine<SpecificProcessModel, StateType>
+// ): Promise<SimulationLog> => {
+export async function* simulateWithEngine<
   SpecificProcessModel extends ProcessModel,
   StateType
 >(
   processModel: SpecificProcessModel,
   simulationConfiguration: Configuration,
   processEngine: ProcessEngine<SpecificProcessModel, StateType>
-): Promise<SimulationLog> => {
+): AsyncGenerator<{ progress: number; simulationLog: SimulationLog }> {
   if (processEngine.processModelType !== processModel.type)
     throw new Error(
       `Process engine ${processEngine.processModelType} cannot be used with process model ${processModel.type}`
     )
-  const simulationResults = []
-  while (
-    getSimulationProgress(
-      processEngine,
-      processModel,
-      simulationConfiguration,
-      simulationResults
-    ) != 1
-  ) {
+  const simulationResults: TraceSimulationResult[] = []
+  let progress = getSimulationProgress(
+    processEngine,
+    processModel,
+    simulationConfiguration,
+    simulationResults
+  )
+  // console.log(progress)
+  while (progress != 100) {
     const simResult = await simulateTraceWithEngine(
       processModel,
       simulationConfiguration,
       processEngine
     )
     simulationResults.push(simResult)
+    progress = getSimulationProgress(
+      processEngine,
+      processModel,
+      simulationConfiguration,
+      simulationResults
+    )
+    setTimeout(() => {
+      console.log('progress', progress)
+    }, 1000)
+    yield { progress: progress, simulationLog: { simulationResults: [] } }
   }
-  return { simulationResults }
+  yield { progress: 100, simulationLog: { simulationResults } }
+  // return { simulationResults }
 }
 
 export const simulateTraceWithEngine = async <

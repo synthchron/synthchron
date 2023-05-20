@@ -1,7 +1,18 @@
 import { useState } from 'react'
 
 import { Button, LinearProgress, Paper, Stack } from '@mui/material'
+import { config } from 'process'
 
+import {
+  PetriNetProcessModel,
+  petriNetEngine,
+  runSimulationFromMainThread,
+  simulateWithEngine,
+} from '@synthchron/simulator'
+import { Result } from '@synthchron/simulator/src/functionWorker'
+
+import { transformFlowToSimulator } from '../../../utils/flowTransformer'
+import { transformSimulationLogToXESLog } from '../../../utils/simulatorToXESConverter'
 import { TablePreview } from '../../common/TablePreview'
 import { ZustandFlowPreview } from '../../common/ZustandFlowPreview'
 import { useEditorStore } from '../editorStore/flowStore'
@@ -36,15 +47,37 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
   const [inSimulation, setInSimulation] = useState(false)
   const [progress, setProgress] = useState(0)
 
-  const simulationDummy = async () => {
+  // const simulationDummy = async () => {
+  //   let result
+  //   for await (const p of simulatorDummy()) {
+  //     setProgress(p.progress)
+  //     result = p.result
+  //   }
+  //   return result
+  // }
+
+  const simulate = async () => {
     let result
-    for await (const p of simulatorDummy()) {
-      setProgress(p.progress)
-      result = p.result
+    const simulator = simulateWithEngine(
+      transformFlowToSimulator(
+        useEditorStore.getState()
+      ) as PetriNetProcessModel,
+      {
+        ...configuration,
+        randomSeed:
+          configuration.randomSeed === ''
+            ? Math.floor(Math.random() * 100).toString()
+            : configuration.randomSeed,
+      },
+      petriNetEngine
+    )
+    for await (const { progress, simulationLog } of simulator) {
+      console.log(progress, simulationLog)
+      setProgress(progress)
+      result = simulationLog
     }
     return result
   }
-
   return (
     <>
       <Stack direction='row' spacing={2} marginTop={3} marginBottom={3}>
@@ -63,17 +96,40 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
           onClick={() => {
             setInSimulation(true)
             setProgress(0)
-            simulationDummy().then(async (result) => {
-              setResult({
-                log: {
-                  traces: [],
-                },
-                statistics: result ?? {},
-              })
-              await new Promise((resolve) => setTimeout(resolve, 2500))
-              setInSimulation(false)
-              nextStep()
-            })
+            runSimulationFromMainThread(
+              transformFlowToSimulator(
+                useEditorStore.getState()
+              ) as PetriNetProcessModel,
+              {
+                ...configuration,
+                randomSeed:
+                  configuration.randomSeed === ''
+                    ? Math.floor(Math.random() * 100).toString()
+                    : configuration.randomSeed,
+              },
+              petriNetEngine,
+              (res: Result) => {
+                console.log(res)
+                setProgress(res.progress)
+                setResult({
+                  log: res
+                    ? transformSimulationLogToXESLog(res.simulationLog)
+                    : { traces: [] },
+                  statistics: res.simulationLog ?? {},
+                })
+              }
+            )
+            // simulate().then(async (result) => {
+            //   setResult({
+            //     log: result
+            //       ? transformSimulationLogToXESLog(result)
+            //       : { traces: [] },
+            //     statistics: result ?? {},
+            //   })
+            //   await new Promise((resolve) => setTimeout(resolve, 2500))
+            //   setInSimulation(false)
+            //   nextStep()
+            // })
           }}
         >
           Simulate Traces
