@@ -13,7 +13,7 @@ import {
   TextField,
 } from '@mui/material'
 
-import { PostprocessingStepType, SimpleSteps } from '@synthchron/postprocessor'
+import { PostprocessingStepType, SimpleSteps } from '@synthchron/types'
 
 function toTitleCase(str: string) {
   return str.replace(/\w\S*/g, function (txt: string) {
@@ -54,7 +54,11 @@ export const SortableItem: React.FC<SortableItemProps> = ({
             }}
             size='small'
           >
-            {Object.values(PostprocessingStepType).map((type, index) => (
+            {[
+              PostprocessingStepType.DeletionStep,
+              PostprocessingStepType.InsertionStep,
+              PostprocessingStepType.SwapStep,
+            ].map((type, index) => (
               <MenuItem key={index} value={type}>
                 {toTitleCase(type as string)}
               </MenuItem>
@@ -62,7 +66,7 @@ export const SortableItem: React.FC<SortableItemProps> = ({
           </Select>
 
           {Object.entries(step)
-            .filter(([key, value]) => key !== 'type')
+            .filter(([key, _value]) => key !== 'type')
             .map(([key, value], index) => (
               <TextField
                 key={index}

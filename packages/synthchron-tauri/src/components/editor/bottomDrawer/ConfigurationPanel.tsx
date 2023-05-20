@@ -5,7 +5,6 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import {
   Button,
   Divider,
-  FormControl,
   IconButton,
   InputLabel,
   MenuItem,
@@ -15,8 +14,6 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-
-import { Configuration } from '@synthchron/simulator'
 
 import { usePersistentStore } from '../../common/persistentStore'
 import { useEditorStore } from '../editorStore/flowStore'

@@ -1,13 +1,11 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-
 import { Stack } from '@mui/material'
 
-import { PostprocessingConfiguration } from '@synthchron/postprocessor'
 import {
+  Configuration,
+  PostprocessingConfiguration,
   StandardConfigurationTerminationType,
   TerminationType,
-} from '@synthchron/simulator'
-import { Configuration } from '@synthchron/simulator'
+} from '@synthchron/types'
 
 import { MinMaxSlider } from './configurationPanel/MinMaxSlider'
 import { NameField } from './configurationPanel/NameField'

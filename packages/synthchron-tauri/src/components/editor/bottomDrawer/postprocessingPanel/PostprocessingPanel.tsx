@@ -1,7 +1,8 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import {
   DndContext,
+  DragEndEvent,
   KeyboardSensor,
   PointerSensor,
   closestCenter,
@@ -22,7 +23,7 @@ import { IconButton, Paper, Tooltip, Typography } from '@mui/material'
 import {
   PostprocessingConfiguration,
   PostprocessingStepType,
-} from '@synthchron/postprocessor'
+} from '@synthchron/types'
 
 import { SortableItem } from './SortableItem'
 
@@ -168,23 +169,25 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
     </Paper>
   )
 
-  function handleDragEnd(event: any) {
+  function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event
 
-    if (active.id !== over.id) {
-      const oldIndex = order.indexOf(active.id)
-      const newIndex = order.indexOf(over.id)
+    if (active == null || over == null) return
 
-      setPostprocessing((postprocessing: PostprocessingConfiguration) => ({
-        postProcessingSteps: arrayMove(
-          postprocessing.postProcessingSteps,
-          oldIndex,
-          newIndex
-        ),
-        stepProbability: postprocessing.stepProbability,
-      }))
-      setOrder((order) => arrayMove(order, oldIndex, newIndex))
-    }
+    if (active.id === over.id) return
+
+    const oldIndex = order.indexOf(active.id as number)
+    const newIndex = order.indexOf(over.id as number)
+
+    setPostprocessing((postprocessing: PostprocessingConfiguration) => ({
+      postProcessingSteps: arrayMove(
+        postprocessing.postProcessingSteps,
+        oldIndex,
+        newIndex
+      ),
+      stepProbability: postprocessing.stepProbability,
+    }))
+    setOrder((order) => arrayMove(order, oldIndex, newIndex))
   }
 }
 

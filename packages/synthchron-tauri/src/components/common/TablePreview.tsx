@@ -15,13 +15,6 @@ interface TablePreviewProps {
   object: object
 }
 
-const truncate = (input: string) => {
-  if (input.length > 20) {
-    return input.substring(0, 20) + '...'
-  }
-  return input
-}
-
 const toRow = (
   [key, value]: [string, unknown],
   prefix: string[] = []
