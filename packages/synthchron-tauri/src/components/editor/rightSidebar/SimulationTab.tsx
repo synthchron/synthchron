@@ -5,8 +5,10 @@ import { Button, Container, Typography } from '@mui/material'
 import {
   Configuration,
   PetriNetProcessModel,
-  SimulationResult,
+  SimulationLog,
+  TraceSimulationResult,
   petriNetEngine,
+  simulateTraceWithEngine,
   simulateWithEngine,
 } from '@synthchron/simulator'
 import { serialize } from '@synthchron/xes'
@@ -20,12 +22,12 @@ import {
 } from './SimulationConfiguration'
 
 export const SimulationTab: React.FC = () => {
-  const [simulationResult, setSimulationResult] = useState<SimulationResult>()
+  const [simulationResult, setSimulationResult] = useState<SimulationLog>()
   const [config, setConfig] = useState<Configuration>(defaultConfiguration)
 
-  const simulate = () => {
+  const simulate = async () => {
     setSimulationResult(
-      simulateWithEngine(
+      await simulateWithEngine(
         transformFlowToSimulator(
           useEditorStore.getState()
         ) as PetriNetProcessModel,
