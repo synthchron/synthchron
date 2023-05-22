@@ -1,7 +1,7 @@
 import { Edge, Node } from 'reactflow'
 import { StateCreator } from 'zustand'
 
-import { Configuration } from '@synthchron/simulator'
+import { Configuration } from '@synthchron/types'
 
 import { petriNetFlowConfig } from '../processModels/petriNet/petriNetFlowConfig'
 import { ProcessModelFlowConfig } from '../processModels/processModelFlowConfig'

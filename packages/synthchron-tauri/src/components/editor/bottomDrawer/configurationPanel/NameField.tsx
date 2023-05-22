@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { TextField } from '@mui/material'
 
-import { Configuration } from '@synthchron/simulator'
+import { Configuration } from '@synthchron/types'
 
 import { usePersistentStore } from '../../../common/persistentStore'
 
