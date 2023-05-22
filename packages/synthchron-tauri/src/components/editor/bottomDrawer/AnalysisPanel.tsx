@@ -10,13 +10,19 @@ import {
   Title,
   Tooltip,
 } from 'chart.js/auto'
-import { Bar, Line, Radar, Scatter } from 'react-chartjs-2'
+import { Bar, Doughnut, Line, Radar, Scatter } from 'react-chartjs-2'
 
 import { serialize } from '@synthchron/xes'
 
+import { XESlogToString } from '../../PostProcessing'
 import { TablePreview } from '../../common/TablePreview'
 import { usePersistentStore } from '../../common/persistentStore'
 import { useEditorStore } from '../editorStore/flowStore'
+import {
+  AggregateToData,
+  TransformToAggregate,
+  chartType,
+} from './analysisFunctions/aggregateCharts'
 
 ChartJS.register(
   CategoryScale,
@@ -103,90 +109,96 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
     return <>Hello</>
   }
 
-  return (
-    <Stack>
-      <Stack
-        direction={'row'}
-        spacing={1}
-        style={{
-          marginLeft: 'auto',
+  const exportButtons = (
+    <Stack
+      direction={'row'}
+      spacing={1}
+      style={{
+        marginLeft: 'auto',
+      }}
+    >
+      <Button
+        variant='contained'
+        onClick={() => {
+          downloadString(
+            serialize(result.log),
+            `trace-${
+              (projectId &&
+                projectId in projects &&
+                projects[projectId].projectName?.replace(/ /g, '_')) ||
+              'model'
+            }-${
+              configuration.configurationName?.replace(/ /g, '_') || 'default'
+            }.xes`
+          )
         }}
       >
-        <Button
-          variant='contained'
-          onClick={() => {
-            downloadString(
-              serialize(result.log),
-              `trace-${
+        Export as XES
+      </Button>
+      <Button
+        variant='contained'
+        onClick={() => {
+          downloadString(
+            serialize(result.log, [
+              'This log was generated using the following model and configuration.',
+              `Model: ${
                 (projectId &&
                   projectId in projects &&
-                  projects[projectId].projectName?.replace(/ /g, '_')) ||
-                'model'
-              }-${
-                configuration.configurationName?.replace(/ /g, '_') || 'default'
-              }.xes`
-            )
-          }}
-        >
-          Export as XES
-        </Button>
-        <Button
-          variant='contained'
-          onClick={() => {
-            downloadString(
-              serialize(result.log, [
-                'This log was generated using the following model and configuration.',
-                `Model: ${
-                  (projectId &&
-                    projectId in projects &&
-                    projects[projectId].projectName) ||
-                  'unknown'
-                }`,
-                `Configuration: ${
-                  configuration.configurationName || 'unknown'
-                }`,
-              ]),
-              `trace-${
+                  projects[projectId].projectName) ||
+                'unknown'
+              }`,
+              `Configuration: ${configuration.configurationName || 'unknown'}`,
+            ]),
+            `trace-${
+              (projectId &&
+                projectId in projects &&
+                projects[projectId].projectName?.replace(/ /g, '_')) ||
+              'model'
+            }-${
+              configuration.configurationName?.replace(/ /g, '_') || 'default'
+            }.xes`
+          )
+        }}
+      >
+        Export as XES with Model
+      </Button>
+      <Button
+        variant='contained'
+        onClick={() => {
+          downloadString(
+            serialize(result.log, [
+              'This log was generated using the following model and configuration.',
+              `Model: ${
                 (projectId &&
                   projectId in projects &&
-                  projects[projectId].projectName?.replace(/ /g, '_')) ||
-                'model'
-              }-${
-                configuration.configurationName?.replace(/ /g, '_') || 'default'
-              }.xes`
-            )
-          }}
-        >
-          Export as XES with Model
-        </Button>
-        <Button
-          variant='contained'
-          onClick={() => {
-            downloadString(
-              serialize(result.log, [
-                'This log was generated using the following model and configuration.',
-                `Model: ${
-                  (projectId &&
-                    projectId in projects &&
-                    JSON.stringify(projects[projectId].projectModel)) ||
-                  'unknown'
-                }`,
-                `Configuration: ${JSON.stringify(configuration) || 'unknown'}`,
-              ]),
-              `trace-${
-                (projectId &&
-                  projectId in projects &&
-                  projects[projectId].projectName?.replace(/ /g, '_')) ||
-                'model'
-              }-${
-                configuration.configurationName?.replace(/ /g, '_') || 'default'
-              }.xes`
-            )
-          }}
-        >
-          Export as XES with fully serialized Model
-        </Button>
-      </Stack>
+                  JSON.stringify(projects[projectId].projectModel)) ||
+                'unknown'
+              }`,
+              `Configuration: ${JSON.stringify(configuration) || 'unknown'}`,
+            ]),
+            `trace-${
+              (projectId &&
+                projectId in projects &&
+                projects[projectId].projectName?.replace(/ /g, '_')) ||
+              'model'
+            }-${
+              configuration.configurationName?.replace(/ /g, '_') || 'default'
+            }.xes`
+          )
+        }}
+      >
+        Export as XES with fully serialized Model
+      </Button>
+    </Stack>
+  )
+
+  return (
+    <Stack>
+      {exportButtons}
+      <p>{XESlogToString(result.log)}</p>
+      <Button onClick={(_event) => TransformToAggregate(result.log)}>
+        Testing button
+      </Button>
       <Divider
         style={{
           marginTop: '16px',
@@ -199,31 +211,63 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
         <Grid item xs={8}>
           <Paper style={{ padding: '16px' }}>
             <TablePreview object={result.statistics} />
+            Missing
           </Paper>
         </Grid>
         <Grid item xs={4}>
           <Paper style={{ padding: '16px' }}>
             <TablePreview object={result.statistics} />
+            Missing
           </Paper>
         </Grid>
         <Grid item xs={6}>
           <Paper style={{ padding: '16px' }}>
-            <Line data={data} options={options} />
+            <Line
+              data={AggregateToData(
+                TransformToAggregate(result.log),
+                chartType.Other
+              )}
+              options={options}
+            />
           </Paper>
         </Grid>
         <Grid item xs={6}>
           <Paper style={{ padding: '16px' }}>
-            <Bar data={data} options={options} />
+            <Bar
+              data={AggregateToData(
+                TransformToAggregate(result.log),
+                chartType.Other
+              )}
+              options={options}
+            />
           </Paper>
         </Grid>
         <Grid item xs={4}>
           <Paper style={{ padding: '16px' }}>
-            <Radar data={data} options={options} />
+            <Radar
+              data={AggregateToData(
+                TransformToAggregate(result.log),
+                chartType.Other
+              )}
+              options={options}
+            />
           </Paper>
         </Grid>
         <Grid item xs={8}>
           <Paper style={{ padding: '16px' }}>
             <Scatter data={highDimensionalData} options={options} />
+            Missing
+          </Paper>
+        </Grid>
+        <Grid item xs={4}>
+          <Paper style={{ padding: '16px' }}>
+            <Doughnut
+              data={AggregateToData(
+                TransformToAggregate(result.log),
+                chartType.Doughnot
+              )}
+              options={options}
+            />
           </Paper>
         </Grid>
       </Grid>

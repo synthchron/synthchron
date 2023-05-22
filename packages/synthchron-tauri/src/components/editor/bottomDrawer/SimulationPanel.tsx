@@ -2,9 +2,18 @@ import { useState } from 'react'
 
 import { Button, LinearProgress, Paper, Stack } from '@mui/material'
 
+import {
+  PetriNetProcessModel,
+  petriNetEngine,
+  simulateWithEngine,
+} from '@synthchron/simulator'
+
+import { transformFlowToSimulator } from '../../../utils/flowTransformer'
+import { transformSimulatioResultToXESLog } from '../../../utils/simulatorToXESConverter'
 import { TablePreview } from '../../common/TablePreview'
 import { ZustandFlowPreview } from '../../common/ZustandFlowPreview'
 import { useEditorStore } from '../editorStore/flowStore'
+import { ResultType } from '../editorStore/simulatorSlice'
 
 interface SimulationPanelProps {
   nextStep: () => void
@@ -36,13 +45,31 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
   const [inSimulation, setInSimulation] = useState(false)
   const [progress, setProgress] = useState(0)
 
-  const simulationDummy = async () => {
-    let result
+  const simulate = async () => {
+    const simulationResult = transformSimulatioResultToXESLog(
+      simulateWithEngine(
+        transformFlowToSimulator(
+          useEditorStore.getState()
+        ) as PetriNetProcessModel,
+        {
+          ...configuration,
+          randomSeed:
+            configuration.randomSeed === ''
+              ? Math.floor(Math.random() * 100).toString()
+              : configuration.randomSeed,
+        },
+        petriNetEngine
+      )
+    )
+
+    const result: ResultType = {
+      log: simulationResult,
+      statistics: {},
+    }
     for await (const p of simulatorDummy()) {
       setProgress(p.progress)
-      result = p.result
     }
-    return result
+    setResult(result)
   }
 
   return (
@@ -63,13 +90,7 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
           onClick={() => {
             setInSimulation(true)
             setProgress(0)
-            simulationDummy().then(async (result) => {
-              setResult({
-                log: {
-                  traces: [],
-                },
-                statistics: result ?? {},
-              })
+            simulate().then(async (_result) => {
               await new Promise((resolve) => setTimeout(resolve, 2500))
               setInSimulation(false)
               nextStep()
