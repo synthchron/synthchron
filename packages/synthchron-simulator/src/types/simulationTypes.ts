@@ -1,43 +1,7 @@
-// Configuration Types for the simulation
-export type Configuration = {
-  configurationName?: string
-  endOnAcceptingStateProbability: number
-  minEvents?: number
-  maxEvents?: number
-  randomSeed: string
-  uniqueTraces?: boolean
-  maximumTraces?: number
-  terminationType: TerminationTypeUnion
-}
-
-export enum TerminationType {
-  Standard = 'standard',
-  Coverage = 'coverage',
-  SpecifiedAmountOfTraces = 'specifiedAmountOfTraces',
-}
-
-export type TerminationTypeUnion =
-  | StandardConfigurationTerminationType
-  | CoverageTerminationType
-  | SpecifiedAmountOfTracesTerminationType
-
-export type StandardConfigurationTerminationType = {
-  type: TerminationType.Standard
-}
-
-export type CoverageTerminationType = {
-  type: TerminationType.Coverage
-  coverage: number
-}
-
-export type SpecifiedAmountOfTracesTerminationType = {
-  type: TerminationType.SpecifiedAmountOfTraces
-  amountOfTraces: number
-}
-
 // Process Engine Types
 
 export type Weight = number
+// export type ActivityName = string
 // export type ActivityIdentifier = string
 
 export type AcceptingReason =
@@ -57,7 +21,7 @@ export type IsAcceptingType<ProcessModel, StateType> = (
 export type GetEnabledType<ProcessModel, StateType> = (
   model: ProcessModel,
   state: StateType
-) => Set<[string, Weight]>
+) => Set<[string, string, Weight]>
 
 export type ExecuteActivityType<ProcessModel, StateType> = (
   model: ProcessModel,

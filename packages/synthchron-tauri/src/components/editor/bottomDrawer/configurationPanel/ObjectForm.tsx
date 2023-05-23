@@ -1,6 +1,6 @@
 import { Paper, Stack, Switch, TextField, Typography } from '@mui/material'
 
-import { TerminationTypeUnion } from '@synthchron/simulator'
+import { TerminationTypeUnion } from '@synthchron/types'
 
 import { TerminationReasonSelecter } from './TerminationReasonSelector'
 

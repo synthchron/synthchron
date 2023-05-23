@@ -4,6 +4,7 @@ export type PetriNetArcData = {
 
 export type PetriNetPlaceData = {
   tokens: number
+  label: string
 }
 
 export type PetriNetTransitionData = {

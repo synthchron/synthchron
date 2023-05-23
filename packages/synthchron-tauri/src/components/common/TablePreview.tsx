@@ -8,6 +8,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Tooltip,
 } from '@mui/material'
 
 interface TablePreviewProps {
@@ -55,12 +56,26 @@ const toRow = (
   }
 
   if (Array.isArray(value)) {
+    const textValue = value.map((x) => JSON.stringify(x)).join(', ')
     return (
       <TableRow key={key}>
         <TableCell component='th' scope='row'>
           {[...prefix, key].join('/')}
         </TableCell>
-        <TableCell align='right'>{value.map(toString).join(', ')}</TableCell>
+        <TableCell align='right'>
+          <Tooltip title={textValue}>
+            <div
+              style={{
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                maxWidth: '200px',
+              }}
+            >
+              {textValue}
+            </div>
+          </Tooltip>
+        </TableCell>
       </TableRow>
     )
   }

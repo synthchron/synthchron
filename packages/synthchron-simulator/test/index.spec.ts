@@ -1,6 +1,8 @@
 // tslint:disable: only-arrow-functions
 import { expect } from 'chai'
 
+import { Configuration } from '@synthchron/types'
+
 import { simulateWithEngine } from '../src'
 import { flowchart1 } from '../src/model-examples/flowchartExamples'
 import {
@@ -9,7 +11,14 @@ import {
   petriNet3,
 } from '../src/model-examples/petriNetExamples'
 import { petriNetEngine } from '../src/process-engines/petrinet-engine'
-import { TerminationType } from '../src/types/simulationTypes'
+import { TerminationType } from '../src/types/enumTypes'
+
+const noPostprocessing: Pick<Configuration, 'postprocessing'> = {
+  postprocessing: {
+    stepProbability: 0,
+    postProcessingSteps: [],
+  },
+}
 
 describe('Deterministic Process Models', () => {
   describe('Petri Net 1', () => {
@@ -34,6 +43,7 @@ describe('Deterministic Process Models', () => {
             endOnAcceptingStateProbability: 1,
             randomSeed: '42',
             terminationType: { type: TerminationType.Standard },
+            ...noPostprocessing,
           },
           petriNetEngine
         )
@@ -59,6 +69,7 @@ describe('Deterministic Process Models', () => {
             endOnAcceptingStateProbability: 1,
             randomSeed: '42',
             terminationType: { type: TerminationType.Standard },
+            ...noPostprocessing,
           },
           petriNetEngine
         )
@@ -84,6 +95,7 @@ describe('Deterministic Process Models', () => {
             endOnAcceptingStateProbability: 0,
             randomSeed: '42',
             terminationType: { type: TerminationType.Standard },
+            ...noPostprocessing,
           },
           petriNetEngine
         )
@@ -114,6 +126,7 @@ describe('Deterministic Process Models', () => {
             randomSeed: '42',
             endOnAcceptingStateProbability: 0,
             terminationType: { type: TerminationType.Standard },
+            ...noPostprocessing,
           },
           petriNetEngine
         )
@@ -135,6 +148,7 @@ describe('Deterministic Process Models', () => {
             randomSeed: '42',
             endOnAcceptingStateProbability: 0,
             terminationType: { type: TerminationType.Standard },
+            ...noPostprocessing,
           },
           petriNetEngine
         )
@@ -156,6 +170,7 @@ describe('Deterministic Process Models', () => {
             randomSeed: '42',
             endOnAcceptingStateProbability: 0,
             terminationType: { type: TerminationType.Standard },
+            ...noPostprocessing,
           },
           petriNetEngine
         )
@@ -196,6 +211,7 @@ describe('Deterministic Process Models', () => {
             endOnAcceptingStateProbability: 1,
             randomSeed: '42',
             terminationType: { type: TerminationType.Standard },
+            ...noPostprocessing,
           },
           petriNetEngine
         )
@@ -221,6 +237,7 @@ describe('Deterministic Process Models', () => {
             endOnAcceptingStateProbability: 0,
             randomSeed: '42',
             terminationType: { type: TerminationType.Standard },
+            ...noPostprocessing,
           },
           petriNetEngine
         )
@@ -251,6 +268,7 @@ describe('Deterministic Process Models', () => {
             randomSeed: '42',
             endOnAcceptingStateProbability: 0,
             terminationType: { type: TerminationType.Standard },
+            ...noPostprocessing,
           },
           petriNetEngine
         )
@@ -272,6 +290,7 @@ describe('Deterministic Process Models', () => {
             randomSeed: '42',
             endOnAcceptingStateProbability: 0,
             terminationType: { type: TerminationType.Standard },
+            ...noPostprocessing,
           },
           petriNetEngine
         )
@@ -310,6 +329,7 @@ describe('Deterministic Process Models', () => {
             endOnAcceptingStateProbability: 1,
             randomSeed: '42',
             terminationType: { type: TerminationType.Standard },
+            ...noPostprocessing,
           },
           petriNetEngine
         )
@@ -329,6 +349,7 @@ describe('Deterministic Process Models', () => {
             endOnAcceptingStateProbability: 0,
             randomSeed: '42',
             terminationType: { type: TerminationType.Standard },
+            ...noPostprocessing,
           },
           petriNetEngine
         )
@@ -358,6 +379,7 @@ describe('Deterministic Process Models', () => {
             randomSeed: '42',
             endOnAcceptingStateProbability: 0,
             terminationType: { type: TerminationType.Standard },
+            ...noPostprocessing,
           },
           petriNetEngine
         )
@@ -387,6 +409,7 @@ describe('Deterministic Process Models', () => {
             endOnAcceptingStateProbability: 1,
             randomSeed: '42',
             terminationType: { type: TerminationType.Standard },
+            ...noPostprocessing,
           },
           petriNetEngine
         )
@@ -411,6 +434,7 @@ describe('Deterministic Process Models', () => {
             randomSeed: '42',
             endOnAcceptingStateProbability: 0,
             terminationType: { type: TerminationType.Standard },
+            ...noPostprocessing,
           },
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           petriNetEngine as any
