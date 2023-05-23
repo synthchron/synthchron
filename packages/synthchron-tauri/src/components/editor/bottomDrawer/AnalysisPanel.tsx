@@ -1,4 +1,4 @@
-import { ColorModule, faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker'
 import { Button, Divider, Grid, Paper, Stack } from '@mui/material'
 import {
   CategoryScale,
