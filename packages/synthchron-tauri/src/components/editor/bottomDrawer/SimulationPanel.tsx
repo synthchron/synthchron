@@ -19,6 +19,21 @@ interface SimulationPanelProps {
   nextStep: () => void
 }
 
+async function* timeoutGenerator() {
+  const totalSteps = 150 // Set the total number of steps for the simulation
+  const delay = 10 // Set the delay between each step in milliseconds
+
+  for (let step = 0; step < totalSteps; step++) {
+    const progress = ((step + 1) / totalSteps) * 100 // Calculate the progress
+    yield progress // Yield the progress value
+
+    // Simulate the step with await
+    await new Promise((resolve) => setTimeout(resolve, delay))
+  }
+
+  yield 100 // Yield the final progress value (100%)
+}
+
 export const SimulationPanel: React.FC<SimulationPanelProps> = ({
   nextStep,
 }) => {
@@ -27,6 +42,13 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
 
   const [inSimulation, setInSimulation] = useState(false)
   const [progress, setProgress] = useState(0)
+
+  const timeout = async () => {
+    const progressGenerator = timeoutGenerator()
+    for await (const progress of progressGenerator) {
+      setProgress(progress) // Update the progress
+    }
+  }
 
   const simulate = async () => {
     const simulationResult = transformSimulatioResultToXESLog(
@@ -83,6 +105,7 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
           onClick={() => {
             setInSimulation(true)
             setProgress(0)
+            timeout().then()
             simulate().then(async (_result) => {
               await new Promise((resolve) => setTimeout(resolve, 2500))
               setInSimulation(false)
