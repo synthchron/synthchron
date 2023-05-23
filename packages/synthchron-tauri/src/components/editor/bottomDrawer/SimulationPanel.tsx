@@ -1,11 +1,9 @@
 import { useState } from 'react'
 
 import { Button, LinearProgress, Paper, Stack } from '@mui/material'
-import { config } from 'process'
 
 import {
   PetriNetProcessModel,
-  SimulationLog,
   petriNetEngine,
   simulateWithEngine,
 } from '@synthchron/simulator'
@@ -20,23 +18,6 @@ interface SimulationPanelProps {
   nextStep: () => void
 }
 
-async function* simulatorDummy() {
-  for (let i = 0; i < 500; i++) {
-    await new Promise((resolve) => setTimeout(resolve, 10))
-    yield {
-      progress: (100 * i) / 500,
-      result: undefined,
-    }
-  }
-  yield {
-    progress: 100,
-    result: {
-      'number of events': 500,
-      'number of traces': 1200,
-    },
-  }
-}
-
 export const SimulationPanel: React.FC<SimulationPanelProps> = ({
   nextStep,
 }) => {
@@ -46,15 +27,6 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
   const [inSimulation, setInSimulation] = useState(false)
   const [progress, setProgress] = useState(0)
 
-  // const simulationDummy = async () => {
-  //   let result
-  //   for await (const p of simulatorDummy()) {
-  //     setProgress(p.progress)
-  //     result = p.result
-  //   }
-  //   return result
-  // }
-
   // Todo:
   // Test Coverage and Specific amount of traces
   // Add unique traces to the simulation
@@ -62,6 +34,7 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
   // fix tests for the simulator
   // Create tests for the simulatorToXESConverter
   // Develop Random Generator for the Simulator
+  // Fix the simulation termination
   const simulate = async () => {
     let result
     const simulator = simulateWithEngine(
@@ -83,7 +56,6 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
       await new Promise((resolve) => setTimeout(resolve, 0))
       result = simulationLog
     }
-    console.log(result)
     return result
   }
   return (

@@ -5,9 +5,7 @@ import { Button, Container, Typography } from '@mui/material'
 import {
   PetriNetProcessModel,
   SimulationLog,
-  TraceSimulationResult,
   petriNetEngine,
-  simulateTraceWithEngine,
   simulateWithEngine,
 } from '@synthchron/simulator'
 import { Configuration } from '@synthchron/types'
@@ -41,8 +39,8 @@ export const SimulationTab: React.FC = () => {
       },
       petriNetEngine
     )
-    for await (const { progress, simulationLog } of simulator) {
-      result = simulationLog
+    for await (const simulation of simulator) {
+      result = simulation.simulationLog
     }
     setSimulationResult(result)
   }
