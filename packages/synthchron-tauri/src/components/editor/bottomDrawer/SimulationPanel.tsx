@@ -79,6 +79,7 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
     )
     for await (const { progress, simulationLog } of simulator) {
       setProgress(progress)
+      // DO not delete this line, it is needed to update the UI - Ali
       await new Promise((resolve) => setTimeout(resolve, 0))
       result = simulationLog
     }
