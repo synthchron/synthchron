@@ -38,12 +38,6 @@ const getSimulationProgress = <SpecificProcessModel, StateType>(
   simulationResults: TraceSimulationResult[]
 ): number => {
   const resultLength = simulationResults.length
-  console.log(
-    'resultLength',
-    resultLength,
-    'simulationResults',
-    simulationResults
-  )
   if (resultLength >= simulationConfiguration.maximumTraces) return 100
   switch (simulationConfiguration.terminationType.type) {
     case TerminationType.Standard:
@@ -64,15 +58,6 @@ const getSimulationProgress = <SpecificProcessModel, StateType>(
 // TODO:
 // - Add support for random seed
 // - Add Unique traces
-
-// export const simulateWithEngine = async <
-//   SpecificProcessModel extends ProcessModel,
-//   StateType
-// >(
-//   processModel: SpecificProcessModel,
-//   simulationConfiguration: Configuration,
-//   processEngine: ProcessEngine<SpecificProcessModel, StateType>
-// ): Promise<SimulationLog> => {
 export async function* simulateWithEngine<
   SpecificProcessModel extends ProcessModel,
   StateType
@@ -106,9 +91,6 @@ export async function* simulateWithEngine<
       simulationConfiguration,
       simulationResults
     )
-    setTimeout(() => {
-      console.log('progress', progress)
-    }, 1000)
     yield { progress: progress, simulationLog: { simulationResults: [] } }
   }
   yield { progress: 100, simulationLog: { simulationResults } }
@@ -166,7 +148,7 @@ export const simulateTraceWithEngine = async <
       randomGenerator
     )
   }
-
+  console.log('Accepting state:', terminationReason.acceptingState)
   return {
     trace,
     exitReason: terminationReason.reason,
@@ -201,7 +183,7 @@ const checkTermination = <SpecificProcessModel extends ProcessModel, StateType>(
 ): TerminationStatus => {
   // Check if the process is accepting (and the minimum number of events has been reached)
   const acceptingState = processEngine.isAccepting(processModel, state)
-
+  console.log('Accepting state from checkTermination:', acceptingState)
   if (
     (configuration.minEvents === undefined ||
       configuration.minEvents <= trace.events.length) &&

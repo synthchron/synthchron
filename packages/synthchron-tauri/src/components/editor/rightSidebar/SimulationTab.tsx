@@ -27,6 +27,7 @@ export const SimulationTab: React.FC = () => {
 
   const simulate = async () => {
     let result
+    console.log(config)
     const simulator = simulateWithEngine(
       transformFlowToSimulator(
         useEditorStore.getState()
@@ -41,7 +42,6 @@ export const SimulationTab: React.FC = () => {
       petriNetEngine
     )
     for await (const { progress, simulationLog } of simulator) {
-      console.log(progress, simulationLog)
       result = simulationLog
     }
     setSimulationResult(result)

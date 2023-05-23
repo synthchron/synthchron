@@ -5,11 +5,10 @@ import { config } from 'process'
 
 import {
   PetriNetProcessModel,
+  SimulationLog,
   petriNetEngine,
-  runSimulationFromMainThread,
   simulateWithEngine,
 } from '@synthchron/simulator'
-import { Result } from '@synthchron/simulator/src/functionWorker'
 
 import { transformFlowToSimulator } from '../../../utils/flowTransformer'
 import { transformSimulationLogToXESLog } from '../../../utils/simulatorToXESConverter'
@@ -56,6 +55,13 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
   //   return result
   // }
 
+  // Todo:
+  // Test Coverage and Specific amount of traces
+  // Add unique traces to the simulation
+  // Merge changes to the main branch
+  // fix tests for the simulator
+  // Create tests for the simulatorToXESConverter
+  // Develop Random Generator for the Simulator
   const simulate = async () => {
     let result
     const simulator = simulateWithEngine(
@@ -72,10 +78,11 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
       petriNetEngine
     )
     for await (const { progress, simulationLog } of simulator) {
-      console.log(progress, simulationLog)
       setProgress(progress)
+      await new Promise((resolve) => setTimeout(resolve, 0))
       result = simulationLog
     }
+    console.log(result)
     return result
   }
   return (
@@ -96,40 +103,17 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
           onClick={() => {
             setInSimulation(true)
             setProgress(0)
-            runSimulationFromMainThread(
-              transformFlowToSimulator(
-                useEditorStore.getState()
-              ) as PetriNetProcessModel,
-              {
-                ...configuration,
-                randomSeed:
-                  configuration.randomSeed === ''
-                    ? Math.floor(Math.random() * 100).toString()
-                    : configuration.randomSeed,
-              },
-              petriNetEngine,
-              (res: Result) => {
-                console.log(res)
-                setProgress(res.progress)
-                setResult({
-                  log: res
-                    ? transformSimulationLogToXESLog(res.simulationLog)
-                    : { traces: [] },
-                  statistics: res.simulationLog ?? {},
-                })
-              }
-            )
-            // simulate().then(async (result) => {
-            //   setResult({
-            //     log: result
-            //       ? transformSimulationLogToXESLog(result)
-            //       : { traces: [] },
-            //     statistics: result ?? {},
-            //   })
-            //   await new Promise((resolve) => setTimeout(resolve, 2500))
-            //   setInSimulation(false)
-            //   nextStep()
-            // })
+            simulate().then(async (result) => {
+              setResult({
+                log: result
+                  ? transformSimulationLogToXESLog(result)
+                  : { traces: [] },
+                statistics: result ?? {},
+              })
+              // await new Promise((resolve) => setTimeout(resolve, 2500))
+              setInSimulation(false)
+              nextStep()
+            })
           }}
         >
           Simulate Traces
