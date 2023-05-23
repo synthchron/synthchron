@@ -13,6 +13,7 @@ import {
 
 interface TablePreviewProps {
   object: object
+  columnTitles: [string, string]
 }
 
 const toRow = (
@@ -91,13 +92,14 @@ const toRow = (
 
 export const TablePreview: React.FC<TablePreviewProps> = ({
   object: configuration,
+  columnTitles = ['Key', 'Value'],
 }) => (
   <TableContainer component={Paper}>
     <Table sx={{ minWidth: 20 }} aria-label='simple table'>
       <TableHead>
         <TableRow>
-          <TableCell>Key</TableCell>
-          <TableCell align='right'>Value</TableCell>
+          <TableCell>{columnTitles[0]}</TableCell>
+          <TableCell align='right'>{columnTitles[1]}</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>

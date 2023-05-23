@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker'
+import { ColorModule, faker } from '@faker-js/faker'
 import { Button, Divider, Grid, Paper, Stack } from '@mui/material'
 import {
   CategoryScale,
@@ -14,13 +14,13 @@ import { Bar, Doughnut, Line, Radar, Scatter } from 'react-chartjs-2'
 
 import { serialize } from '@synthchron/xes'
 
-import { XESlogToString } from '../../PostProcessing'
 import { TablePreview } from '../../common/TablePreview'
 import { usePersistentStore } from '../../common/persistentStore'
 import { useEditorStore } from '../editorStore/flowStore'
 import {
   AggregateToData,
   TransformToAggregate,
+  aggregateToTable,
   chartType,
 } from './analysisFunctions/aggregateCharts'
 
@@ -35,24 +35,6 @@ ChartJS.register(
 )
 
 const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
-
-const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Dataset 1',
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-    {
-      label: 'Dataset 2',
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
-    },
-  ],
-}
 
 const highDimensionalData = {
   labels,
@@ -79,7 +61,7 @@ const options = {
     },
     title: {
       display: true,
-      text: 'Chart.js Line Chart',
+      text: 'Trace Chart',
     },
   },
 }
@@ -192,13 +174,14 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
     </Stack>
   )
 
+  const aggregateOfLog = TransformToAggregate(result.log)
+
+  const DoughnotData = AggregateToData(aggregateOfLog, chartType.Doughnot)
+  const LineData = AggregateToData(aggregateOfLog, chartType.Other)
+
   return (
     <Stack>
       {exportButtons}
-      <p>{XESlogToString(result.log)}</p>
-      <Button onClick={(_event) => TransformToAggregate(result.log)}>
-        Testing button
-      </Button>
       <Divider
         style={{
           marginTop: '16px',
@@ -210,64 +193,44 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
       <Grid container spacing={2}>
         <Grid item xs={8}>
           <Paper style={{ padding: '16px' }}>
-            <TablePreview object={result.statistics} />
-            Missing
-          </Paper>
-        </Grid>
-        <Grid item xs={4}>
-          <Paper style={{ padding: '16px' }}>
-            <TablePreview object={result.statistics} />
-            Missing
-          </Paper>
-        </Grid>
-        <Grid item xs={6}>
-          <Paper style={{ padding: '16px' }}>
-            <Line
-              data={AggregateToData(
-                TransformToAggregate(result.log),
-                chartType.Other
-              )}
-              options={options}
-            />
-          </Paper>
-        </Grid>
-        <Grid item xs={6}>
-          <Paper style={{ padding: '16px' }}>
-            <Bar
-              data={AggregateToData(
-                TransformToAggregate(result.log),
-                chartType.Other
-              )}
-              options={options}
+            <TablePreview
+              object={result.statistics}
+              columnTitles={['Key', 'Value']}
             />
           </Paper>
         </Grid>
         <Grid item xs={4}>
           <Paper style={{ padding: '16px' }}>
-            <Radar
-              data={AggregateToData(
-                TransformToAggregate(result.log),
-                chartType.Other
-              )}
-              options={options}
+            <TablePreview
+              object={aggregateToTable(aggregateOfLog)}
+              columnTitles={['Transition', 'Amount']}
             />
+          </Paper>
+        </Grid>
+        <Grid item xs={6}>
+          <Paper style={{ padding: '16px' }}>
+            <Line data={LineData} options={options} />
+          </Paper>
+        </Grid>
+        <Grid item xs={6}>
+          <Paper style={{ padding: '16px' }}>
+            <Bar data={LineData} options={options} />
+          </Paper>
+        </Grid>
+        <Grid item xs={4}>
+          <Paper style={{ padding: '16px' }}>
+            <Radar data={LineData} options={options} />
           </Paper>
         </Grid>
         <Grid item xs={8}>
           <Paper style={{ padding: '16px' }}>
             <Scatter data={highDimensionalData} options={options} />
-            Missing
+            Not implemented
           </Paper>
         </Grid>
         <Grid item xs={4}>
           <Paper style={{ padding: '16px' }}>
-            <Doughnut
-              data={AggregateToData(
-                TransformToAggregate(result.log),
-                chartType.Doughnot
-              )}
-              options={options}
-            />
+            <Doughnut data={DoughnotData} options={options} />
           </Paper>
         </Grid>
       </Grid>

@@ -19,23 +19,6 @@ interface SimulationPanelProps {
   nextStep: () => void
 }
 
-async function* simulatorDummy() {
-  for (let i = 0; i < 500; i++) {
-    await new Promise((resolve) => setTimeout(resolve, 10))
-    yield {
-      progress: (100 * i) / 500,
-      result: undefined,
-    }
-  }
-  yield {
-    progress: 100,
-    result: {
-      'number of events': 500,
-      'number of traces': 1200,
-    },
-  }
-}
-
 export const SimulationPanel: React.FC<SimulationPanelProps> = ({
   nextStep,
 }) => {
@@ -61,14 +44,21 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
         petriNetEngine
       )
     )
+    const tracesAmount = simulationResult.traces.length
+
+    const eventsAmount = simulationResult.traces.reduce(
+      (accumulator, trace) => accumulator + trace.events.length,
+      0
+    )
 
     const result: ResultType = {
       log: simulationResult,
-      statistics: {},
+      statistics: {
+        'number of traces': tracesAmount,
+        'number of events': eventsAmount,
+      },
     }
-    for await (const p of simulatorDummy()) {
-      setProgress(p.progress)
-    }
+
     setResult(result)
   }
 
@@ -76,7 +66,10 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
     <>
       <Stack direction='row' spacing={2} marginTop={3} marginBottom={3}>
         <Paper style={{ padding: '16px' }}>
-          <TablePreview object={configuration} />
+          <TablePreview
+            object={configuration}
+            columnTitles={['Config', 'Value']}
+          />
         </Paper>
         <Paper style={{ paddingRight: '5px', flexGrow: 1 }}>
           <ZustandFlowPreview />
