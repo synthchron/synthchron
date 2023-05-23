@@ -64,6 +64,7 @@ export const EditorPageWrapped = () => {
     if (projectId === undefined) return // User has opened the editor window directly
     const processModelConfig = petriNetFlowConfig // TODO: Chose processFlowConfig dynamicly
     const project = projects[projectId]
+    if (project === undefined) return // User has opened the editor with an old link
     const { nodes, edges, meta } = processModelConfig.generateFlow(
       project.projectModel
     ) // Get react flow compatible data
