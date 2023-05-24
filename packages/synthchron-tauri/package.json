@@ -29,6 +29,7 @@
     "allotment": "^1.19.0",
     "chart.js": "^4.3.0",
     "filtrex": "^3.0.0",
+    "jszip": "^3.10.1",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
