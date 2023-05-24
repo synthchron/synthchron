@@ -17,7 +17,7 @@ import {
 
 import { CustomAppBar } from './CustomAppBar'
 
-export function XESlogToString(log: XESLog) {
+export function XESLogToString(log: XESLog) {
   return log.traces
     .map((trace: XESTrace) =>
       trace.events.map((event: XESEvent) =>

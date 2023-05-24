@@ -19,10 +19,10 @@ import { usePersistentStore } from '../../common/persistentStore'
 import { useEditorStore } from '../editorStore/flowStore'
 import {
   AggregateToData,
+  ChartType,
   TransformToAggregate,
   aggregateToTable,
-  chartType,
-} from './analysisFunctions/aggregateCharts'
+} from './analysisFunctions/AggregateCharts'
 
 ChartJS.register(
   CategoryScale,
@@ -176,8 +176,8 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
 
   const aggregateOfLog = TransformToAggregate(result.log)
 
-  const DoughnotData = AggregateToData(aggregateOfLog, chartType.Doughnot)
-  const LineData = AggregateToData(aggregateOfLog, chartType.Other)
+  const doughnutData = AggregateToData(aggregateOfLog, ChartType.Doughnut)
+  const lineData = AggregateToData(aggregateOfLog, ChartType.Other)
 
   return (
     <Stack>
@@ -209,17 +209,17 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
         </Grid>
         <Grid item xs={6}>
           <Paper style={{ padding: '16px' }}>
-            <Line data={LineData} options={options} />
+            <Line data={lineData} options={options} />
           </Paper>
         </Grid>
         <Grid item xs={6}>
           <Paper style={{ padding: '16px' }}>
-            <Bar data={LineData} options={options} />
+            <Bar data={lineData} options={options} />
           </Paper>
         </Grid>
         <Grid item xs={4}>
           <Paper style={{ padding: '16px' }}>
-            <Radar data={LineData} options={options} />
+            <Radar data={lineData} options={options} />
           </Paper>
         </Grid>
         <Grid item xs={8}>
@@ -230,7 +230,7 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
         </Grid>
         <Grid item xs={4}>
           <Paper style={{ padding: '16px' }}>
-            <Doughnut data={DoughnotData} options={options} />
+            <Doughnut data={doughnutData} options={options} />
           </Paper>
         </Grid>
       </Grid>

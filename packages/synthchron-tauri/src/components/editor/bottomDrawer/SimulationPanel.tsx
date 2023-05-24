@@ -9,29 +9,15 @@ import {
 } from '@synthchron/simulator'
 
 import { transformFlowToSimulator } from '../../../utils/flowTransformer'
-import { transformSimulatioResultToXESLog } from '../../../utils/simulatorToXESConverter'
+import { transformSimulationLogToXESLog } from '../../../utils/simulatorToXESConverter'
 import { TablePreview } from '../../common/TablePreview'
 import { ZustandFlowPreview } from '../../common/ZustandFlowPreview'
 import { useEditorStore } from '../editorStore/flowStore'
 import { ResultType } from '../editorStore/simulatorSlice'
+import { SimulationStatisticsAdapter } from './analysisFunctions/SimulationStats'
 
 interface SimulationPanelProps {
   nextStep: () => void
-}
-
-async function* timeoutGenerator() {
-  const totalSteps = 150 // Set the total number of steps for the simulation
-  const delay = 10 // Set the delay between each step in milliseconds
-
-  for (let step = 0; step < totalSteps; step++) {
-    const progress = ((step + 1) / totalSteps) * 100 // Calculate the progress
-    yield progress // Yield the progress value
-
-    // Simulate the step with await
-    await new Promise((resolve) => setTimeout(resolve, delay))
-  }
-
-  yield 100 // Yield the final progress value (100%)
 }
 
 export const SimulationPanel: React.FC<SimulationPanelProps> = ({
@@ -43,45 +29,41 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
   const [inSimulation, setInSimulation] = useState(false)
   const [progress, setProgress] = useState(0)
 
-  const timeout = async () => {
-    const progressGenerator = timeoutGenerator()
-    for await (const progress of progressGenerator) {
-      setProgress(progress) // Update the progress
-    }
-  }
-
+  // Todo:
+  // Test Coverage and Specific amount of traces
+  // Add unique traces to the simulation
+  // Merge changes to the main branch
+  // fix tests for the simulator
+  // Create tests for the simulatorToXESConverter
+  // Develop Random Generator for the Simulator
+  // Fix the simulation termination
   const simulate = async () => {
-    const simulationResult = transformSimulatioResultToXESLog(
-      simulateWithEngine(
-        transformFlowToSimulator(
-          useEditorStore.getState()
-        ) as PetriNetProcessModel,
-        {
-          ...configuration,
-          randomSeed:
-            configuration.randomSeed === ''
-              ? Math.floor(Math.random() * 100).toString()
-              : configuration.randomSeed,
-        },
-        petriNetEngine
-      )
-    )
-    const tracesAmount = simulationResult.traces.length
-
-    const eventsAmount = simulationResult.traces.reduce(
-      (accumulator, trace) => accumulator + trace.events.length,
-      0
-    )
-
-    const result: ResultType = {
-      log: simulationResult,
-      statistics: {
-        'number of traces': tracesAmount,
-        'number of events': eventsAmount,
+    let result
+    const simulator = simulateWithEngine(
+      transformFlowToSimulator(
+        useEditorStore.getState()
+      ) as PetriNetProcessModel,
+      {
+        ...configuration,
       },
+      petriNetEngine
+    )
+    for await (const { progress, simulationLog } of simulator) {
+      setProgress(progress)
+      // DO not delete this line, it is needed to update the UI - Ali
+      await new Promise((resolve) => setTimeout(resolve, 0))
+      result = simulationLog
     }
-
-    setResult(result)
+    if (result) {
+      const XESResult = transformSimulationLogToXESLog(result)
+      return SimulationStatisticsAdapter(XESResult)
+    } else {
+      const emptyResult: ResultType = {
+        log: { traces: [] },
+        statistics: {},
+      }
+      return emptyResult
+    }
   }
 
   return (
@@ -105,9 +87,9 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
           onClick={() => {
             setInSimulation(true)
             setProgress(0)
-            timeout().then()
-            simulate().then(async (_result) => {
-              await new Promise((resolve) => setTimeout(resolve, 2500))
+            simulate().then(async (result) => {
+              setResult(result)
+              // await new Promise((resolve) => setTimeout(resolve, 2500))
               setInSimulation(false)
               nextStep()
             })

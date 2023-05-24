@@ -2,39 +2,38 @@ import { faker } from '@faker-js/faker'
 
 import { XESLog } from '@synthchron/xes'
 
-type logAggregate = Map<string, number> //Map<key, value>
+type LogAggregate = Map<string, number> //Map<key, value>
 
 //Also bar and pie chart
-type doughnotData = {
+type DoughnutData = {
   label: string
   data: number[]
   backgroundColor: string[]
   hoverOffset: number
 }
 
-type defualtData = {
+type DefaultData = {
   label: string
   data: number[]
   borderColor: string
   backgroundColor: string
 }
 
-type dataset = doughnotData | defualtData
+type Dataset = DoughnutData | DefaultData
 
-type chartData = {
+type ChartData = {
   labels: string[]
-  datasets: dataset[]
+  datasets: Dataset[]
 }
 
-export enum chartType {
-  Doughnot,
+export enum ChartType {
+  Doughnut,
   Other,
 }
 
-//REMOVE EXPORT
 // Maybe add 'string' last key, to highlight ending event with another color in statistics.
-export const TransformToAggregate = (log: XESLog): logAggregate[] => {
-  const aggregate: logAggregate[] = []
+export const TransformToAggregate = (log: XESLog): LogAggregate[] => {
+  const aggregate: LogAggregate[] = []
   log.traces.forEach((trace, index) => {
     aggregate[index] = new Map<string, number>()
     trace.events.forEach((event) => {
@@ -48,42 +47,42 @@ export const TransformToAggregate = (log: XESLog): logAggregate[] => {
 }
 
 export const AggregateToData = (
-  aggArr: logAggregate[],
-  chartTypeV: chartType
-): chartData => {
+  aggArr: LogAggregate[],
+  chartTypeV: ChartType
+): ChartData => {
   //Might be nice if the data was sorted, so the line chart for example only goes downwards
 
   const labels = Array.from(
     new Set(aggArr.flatMap((aggregate) => Array.from(aggregate.keys())))
   )
 
-  const datasetArr: dataset[] = []
+  const datasetArr: Dataset[] = []
+
+  const doughnutColors = Array.from({ length: labels.length }, () =>
+    faker.color.rgb({ format: 'css' })
+  )
 
   aggArr.forEach((agg, index) => {
     switch (chartTypeV) {
-      case chartType.Doughnot:
+      case ChartType.Doughnut:
         // eslint-disable-next-line no-case-declarations
-        const colorAsTextD = Array.from({ length: agg.size }, () =>
-          faker.color.rgb({ format: 'css' })
-        )
-
-        // eslint-disable-next-line no-case-declarations
-        const dataSetD: doughnotData = {
-          label: 'Dataset ' + index,
+        const dataSetD: DoughnutData = {
+          label: 'Trace ' + index,
           data: Array.from(agg.values()),
-          backgroundColor: colorAsTextD,
+          backgroundColor: doughnutColors,
           hoverOffset: 20,
         }
+        console.log(dataSetD)
 
         datasetArr.push(dataSetD)
         break
-      case chartType.Other:
+      case ChartType.Other:
         // eslint-disable-next-line no-case-declarations
         const colorAsText = faker.color.rgb({ format: 'decimal' }).join(', ')
 
         // eslint-disable-next-line no-case-declarations
-        const dataSet: defualtData = {
-          label: 'Dataset ' + index,
+        const dataSet: DefaultData = {
+          label: 'Trace ' + index,
           data: Array.from(agg.values()),
           borderColor: 'rgb(' + colorAsText + ')',
           backgroundColor: 'rgba(' + colorAsText + ', 0.5)',
@@ -94,7 +93,7 @@ export const AggregateToData = (
     }
   })
 
-  const chartdata: chartData = {
+  const chartdata: ChartData = {
     labels: labels,
     datasets: datasetArr,
   }
@@ -103,7 +102,7 @@ export const AggregateToData = (
 }
 
 export const aggregateToTable = (
-  aggArr: logAggregate[]
+  aggArr: LogAggregate[]
 ): Record<string, number> => {
   const resObj: Record<string, number> = {}
 

@@ -47,6 +47,7 @@ const partialAutoConfiguration: Partial<Configuration> = {
   //Add other configuration options here
   configurationName: 'Default',
   maximumTraces: 1,
+  uniqueTraces: false,
 
   terminationType: {
     type: TerminationType.Standard,

@@ -21,6 +21,8 @@ const configTemplate: Configuration = {
     stepProbability: 0.5,
     postProcessingSteps: [],
   },
+  uniqueTraces: false,
+  maximumTraces: 1,
 }
 
 describe('Testing delete functionality', function () {

@@ -8,6 +8,7 @@ import {
 } from '../types/processModelTypes/petriNetTypes'
 import {
   ExecuteActivityType,
+  GetActiviesType,
   GetEnabledType,
   IsAcceptingType,
   ProcessEngine,
@@ -148,6 +149,11 @@ const resetActivity: ResetActivityType<ProcessModel, State> = (model) => {
   return newState
 }
 
+const getActivities: GetActiviesType<ProcessModel> = (model: ProcessModel) => {
+  const events = model.nodes.filter((node) => node.type === 'transition')
+  return [...new Set(events.map((event) => event.identifier))]
+}
+
 export const petriNetEngine: ProcessEngine<
   PetriNetProcessModel,
   PetriNetState
@@ -157,4 +163,5 @@ export const petriNetEngine: ProcessEngine<
   getEnabled: getEnabled,
   executeActivity: executeActivity,
   resetActivity: resetActivity,
+  getActivities: getActivities,
 }

@@ -76,8 +76,6 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
     }
   }
 
-  console.log(config.configurationName)
-
   return (
     <>
       <div
