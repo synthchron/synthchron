@@ -33,12 +33,15 @@ export type ResetActivityType<ProcessModel, StateType> = (
   model: ProcessModel
 ) => StateType
 
+export type GetActiviesType<ProcessModel> = (model: ProcessModel) => string[]
+
 export type ProcessEngine<ProcessModel, StateType> = {
   processModelType: string
   isAccepting: IsAcceptingType<ProcessModel, StateType>
   getEnabled: GetEnabledType<ProcessModel, StateType>
   executeActivity: ExecuteActivityType<ProcessModel, StateType>
   resetActivity: ResetActivityType<ProcessModel, StateType>
+  getActivities?: GetActiviesType<ProcessModel>
 }
 
 // Generation Result Types
@@ -52,10 +55,14 @@ export type Event = {
   meta: object
 }
 
-export type SimulationResult = {
+export type TraceSimulationResult = {
   trace: Trace
-  exitReason: TerminationReason
+  exitReason: TraceTerminationReason
   acceptingState?: string
+}
+
+export type SimulationLog = {
+  simulationResults: TraceSimulationResult[]
 }
 
 type HasNotTerminatedType = {
@@ -64,11 +71,11 @@ type HasNotTerminatedType = {
 
 type HasTerminatedType = {
   termination: true
-  reason: TerminationReason
+  reason: TraceTerminationReason
   acceptingState?: string
 }
 
-type TerminationReason =
+type TraceTerminationReason =
   | 'maxStepsReached'
   | 'acceptingStateReached'
   | 'error'

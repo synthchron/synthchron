@@ -1,28 +1,115 @@
 import seedrandom from 'seedrandom'
 
 import { Configuration } from '@synthchron/types'
+import { TerminationType } from '@synthchron/types'
 
 import { ProcessModel } from './types/processModelTypes'
 import {
   ProcessEngine,
-  SimulationResult,
+  SimulationLog,
   TerminationStatus,
   Trace,
+  TraceSimulationResult,
 } from './types/simulationTypes'
 
-export const simulateWithEngine = <
+const calculateCoverage = <SpecificProcessModel, StateType>(
+  simulationResults: TraceSimulationResult[],
+  processEngine: ProcessEngine<SpecificProcessModel, StateType>,
+  processModel: SpecificProcessModel
+): number => {
+  const reachedTransitions = [
+    ...new Set(
+      simulationResults.map((result) =>
+        result.trace.events.filter((event) => event.name)
+      )
+    ),
+  ]
+  if (processEngine.getActivities === undefined) {
+    throw new Error('Get Activities Function not implemented in Process Engine')
+  }
+  const activitiesList = processEngine.getActivities(processModel)
+  return reachedTransitions.length / activitiesList.length
+}
+
+const getSimulationProgress = <SpecificProcessModel, StateType>(
+  processEngine: ProcessEngine<SpecificProcessModel, StateType>,
+  processModel: SpecificProcessModel,
+  simulationConfiguration: Configuration,
+  simulationResults: TraceSimulationResult[]
+): number => {
+  const resultLength = simulationResults.length
+  if (resultLength >= simulationConfiguration.maximumTraces) return 100
+  switch (simulationConfiguration.terminationType.type) {
+    case TerminationType.Standard:
+      return (100 * resultLength) / simulationConfiguration.maximumTraces
+    case TerminationType.Coverage:
+      return (
+        (100 *
+          calculateCoverage(simulationResults, processEngine, processModel)) /
+        simulationConfiguration.terminationType.coverage
+      )
+    case TerminationType.SpecifiedAmountOfTraces:
+      return (
+        (100 * resultLength) /
+        simulationConfiguration.terminationType.amountOfTraces
+      )
+  }
+}
+// TODO:
+// - Add support for random seed
+// - Add Unique traces
+export async function* simulateWithEngine<
+  SpecificProcessModel extends ProcessModel,
+  StateType
+>(
+  processModel: SpecificProcessModel,
+  simulationConfiguration: Configuration,
+  processEngine: ProcessEngine<SpecificProcessModel, StateType>
+): AsyncGenerator<{ progress: number; simulationLog: SimulationLog }> {
+  if (processEngine.processModelType !== processModel.type)
+    throw new Error(
+      `Process engine ${processEngine.processModelType} cannot be used with process model ${processModel.type}`
+    )
+  const simulationResults: TraceSimulationResult[] = []
+  let progress = getSimulationProgress(
+    processEngine,
+    processModel,
+    simulationConfiguration,
+    simulationResults
+  )
+  // console.log(progress)
+  while (progress != 100) {
+    const simResult = await simulateTraceWithEngine(
+      processModel,
+      simulationConfiguration,
+      processEngine
+    )
+    simulationResults.push(simResult)
+    progress = getSimulationProgress(
+      processEngine,
+      processModel,
+      simulationConfiguration,
+      simulationResults
+    )
+    yield { progress: progress, simulationLog: { simulationResults: [] } }
+  }
+  yield { progress: 100, simulationLog: { simulationResults } }
+  // return { simulationResults }
+}
+
+export const simulateTraceWithEngine = async <
   SpecificProcessModel extends ProcessModel,
   StateType
 >(
   processModel: SpecificProcessModel,
   configuration: Configuration,
   processEngine: ProcessEngine<SpecificProcessModel, StateType>
-): SimulationResult => {
+): Promise<TraceSimulationResult> => {
   // Validate the used engine with the used model
-  if (processEngine.processModelType !== processModel.type)
-    throw new Error(
-      `Process engine ${processEngine.processModelType} cannot be used with process model ${processModel.type}`
-    )
+  // if (processEngine.processModelType !== processModel.type)
+  //   throw new Error(
+  //     `Process engine ${processEngine.processModelType} cannot be used with process model ${processModel.type}`
+  //   )
 
   const trace: Trace = {
     events: [],
@@ -61,7 +148,6 @@ export const simulateWithEngine = <
       randomGenerator
     )
   }
-
   return {
     trace,
     exitReason: terminationReason.reason,
@@ -96,7 +182,6 @@ const checkTermination = <SpecificProcessModel extends ProcessModel, StateType>(
 ): TerminationStatus => {
   // Check if the process is accepting (and the minimum number of events has been reached)
   const acceptingState = processEngine.isAccepting(processModel, state)
-
   if (
     (configuration.minEvents === undefined ||
       configuration.minEvents <= trace.events.length) &&
