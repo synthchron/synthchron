@@ -1,43 +1,7 @@
-// Configuration Types for the simulation
-export type Configuration = {
-  configurationName?: string
-  endOnAcceptingStateProbability: number
-  minEvents?: number
-  maxEvents?: number
-  randomSeed: string
-  uniqueTraces?: boolean
-  maximumTraces?: number
-  terminationType: TerminationTypeUnion
-}
-
-export enum TerminationType {
-  Standard = 'standard',
-  Coverage = 'coverage',
-  SpecifiedAmountOfTraces = 'specifiedAmountOfTraces',
-}
-
-export type TerminationTypeUnion =
-  | StandardConfigurationTerminationType
-  | CoverageTerminationType
-  | SpecifiedAmountOfTracesTerminationType
-
-export type StandardConfigurationTerminationType = {
-  type: TerminationType.Standard
-}
-
-export type CoverageTerminationType = {
-  type: TerminationType.Coverage
-  coverage: number
-}
-
-export type SpecifiedAmountOfTracesTerminationType = {
-  type: TerminationType.SpecifiedAmountOfTraces
-  amountOfTraces: number
-}
-
 // Process Engine Types
 
 export type Weight = number
+// export type ActivityName = string
 // export type ActivityIdentifier = string
 
 export type AcceptingReason =
@@ -57,7 +21,7 @@ export type IsAcceptingType<ProcessModel, StateType> = (
 export type GetEnabledType<ProcessModel, StateType> = (
   model: ProcessModel,
   state: StateType
-) => Set<[string, Weight]>
+) => Set<[string, string, Weight]>
 
 export type ExecuteActivityType<ProcessModel, StateType> = (
   model: ProcessModel,
@@ -69,12 +33,15 @@ export type ResetActivityType<ProcessModel, StateType> = (
   model: ProcessModel
 ) => StateType
 
+export type GetActiviesType<ProcessModel> = (model: ProcessModel) => string[]
+
 export type ProcessEngine<ProcessModel, StateType> = {
   processModelType: string
   isAccepting: IsAcceptingType<ProcessModel, StateType>
   getEnabled: GetEnabledType<ProcessModel, StateType>
   executeActivity: ExecuteActivityType<ProcessModel, StateType>
   resetActivity: ResetActivityType<ProcessModel, StateType>
+  getActivities?: GetActiviesType<ProcessModel>
 }
 
 // Generation Result Types
@@ -88,10 +55,14 @@ export type Event = {
   meta: object
 }
 
-export type SimulationResult = {
+export type TraceSimulationResult = {
   trace: Trace
-  exitReason: TerminationReason
+  exitReason: TraceTerminationReason
   acceptingState?: string
+}
+
+export type SimulationLog = {
+  simulationResults: TraceSimulationResult[]
 }
 
 type HasNotTerminatedType = {
@@ -100,11 +71,11 @@ type HasNotTerminatedType = {
 
 type HasTerminatedType = {
   termination: true
-  reason: TerminationReason
+  reason: TraceTerminationReason
   acceptingState?: string
 }
 
-type TerminationReason =
+type TraceTerminationReason =
   | 'maxStepsReached'
   | 'acceptingStateReached'
   | 'error'

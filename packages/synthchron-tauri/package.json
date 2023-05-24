@@ -14,11 +14,13 @@
     "lint:fix": "npx eslint src --ext .ts --ext .tsx --fix"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.0.8",
+    "@dnd-kit/sortable": "^7.0.2",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^4.5.8",
     "@mui/icons-material": "^5.11.16",
-    "@mui/material": "^5.12.3",
+    "@mui/material": "^5.13.1",
     "@synthchron/postprocessor": "*",
     "@synthchron/simulator": "*",
     "@synthchron/types": "*",
@@ -59,7 +61,7 @@
     "@storybook/testing-library": "^0.1.0",
     "@synthchron/eslint-config": "*",
     "@tauri-apps/cli": "^1.3.1",
-    "@types/node": "^20.1.4",
+    "@types/node": "^20.2.3",
     "@types/react": "^18.0.34",
     "@types/react-detect-offline": "^2.4.1",
     "@types/react-dom": "^18.0.6",
@@ -76,6 +78,6 @@
     "stream-browserify": "^3.0.0",
     "typescript": "^5.0.4",
     "util": "^0.12.5",
-    "vite": "^4.3.5"
+    "vite": "^4.3.8"
   }
 }

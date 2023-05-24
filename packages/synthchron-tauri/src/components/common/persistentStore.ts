@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
-import { Configuration } from '@synthchron/simulator'
+import { Configuration } from '@synthchron/types'
 
 import { Project } from '../../types/project'
 

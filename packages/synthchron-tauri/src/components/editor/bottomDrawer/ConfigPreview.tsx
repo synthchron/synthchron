@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { Button, Paper, Typography } from '@mui/material'
 
-import { Configuration } from '@synthchron/simulator'
+import { Configuration } from '@synthchron/types'
 
 interface ConfigPreviewProps {
   config: Configuration

@@ -8,26 +8,42 @@ import {
 } from '../types/processModelTypes/petriNetTypes'
 import {
   ExecuteActivityType,
+  GetActiviesType,
   GetEnabledType,
   IsAcceptingType,
   ProcessEngine,
   ResetActivityType,
 } from '../types/simulationTypes'
 
-type PetriNetState = Map<string, number>
+type PetriNetState = Map<string, [string, number]> //ID, Label, weight
 
 type ProcessModel = PetriNetProcessModel
 type State = PetriNetState
 
 const isAccepting: IsAcceptingType<ProcessModel, State> = (model, state) => {
+  const errorStore: string[] = []
+
   const reason = model.acceptingExpressions.find(({ expression }) => {
     const exp = compileExpression(expression)
-    return exp(
+    const resultReason = exp(
       Object.fromEntries(
-        Array.from(state.entries()).map(([key, value]) => [`${key}`, value])
+        Array.from(state.entries()).map(([_key, [name, value]]) => [
+          `${name}`,
+          value,
+        ])
       )
     )
+    if (resultReason.toString().startsWith('ReferenceError:')) {
+      errorStore.push(resultReason.toString())
+    } else {
+      return resultReason
+    }
   })
+
+  if (errorStore.length !== 0) {
+    throw errorStore
+  }
+
   if (reason === undefined) {
     return { isAccepting: false }
   }
@@ -45,14 +61,22 @@ const getEnabled: GetEnabledType<ProcessModel, State> = (model, state) =>
           // We only care about the edges that have the transition as target
           .filter((edge) => edge.target === transition.identifier)
           // We only care about the edges that have enough tokens in the source place
-          .filter((edge) => (state.get(edge.source) || 0) >= edge.multiplicity)
+          .filter(
+            (edge) =>
+              ((state.get(edge.source) ?? [])[1] || 0) >= edge.multiplicity
+            //[1] gets the value of the node
+          )
         return (
           enabledEdges.length ===
           model.edges.filter((edge) => edge.target === transition.identifier)
             .length
         )
       })
-      .map((transition) => [transition.identifier, transition.weight])
+      .map((transition) => [
+        transition.identifier,
+        transition.name,
+        transition.weight,
+      ])
   )
 
 const executeActivity: ExecuteActivityType<ProcessModel, State> = (
@@ -81,7 +105,8 @@ const executeActivity: ExecuteActivityType<ProcessModel, State> = (
     ) // Only places that are source of the activity
     .forEach((place) => {
       const newWeight =
-        (newState.get(place.identifier) || 0) -
+        //[1] gets the value of the node
+        ((newState.get(place.identifier) ?? [])[1] || 0) -
         model.edges.filter(
           (edge) => edge.source === place.identifier && edge.target === activity
         )[0].multiplicity
@@ -91,7 +116,7 @@ const executeActivity: ExecuteActivityType<ProcessModel, State> = (
           `Attempted activities ${activity} with not enough tokens in place ${place.identifier}}`
         )
 
-      newState.set(place.identifier, newWeight)
+      newState.set(place.identifier, [place.name, newWeight])
     })
 
   // Add tokens to target places
@@ -106,18 +131,27 @@ const executeActivity: ExecuteActivityType<ProcessModel, State> = (
       const edgeMultiplicity = model.edges.filter(
         (edge) => edge.target === place.identifier && edge.source === activity
       )[0].multiplicity
-      const newWeight = (newState.get(place.identifier) || 0) + edgeMultiplicity
-      newState.set(place.identifier, newWeight)
+      const newWeight =
+        //[1] gets the value of the node
+        ((newState.get(place.identifier) ?? [])[1] || 0) + edgeMultiplicity
+      newState.set(place.identifier, [place.name, newWeight])
     })
   return newState
 }
 
 const resetActivity: ResetActivityType<ProcessModel, State> = (model) => {
-  const newState = new Map<string, number>()
+  const newState: Map<string, [string, number]> = new Map() // PetriNetState
   model.nodes
     .filter((node): node is PetriNetPlace => node.type === 'place')
-    .forEach((place) => newState.set(place.identifier, place.amountOfTokens))
+    .forEach((place) =>
+      newState.set(place.identifier, [place.name, place.amountOfTokens])
+    )
   return newState
+}
+
+const getActivities: GetActiviesType<ProcessModel> = (model: ProcessModel) => {
+  const events = model.nodes.filter((node) => node.type === 'transition')
+  return [...new Set(events.map((event) => event.identifier))]
 }
 
 export const petriNetEngine: ProcessEngine<
@@ -129,4 +163,5 @@ export const petriNetEngine: ProcessEngine<
   getEnabled: getEnabled,
   executeActivity: executeActivity,
   resetActivity: resetActivity,
+  getActivities: getActivities,
 }
