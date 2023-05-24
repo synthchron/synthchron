@@ -65,6 +65,9 @@ const InnerFlow: React.FC<FlowPreviewProps> = ({
       // Interaction blockers
       nodesDraggable={false}
       nodesConnectable={false}
+      nodesFocusable={false}
+      edgesFocusable={false}
+      disableKeyboardA11y={true}
       elementsSelectable={false}
       panOnDrag={false}
       zoomOnScroll={false}
