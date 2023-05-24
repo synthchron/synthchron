@@ -77,20 +77,16 @@ export async function* simulateWithEngine<
     simulationConfiguration,
     simulationResults
   )
+  const randomGenerator = seedrandom(simulationConfiguration.randomSeed)
 
   while (progress != 100) {
-    const randomSeed =
-      simulationConfiguration.randomSeed === ''
-        ? Math.floor(Math.random() * 100).toString()
-        : simulationConfiguration.randomSeed
-    const randomSimulationConfiguration = {
-      ...simulationConfiguration,
-      randomSeed: randomSeed,
-    }
-
+    const simulationRandomSeed = randomGenerator()
     const simResult = await simulateTraceWithEngine(
       processModel,
-      randomSimulationConfiguration,
+      {
+        ...simulationConfiguration,
+        randomSeed: simulationRandomSeed.toString(),
+      },
       processEngine
     )
     simulationResults.push(simResult)
@@ -103,7 +99,6 @@ export async function* simulateWithEngine<
     yield { progress: progress, simulationLog: { simulationResults: [] } }
   }
   yield { progress: 100, simulationLog: { simulationResults } }
-  // return { simulationResults }
 }
 
 export const simulateTraceWithEngine = async <
