@@ -25,7 +25,6 @@ export const SimulationTab: React.FC = () => {
 
   const simulate = async () => {
     let result
-    console.log(config)
     const simulator = simulateWithEngine(
       transformFlowToSimulator(
         useEditorStore.getState()

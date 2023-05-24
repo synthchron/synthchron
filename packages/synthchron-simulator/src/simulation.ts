@@ -148,7 +148,6 @@ export const simulateTraceWithEngine = async <
       randomGenerator
     )
   }
-  console.log('Accepting state:', terminationReason.acceptingState)
   return {
     trace,
     exitReason: terminationReason.reason,
@@ -183,7 +182,6 @@ const checkTermination = <SpecificProcessModel extends ProcessModel, StateType>(
 ): TerminationStatus => {
   // Check if the process is accepting (and the minimum number of events has been reached)
   const acceptingState = processEngine.isAccepting(processModel, state)
-  console.log('Accepting state from checkTermination:', acceptingState)
   if (
     (configuration.minEvents === undefined ||
       configuration.minEvents <= trace.events.length) &&
