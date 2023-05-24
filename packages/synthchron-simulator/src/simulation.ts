@@ -77,11 +77,16 @@ export async function* simulateWithEngine<
     simulationConfiguration,
     simulationResults
   )
+  const randomGenerator = seedrandom(simulationConfiguration.randomSeed)
   // console.log(progress)
   while (progress != 100) {
+    const simulationRandomSeed = randomGenerator()
     const simResult = await simulateTraceWithEngine(
       processModel,
-      simulationConfiguration,
+      {
+        ...simulationConfiguration,
+        randomSeed: simulationRandomSeed.toString(),
+      },
       processEngine
     )
     simulationResults.push(simResult)
