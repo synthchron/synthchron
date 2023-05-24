@@ -79,7 +79,7 @@ export const PostProcessing = () => {
                 color='primary'
                 onClick={() => {
                   setProcessingResult(
-                    XESlogToString(insertDuplicate(example, 20))
+                    XESLogToString(insertDuplicate(example, 20))
                   )
                 }}
               >
