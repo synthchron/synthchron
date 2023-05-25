@@ -577,15 +577,15 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.40.0.tgz#3ba73359e11f5a7bd3e407f70b3528abfae69cec"
   integrity sha512-ElyB54bJIhXQYVKjDSvCkPO1iU1tSAeVQJbllWJq1XQSmmA4dgFk8CbiBGpiOPxleE48vDogxCtmMYku4HSVLA==
 
-"@faker-js/faker@^7.6.0":
-  version "7.6.0"
-  resolved "https://registry.yarnpkg.com/@faker-js/faker/-/faker-7.6.0.tgz#9ea331766084288634a9247fcd8b84f16ff4ba07"
-  integrity sha512-XK6BTq1NDMo9Xqw/YkYyGjSsg44fbNwYRx7QK2CuoQgyy+f1rrTDHoExVM5PsyXCtfl2vs2vVJ0MN0yN6LppRw==
+"@faker-js/faker@^8.0.1":
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/@faker-js/faker/-/faker-8.0.1.tgz#2157068931aaab555eda5ff87f50330aeeb6153a"
+  integrity sha512-kbh5MenpTN9U0B4QcOI1NoTPlZHniSYQ3BHbhAnPjJGAmmFqxoxTE4sGdpy7ZOO9038DPGCuhXyMkjOr05uVwA==
 
-"@fontsource/roboto@^4.5.8":
-  version "4.5.8"
-  resolved "https://registry.yarnpkg.com/@fontsource/roboto/-/roboto-4.5.8.tgz#56347764786079838faf43f0eeda22dd7328437f"
-  integrity sha512-CnD7zLItIzt86q4Sj3kZUiLcBk1dSk81qcqgMGaZe7SQ1P8hFNxhMl5AZthK1zrDM5m74VVhaOpuMGIL4gagaA==
+"@fontsource/roboto@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@fontsource/roboto/-/roboto-5.0.1.tgz#c9d374fc71553d356986b393ec8aace1bf740d58"
+  integrity sha512-pWF64nF35Tfoh2kWgOuJYEFTLkpn+O3/GIR//u1MGD9b1yR+UBwYKXmcNx9CRyNPjMdWjkdN9GKDHhaWZRYbnw==
 
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"
@@ -806,12 +806,14 @@
     "@mui/utils" "^5.13.1"
     prop-types "^15.8.1"
 
-"@mui/styled-engine@^5.12.3", "@mui/styled-engine@npm:@mui/styled-engine-sc@latest":
-  version "5.12.0"
-  resolved "https://registry.yarnpkg.com/@mui/styled-engine-sc/-/styled-engine-sc-5.12.0.tgz#41040fb27667efab46e9200cec9657e62b544c48"
-  integrity sha512-3MgYoY2YG5tx0E5oKqvCv94oL0ABVBr+qpcyvciXW/v0wzPG6bXvuZV80GHYlJfasgnnRa1AbRWf5a9FcX8v6g==
+"@mui/styled-engine@^5.12.3":
+  version "5.13.2"
+  resolved "https://registry.yarnpkg.com/@mui/styled-engine/-/styled-engine-5.13.2.tgz#c87bd61c0ab8086d34828b6defe97c02bcd642ef"
+  integrity sha512-VCYCU6xVtXOrIN8lcbuPmoG+u7FYuOERG++fpY74hPpEWkyFQG97F+/XfTQVYzlR2m7nPjnwVUgATcTCMEaMvw==
   dependencies:
     "@babel/runtime" "^7.21.0"
+    "@emotion/cache" "^11.11.0"
+    csstype "^3.1.2"
     prop-types "^15.8.1"
 
 "@mui/system@^5.13.1":
