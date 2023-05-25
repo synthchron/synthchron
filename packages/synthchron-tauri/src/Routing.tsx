@@ -6,6 +6,7 @@ import { CollaborationPage } from './pages/CollaborationPage'
 import { EditorPage } from './pages/EditorPage'
 import { MainMenuPage } from './pages/MainMenuPage'
 import { NotFoundPage } from './pages/NotFoundPage'
+import { SwarmPage } from './pages/SwarmPage'
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: 'collaborate',
     element: <CollaborationPage />,
+  },
+  {
+    path: 'swarm',
+    element: <SwarmPage />,
   },
   {
     path: 'debug',
