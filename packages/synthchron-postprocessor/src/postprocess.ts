@@ -5,7 +5,6 @@ import {
   Configuration,
   PostprocessingConfiguration,
   PostprocessingStepType,
-  SimpleSteps,
 } from '@synthchron/types'
 
 export const postprocess = (
@@ -13,34 +12,35 @@ export const postprocess = (
   postProcessingConfiguration: PostprocessingConfiguration,
   config: Configuration
 ): Trace[] => {
-  const postProcessingSteps: Set<[SimpleSteps, number]> = new Set()
-  for (const postProcessingStep of postProcessingConfiguration.postProcessingSteps) {
-    postProcessingSteps.add([postProcessingStep, postProcessingStep.weight])
-  }
-
+  const postProcessingSteps = postProcessingConfiguration.postProcessingSteps
   const randomGenerator = seedrandom(config.randomSeed)
   traces.forEach((trace) => {
     // using for loop, to get the correct index to identify the event
     for (let i = 0; i < trace.events.length; i++) {
       const random = randomGenerator()
       if (random < postProcessingConfiguration.stepProbability) {
-        const postProcessingStep = weightedRandom(
-          postProcessingSteps,
+        const postProcessingStep = weightedRandom<PostprocessingStepType>(
+          (i != 0
+            ? postProcessingSteps
+            : postProcessingSteps.filter(
+                (step) => step.type !== PostprocessingStepType.SwapStep
+              )
+          ).map((step) => [step.type, step.weight]),
           randomGenerator
         )
 
-        switch (postProcessingStep.type) {
+        switch (postProcessingStep) {
           case PostprocessingStepType.DeletionStep:
             trace = performDeletion(trace, i)
-            i = i - 1
+            i -= 1
             break
           case PostprocessingStepType.SwapStep:
             trace = performSwap(trace, i)
-            i = i + 1
+            i += 1
             break
           case PostprocessingStepType.InsertionStep:
             trace = performInsertion(trace, i)
-            i = i + 1
+            i += 1
             break
         }
       }
@@ -55,7 +55,10 @@ const performDeletion = (trace: Trace, event_id: number): Trace => {
   return trace
 }
 
-const performSwap = (trace: Trace, _event_id: number): Trace => {
+const performSwap = (trace: Trace, event_id: number): Trace => {
+  const temp = trace.events[event_id]
+  trace.events[event_id] = trace.events[event_id - 1]
+  trace.events[event_id - 1] = temp
   return trace
 }
 
@@ -64,15 +67,16 @@ const performInsertion = (trace: Trace, _event_id: number): Trace => {
 }
 
 export const weightedRandom = <T>(
-  activities: Set<[T, number]>,
+  activities: Iterable<[T, number]>,
   randomGenerator: seedrandom.PRNG
-): T => {
+): T | undefined => {
   const cumulativeWeights: [T, number][] = []
   let cumulativeWeight = 0
   for (const [activity, weight] of activities) {
     cumulativeWeight += weight
     cumulativeWeights.push([activity, cumulativeWeight])
   }
+  if (cumulativeWeights.length === 0) return undefined
   const random = randomGenerator() * cumulativeWeight
   for (const [activity, cumulativeWeight] of cumulativeWeights) {
     if (random <= cumulativeWeight) return activity
