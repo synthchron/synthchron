@@ -141,3 +141,72 @@ export const petriNet3: PetriNetProcessModel = {
     },
   ],
 }
+
+export const petriNet4: PetriNetProcessModel = {
+  type: ProcessModelType.PetriNet,
+  nodes: [
+    {
+      type: 'place',
+      identifier: 'p1',
+      name: 'p1',
+      amountOfTokens: 5,
+    },
+    {
+      type: 'transition',
+      identifier: 't1',
+      weight: 1,
+      name: 't1',
+    },
+    {
+      type: 'transition',
+      identifier: 't2',
+      weight: 1,
+      name: 't2',
+    },
+    {
+      type: 'transition',
+      identifier: 't3',
+      weight: 1,
+      name: 't3',
+    },
+    {
+      type: 'place',
+      identifier: 'p2',
+      name: 'p2',
+      amountOfTokens: 0,
+    },
+  ],
+  edges: [
+    {
+      multiplicity: 1,
+      source: 'p1',
+      target: 't1',
+    },
+    {
+      multiplicity: 1,
+      source: 't1',
+      target: 'p2',
+    },
+    {
+      multiplicity: 1,
+      source: 'p1',
+      target: 't2',
+    },
+    {
+      multiplicity: 1,
+      source: 't2',
+      target: 'p2',
+    },
+    {
+      multiplicity: 1,
+      source: 'p1',
+      target: 't3',
+    },
+    {
+      multiplicity: 1,
+      source: 't3',
+      target: 'p2',
+    },
+  ],
+  acceptingExpressions: [],
+}
