@@ -36,23 +36,44 @@ const getSimulationProgress = <SpecificProcessModel, StateType>(
   processModel: SpecificProcessModel,
   simulationConfiguration: Configuration,
   simulationResults: TraceSimulationResult[]
-): number => {
+): { continue: boolean; progress: number } => {
   const resultLength = simulationResults.length
-  if (resultLength >= simulationConfiguration.maximumTraces) return 100
+  if (resultLength >= simulationConfiguration.maximumTraces)
+    return { continue: false, progress: 100 }
   switch (simulationConfiguration.terminationType.type) {
     case TerminationType.Standard:
-      return (100 * resultLength) / simulationConfiguration.maximumTraces
-    case TerminationType.Coverage:
-      return (
-        (100 *
-          calculateCoverage(simulationResults, processEngine, processModel)) /
-        simulationConfiguration.terminationType.coverage
+      return {
+        continue: true,
+        progress: (100 * resultLength) / simulationConfiguration.maximumTraces,
+      }
+    case TerminationType.Coverage: {
+      const coverage = calculateCoverage(
+        simulationResults,
+        processEngine,
+        processModel
       )
-    case TerminationType.SpecifiedAmountOfTraces:
-      return (
-        (100 * resultLength) /
-        simulationConfiguration.terminationType.amountOfTraces
-      )
+      if (coverage >= simulationConfiguration.terminationType.coverage) {
+        return { continue: false, progress: 100 }
+      }
+      return {
+        continue: true,
+        progress:
+          (100 * coverage) / simulationConfiguration.terminationType.coverage,
+      }
+    }
+    case TerminationType.SpecifiedAmountOfTraces: {
+      if (
+        resultLength >= simulationConfiguration.terminationType.amountOfTraces
+      ) {
+        return { continue: false, progress: 100 }
+      }
+      return {
+        continue: true,
+        progress:
+          (100 * resultLength) /
+          simulationConfiguration.terminationType.amountOfTraces,
+      }
+    }
   }
 }
 // TODO:
@@ -71,7 +92,7 @@ export async function* simulateWithEngine<
       `Process engine ${processEngine.processModelType} cannot be used with process model ${processModel.type}`
     )
   const simulationResults: TraceSimulationResult[] = []
-  let progress = getSimulationProgress(
+  let status = getSimulationProgress(
     processEngine,
     processModel,
     simulationConfiguration,
@@ -79,7 +100,7 @@ export async function* simulateWithEngine<
   )
   const randomGenerator = seedrandom(simulationConfiguration.randomSeed)
   // console.log(progress)
-  while (progress != 100) {
+  while (status.continue) {
     const simulationRandomSeed = randomGenerator()
     const simResult = await simulateTraceWithEngine(
       processModel,
@@ -90,13 +111,16 @@ export async function* simulateWithEngine<
       processEngine
     )
     simulationResults.push(simResult)
-    progress = getSimulationProgress(
+    status = getSimulationProgress(
       processEngine,
       processModel,
       simulationConfiguration,
       simulationResults
     )
-    yield { progress: progress, simulationLog: { simulationResults: [] } }
+    yield {
+      progress: status.progress,
+      simulationLog: { simulationResults: [] },
+    }
   }
   yield { progress: 100, simulationLog: { simulationResults } }
   // return { simulationResults }
