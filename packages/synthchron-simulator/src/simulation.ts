@@ -38,22 +38,44 @@ const getSimulationProgress = <SpecificProcessModel, StateType>(
   simulationConfiguration: Configuration,
   simulationResults: TraceSimulationResult[],
   steps: number
-): number => {
+): { continue: boolean; progress: number } => {
   const resultLength = simulationResults.length
+  if (steps >= simulationConfiguration.maximumTraces)
+    return { continue: false, progress: 100 }
   switch (simulationConfiguration.terminationType.type) {
     case TerminationType.Standard:
-      return (100 * steps) / simulationConfiguration.maximumTraces
-    case TerminationType.Coverage:
-      return (
-        (100 *
-          calculateCoverage(simulationResults, processEngine, processModel)) /
-        simulationConfiguration.terminationType.coverage
+      return {
+        continue: true,
+        progress: (100 * steps) / simulationConfiguration.maximumTraces,
+      }
+    case TerminationType.Coverage: {
+      const coverage = calculateCoverage(
+        simulationResults,
+        processEngine,
+        processModel
       )
-    case TerminationType.SpecifiedAmountOfTraces:
-      return (
-        (100 * resultLength) /
-        simulationConfiguration.terminationType.amountOfTraces
-      )
+      if (coverage >= simulationConfiguration.terminationType.coverage) {
+        return { continue: false, progress: 100 }
+      }
+      return {
+        continue: true,
+        progress:
+          (100 * coverage) / simulationConfiguration.terminationType.coverage,
+      }
+    }
+    case TerminationType.SpecifiedAmountOfTraces: {
+      if (
+        resultLength >= simulationConfiguration.terminationType.amountOfTraces
+      ) {
+        return { continue: false, progress: 100 }
+      }
+      return {
+        continue: true,
+        progress:
+          (100 * resultLength) /
+          simulationConfiguration.terminationType.amountOfTraces,
+      }
+    }
   }
 }
 // TODO:
@@ -72,7 +94,7 @@ export async function* simulateWithEngine<
       `Process engine ${processEngine.processModelType} cannot be used with process model ${processModel.type}`
     )
   const simulationResults: TraceSimulationResult[] = []
-  let progress = getSimulationProgress(
+  let status = getSimulationProgress(
     processEngine,
     processModel,
     simulationConfiguration,
@@ -84,10 +106,10 @@ export async function* simulateWithEngine<
 
   for (
     let step = 0;
-    step < simulationConfiguration.maximumTraces && progress < 100;
+    step < simulationConfiguration.maximumTraces && status.continue;
     step++
   ) {
-    yield { progress: progress }
+    yield { progress: status.progress }
 
     const simulationRandomSeed = randomGenerator()
     const simResult = await simulateTraceWithEngine(
@@ -101,7 +123,6 @@ export async function* simulateWithEngine<
     )
 
     // Check for unique traces
-
     if (!simulationConfiguration.uniqueTraces) {
       simulationResults.push(simResult)
     } else {
@@ -113,14 +134,13 @@ export async function* simulateWithEngine<
       }
     }
 
-    progress = getSimulationProgress(
+    status = getSimulationProgress(
       processEngine,
       processModel,
       simulationConfiguration,
       simulationResults,
       step + 1
     )
-    console.log('progress', progress)
   }
 
   yield { progress: 100, simulationLog: { simulationResults } }
