@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import seedrandom from 'seedrandom'
 
 import { Configuration } from '@synthchron/types'
@@ -6,7 +7,7 @@ import { TerminationType } from '@synthchron/types'
 import { ProcessModel } from './types/processModelTypes'
 import {
   ProcessEngine,
-  SimulationLog,
+  SimulationYield,
   TerminationStatus,
   Trace,
   TraceSimulationResult,
@@ -35,13 +36,13 @@ const getSimulationProgress = <SpecificProcessModel, StateType>(
   processEngine: ProcessEngine<SpecificProcessModel, StateType>,
   processModel: SpecificProcessModel,
   simulationConfiguration: Configuration,
-  simulationResults: TraceSimulationResult[]
+  simulationResults: TraceSimulationResult[],
+  steps: number
 ): number => {
   const resultLength = simulationResults.length
-  if (resultLength >= simulationConfiguration.maximumTraces) return 100
   switch (simulationConfiguration.terminationType.type) {
     case TerminationType.Standard:
-      return (100 * resultLength) / simulationConfiguration.maximumTraces
+      return (100 * steps) / simulationConfiguration.maximumTraces
     case TerminationType.Coverage:
       return (
         (100 *
@@ -65,7 +66,7 @@ export async function* simulateWithEngine<
   processModel: SpecificProcessModel,
   simulationConfiguration: Configuration,
   processEngine: ProcessEngine<SpecificProcessModel, StateType>
-): AsyncGenerator<{ progress: number; simulationLog: SimulationLog }> {
+): AsyncGenerator<SimulationYield> {
   if (processEngine.processModelType !== processModel.type)
     throw new Error(
       `Process engine ${processEngine.processModelType} cannot be used with process model ${processModel.type}`
@@ -75,11 +76,19 @@ export async function* simulateWithEngine<
     processEngine,
     processModel,
     simulationConfiguration,
-    simulationResults
+    simulationResults,
+    0
   )
   const randomGenerator = seedrandom(simulationConfiguration.randomSeed)
   // console.log(progress)
-  while (progress != 100) {
+
+  for (
+    let step = 0;
+    step < simulationConfiguration.maximumTraces && progress < 100;
+    step++
+  ) {
+    yield { progress: progress }
+
     const simulationRandomSeed = randomGenerator()
     const simResult = await simulateTraceWithEngine(
       processModel,
@@ -87,19 +96,34 @@ export async function* simulateWithEngine<
         ...simulationConfiguration,
         randomSeed: simulationRandomSeed.toString(),
       },
-      processEngine
+      processEngine,
+      randomGenerator
     )
-    simulationResults.push(simResult)
+
+    // Check for unique traces
+
+    if (!simulationConfiguration.uniqueTraces) {
+      simulationResults.push(simResult)
+    } else {
+      const uniqueTrace = simulationResults.find((result) =>
+        _.isEqual(result.trace, simResult.trace)
+      )
+      if (!uniqueTrace) {
+        simulationResults.push(simResult)
+      }
+    }
+
     progress = getSimulationProgress(
       processEngine,
       processModel,
       simulationConfiguration,
-      simulationResults
+      simulationResults,
+      step + 1
     )
-    yield { progress: progress, simulationLog: { simulationResults: [] } }
+    console.log('progress', progress)
   }
+
   yield { progress: 100, simulationLog: { simulationResults } }
-  // return { simulationResults }
 }
 
 export const simulateTraceWithEngine = async <
@@ -108,7 +132,8 @@ export const simulateTraceWithEngine = async <
 >(
   processModel: SpecificProcessModel,
   configuration: Configuration,
-  processEngine: ProcessEngine<SpecificProcessModel, StateType>
+  processEngine: ProcessEngine<SpecificProcessModel, StateType>,
+  randomGenerator: seedrandom.PRNG
 ): Promise<TraceSimulationResult> => {
   // Validate the used engine with the used model
   // if (processEngine.processModelType !== processModel.type)
@@ -121,8 +146,6 @@ export const simulateTraceWithEngine = async <
   }
 
   let state = processEngine.resetActivity(processModel)
-
-  const randomGenerator = seedrandom(configuration.randomSeed)
 
   let terminationReason = checkTermination(
     processModel,
@@ -231,6 +254,4 @@ const checkTermination = <SpecificProcessModel extends ProcessModel, StateType>(
 const isEndOnAcceptingState = (
   probability: number,
   randomGenerator: seedrandom.PRNG
-): boolean => {
-  return randomGenerator() < probability
-}
+): boolean => 100 * randomGenerator() < probability
