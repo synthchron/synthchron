@@ -17,6 +17,8 @@ export const ObjectForm: React.FC<ObjectFormProps> = ({
 }) => {
   if (object == null) return <></>
 
+  console.log(Object.keys(object))
+
   return (
     <>
       {Object.entries(object)
@@ -82,10 +84,16 @@ const ObjectFormLine: React.FC<ObjectFormLineProps> = ({
 
   if (typeof value === 'boolean') {
     return (
-      <Switch
-        checked={value}
-        onChange={(event) => set(keyName, event.target.checked)}
-      />
+      <Paper style={{ padding: '16px' }}>
+        <Stack direction='row' spacing={1} alignItems='center'>
+          <Typography>{camelCaseToString(keyName)}</Typography>
+
+          <Switch
+            checked={value}
+            onChange={(event) => set(keyName, event.target.checked)}
+          />
+        </Stack>
+      </Paper>
     )
   }
 
