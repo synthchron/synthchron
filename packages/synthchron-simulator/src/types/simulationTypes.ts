@@ -81,3 +81,8 @@ type TraceTerminationReason =
   | 'error'
   | 'noEnabledActivities'
 export type TerminationStatus = HasNotTerminatedType | HasTerminatedType
+
+export type SimulationYield = {
+  progress: number
+  simulationLog?: SimulationLog
+}
