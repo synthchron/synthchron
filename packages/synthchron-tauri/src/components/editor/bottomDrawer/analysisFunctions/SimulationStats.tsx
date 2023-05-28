@@ -38,6 +38,7 @@ const GetBasicStats = (xeslog: XESLog) => {
     (accumulator, trace) => accumulator + trace.events.length,
     0
   )
+  //Remove tests here
   console.log(totalEvents)
   const test = TransformToAggregate(xeslog)
   const resObj: Record<string, number> = {}
