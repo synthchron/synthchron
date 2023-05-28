@@ -84,7 +84,7 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
         >
           {postprocessing.postProcessingSteps.map((step, index) => (
             <SortableItem
-              key={order[index]}
+              key={index}
               id={order[index]}
               step={step}
               setStep={(step) => {

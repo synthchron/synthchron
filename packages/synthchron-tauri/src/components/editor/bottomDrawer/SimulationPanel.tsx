@@ -9,7 +9,6 @@ import {
 } from '@synthchron/simulator'
 
 import { transformFlowToSimulator } from '../../../utils/flowTransformer'
-import { transformSimulationLogToXESLog } from '../../../utils/simulatorToXESConverter'
 import { TablePreview } from '../../common/TablePreview'
 import { ZustandFlowPreview } from '../../common/ZustandFlowPreview'
 import { useEditorStore } from '../editorStore/flowStore'
@@ -55,8 +54,7 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
       result = simulationLog
     }
     if (result) {
-      const XESResult = transformSimulationLogToXESLog(result)
-      return SimulationStatisticsAdapter(XESResult)
+      return SimulationStatisticsAdapter(result)
     } else {
       const emptyResult: ResultType = {
         log: { traces: [] },

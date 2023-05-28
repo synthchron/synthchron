@@ -2,9 +2,9 @@ import { faker } from '@faker-js/faker'
 
 import { XESLog } from '@synthchron/xes'
 
-type LogAggregate = Map<string, number> //Map<key, value>
+type LogAggregate = Map<string, number> //Map<Transition, Amount>
 
-//Also bar and pie chart
+//Also pie chart
 type DoughnutData = {
   label: string
   data: number[]
@@ -43,10 +43,11 @@ export const TransformToAggregate = (log: XESLog): LogAggregate[] => {
       })
     })
   })
+
   return aggregate
 }
 
-export const AggregateToData = (
+export const AggregateToChartData = (
   aggArr: LogAggregate[],
   chartTypeV: ChartType
 ): ChartData => {
@@ -56,42 +57,54 @@ export const AggregateToData = (
     new Set(aggArr.flatMap((aggregate) => Array.from(aggregate.keys())))
   )
 
+  const averageMap = aggArr.reduce((result, map) => {
+    map.forEach((value, key) => {
+      result.set(key, (result.get(key) || 0) + value)
+    })
+    return result
+  }, new Map())
+
+  const totalEvents = Array.from(averageMap.values()).reduce(
+    (sum, value) => sum + value,
+    0
+  )
+
+  averageMap.forEach((value, key, map) => {
+    map.set(key, value / totalEvents)
+  })
+
   const datasetArr: Dataset[] = []
 
   const doughnutColors = Array.from({ length: labels.length }, () =>
     faker.color.rgb({ format: 'css' })
   )
 
-  aggArr.forEach((agg, index) => {
-    switch (chartTypeV) {
-      case ChartType.Doughnut:
-        // eslint-disable-next-line no-case-declarations
-        const dataSetD: DoughnutData = {
-          label: 'Trace ' + index,
-          data: Array.from(agg.values()),
-          backgroundColor: doughnutColors,
-          hoverOffset: 20,
-        }
-        console.log(dataSetD)
+  switch (chartTypeV) {
+    case ChartType.Doughnut:
+      // eslint-disable-next-line no-case-declarations
+      const dataSetD: DoughnutData = {
+        label: 'Trace ',
+        data: Array.from(averageMap.values()),
+        backgroundColor: doughnutColors,
+        hoverOffset: 20,
+      }
+      datasetArr.push(dataSetD)
+      break
+    case ChartType.Other:
+      // eslint-disable-next-line no-case-declarations
+      const colorAsText = faker.color.rgb({ format: 'decimal' }).join(', ')
 
-        datasetArr.push(dataSetD)
-        break
-      case ChartType.Other:
-        // eslint-disable-next-line no-case-declarations
-        const colorAsText = faker.color.rgb({ format: 'decimal' }).join(', ')
+      // eslint-disable-next-line no-case-declarations
+      const dataSet: DefaultData = {
+        label: 'Trace ',
+        data: Array.from(averageMap.values()),
+        borderColor: 'rgb(' + colorAsText + ')',
+        backgroundColor: 'rgba(' + colorAsText + ', 0.5)',
+      }
 
-        // eslint-disable-next-line no-case-declarations
-        const dataSet: DefaultData = {
-          label: 'Trace ' + index,
-          data: Array.from(agg.values()),
-          borderColor: 'rgb(' + colorAsText + ')',
-          backgroundColor: 'rgba(' + colorAsText + ', 0.5)',
-        }
-
-        datasetArr.push(dataSet)
-        break
-    }
-  })
+      datasetArr.push(dataSet)
+      break
+  }
 
   const chartdata: ChartData = {
     labels: labels,
@@ -101,14 +114,14 @@ export const AggregateToData = (
   return chartdata
 }
 
-export const aggregateToTable = (
+export const AggregateToTable = (
   aggArr: LogAggregate[]
 ): Record<string, number> => {
   const resObj: Record<string, number> = {}
 
   aggArr.forEach((agg) => {
     agg.forEach((value, key) => {
-      resObj[key] = value
+      resObj[key] = (resObj[key] || 0) + value
     })
   })
 

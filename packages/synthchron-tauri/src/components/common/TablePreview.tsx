@@ -20,7 +20,7 @@ const toRow = (
   [key, value]: [string, unknown],
   prefix: string[] = []
 ): React.ReactNode | React.ReactNode[] => {
-  if (key == null) return <></>
+  if (key == null) return
 
   if (
     typeof value === 'string' ||
@@ -86,8 +86,6 @@ const toRow = (
       toRow(entry, [...prefix, key])
     )
   }
-
-  return <></>
 }
 
 export const TablePreview: React.FC<TablePreviewProps> = ({

@@ -18,10 +18,10 @@ import { TablePreview } from '../../common/TablePreview'
 import { usePersistentStore } from '../../common/persistentStore'
 import { useEditorStore } from '../editorStore/flowStore'
 import {
-  AggregateToData,
+  AggregateToChartData,
+  AggregateToTable,
   ChartType,
   TransformToAggregate,
-  aggregateToTable,
 } from './analysisFunctions/AggregateCharts'
 
 ChartJS.register(
@@ -43,8 +43,8 @@ const highDimensionalData = {
       label: 'Dataset 1',
       data: [...labels, ...labels, ...labels, ...labels, ...labels].map(
         (_l, i) => ({
-          x: faker.datatype.number({ min: i, max: Math.pow(i, 2) }),
-          y: faker.datatype.number({ min: -10 * i, max: 0 }),
+          x: faker.number.int({ min: i, max: Math.pow(i, 2) }),
+          y: faker.number.int({ min: -10 * i, max: 0 }),
         })
       ),
       borderColor: 'rgb(255, 99, 132)',
@@ -176,8 +176,8 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
 
   const aggregateOfLog = TransformToAggregate(result.log)
 
-  const doughnutData = AggregateToData(aggregateOfLog, ChartType.Doughnut)
-  const lineData = AggregateToData(aggregateOfLog, ChartType.Other)
+  const doughnutData = AggregateToChartData(aggregateOfLog, ChartType.Doughnut)
+  const lineData = AggregateToChartData(aggregateOfLog, ChartType.Other)
 
   return (
     <Stack>
@@ -202,7 +202,7 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
         <Grid item xs={4}>
           <Paper style={{ padding: '16px' }}>
             <TablePreview
-              object={aggregateToTable(aggregateOfLog)}
+              object={AggregateToTable(aggregateOfLog)}
               columnTitles={['Transition', 'Amount']}
             />
           </Paper>
