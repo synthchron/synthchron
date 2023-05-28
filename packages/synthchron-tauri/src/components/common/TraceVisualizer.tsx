@@ -1,4 +1,3 @@
-import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { Box, Chip, Divider, Paper, Typography } from '@mui/material'
 
 import {
