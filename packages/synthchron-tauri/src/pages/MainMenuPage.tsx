@@ -61,8 +61,8 @@ export const MainMenuPage = () => {
                 return Date.parse(p1.lastEdited) - Date.parse(p2.lastEdited)
               })
               .reverse()
-              .map(([k, v], i) => (
-                <Grid key={i} item xs={6} md={4} lg={3}>
+              .map(([k, v]) => (
+                <Grid key={k} item xs={6} md={4} lg={3}>
                   <ProjectCard projectId={k} project={v} />
                 </Grid>
               ))}
