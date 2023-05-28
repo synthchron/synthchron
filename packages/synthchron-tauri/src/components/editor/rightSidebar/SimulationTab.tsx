@@ -32,8 +32,8 @@ export const SimulationTab: React.FC = () => {
       {
         ...config,
         randomSeed:
-          config.randomSeed === ''
-            ? Math.floor(Math.random() * 100).toString()
+          config.randomSeed === undefined
+            ? Math.floor(Math.random() * Math.pow(2, 31)).toString()
             : config.randomSeed,
       },
       petriNetEngine

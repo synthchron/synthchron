@@ -1,3 +1,4 @@
+import { Masonry } from '@mui/lab'
 import { Stack } from '@mui/material'
 
 import {
@@ -11,6 +12,7 @@ import { MinMaxSlider } from './configurationPanel/MinMaxSlider'
 import { NameField } from './configurationPanel/NameField'
 import { ObjectForm } from './configurationPanel/ObjectForm'
 import { PercentSlider } from './configurationPanel/PercentSlider'
+import { RandomSeedSelector } from './configurationPanel/RandomSeedSelector'
 import PostprocessingPanel from './postprocessingPanel/PostprocessingPanel'
 
 type ConfigurationFormProps = {
@@ -32,7 +34,7 @@ const partialNotAutoConfiguration: Partial<Configuration> = {
 }
 const partialAutoConfiguration: Partial<Configuration> = {
   //These are values that can be automatically generated
-  randomSeed: '',
+  randomSeed: undefined,
   //Add other configuration options here
   configurationName: 'Default',
   maximumTraces: 1,
@@ -65,7 +67,55 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
   }
 
   return (
-    <Stack spacing={3} sx={{ marginTop: '30px', marginBottom: '30px' }}>
+    <Masonry columns={2} spacing={2}>
+      <NameField
+        name={config.configurationName ?? 'Default'}
+        setName={(value) => setConfig({ ...config, configurationName: value })}
+      />
+
+      <PercentSlider
+        value={config.endOnAcceptingStateProbability}
+        setValue={(value) =>
+          setConfig({ ...config, endOnAcceptingStateProbability: value })
+        }
+        title='Chance to terminate on accepting state'
+      />
+
+      <MinMaxSlider
+        value={[config.minEvents ?? 0, config.maxEvents ?? 100]}
+        setValue={(value) =>
+          setConfig({ ...config, minEvents: value[0], maxEvents: value[1] })
+        }
+        title='Minimum and maximum Events:'
+      />
+
+      <RandomSeedSelector
+        value={config.randomSeed}
+        setValue={(value) => setConfig({ ...config, randomSeed: value })}
+      />
+
+      <ObjectForm
+        object={config}
+        set={(key, value) => setConfig({ ...config, [key]: value })}
+        ignoreKeys={[
+          'endOnAcceptingStateProbability',
+          'minEvents',
+          'maxEvents',
+          'configurationName',
+          'postprocessing',
+          'randomSeed',
+        ]}
+      />
+
+      <PostprocessingPanel
+        postprocessing={postprocessing}
+        setPostprocessing={setPostprocessing}
+      />
+    </Masonry>
+  )
+}
+
+/* <Stack spacing={3} sx={{ marginTop: '30px', marginBottom: '30px' }}>
       <NameField
         name={config.configurationName ?? 'Default'}
         setName={(value) => setConfig({ ...config, configurationName: value })}
@@ -103,6 +153,4 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
         postprocessing={postprocessing}
         setPostprocessing={setPostprocessing}
       />
-    </Stack>
-  )
-}
+    </Stack> */

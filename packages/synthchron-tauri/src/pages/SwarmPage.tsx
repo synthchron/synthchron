@@ -36,8 +36,8 @@ export const SwarmPage = () => {
           {
             ...configurations[configIndex],
             randomSeed:
-              configurations[configIndex].randomSeed === ''
-                ? Math.floor(Math.random() * 100).toString()
+              configurations[configIndex].randomSeed === undefined
+                ? Math.floor(Math.random() * Math.pow(2, 31)).toString()
                 : configurations[configIndex].randomSeed,
           },
           petriNetEngine

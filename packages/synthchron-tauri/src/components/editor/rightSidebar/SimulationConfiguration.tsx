@@ -43,7 +43,7 @@ const partialNotAutoConfiguration: Partial<Configuration> = {
 }
 const partialAutoConfiguration: Partial<Configuration> = {
   //These are values that can be automatically generated
-  randomSeed: '',
+  randomSeed: undefined,
   //Add other configuration options here
   configurationName: 'Default',
   maximumTraces: 1,

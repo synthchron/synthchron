@@ -1,4 +1,4 @@
-import { Slider, Typography } from '@mui/material'
+import { Paper, Slider, Typography } from '@mui/material'
 
 interface PercentSliderProps {
   title: string
@@ -11,7 +11,11 @@ export const PercentSlider: React.FC<PercentSliderProps> = ({
   value,
   setValue,
 }) => (
-  <div>
+  <Paper
+    sx={{
+      padding: '16px',
+    }}
+  >
     <Typography gutterBottom>{title}</Typography>
     <Slider
       getAriaLabel={() => 'Event range'}
@@ -29,5 +33,5 @@ export const PercentSlider: React.FC<PercentSliderProps> = ({
         { value: 100, label: '100%' },
       ]}
     />
-  </div>
+  </Paper>
 )

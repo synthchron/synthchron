@@ -157,7 +157,14 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
             </Typography>
           </Divider>
           <Paper style={{ padding: '16px', paddingBottom: '0px' }}>
-            <Typography variant='h6' color='grey' gutterBottom>
+            <Typography
+              variant='h5'
+              color='grey'
+              gutterBottom
+              sx={{
+                marginBottom: '1em',
+              }}
+            >
               Configuration Editor
             </Typography>
             <ConfigurationForm

@@ -44,8 +44,8 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
       {
         ...configuration,
         randomSeed:
-          configuration.randomSeed === ''
-            ? Math.floor(Math.random() * 100).toString()
+          configuration.randomSeed === undefined
+            ? Math.floor(Math.random() * Math.pow(2, 31)).toString()
             : configuration.randomSeed,
       },
       petriNetEngine
