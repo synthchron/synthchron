@@ -54,45 +54,84 @@ export const GeneralTab: React.FC = () => {
                   width: '100%',
                 }}
               >
-                <TextField
-                  sx={{
-                    width: '25%',
-                    marginRight: '0.25em',
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    width: '30vw',
                   }}
-                  value={name}
-                  onChange={(e) => {
-                    const newAcceptingExpressions = [
-                      ...(meta as PetriNetMeta).acceptingExpressions,
-                    ]
-                    newAcceptingExpressions[index].name = e.target.value
-                    setMeta({
-                      acceptingExpressions: newAcceptingExpressions,
-                    })
-                  }}
-                  variant='outlined'
-                  size='small'
-                  placeholder='name'
-                />
-                <TextField
-                  sx={{
-                    width: '55%',
-                  }}
-                  value={expression}
-                  onChange={(e) => {
-                    const newAcceptingExpressions = [
-                      ...(meta as PetriNetMeta).acceptingExpressions,
-                    ]
-                    newAcceptingExpressions[index].expression = e.target.value
-                    setMeta({
-                      acceptingExpressions: newAcceptingExpressions,
-                    })
-                  }}
-                  variant='outlined'
-                  size='small'
-                  placeholder={
-                    exampleExpressions[index % exampleExpressions.length]
-                  }
-                />
+                >
+                  <TextField
+                    sx={{
+                      width: '30%',
+                      padding: 0,
+                      '& .MuiOutlinedInput-input': {
+                        paddingLeft: 1, // <-- added zero padding instruction
+                        paddingRight: 1, // <-- added zero padding instruction
+                      },
+                      '& .MuiOutlinedInput-root': {
+                        borderTopRightRadius: 0,
+                        borderBottomRightRadius: 0,
+                      },
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        // only half of the right border oppacity
+                        borderRight: '1px solid rgba(0, 0, 0, 0.23)',
+                      },
+                    }}
+                    value={name}
+                    onChange={(e) => {
+                      const newAcceptingExpressions = [
+                        ...(meta as PetriNetMeta).acceptingExpressions,
+                      ]
+                      newAcceptingExpressions[index].name = e.target.value
+                      setMeta({
+                        acceptingExpressions: newAcceptingExpressions,
+                      })
+                    }}
+                    error={name == ''}
+                    variant='outlined'
+                    size='small'
+                    placeholder='name'
+                  />
+                  <TextField
+                    sx={{
+                      flexGrow: 2,
+                      marginLeft: '-1px',
+                      '& .MuiOutlinedInput-input': {
+                        //borderWidth: 0,
+                        //outline: 'none',
+                        //borderColor: 'white !important',
+                        paddingLeft: 1, // <-- added zero padding instruction
+                        paddingRight: 1, // <-- added zero padding instruction
+                      },
+                      '& .MuiOutlinedInput-root': {
+                        borderTopLeftRadius: 0,
+                        borderBottomLeftRadius: 0,
+                      },
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        // only half of the left border oppacity
+                        borderLeft: '1px solid rgba(0, 0, 0, 0.23)',
+                      },
+                    }}
+                    value={expression}
+                    onChange={(e) => {
+                      const newAcceptingExpressions = [
+                        ...(meta as PetriNetMeta).acceptingExpressions,
+                      ]
+                      newAcceptingExpressions[index].expression = e.target.value
+                      setMeta({
+                        acceptingExpressions: newAcceptingExpressions,
+                      })
+                    }}
+                    error={expression == ''}
+                    variant='outlined'
+                    size='small'
+                    placeholder={
+                      exampleExpressions[index % exampleExpressions.length]
+                    }
+                  />
+                </div>
                 <IconButton
                   sx={{}}
                   onClick={() => {
