@@ -75,22 +75,6 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
         setName={(value) => setConfig({ ...config, configurationName: value })}
       />
 
-      <PercentSlider
-        value={config.endOnAcceptingStateProbability}
-        setValue={(value) =>
-          setConfig({ ...config, endOnAcceptingStateProbability: value })
-        }
-        title='Chance to terminate on accepting state'
-      />
-
-      <MinMaxSlider
-        value={[config.minEvents ?? 0, config.maxEvents ?? 100]}
-        setValue={(value) =>
-          setConfig({ ...config, minEvents: value[0], maxEvents: value[1] })
-        }
-        title='Minimum and maximum number of events per trace'
-      />
-
       <RandomSeedSelector
         value={config.randomSeed}
         setValue={(value) => setConfig({ ...config, randomSeed: value })}
@@ -104,6 +88,22 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
       <UniqueTracesSlide
         value={config.uniqueTraces}
         setValue={(value) => setConfig({ ...config, uniqueTraces: value })}
+      />
+
+      <PercentSlider
+        value={config.endOnAcceptingStateProbability}
+        setValue={(value) =>
+          setConfig({ ...config, endOnAcceptingStateProbability: value })
+        }
+        title='Probability to terminate on accepting state'
+      />
+
+      <MinMaxSlider
+        value={[config.minEvents ?? 0, config.maxEvents ?? 100]}
+        setValue={(value) =>
+          setConfig({ ...config, minEvents: value[0], maxEvents: value[1] })
+        }
+        title='Minimum and maximum number of events per trace'
       />
 
       <ObjectForm
