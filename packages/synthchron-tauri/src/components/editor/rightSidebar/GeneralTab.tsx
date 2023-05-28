@@ -1,13 +1,5 @@
 import AddIcon from '@mui/icons-material/Add'
-import ControlPointIcon from '@mui/icons-material/ControlPoint'
-import {
-  Button,
-  Container,
-  IconButton,
-  Paper,
-  Tooltip,
-  Typography,
-} from '@mui/material'
+import { Container, Paper, Tooltip, Typography } from '@mui/material'
 
 import { ProcessModelType } from '@synthchron/simulator'
 
