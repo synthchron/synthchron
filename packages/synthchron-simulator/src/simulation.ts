@@ -103,15 +103,25 @@ export async function* simulateWithEngine<
   )
   const randomGenerator = seedrandom(simulationConfiguration.randomSeed)
   // console.log(progress)
-
+  console.log('[SIM] initialized simulation', status)
   for (
     let step = 0;
     step < simulationConfiguration.maximumTraces && status.continue;
     step++
   ) {
+    console.log(
+      '[SIM] start step',
+      step,
+      'of',
+      simulationConfiguration.maximumTraces
+    )
     yield { progress: status.progress }
+    console.log('[SIM] yielded progress', status.progress)
 
     const simulationRandomSeed = randomGenerator()
+
+    console.log('[SIM] got trace seed', simulationRandomSeed)
+
     const simResult = await simulateTraceWithEngine(
       processModel,
       {
@@ -120,6 +130,11 @@ export async function* simulateWithEngine<
       },
       processEngine,
       randomGenerator
+    )
+
+    console.log(
+      '[SIM] got trace result with length',
+      simResult.trace.events.length
     )
 
     // Check for unique traces
@@ -134,6 +149,8 @@ export async function* simulateWithEngine<
       }
     }
 
+    console.log('[SIM] added trace to results')
+
     status = getSimulationProgress(
       processEngine,
       processModel,
@@ -141,6 +158,8 @@ export async function* simulateWithEngine<
       simulationResults,
       step + 1
     )
+
+    console.log('[SIM] computed new progress', status.progress)
   }
 
   yield { progress: 100, simulationLog: { simulationResults } }

@@ -8,11 +8,13 @@ import {
   TerminationType,
 } from '@synthchron/types'
 
+import { MaxStepsField } from './configurationPanel/MaxStepsField'
 import { MinMaxSlider } from './configurationPanel/MinMaxSlider'
 import { NameField } from './configurationPanel/NameField'
 import { ObjectForm } from './configurationPanel/ObjectForm'
 import { PercentSlider } from './configurationPanel/PercentSlider'
 import { RandomSeedSelector } from './configurationPanel/RandomSeedSelector'
+import { UniqueTracesSlide } from './configurationPanel/UniqueTracesSlider'
 import PostprocessingPanel from './postprocessingPanel/PostprocessingPanel'
 
 type ConfigurationFormProps = {
@@ -86,12 +88,22 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
         setValue={(value) =>
           setConfig({ ...config, minEvents: value[0], maxEvents: value[1] })
         }
-        title='Minimum and maximum Events:'
+        title='Minimum and maximum number of events per trace'
       />
 
       <RandomSeedSelector
         value={config.randomSeed}
         setValue={(value) => setConfig({ ...config, randomSeed: value })}
+      />
+
+      <MaxStepsField
+        value={config.maximumTraces}
+        setValue={(value) => setConfig({ ...config, maximumTraces: value })}
+      />
+
+      <UniqueTracesSlide
+        value={config.uniqueTraces}
+        setValue={(value) => setConfig({ ...config, uniqueTraces: value })}
       />
 
       <ObjectForm
@@ -104,6 +116,8 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
           'configurationName',
           'postprocessing',
           'randomSeed',
+          'uniqueTraces',
+          'maximumTraces',
         ]}
       />
 

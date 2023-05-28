@@ -76,7 +76,7 @@ export const MinMaxSlider: React.FC<MinMaxSliderProps> = ({
           }
           valueLabelDisplay='auto'
           min={0}
-          max={1000}
+          max={10000}
         />
       </Grid>
       <Grid item xs={3}>

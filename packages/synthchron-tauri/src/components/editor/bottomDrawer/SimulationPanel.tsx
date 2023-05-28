@@ -51,11 +51,23 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
       petriNetEngine
     )
     for await (const { progress, simulationLog } of simulator) {
+      console.log('[UI] got new trace with process', progress)
       setProgress(progress)
-      // DO not delete this line, it is needed to update the UI - Ali
-      await new Promise((resolve) => setTimeout(resolve, 0))
+      console.log('[UI] set progress')
+      // Do not delete this line, it is needed to update the UI - Ali
+      await new Promise((resolve) => {
+        console.log('[UI] wait for 0ms before resolving')
+        setTimeout(() => {
+          console.log('[UI] resolve')
+          resolve('done')
+          console.log('[UI] resolved')
+        }, 0)
+      })
+      console.log('[UI] wait for 0ms')
       result = simulationLog
+      console.log('[UI] get new trace')
     }
+    console.log('[UI] return result')
     return result
   }
   return (

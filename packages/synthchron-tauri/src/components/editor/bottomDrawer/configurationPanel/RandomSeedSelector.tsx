@@ -44,6 +44,7 @@ export const RandomSeedSelector: React.FC<RandomSeedSelectorProps> = ({
           checked={value !== undefined}
           onChange={() => setValue(value !== undefined ? undefined : '')}
         />
+        <div style={{ flexGrow: 1 }} />
         <TextField
           value={value || ''}
           onChange={(event) => setValue(event.target.value)}
