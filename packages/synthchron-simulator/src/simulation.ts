@@ -184,7 +184,9 @@ export const simulateTraceWithEngine = async <
     state = processEngine.executeActivity(processModel, state, activity)
     trace.events.push({
       name: activityName,
-      meta: {},
+      meta: {
+        //timestamp: new Date().getTime() / 1000,
+      },
     })
     terminationReason = checkTermination(
       processModel,

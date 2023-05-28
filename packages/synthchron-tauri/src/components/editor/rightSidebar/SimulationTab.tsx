@@ -8,20 +8,31 @@ import {
   petriNetEngine,
   simulateWithEngine,
 } from '@synthchron/simulator'
-import { Configuration } from '@synthchron/types'
-import { serialize } from '@synthchron/xes'
+import { Configuration, TerminationType } from '@synthchron/types'
 
 import { transformFlowToSimulator } from '../../../utils/flowTransformer'
-import { transformSimulationLogToXESLog } from '../../../utils/simulatorToXESConverter'
+import { TraceVisualizer } from '../../common/TraceVisualizer'
 import { useEditorStore } from '../editorStore/flowStore'
-import {
-  SimulationConfiguration,
-  defaultConfiguration,
-} from './SimulationConfiguration'
+
+const testConfig: Configuration = {
+  endOnAcceptingStateProbability: 100,
+  maximumTraces: 1,
+  postprocessing: {
+    stepProbability: 0,
+    postProcessingSteps: [],
+  },
+  terminationType: {
+    type: TerminationType.Standard,
+  },
+  uniqueTraces: false,
+  configurationName: 'testconfig',
+  maxEvents: 500,
+  minEvents: 0,
+  randomSeed: undefined,
+}
 
 export const SimulationTab: React.FC = () => {
   const [simulationResult, setSimulationResult] = useState<SimulationLog>()
-  const [config, setConfig] = useState<Configuration>(defaultConfiguration)
 
   const simulate = async () => {
     let result
@@ -30,11 +41,8 @@ export const SimulationTab: React.FC = () => {
         useEditorStore.getState()
       ) as PetriNetProcessModel,
       {
-        ...config,
-        randomSeed:
-          config.randomSeed === undefined
-            ? Math.floor(Math.random() * Math.pow(2, 31)).toString()
-            : config.randomSeed,
+        ...testConfig,
+        randomSeed: Math.floor(Math.random() * Math.pow(2, 31)).toString(),
       },
       petriNetEngine
     )
@@ -44,18 +52,6 @@ export const SimulationTab: React.FC = () => {
     setSimulationResult(result)
   }
 
-  const exportSimulation = () => {
-    if (simulationResult === undefined) return
-    const xesLog = transformSimulationLogToXESLog(simulationResult)
-    const xesString = serialize(xesLog)
-    const xmlData = `data:text/xml;charset=utf-8,${encodeURIComponent(
-      xesString
-    )}`
-    const link = document.createElement('a')
-    link.href = xmlData
-    link.download = 'simulation.xes'
-    link.click()
-  }
   return (
     <Container
       sx={{
@@ -65,11 +61,25 @@ export const SimulationTab: React.FC = () => {
         marginTop: '1em',
       }}
     >
-      <Typography variant='h6'>Simulate</Typography>
-      <SimulationConfiguration onUpdate={setConfig} />
-      <Button onClick={simulate}>Simulate</Button>
-      <Button onClick={exportSimulation}>Export</Button>
-      <pre>{JSON.stringify(simulationResult, null, 2)}</pre>
+      <Typography variant='caption' sx={{ marginTop: '1em' }}>
+        Verify the behaviour of your process model by generating and inspecting
+        example traces. Traces are limited to 500 events. Use the simulation
+        panel to run full simulations.
+      </Typography>
+      <Button
+        onClick={simulate}
+        variant='contained'
+        sx={{ marginTop: '1em', marginBottom: '1em' }}
+      >
+        Generate Trace
+      </Button>
+      {simulationResult && (
+        <TraceVisualizer
+          trace={simulationResult.simulationResults[0]}
+          firstN={8}
+          lastN={8}
+        />
+      )}
     </Container>
   )
 }
