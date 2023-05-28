@@ -1,5 +1,4 @@
 import { Masonry } from '@mui/lab'
-import { Stack } from '@mui/material'
 
 import {
   Configuration,

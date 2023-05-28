@@ -1,12 +1,8 @@
-import { useState } from 'react'
-
 import HelpIcon from '@mui/icons-material/Help'
 import {
   IconButton,
   Paper,
-  Slider,
   Stack,
-  Switch,
   TextField,
   Tooltip,
   Typography,
