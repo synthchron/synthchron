@@ -43,12 +43,6 @@ export const SwarmPage = () => {
           petriNetEngine
         )
         for await (const { progress, simulationLog } of simulator) {
-          console.log(
-            (100 *
-              (projectIndexIndex +
-                (configIndexIndex + progress / 100) / checkedConfigs.length)) /
-              checkedProjects.length
-          )
           setProgress(
             (100 *
               (projectIndexIndex +
@@ -57,6 +51,7 @@ export const SwarmPage = () => {
           )
           // DO not delete this line, it is needed to update the UI - Ali
           await new Promise((resolve) => setTimeout(resolve, 0))
+          if (simulationLog == null) continue
           resultFiles.push([
             Object.values(projects)[projectIndex].projectName,
             configurations[configIndex].configurationName ?? '',
