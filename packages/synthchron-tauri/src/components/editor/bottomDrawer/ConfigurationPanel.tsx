@@ -93,11 +93,7 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
               <Select
                 label='Load Configuration'
                 labelId='configurations-label'
-                value={
-                  configurations.includes(config)
-                    ? config.configurationName
-                    : ''
-                }
+                value={config.configurationName}
                 onChange={handleConfigChange}
               >
                 <MenuItem key='new-configuration' value=''>

@@ -4,6 +4,7 @@ import { devtools, persist } from 'zustand/middleware'
 import { Configuration } from '@synthchron/types'
 
 import { Project } from '../../types/project'
+import { defaultConfiguration } from '../editor/rightSidebar/SimulationConfiguration'
 
 export interface PersistentState {
   // Project storage

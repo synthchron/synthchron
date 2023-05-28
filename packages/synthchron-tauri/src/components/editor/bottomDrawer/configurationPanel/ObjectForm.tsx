@@ -17,8 +17,6 @@ export const ObjectForm: React.FC<ObjectFormProps> = ({
 }) => {
   if (object == null) return <></>
 
-  console.log(Object.keys(object))
-
   return (
     <>
       {Object.entries(object)

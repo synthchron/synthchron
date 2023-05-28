@@ -85,7 +85,7 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
           onClick={() => {
             setInSimulation(true)
             setProgress(0)
-            simulate().then(async (result) => {
+            simulate().then((result) => {
               setResult(result)
               // await new Promise((resolve) => setTimeout(resolve, 2500))
               setInSimulation(false)

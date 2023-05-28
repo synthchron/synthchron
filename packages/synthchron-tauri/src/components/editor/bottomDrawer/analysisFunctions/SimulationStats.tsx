@@ -3,7 +3,6 @@ import { XESLog } from '@synthchron/xes'
 
 import { transformSimulationLogToXESLog } from '../../../../utils/simulatorToXESConverter'
 import { ResultType } from '../../editorStore/simulatorSlice'
-import { TransformToAggregate } from './AggregateCharts'
 
 //Polymorphic funtion to count repetetions of entires in array, and sort them.
 const SumMapSort = (list: unknown[]): [unknown, number][] => {
@@ -34,22 +33,13 @@ export const SimulationStatisticsAdapter = (
 
 const GetBasicStats = (xeslog: XESLog) => {
   const totalTraces = xeslog.traces.length
-  const totalEvents = xeslog.traces.reduce(
-    (accumulator, trace) => accumulator + trace.events.length,
-    0
-  )
-  //Remove tests here
-  console.log(totalEvents)
-  const test = TransformToAggregate(xeslog)
-  const resObj: Record<string, number> = {}
 
-  test.forEach((agg) => {
-    agg.forEach((value, key) => {
-      resObj[key] = (resObj[key] || 0) + value
-    })
-  })
-  console.log(resObj)
-  console.log('end')
+  // Issue with events.length casues length to be one larger than it should be
+  // This is fixed with the -1
+  // https://user-images.githubusercontent.com/79922317/241557149-910ad5ea-c16d-49ba-9be9-223ec64d33eb.png
+  const totalEvents = xeslog.traces.reduce((accumulator, trace) => {
+    return accumulator + trace.events.length - 1
+  }, 0)
   const averageEvents = totalEvents / totalTraces
 
   const basicStats = {
