@@ -1,6 +1,7 @@
 import React from 'react'
 
 import {
+  Box,
   Paper,
   Table,
   TableBody,
@@ -101,7 +102,11 @@ export const TablePreview: React.FC<TablePreviewProps> = ({
         </TableRow>
       </TableHead>
       <TableBody>
-        {Object.entries(configuration).flatMap((entry) => toRow(entry, []))}
+        {Object.entries(configuration)
+          .flatMap((entry) => toRow(entry, []))
+          .map((row, idx) => (
+            <React.Fragment key={idx}>{row}</React.Fragment>
+          ))}
       </TableBody>
     </Table>
   </TableContainer>
