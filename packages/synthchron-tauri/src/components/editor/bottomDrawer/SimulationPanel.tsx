@@ -44,13 +44,21 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
       ) as PetriNetProcessModel,
       {
         ...configuration,
+        randomSeed:
+          configuration.randomSeed === undefined
+            ? Math.floor(Math.random() * Math.pow(2, 31)).toString()
+            : configuration.randomSeed,
       },
       petriNetEngine
     )
     for await (const { progress, simulationLog } of simulator) {
       setProgress(progress)
-      // DO not delete this line, it is needed to update the UI - Ali
-      await new Promise((resolve) => setTimeout(resolve, 0))
+      // Do not delete this line, it is needed to update the UI - Ali
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve('done')
+        }, 0)
+      })
       result = simulationLog
     }
     if (result) {

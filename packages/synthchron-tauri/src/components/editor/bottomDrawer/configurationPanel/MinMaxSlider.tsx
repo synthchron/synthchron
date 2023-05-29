@@ -1,4 +1,4 @@
-import { Grid, Input, Slider, Typography } from '@mui/material'
+import { Grid, Input, Paper, Slider, Typography } from '@mui/material'
 
 interface MinMaxSliderProps {
   title: string
@@ -36,7 +36,11 @@ export const MinMaxSlider: React.FC<MinMaxSliderProps> = ({
   value,
   setValue,
 }) => (
-  <div>
+  <Paper
+    sx={{
+      padding: '16px',
+    }}
+  >
     <Typography gutterBottom>{title}</Typography>
     <Grid container spacing={2} alignItems='center'>
       <Grid item xs={3}>
@@ -72,7 +76,7 @@ export const MinMaxSlider: React.FC<MinMaxSliderProps> = ({
           }
           valueLabelDisplay='auto'
           min={0}
-          max={1000}
+          max={10000}
         />
       </Grid>
       <Grid item xs={3}>
@@ -95,5 +99,5 @@ export const MinMaxSlider: React.FC<MinMaxSliderProps> = ({
         />
       </Grid>
     </Grid>
-  </div>
+  </Paper>
 )

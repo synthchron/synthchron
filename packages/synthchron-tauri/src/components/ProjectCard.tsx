@@ -38,6 +38,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 
   const updateProject = usePersistentStore((state) => state.updateProject)
 
+  const addProject = usePersistentStore((state) => state.addProject)
+
   const flow = petriNetFlowConfig.generateFlow(project.projectModel)
 
   const navigate = useNavigate()
@@ -79,7 +81,12 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         >
           {project.projectModel.type}
         </Typography>
-        <Typography variant='h5' component='div' noWrap>
+        <Typography
+          variant='h5'
+          component='div'
+          noWrap
+          title={project.projectName}
+        >
           {project.projectName}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color='text.secondary' fontSize={14}>
@@ -95,6 +102,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             WebkitBoxOrient: 'vertical',
           }}
           variant='body2'
+          title={project.projectDescription}
         >
           {project.projectDescription}
         </Typography>
@@ -119,7 +127,14 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           <EditIcon />
         </IconButton>
         <IconButton
-          onClick={() => alert('Not implemented')}
+          onClick={() => {
+            addProject({
+              ...project,
+              projectName: `${project.projectName} (copy)`,
+              lastOpened: new Date().toJSON(),
+              lastEdited: new Date().toJSON(),
+            })
+          }}
           style={{
             marginLeft: '8px',
           }}

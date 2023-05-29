@@ -1,7 +1,7 @@
 import React from 'react'
 
 import AddIcon from '@mui/icons-material/Add'
-import { Box, Grid, IconButton, Paper } from '@mui/material'
+import { Box, Grid, IconButton, Paper, Tooltip } from '@mui/material'
 
 import { BottomAppBar } from '../components/BottomAppBar'
 import { CustomAppBar } from '../components/CustomAppBar'
@@ -37,32 +37,34 @@ export const MainMenuPage = () => {
         >
           <Grid container spacing={2}>
             <Grid item xs={6} md={4} lg={3}>
-              <Paper
-                style={{
-                  minHeight: 250,
-                  height: '100%',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: '#f5f5f5',
-                  cursor: 'pointer',
-                }}
-                onClick={() => {
-                  setNewProjectModalOpen(true)
-                }}
-              >
-                <IconButton>
-                  <AddIcon fontSize='large' />
-                </IconButton>
-              </Paper>
+              <Tooltip title='Create new project' arrow placement='left'>
+                <Paper
+                  style={{
+                    minHeight: 250,
+                    height: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: '#f5f5f5',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => {
+                    setNewProjectModalOpen(true)
+                  }}
+                >
+                  <IconButton>
+                    <AddIcon fontSize='large' />
+                  </IconButton>
+                </Paper>
+              </Tooltip>
             </Grid>
             {Object.entries(projects)
               .sort(([, p1], [, p2]) => {
                 return Date.parse(p1.lastEdited) - Date.parse(p2.lastEdited)
               })
               .reverse()
-              .map(([k, v], i) => (
-                <Grid key={i} item xs={6} md={4} lg={3}>
+              .map(([k, v]) => (
+                <Grid key={k} item xs={6} md={4} lg={3}>
                   <ProjectCard projectId={k} project={v} />
                 </Grid>
               ))}

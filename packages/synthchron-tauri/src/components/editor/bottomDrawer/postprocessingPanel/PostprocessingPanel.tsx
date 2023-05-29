@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import {
   DndContext,
@@ -18,7 +18,8 @@ import {
 import AddIcon from '@mui/icons-material/Add'
 import HelpIcon from '@mui/icons-material/Help'
 // Temporary
-import { IconButton, Paper, Tooltip, Typography } from '@mui/material'
+import { IconButton, Paper, Slider, Tooltip, Typography } from '@mui/material'
+import { debounce } from 'lodash'
 
 import {
   PostprocessingConfiguration,
@@ -44,6 +45,26 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
   setPostprocessing,
 }) => {
   const [order, setOrder] = useState<number[]>([])
+
+  const [localPostprocessing, setLocalPostprocessing] =
+    useState<PostprocessingConfiguration>(postprocessing)
+
+  useEffect(() => {
+    setLocalPostprocessing(postprocessing)
+  }, [postprocessing])
+
+  const deb = useCallback(
+    debounce(
+      (f: (p: PostprocessingConfiguration) => PostprocessingConfiguration) =>
+        setPostprocessing(f),
+      75
+    ),
+    [postprocessing]
+  )
+
+  useEffect(() => {
+    deb((_) => localPostprocessing)
+  }, [localPostprocessing])
 
   useEffect(() => {
     if (order.length > postprocessing.postProcessingSteps.length) return
@@ -73,27 +94,72 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
           </IconButton>
         </Tooltip>
       </Typography>
+      <Typography variant='body2' gutterBottom>
+        Postprocessing probability
+      </Typography>
+      <Slider
+        value={localPostprocessing.stepProbability}
+        onChange={(event, value) => {
+          setLocalPostprocessing(
+            (postprocessing: PostprocessingConfiguration) => ({
+              stepProbability: value as number,
+              postProcessingSteps: postprocessing.postProcessingSteps,
+            })
+          )
+        }}
+        valueLabelDisplay='auto'
+        step={0.01}
+        min={0}
+        max={1}
+      />
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
       >
         <SortableContext
-          items={order.slice(0, postprocessing.postProcessingSteps.length)}
+          items={order.slice(0, localPostprocessing.postProcessingSteps.length)}
           strategy={verticalListSortingStrategy}
         >
           {postprocessing.postProcessingSteps.map((step, index) => (
-            <SortableItem
-              key={index}
-              id={order[index]}
-              step={step}
-              setStep={(step) => {
-                if (step === undefined) {
+            <React.Fragment key={order[index]}>
+              <SortableItem
+                key={order[index]}
+                id={order[index]}
+                step={step}
+                setStep={(step) => {
+                  if (step === undefined) {
+                    setPostprocessing(
+                      (postprocessing: PostprocessingConfiguration) => {
+                        const newPostprocessing: PostprocessingConfiguration = {
+                          postProcessingSteps: [
+                            ...postprocessing.postProcessingSteps.slice(
+                              0,
+                              index
+                            ),
+                            ...postprocessing.postProcessingSteps.slice(
+                              index + 1
+                            ),
+                          ],
+                          stepProbability: postprocessing.stepProbability,
+                        }
+
+                        return newPostprocessing
+                      }
+                    )
+                    setOrder((order) => [
+                      ...order.slice(0, index),
+                      ...order.slice(index + 1),
+                      order[index],
+                    ])
+                    return
+                  }
                   setPostprocessing(
                     (postprocessing: PostprocessingConfiguration) => {
                       const newPostprocessing: PostprocessingConfiguration = {
                         postProcessingSteps: [
                           ...postprocessing.postProcessingSteps.slice(0, index),
+                          step,
                           ...postprocessing.postProcessingSteps.slice(
                             index + 1
                           ),
@@ -104,29 +170,9 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
                       return newPostprocessing
                     }
                   )
-                  setOrder((order) => [
-                    ...order.slice(0, index),
-                    ...order.slice(index + 1),
-                    order[index],
-                  ])
-                  return
-                }
-                setPostprocessing(
-                  (postprocessing: PostprocessingConfiguration) => {
-                    const newPostprocessing: PostprocessingConfiguration = {
-                      postProcessingSteps: [
-                        ...postprocessing.postProcessingSteps.slice(0, index),
-                        step,
-                        ...postprocessing.postProcessingSteps.slice(index + 1),
-                      ],
-                      stepProbability: postprocessing.stepProbability,
-                    }
-
-                    return newPostprocessing
-                  }
-                )
-              }}
-            />
+                }}
+              />{' '}
+            </React.Fragment>
           ))}
         </SortableContext>
       </DndContext>

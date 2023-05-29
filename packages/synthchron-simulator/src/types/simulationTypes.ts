@@ -75,7 +75,7 @@ type HasTerminatedType = {
   acceptingState?: string
 }
 
-type TraceTerminationReason =
+export type TraceTerminationReason =
   | 'maxStepsReached'
   | 'acceptingStateReached'
   | 'error'

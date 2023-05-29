@@ -6,7 +6,7 @@ export type Configuration = {
   endOnAcceptingStateProbability: number
   minEvents?: number
   maxEvents?: number
-  randomSeed: string
+  randomSeed?: string
   uniqueTraces: boolean
   maximumTraces: number
   terminationType: TerminationTypeUnion

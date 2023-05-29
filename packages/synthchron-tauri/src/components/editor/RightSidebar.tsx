@@ -5,7 +5,7 @@ import { SimulationTab } from './rightSidebar/SimulationTab'
 
 export const RightSidebar = () => {
   return (
-    <TabbedDrawer side='right' tabs={['Properties', 'General', 'Simulator']}>
+    <TabbedDrawer side='right' tabs={['Properties', 'General', 'Verify']}>
       <PropertiesTab />
       <GeneralTab />
       <SimulationTab />

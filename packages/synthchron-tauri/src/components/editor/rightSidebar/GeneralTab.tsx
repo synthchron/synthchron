@@ -1,17 +1,11 @@
-import ControlPointIcon from '@mui/icons-material/ControlPoint'
-import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
-import {
-  Box,
-  Container,
-  IconButton,
-  TextField,
-  Typography,
-} from '@mui/material'
+import AddIcon from '@mui/icons-material/Add'
+import { Container, Paper, Tooltip, Typography } from '@mui/material'
 
 import { ProcessModelType } from '@synthchron/simulator'
 
 import { useEditorStore } from '../editorStore/flowStore'
 import { PetriNetMeta } from '../processModels/petriNet/petriNetFlowConfig'
+import { AcceptingExpressionsLine } from './AcceptingExpressionsLine'
 
 const exampleExpressions = [
   'p1 > 1 and p2 <= 4',
@@ -38,92 +32,71 @@ export const GeneralTab: React.FC = () => {
         marginTop: '1em',
       }}
     >
-      <Typography variant='h6'>Project</Typography>
+      <Typography variant='h6' gutterBottom>
+        Project
+      </Typography>
       {processModelFlowConfig.processModelType == ProcessModelType.PetriNet && (
-        <>
+        <Paper
+          sx={{
+            padding: '16px',
+          }}
+        >
           <Typography variant='subtitle1'>Accepting Expressions</Typography>
           {(meta as PetriNetMeta).acceptingExpressions.map(
-            ({ name, expression }, index) => (
-              <Box
+            (expression, index) => (
+              <AcceptingExpressionsLine
                 key={index}
-                sx={{
-                  marginTop: '0.5em',
-                  justifyContent: 'space-between',
-                  display: 'flex',
-                  flexDirection: 'row',
-                  width: '100%',
+                expression={expression}
+                updateExpression={(expression) => {
+                  const newAcceptingExpressions = [
+                    ...(meta as PetriNetMeta).acceptingExpressions,
+                  ]
+                  newAcceptingExpressions[index] = expression
+                  setMeta({
+                    acceptingExpressions: newAcceptingExpressions,
+                  })
                 }}
-              >
-                <TextField
-                  sx={{
-                    width: '25%',
-                    marginRight: '0.25em',
-                  }}
-                  value={name}
-                  onChange={(e) => {
-                    const newAcceptingExpressions = [
-                      ...(meta as PetriNetMeta).acceptingExpressions,
-                    ]
-                    newAcceptingExpressions[index].name = e.target.value
-                    setMeta({
-                      acceptingExpressions: newAcceptingExpressions,
-                    })
-                  }}
-                  variant='outlined'
-                  size='small'
-                  placeholder='name'
-                />
-                <TextField
-                  sx={{
-                    width: '55%',
-                  }}
-                  value={expression}
-                  onChange={(e) => {
-                    const newAcceptingExpressions = [
-                      ...(meta as PetriNetMeta).acceptingExpressions,
-                    ]
-                    newAcceptingExpressions[index].expression = e.target.value
-                    setMeta({
-                      acceptingExpressions: newAcceptingExpressions,
-                    })
-                  }}
-                  variant='outlined'
-                  size='small'
-                  placeholder={
-                    exampleExpressions[index % exampleExpressions.length]
-                  }
-                />
-                <IconButton
-                  sx={{}}
-                  onClick={() => {
-                    const newAcceptingExpressions = [
-                      ...(meta as PetriNetMeta).acceptingExpressions,
-                    ]
-                    newAcceptingExpressions.splice(index, 1)
-                    setMeta({
-                      acceptingExpressions: newAcceptingExpressions,
-                    })
-                  }}
-                >
-                  <RemoveCircleOutlineIcon />
-                </IconButton>
-              </Box>
+                deleteExpression={() => {
+                  const newAcceptingExpressions = [
+                    ...(meta as PetriNetMeta).acceptingExpressions,
+                  ]
+                  newAcceptingExpressions.splice(index, 1)
+                  setMeta({
+                    acceptingExpressions: newAcceptingExpressions,
+                  })
+                }}
+                placeholder={
+                  exampleExpressions[index % exampleExpressions.length]
+                }
+              />
             )
           )}
-        </>
+          <Tooltip title='Add accepting condition'>
+            <Paper
+              style={{
+                backgroundColor: 'lightgrey',
+                width: '100%',
+                alignItems: 'center',
+                display: 'flex',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                height: '2rem',
+                marginTop: '0.5em',
+              }}
+              onClick={() => {
+                setMeta({
+                  acceptingExpressions: [
+                    ...(meta as PetriNetMeta).acceptingExpressions,
+                    { name: '', expression: '' },
+                  ],
+                })
+              }}
+            >
+              <AddIcon />
+            </Paper>
+          </Tooltip>
+        </Paper>
       )}
-      <IconButton
-        onClick={() =>
-          setMeta({
-            acceptingExpressions: [
-              ...(meta as PetriNetMeta).acceptingExpressions,
-              { name: '', expression: '' },
-            ],
-          })
-        }
-      >
-        <ControlPointIcon />
-      </IconButton>
     </Container>
   )
 }

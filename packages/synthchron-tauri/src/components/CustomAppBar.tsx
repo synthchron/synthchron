@@ -68,9 +68,17 @@ export const CustomAppBar: React.FC = () => {
       name: 'Swarm',
       href: '/swarm',
     },
+  ]
+
+  // These pages will not be shown in the final product but are useful during development
+  const debugPages = [
     {
-      name: 'Post-processing',
+      name: 'Post Processing',
       href: '/postprocessing',
+    },
+    {
+      name: 'Debug',
+      href: '/debug',
     },
   ]
 
@@ -182,20 +190,34 @@ export const CustomAppBar: React.FC = () => {
               flexGrow: 1,
             }}
           />
-          <Button
-            sx={{
-              my: 2,
-              alignSelf: 'right',
-              alignItems: 'right',
-              color: 'white',
-              display: 'block',
-            }}
-            onClick={preventExit}
-            to={'/debug'}
-            component={Link}
-          >
-            Debug
-          </Button>
+          {debugPages.length > 0 && (
+            <Divider
+              orientation='vertical'
+              flexItem
+              variant='middle'
+              style={{
+                marginRight: '1rem',
+                marginLeft: '1rem',
+              }}
+            />
+          )}
+          {debugPages.map((page) => (
+            <Button
+              key={page.name}
+              sx={{
+                my: 2,
+                alignSelf: 'right',
+                alignItems: 'right',
+                color: 'white',
+                display: 'block',
+              }}
+              onClick={preventExit}
+              to={page.href}
+              component={Link}
+            >
+              {page.name}
+            </Button>
+          ))}
         </Toolbar>
       </Container>
       <NewProjectModal

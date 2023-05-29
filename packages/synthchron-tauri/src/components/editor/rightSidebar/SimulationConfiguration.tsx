@@ -30,7 +30,7 @@ type SimulationConfigurationProperty = {
 }
 
 //Default values of configuration for simulation.
-const minMaxEvents = [1, 100]
+const minMaxEvents = [0, 1000]
 const partialNotAutoConfiguration: Partial<Configuration> = {
   //These are values that should not be automatically generated
   endOnAcceptingStateProbability: 100,
@@ -43,7 +43,7 @@ const partialNotAutoConfiguration: Partial<Configuration> = {
 }
 const partialAutoConfiguration: Partial<Configuration> = {
   //These are values that can be automatically generated
-  randomSeed: '',
+  randomSeed: undefined,
   //Add other configuration options here
   configurationName: 'Default',
   maximumTraces: 1,
