@@ -14,7 +14,8 @@ interface MaxStepsFieldProps {
 }
 
 // Explanation of this setting
-const tooltip = 'The maximum number of simulations to run.'
+const tooltip = `Will attempt this many generations before stopping. 
+Can stop early if the "Simulation Goal" is reached, or return less traces if unique traces are enforced`
 
 export const MaxStepsField: React.FC<MaxStepsFieldProps> = ({
   value,
@@ -28,7 +29,7 @@ export const MaxStepsField: React.FC<MaxStepsFieldProps> = ({
     >
       <Stack direction={'row'} spacing={2} alignItems='center'>
         <Typography gutterBottom>
-          Simulation Limit
+          Attempted Generations
           <Tooltip title={tooltip} placement='right'>
             <IconButton>
               <HelpIcon fontSize='small' />
@@ -41,7 +42,7 @@ export const MaxStepsField: React.FC<MaxStepsFieldProps> = ({
           onChange={(event) => setValue(Number(event.target.value))}
           size='small'
           variant='outlined'
-          label='Max Steps'
+          label='Traces'
           type='number'
           inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
         />

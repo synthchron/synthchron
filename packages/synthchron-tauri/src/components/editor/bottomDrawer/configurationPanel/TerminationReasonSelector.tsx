@@ -27,21 +27,24 @@ const terminationTypeDefaults: {
   },
 }
 
-const tooltip = `Choose which property determines sufficent traces.`
+const tooltip = `Stops the simulation early once a specified goal is reached.`
 
 const options = [
   {
     option: TerminationType.Standard,
-    explanation: 'Run for the maximum number of simulations',
+    title: 'None',
+    explanation: 'Generate the configured amount of traces',
   },
   {
     option: TerminationType.Coverage,
-    explanation: 'Run until the given event coverage is reached',
+    title: 'Coverage',
+    explanation: 'Stop once a given coverage is reached',
   },
   {
     option: TerminationType.SpecifiedAmountOfTraces,
-    explanation:
-      'Run until the given amount of (possibly unique) traces have been found',
+    title: 'Generated Traces',
+    explanation: `Stop once the specified amount of traces has been generated. 
+    Only useful when used together with the "Enforce Unique Traces" option.`,
   },
 ]
 
@@ -60,7 +63,7 @@ export const TerminationReasonSelecter: React.FC<
       style={{ marginBottom: -10 }}
       width={'100%'}
     >
-      Termination Reason
+      Simulation Goal
       <Tooltip
         title={tooltip}
         placement='right'
@@ -85,7 +88,7 @@ export const TerminationReasonSelecter: React.FC<
       {options.map((key) => (
         <MenuItem key={key.option} value={key.option}>
           <Stack direction='row' alignItems={'center'} width={'100%'}>
-            {camelCaseToString(key.option)}
+            {key.title}
             <Tooltip
               title={key.explanation}
               placement='right'

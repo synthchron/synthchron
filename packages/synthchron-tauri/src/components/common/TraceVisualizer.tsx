@@ -159,8 +159,10 @@ const LastLine: React.FC<LastLineProps> = ({ reason, acceptingState }) => (
         'Error'
       ) : reason === 'noEnabledActivities' ? (
         'No enabled activities'
-      ) : (
+      ) : reason === 'maxStepsReached' ? (
         'Max events reached'
+      ) : (
+        'Unknown termination reason'
       )}
     </Typography>
   </Paper>

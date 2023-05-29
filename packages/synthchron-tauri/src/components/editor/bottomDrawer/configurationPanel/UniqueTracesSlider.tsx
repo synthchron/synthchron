@@ -29,7 +29,7 @@ export const UniqueTracesSlide: React.FC<UniqueTracesSlideProps> = ({
       }}
     >
       <Stack direction={'row'} spacing={2} alignItems='center'>
-        <Typography>Generate Unique Traces</Typography>
+        <Typography>Enforce Unique Traces</Typography>
         <Tooltip title={tooltip} placement='right'>
           <IconButton>
             <HelpIcon fontSize='small' />
