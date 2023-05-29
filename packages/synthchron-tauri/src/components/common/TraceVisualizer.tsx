@@ -64,15 +64,16 @@ export const TraceVisualizer: React.FC<TraceVisualizerProps> = ({
           </Divider>
         )}
       </Box>
-      {trace.trace.events
-        .slice(-last, trace.trace.events.length)
-        .map((event, idx) => (
-          <EventLine
-            idx={idx + trace.trace.events.length - last}
-            event={event}
-            key={idx}
-          />
-        ))}
+      {last !== 0 &&
+        trace.trace.events
+          .slice(-last, trace.trace.events.length)
+          .map((event, idx) => (
+            <EventLine
+              idx={idx + trace.trace.events.length - last}
+              event={event}
+              key={idx}
+            />
+          ))}
 
       <LastLine
         reason={trace.exitReason}
