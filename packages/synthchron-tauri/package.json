@@ -52,7 +52,7 @@
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
   },
   "devDependencies": {
-    "@babel/core": "^7.21.8",
+    "@babel/core": "^7.22.1",
     "@faker-js/faker": "^8.0.2",
     "@storybook/addon-actions": "^7.0.11",
     "@storybook/addon-essentials": "^7.0.7",
