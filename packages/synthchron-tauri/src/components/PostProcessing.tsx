@@ -17,7 +17,7 @@ import {
 
 import { CustomAppBar } from './CustomAppBar'
 
-function XESlogToString(log: XESLog) {
+export function XESLogToString(log: XESLog) {
   return log.traces
     .map((trace: XESTrace) =>
       trace.events.map((event: XESEvent) =>
@@ -61,7 +61,7 @@ export const PostProcessing = () => {
       </Typography>
       <div style={{ display: 'flex', height: '100vh', color: 'white' }}>
         <div style={{ flex: 1, backgroundColor: 'red', padding: '20px' }}>
-          <pre>{XESlogToString(example)}</pre>
+          <pre>{XESLogToString(example)}</pre>
         </div>
         <div style={{ flex: 3, backgroundColor: 'green', padding: '20px' }}>
           {/* Content for the second column */}
@@ -79,7 +79,7 @@ export const PostProcessing = () => {
                 color='primary'
                 onClick={() => {
                   setProcessingResult(
-                    XESlogToString(insertDuplicate(example, 20))
+                    XESLogToString(insertDuplicate(example, 20))
                   )
                 }}
               >
@@ -90,7 +90,7 @@ export const PostProcessing = () => {
                 color='primary'
                 onClick={() => {
                   setProcessingResult(
-                    XESlogToString(insertEvent(example, 20, exampleEvent))
+                    XESLogToString(insertEvent(example, 20, exampleEvent))
                   )
                 }}
               >
@@ -101,7 +101,7 @@ export const PostProcessing = () => {
                 color='primary'
                 onClick={() => {
                   setProcessingResult(
-                    XESlogToString(insertExisting(example, 20))
+                    XESLogToString(insertExisting(example, 20))
                   )
                 }}
               >

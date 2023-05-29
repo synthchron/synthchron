@@ -102,7 +102,6 @@ export async function* simulateWithEngine<
     0
   )
   const randomGenerator = seedrandom(simulationConfiguration.randomSeed)
-  // console.log(progress)
 
   for (
     let step = 0;

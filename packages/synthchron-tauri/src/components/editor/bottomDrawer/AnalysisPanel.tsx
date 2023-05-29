@@ -10,13 +10,19 @@ import {
   Title,
   Tooltip,
 } from 'chart.js/auto'
-import { Bar, Line, Radar, Scatter } from 'react-chartjs-2'
+import { Bar, Doughnut, Line, Radar, Scatter } from 'react-chartjs-2'
 
 import { serialize } from '@synthchron/xes'
 
 import { TablePreview } from '../../common/TablePreview'
 import { usePersistentStore } from '../../common/persistentStore'
 import { useEditorStore } from '../editorStore/flowStore'
+import {
+  AggregateToChartData,
+  AggregateToTable,
+  ChartType,
+  TransformToAggregate,
+} from './analysisFunctions/AggregateCharts'
 
 ChartJS.register(
   CategoryScale,
@@ -30,24 +36,6 @@ ChartJS.register(
 
 const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
 
-const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Dataset 1',
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-    {
-      label: 'Dataset 2',
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
-    },
-  ],
-}
-
 const highDimensionalData = {
   labels,
   datasets: [
@@ -55,8 +43,8 @@ const highDimensionalData = {
       label: 'Dataset 1',
       data: [...labels, ...labels, ...labels, ...labels, ...labels].map(
         (_l, i) => ({
-          x: faker.datatype.number({ min: i, max: Math.pow(i, 2) }),
-          y: faker.datatype.number({ min: -10 * i, max: 0 }),
+          x: faker.number.int({ min: i, max: Math.pow(i, 2) }),
+          y: faker.number.int({ min: -10 * i, max: 0 }),
         })
       ),
       borderColor: 'rgb(255, 99, 132)',
@@ -73,7 +61,7 @@ const options = {
     },
     title: {
       display: true,
-      text: 'Chart.js Line Chart',
+      text: 'Trace Chart',
     },
   },
 }
@@ -103,90 +91,97 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
     return <>Hello</>
   }
 
-  return (
-    <Stack>
-      <Stack
-        direction={'row'}
-        spacing={1}
-        style={{
-          marginLeft: 'auto',
+  const exportButtons = (
+    <Stack
+      direction={'row'}
+      spacing={1}
+      style={{
+        marginLeft: 'auto',
+      }}
+    >
+      <Button
+        variant='contained'
+        onClick={() => {
+          downloadString(
+            serialize(result.log),
+            `trace-${
+              (projectId &&
+                projectId in projects &&
+                projects[projectId].projectName?.replace(/ /g, '_')) ||
+              'model'
+            }-${
+              configuration.configurationName?.replace(/ /g, '_') || 'default'
+            }.xes`
+          )
         }}
       >
-        <Button
-          variant='contained'
-          onClick={() => {
-            downloadString(
-              serialize(result.log),
-              `trace-${
+        Export as XES
+      </Button>
+      <Button
+        variant='contained'
+        onClick={() => {
+          downloadString(
+            serialize(result.log, [
+              'This log was generated using the following model and configuration.',
+              `Model: ${
                 (projectId &&
                   projectId in projects &&
-                  projects[projectId].projectName?.replace(/ /g, '_')) ||
-                'model'
-              }-${
-                configuration.configurationName?.replace(/ /g, '_') || 'default'
-              }.xes`
-            )
-          }}
-        >
-          Export as XES
-        </Button>
-        <Button
-          variant='contained'
-          onClick={() => {
-            downloadString(
-              serialize(result.log, [
-                'This log was generated using the following model and configuration.',
-                `Model: ${
-                  (projectId &&
-                    projectId in projects &&
-                    projects[projectId].projectName) ||
-                  'unknown'
-                }`,
-                `Configuration: ${
-                  configuration.configurationName || 'unknown'
-                }`,
-              ]),
-              `trace-${
+                  projects[projectId].projectName) ||
+                'unknown'
+              }`,
+              `Configuration: ${configuration.configurationName || 'unknown'}`,
+            ]),
+            `trace-${
+              (projectId &&
+                projectId in projects &&
+                projects[projectId].projectName?.replace(/ /g, '_')) ||
+              'model'
+            }-${
+              configuration.configurationName?.replace(/ /g, '_') || 'default'
+            }.xes`
+          )
+        }}
+      >
+        Export as XES with Model
+      </Button>
+      <Button
+        variant='contained'
+        onClick={() => {
+          downloadString(
+            serialize(result.log, [
+              'This log was generated using the following model and configuration.',
+              `Model: ${
                 (projectId &&
                   projectId in projects &&
-                  projects[projectId].projectName?.replace(/ /g, '_')) ||
-                'model'
-              }-${
-                configuration.configurationName?.replace(/ /g, '_') || 'default'
-              }.xes`
-            )
-          }}
-        >
-          Export as XES with Model
-        </Button>
-        <Button
-          variant='contained'
-          onClick={() => {
-            downloadString(
-              serialize(result.log, [
-                'This log was generated using the following model and configuration.',
-                `Model: ${
-                  (projectId &&
-                    projectId in projects &&
-                    JSON.stringify(projects[projectId].projectModel)) ||
-                  'unknown'
-                }`,
-                `Configuration: ${JSON.stringify(configuration) || 'unknown'}`,
-              ]),
-              `trace-${
-                (projectId &&
-                  projectId in projects &&
-                  projects[projectId].projectName?.replace(/ /g, '_')) ||
-                'model'
-              }-${
-                configuration.configurationName?.replace(/ /g, '_') || 'default'
-              }.xes`
-            )
-          }}
-        >
-          Export as XES with fully serialized Model
-        </Button>
-      </Stack>
+                  JSON.stringify(projects[projectId].projectModel)) ||
+                'unknown'
+              }`,
+              `Configuration: ${JSON.stringify(configuration) || 'unknown'}`,
+            ]),
+            `trace-${
+              (projectId &&
+                projectId in projects &&
+                projects[projectId].projectName?.replace(/ /g, '_')) ||
+              'model'
+            }-${
+              configuration.configurationName?.replace(/ /g, '_') || 'default'
+            }.xes`
+          )
+        }}
+      >
+        Export as XES with fully serialized Model
+      </Button>
+    </Stack>
+  )
+
+  const aggregateOfLog = TransformToAggregate(result.log)
+
+  const doughnutData = AggregateToChartData(aggregateOfLog, ChartType.Doughnut)
+  const lineData = AggregateToChartData(aggregateOfLog, ChartType.Other)
+
+  return (
+    <Stack>
+      {exportButtons}
       <Divider
         style={{
           marginTop: '16px',
@@ -198,32 +193,44 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
       <Grid container spacing={2}>
         <Grid item xs={8}>
           <Paper style={{ padding: '16px' }}>
-            <TablePreview object={result.statistics} />
+            <TablePreview
+              object={result.statistics}
+              columnTitles={['Key', 'Value']}
+            />
           </Paper>
         </Grid>
         <Grid item xs={4}>
           <Paper style={{ padding: '16px' }}>
-            <TablePreview object={result.statistics} />
+            <TablePreview
+              object={AggregateToTable(aggregateOfLog)}
+              columnTitles={['Transition', 'Amount']}
+            />
           </Paper>
         </Grid>
         <Grid item xs={6}>
           <Paper style={{ padding: '16px' }}>
-            <Line data={data} options={options} />
+            <Line data={lineData} options={options} />
           </Paper>
         </Grid>
         <Grid item xs={6}>
           <Paper style={{ padding: '16px' }}>
-            <Bar data={data} options={options} />
+            <Bar data={lineData} options={options} />
           </Paper>
         </Grid>
         <Grid item xs={4}>
           <Paper style={{ padding: '16px' }}>
-            <Radar data={data} options={options} />
+            <Radar data={lineData} options={options} />
           </Paper>
         </Grid>
         <Grid item xs={8}>
           <Paper style={{ padding: '16px' }}>
             <Scatter data={highDimensionalData} options={options} />
+            Not implemented
+          </Paper>
+        </Grid>
+        <Grid item xs={4}>
+          <Paper style={{ padding: '16px' }}>
+            <Doughnut data={doughnutData} options={options} />
           </Paper>
         </Grid>
       </Grid>
