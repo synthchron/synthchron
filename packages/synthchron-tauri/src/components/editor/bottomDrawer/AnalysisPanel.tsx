@@ -35,13 +35,13 @@ const data = {
   datasets: [
     {
       label: 'Dataset 1',
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+      data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
       borderColor: 'rgb(255, 99, 132)',
       backgroundColor: 'rgba(255, 99, 132, 0.5)',
     },
     {
       label: 'Dataset 2',
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+      data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
       borderColor: 'rgb(53, 162, 235)',
       backgroundColor: 'rgba(53, 162, 235, 0.5)',
     },
@@ -55,8 +55,8 @@ const highDimensionalData = {
       label: 'Dataset 1',
       data: [...labels, ...labels, ...labels, ...labels, ...labels].map(
         (_l, i) => ({
-          x: faker.datatype.number({ min: i, max: Math.pow(i, 2) }),
-          y: faker.datatype.number({ min: -10 * i, max: 0 }),
+          x: faker.number.int({ min: i, max: Math.pow(i, 2) }),
+          y: faker.number.int({ min: -10 * i, max: 0 }),
         })
       ),
       borderColor: 'rgb(255, 99, 132)',
