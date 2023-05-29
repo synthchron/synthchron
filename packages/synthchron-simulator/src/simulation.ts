@@ -102,6 +102,7 @@ export async function* simulateWithEngine<
     0
   )
   const randomGenerator = seedrandom(simulationConfiguration.randomSeed)
+
   for (
     let step = 0;
     step < simulationConfiguration.maximumTraces && status.continue;

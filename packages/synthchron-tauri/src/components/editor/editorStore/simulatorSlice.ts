@@ -6,7 +6,7 @@ import { XESLog } from '@synthchron/xes'
 import { defaultConfiguration } from '../rightSidebar/SimulationConfiguration'
 import { EditorState } from './flowStore'
 
-type ResultType = {
+export type ResultType = {
   // TODO: To be updated
   log: XESLog
   statistics: object

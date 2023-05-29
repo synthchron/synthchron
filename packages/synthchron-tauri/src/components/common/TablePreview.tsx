@@ -13,13 +13,14 @@ import {
 
 interface TablePreviewProps {
   object: object
+  columnTitles: [string, string]
 }
 
 const toRow = (
   [key, value]: [string, unknown],
   prefix: string[] = []
 ): React.ReactNode | React.ReactNode[] => {
-  if (key == null) return <></>
+  if (key == null) return
 
   if (
     typeof value === 'string' ||
@@ -85,19 +86,18 @@ const toRow = (
       toRow(entry, [...prefix, key])
     )
   }
-
-  return <></>
 }
 
 export const TablePreview: React.FC<TablePreviewProps> = ({
   object: configuration,
+  columnTitles = ['Key', 'Value'],
 }) => (
   <TableContainer component={Paper}>
     <Table sx={{ minWidth: 20 }} aria-label='simple table'>
       <TableHead>
         <TableRow>
-          <TableCell>Key</TableCell>
-          <TableCell align='right'>Value</TableCell>
+          <TableCell>{columnTitles[0]}</TableCell>
+          <TableCell align='right'>{columnTitles[1]}</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>

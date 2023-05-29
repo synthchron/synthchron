@@ -9,10 +9,11 @@ import {
 } from '@synthchron/simulator'
 
 import { transformFlowToSimulator } from '../../../utils/flowTransformer'
-import { transformSimulationLogToXESLog } from '../../../utils/simulatorToXESConverter'
 import { TablePreview } from '../../common/TablePreview'
 import { ZustandFlowPreview } from '../../common/ZustandFlowPreview'
 import { useEditorStore } from '../editorStore/flowStore'
+import { ResultType } from '../editorStore/simulatorSlice'
+import { SimulationStatisticsAdapter } from './analysisFunctions/SimulationStats'
 
 interface SimulationPanelProps {
   nextStep: () => void
@@ -60,13 +61,25 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
       })
       result = simulationLog
     }
-    return result
+    if (result) {
+      return SimulationStatisticsAdapter(result)
+    } else {
+      const emptyResult: ResultType = {
+        log: { traces: [] },
+        statistics: {},
+      }
+      return emptyResult
+    }
   }
+
   return (
     <>
       <Stack direction='row' spacing={2} marginTop={3} marginBottom={3}>
         <Paper style={{ padding: '16px' }}>
-          <TablePreview object={configuration} />
+          <TablePreview
+            object={configuration}
+            columnTitles={['Config', 'Value']}
+          />
         </Paper>
         <Paper style={{ paddingRight: '5px', flexGrow: 1 }}>
           <ZustandFlowPreview />
@@ -80,13 +93,8 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
           onClick={() => {
             setInSimulation(true)
             setProgress(0)
-            simulate().then(async (result) => {
-              setResult({
-                log: result
-                  ? transformSimulationLogToXESLog(result)
-                  : { traces: [] },
-                statistics: result ?? {},
-              })
+            simulate().then((result) => {
+              setResult(result)
               // await new Promise((resolve) => setTimeout(resolve, 2500))
               setInSimulation(false)
               nextStep()
