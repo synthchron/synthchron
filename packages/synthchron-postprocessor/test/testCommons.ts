@@ -62,3 +62,9 @@ export const multipleTraces: Trace[] = [
     events: MR_Events,
   },
 ]
+
+export const emptyTrace: Trace[] = [
+  {
+    events: [],
+  },
+]
