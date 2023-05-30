@@ -1,7 +1,15 @@
 import { useCallback } from 'react'
 
 import { faker } from '@faker-js/faker'
-import { Box, Button, Container, TextField, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  Container,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
 import { shallow } from 'zustand/shallow'
 
@@ -42,15 +50,17 @@ export const ProjectTab: React.FC = () => {
         width: '100%',
       }}
     >
-      <Container>
-        <Typography variant='h6'>Project</Typography>
+      <Paper
+        sx={{
+          margin: '10px',
+          padding: '16px',
+        }}
+      >
+        <Stack spacing={1}>
+          <Typography variant='h6' gutterBottom>
+            Project
+          </Typography>
 
-        <Box
-          sx={{
-            marginTop: '1em',
-            marginBottom: '1em',
-          }}
-        >
           <TextField
             label='Project Name'
             value={projectId && projects[projectId].projectName}
@@ -65,14 +75,7 @@ export const ProjectTab: React.FC = () => {
             fullWidth
             disabled={projectId === undefined}
           />
-        </Box>
 
-        <Box
-          sx={{
-            marginTop: '2em',
-            marginBottom: '1em',
-          }}
-        >
           <TextField
             label='Project Description'
             value={projectId && projects[projectId].projectDescription}
@@ -86,32 +89,32 @@ export const ProjectTab: React.FC = () => {
             fullWidth
             disabled={projectId === undefined}
           />
-        </Box>
 
-        <Button
-          onClick={() => {
-            if (projectId) {
-              saveFlow()
-            } else {
-              const processModel = transformFlowToSimulator(
-                useEditorStore.getState()
-              )
-              const id = addProject({
-                projectName: faker.animal.cow(),
-                projectDescription: faker.lorem.lines(3),
-                projectModel: processModel,
-                created: new Date().toJSON(),
-                lastEdited: new Date().toJSON(),
-                lastOpened: new Date(0).toJSON(),
-              })
+          <Button
+            onClick={() => {
+              if (projectId) {
+                saveFlow()
+              } else {
+                const processModel = transformFlowToSimulator(
+                  useEditorStore.getState()
+                )
+                const id = addProject({
+                  projectName: faker.animal.cow(),
+                  projectDescription: faker.lorem.lines(3),
+                  projectModel: processModel,
+                  created: new Date().toJSON(),
+                  lastEdited: new Date().toJSON(),
+                  lastOpened: new Date(0).toJSON(),
+                })
 
-              navigate(`/editor/${id}`)
-            }
-          }}
-        >
-          Save
-        </Button>
-      </Container>
+                navigate(`/editor/${id}`)
+              }
+            }}
+          >
+            Save
+          </Button>
+        </Stack>
+      </Paper>
     </Box>
   )
 }
