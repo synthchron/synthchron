@@ -51,10 +51,11 @@ describe('Testing delete functionality', function () {
 
       const config: Configuration = {
         ...configTemplate,
+        postprocessing: steps,
         randomSeed: 'word',
       }
 
-      const result = postprocess(traces, steps, config)
+      const result = postprocess(traces, config)
 
       expect(result).to.deep.equal([
         {
@@ -110,10 +111,11 @@ describe('Testing delete functionality', function () {
 
       const config: Configuration = {
         ...configTemplate,
+        postprocessing: steps,
         randomSeed: 'new',
       }
 
-      const result = postprocess(traces, steps, config)
+      const result = postprocess(traces, config)
 
       expect(result).to.deep.equal([
         {
@@ -169,10 +171,11 @@ describe('Testing delete functionality', function () {
 
       const config: Configuration = {
         ...configTemplate,
+        postprocessing: steps,
         randomSeed: 'abc',
       }
 
-      const result = postprocess(traces, steps, config)
+      const result = postprocess(traces, config)
       expect(result[0].events.length).to.equal(0)
 
       expect(result).to.deep.equal([
@@ -225,10 +228,11 @@ describe('Testing delete functionality', function () {
 
       const config: Configuration = {
         ...configTemplate,
+        postprocessing: steps,
         randomSeed: 'random number',
       }
 
-      const result = postprocess(traces, steps, config)
+      const result = postprocess(traces, config)
       expect(result[0].events.length).to.equal(0)
 
       expect(result).to.deep.equal([
@@ -254,6 +258,7 @@ describe('Testing swap step', function () {
 
   const postProcessingConfig = {
     ...configTemplate,
+    postprocessing: swapConfig,
     randomSeed: 'random',
   }
 
@@ -264,7 +269,7 @@ describe('Testing swap step', function () {
           events: [],
         },
       ]
-      const result = postprocess(traces, swapConfig, postProcessingConfig)
+      const result = postprocess(traces, postProcessingConfig)
       expect(result).to.deep.equal([
         {
           events: [],
@@ -277,7 +282,7 @@ describe('Testing swap step', function () {
           events: [{ name: 'a', meta: {} }],
         },
       ]
-      const result = postprocess(traces, swapConfig, postProcessingConfig)
+      const result = postprocess(traces, postProcessingConfig)
 
       expect(result).to.deep.equal([
         {
@@ -296,7 +301,7 @@ describe('Testing swap step', function () {
         },
       ]
 
-      const result = postprocess(traces, swapConfig, postProcessingConfig)
+      const result = postprocess(traces, postProcessingConfig)
 
       expect(result).to.deep.equal([
         {
@@ -319,7 +324,7 @@ describe('Testing swap step', function () {
         },
       ]
 
-      const result = postprocess(traces, swapConfig, postProcessingConfig)
+      const result = postprocess(traces, postProcessingConfig)
 
       expect(result).to.deep.equal([
         {
@@ -343,7 +348,7 @@ describe('Testing swap step', function () {
         },
       ]
 
-      const result = postprocess(traces, swapConfig, postProcessingConfig)
+      const result = postprocess(traces, postProcessingConfig)
 
       expect(result).to.deep.equal([
         {
@@ -384,7 +389,7 @@ describe('Testing swap step', function () {
         },
       ]
 
-      const result = postprocess(traces, swapConfig, postProcessingConfig)
+      const result = postprocess(traces, postProcessingConfig)
 
       expect(result).to.deep.equal([
         {
@@ -420,6 +425,11 @@ describe('Testing swap step', function () {
       ...swapConfig,
       stepProbability: 0.5,
     }
+    const postProcessingConfig = {
+      ...configTemplate,
+      postprocessing: newConfig,
+      randomSeed: 'random',
+    }
     it('Swapping trace of six events', function () {
       const traces: Trace[] = [
         {
@@ -434,7 +444,7 @@ describe('Testing swap step', function () {
         },
       ]
 
-      const result = postprocess(traces, newConfig, postProcessingConfig)
+      const result = postprocess(traces, postProcessingConfig)
 
       expect(result).to.deep.equal([
         {
