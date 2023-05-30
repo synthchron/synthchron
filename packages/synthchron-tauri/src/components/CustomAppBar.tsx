@@ -61,20 +61,24 @@ export const CustomAppBar: React.FC = () => {
       href: '/',
     },
     {
-      name: 'Collaborate',
-      href: '/collaborate',
-    },
-    {
       name: 'Swarm',
       href: '/swarm',
+    },
+    {
+      name: 'Post Processing',
+      href: '/postprocessing',
+    },
+    {
+      name: 'Collaborate',
+      href: '/collaborate',
     },
   ]
 
   // These pages will not be shown in the final product but are useful during development
   const debugPages = [
     {
-      name: 'Post Processing',
-      href: '/postprocessing',
+      name: 'Post Processing (Debug)',
+      href: '/debug_postprocessing',
     },
     {
       name: 'Debug',
