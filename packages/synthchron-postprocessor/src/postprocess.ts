@@ -1,17 +1,13 @@
 import seedrandom from 'seedrandom'
 
 import { Trace } from '@synthchron/simulator'
-import {
-  Configuration,
-  PostprocessingConfiguration,
-  PostprocessingStepType,
-} from '@synthchron/types'
+import { Configuration, PostprocessingStepType } from '@synthchron/types'
 
 export const postprocess = (
   traces: Trace[],
-  postProcessingConfiguration: PostprocessingConfiguration,
   config: Configuration
 ): Trace[] => {
+  const postProcessingConfiguration = config.postprocessing
   const postProcessingSteps = postProcessingConfiguration.postProcessingSteps
   const randomGenerator = seedrandom(config.randomSeed)
   traces.forEach((trace) => {
