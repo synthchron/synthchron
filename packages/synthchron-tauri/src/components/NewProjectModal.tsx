@@ -5,6 +5,7 @@ import {
   Box,
   Button,
   FormControl,
+  Input,
   InputLabel,
   MenuItem,
   Modal,
@@ -109,6 +110,8 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
 }) => {
   const navigate = useNavigate()
 
+  const [processModel, setProcessModel] = useState({ type: 'none' })
+
   const addProject = usePersistentStore((state) => state.addProject)
 
   const newProjectDefault = () => {
@@ -151,6 +154,11 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
         }
         break
     }
+
+    if (processModel.type != null) {
+      model = processModel as ProcessModel
+    }
+
     const projectId = addProject({
       projectName: newProjectConfig.name,
       projectDescription: newProjectConfig.description,
@@ -162,6 +170,14 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
     setNewProjectConfig(newProjectDefault())
     if (redirect) navigate(`/editor/${projectId}`)
     onClose()
+  }
+
+  const readFile = (file: File) => {
+    console.log(file)
+    file.text().then((res: string) => {
+      const json: ProcessModel = JSON.parse(res) as ProcessModel
+      setProcessModel(json)
+    })
   }
 
   return (
@@ -198,6 +214,16 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
               updateNewProjectConfig({ name: event.target.value })
             }}
           />
+          <Input
+            type='file'
+            className='Mui-error'
+            onChange={(e) => {
+              if (e != null && e.target != null) {
+                if (e.target.files != null && e.target.files.length > 0)
+                  readFile(e.target.files[0])
+              }
+            }}
+          ></Input>
           <FormControl fullWidth>
             <InputLabel id='demo-simple-select-label'>Model Type</InputLabel>
             <Select
