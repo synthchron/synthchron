@@ -1,15 +1,7 @@
 import { useCallback } from 'react'
 
 import { faker } from '@faker-js/faker'
-import {
-  Box,
-  Button,
-  Container,
-  Paper,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Box, Button, Paper, Stack, TextField, Typography } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
 import { shallow } from 'zustand/shallow'
 
@@ -64,6 +56,7 @@ export const ProjectTab: React.FC = () => {
 
           <TextField
             label='Project Name'
+            size='small'
             value={projectId && projects[projectId].projectName}
             onChange={(val) => {
               if (projectId)
@@ -88,6 +81,7 @@ export const ProjectTab: React.FC = () => {
             multiline
             fullWidth
             disabled={projectId === undefined}
+            minRows={3}
           />
 
           <Button

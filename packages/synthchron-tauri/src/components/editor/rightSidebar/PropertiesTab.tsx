@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { Container, Stack, TextField, Typography } from '@mui/material'
+import { Paper, Stack, Typography } from '@mui/material'
 import { Edge, Node } from 'reactflow'
 import { shallow } from 'zustand/shallow'
 
@@ -87,52 +87,46 @@ export const PropertiesTab: React.FC = () => {
 
   const selectedElementProperties =
     selectedElement && fieldsToDisplay ? (
-      [
-        <div key='NodeLabel'>
-          <TextField
-            value={selectedElement.type}
-            disabled={true}
-            variant='standard'
-          ></TextField>
-        </div>,
-      ].concat(
-        Object.entries(selectedElement.data)
-          .filter(([key, _value]) => fieldsToDisplay.includes(key))
-          .map(([key, value]) => (
-            <div key={key}>
-              {key === 'label' && selectedElement.type === 'Place' ? (
-                <LabelProperty
-                  value={value as string}
-                  changeSelectedPlaceLabel={changeSelectedPlaceLabel}
-                />
-              ) : (
-                <OtherProperty
-                  value={value as string}
-                  NonReactKey={key}
-                  type={NodeDataFieldsTypesAsStrings(key)}
-                  updateNodeFields={updateNodeFields}
-                />
-              )}
-            </div>
-          ))
-      )
+      Object.entries(selectedElement.data)
+        .filter(([key, _value]) => fieldsToDisplay.includes(key))
+        .map(([key, value]) => (
+          <div key={key}>
+            {key === 'label' && selectedElement.type === 'Place' ? (
+              <LabelProperty
+                value={value as string}
+                changeSelectedPlaceLabel={changeSelectedPlaceLabel}
+              />
+            ) : (
+              <OtherProperty
+                value={value as string}
+                NonReactKey={key}
+                type={NodeDataFieldsTypesAsStrings(key)}
+                updateNodeFields={updateNodeFields}
+              />
+            )}
+          </div>
+        ))
     ) : (
       <></>
     )
 
+  if (!(selectedElement && fieldsToDisplay)) {
+    return <></>
+  }
+
   return (
-    <Container
+    <Paper
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        marginTop: '1em',
+        margin: '10px',
+        padding: '16px',
       }}
     >
       <Stack spacing={2}>
-        <Typography variant='h6'>Properties</Typography>
+        <Typography variant='h6'>
+          {selectedElement.type} ({selectedElement.data.label})
+        </Typography>
         {selectedElementProperties}
       </Stack>
-    </Container>
+    </Paper>
   )
 }

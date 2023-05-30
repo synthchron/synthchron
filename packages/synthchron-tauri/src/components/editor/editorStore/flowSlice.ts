@@ -27,7 +27,7 @@ export type FlowSlice = {
 }
 
 export const createFlowSlice: StateCreator<EditorState, [], [], FlowSlice> = (
-  _set,
+  set,
   get
 ) => ({
   selectedElement: undefined,
@@ -72,7 +72,7 @@ export const createFlowSlice: StateCreator<EditorState, [], [], FlowSlice> = (
   selectElement: (elem: Node | Edge | undefined) => {
     const nodesMap = get().yNodesMap
     const edgesMap = get().yEdgesMap
-    _set({
+    set({
       selectedElement: elem,
     })
     if (elem) {
@@ -111,11 +111,36 @@ export const createFlowSlice: StateCreator<EditorState, [], [], FlowSlice> = (
     const labelAvailable = !Array.from(nodesMap.values())
       .filter((node) => node.type === 'Place') //Allows transitions and places to share labels
       .some((node) => node.data.label === newLabel)
-    const selectedELem = get().selectedElement
+    const selectedElem = get().selectedElement
 
-    if (labelAvailable && selectedELem) {
-      selectedELem.data.label = newLabel
-      get().selectElement(selectedELem)
+    if (labelAvailable && selectedElem) {
+      selectedElem.data.label = newLabel
+      if (selectedElem.type === 'Place') {
+        nodesMap.set(selectedElem.id, {
+          ...(selectedElem as Node),
+          data: {
+            ...selectedElem.data,
+            label: newLabel,
+          },
+        })
+      } else if (selectedElem.type === 'edge') {
+        const edge = selectedElem as Edge
+        get().yEdgesMap.set(edge.id, {
+          ...edge,
+          data: {
+            ...edge.data,
+            label: newLabel,
+          },
+        })
+      } else {
+        console.error(
+          'Selected element is not a node or an edge',
+          selectedElem.type
+        )
+      }
+      get().selectElement({
+        ...selectedElem,
+      })
 
       return true
     }

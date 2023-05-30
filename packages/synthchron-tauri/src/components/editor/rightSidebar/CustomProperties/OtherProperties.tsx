@@ -39,6 +39,7 @@ export const OtherProperty: React.FC<OtherPropertyProperties> = ({
       label={NonReactKey}
       variant='outlined'
       type={type}
+      size='small'
       value={value}
       {...(type === 'number'
         ? {
