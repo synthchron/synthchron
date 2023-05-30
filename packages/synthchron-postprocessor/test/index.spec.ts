@@ -10,6 +10,7 @@ import {
 
 import { postprocess } from '../src'
 import { PostprocessingStepType } from '../src/enumTypes'
+import { insertTests } from './testInsert.spec'
 
 const configTemplate: Configuration = {
   endOnAcceptingStateProbability: 1,
@@ -450,3 +451,5 @@ describe('Testing swap step', function () {
     })
   })
 })
+
+insertTests
