@@ -3,9 +3,13 @@ import { useCallback, useState } from 'react'
 import { faker } from '@faker-js/faker'
 import {
   Avatar,
+  Box,
   Button,
   Chip,
   Container,
+  Divider,
+  Paper,
+  Stack,
   TextField,
   Typography,
 } from '@mui/material'
@@ -63,67 +67,73 @@ export const CollaborationTab = () => {
   }
 
   return (
-    <Container
+    <Paper
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        marginTop: '10px',
+        margin: '10px',
+        padding: '16px',
       }}
     >
-      <Typography variant='h6'>Collaboration</Typography>
-      <TextField
-        variant='standard'
-        label='Room Code'
-        sx={{
-          alignSelf: 'center',
-        }}
-        inputProps={{
-          style: {
-            textAlign: 'center',
-          },
-        }}
-        disabled={roomTextfieldState.textAvailable}
-        value={roomTextfieldState.roomCode}
-        onChange={(event) =>
-          setRoomTextfieldState(event.target.value, undefined)
-        }
-        error={connectError !== ''}
-        helperText={connectError}
-      />
-      <Button onClick={() => OpenRoom(true)} disabled={checking}>
-        {yWebRTCProvider !== null ? 'Reconnect' : 'Open room for collaboration'}
-      </Button>
-      {yWebRTCProvider !== null && (
-        <Button onClick={CloseRoom}>Leave Collaboration</Button>
-      )}
-      {awareness && collaboratorStates && awarenessState && (
-        <Container>
-          <br />
-          You:
-          {awarenessState?.user?.name && (
-            <Chip
-              avatar={<Avatar>{awarenessState.user.name.charAt(0)}</Avatar>}
-              color='primary'
-              style={{ backgroundColor: awarenessState.user.color }}
-              label={awarenessState.user.name}
-            />
-          )}
-          <br /> <br />
-          Peers:
-          {Object.entries(Object.fromEntries(collaboratorStates))
-            .filter(([_key, value]) => value?.user?.name)
-            .map(([key, value]) => (
+      <Stack spacing={1}>
+        <Typography variant='h6' gutterBottom>
+          Collaboration
+        </Typography>
+        <TextField
+          label='Room Code'
+          disabled={roomTextfieldState.textAvailable}
+          value={roomTextfieldState.roomCode}
+          onChange={(event) =>
+            setRoomTextfieldState(event.target.value, undefined)
+          }
+          error={connectError !== ''}
+          helperText={connectError}
+        />
+        <Button onClick={() => OpenRoom(true)} disabled={checking}>
+          {yWebRTCProvider !== null
+            ? 'Reconnect'
+            : 'Open room for collaboration'}
+        </Button>
+
+        <Divider />
+        {awareness && collaboratorStates && awarenessState && (
+          <Box
+            sx={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+            }}
+          >
+            {awarenessState?.user?.name && (
               <Chip
-                key={key}
-                avatar={<Avatar>{value.user.name.charAt(0)}</Avatar>}
+                avatar={<Avatar>{awarenessState.user.name.charAt(0)}</Avatar>}
                 color='primary'
-                style={{ backgroundColor: value.user.color }}
-                label={value.user.name}
+                style={{ backgroundColor: awarenessState.user.color }}
+                label={awarenessState.user.name + ' (You)'}
               />
-            ))}
-        </Container>
-      )}
-    </Container>
+            )}
+            {Object.entries(Object.fromEntries(collaboratorStates))
+              .filter(([_key, value]) => value?.user?.name)
+              .map(([key, value]) => (
+                <Chip
+                  key={key}
+                  avatar={<Avatar>{value.user.name.charAt(0)}</Avatar>}
+                  color='primary'
+                  style={{ backgroundColor: value.user.color }}
+                  label={value.user.name}
+                  sx={{
+                    margin: '1px',
+                    maxWidth: '100px',
+                  }}
+                />
+              ))}
+          </Box>
+        )}
+        <Divider />
+        {yWebRTCProvider !== null && (
+          <Button onClick={CloseRoom} color='error'>
+            Leave Collaboration
+          </Button>
+        )}
+      </Stack>
+    </Paper>
   )
 }

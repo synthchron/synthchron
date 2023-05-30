@@ -4,7 +4,7 @@ import { CreatorTab } from './leftSidebar/CreatorTab'
 import { ProjectTab } from './leftSidebar/ProjectTab'
 
 export const LeftSidebar = () => (
-  <TabbedDrawer side='left' tabs={['Project', 'Creator', 'Collab']}>
+  <TabbedDrawer side='left' tabs={['Project', 'Creator']}>
     <ProjectTab />
     <CreatorTab />
     <CollaborationTab />

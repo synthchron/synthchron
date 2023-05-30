@@ -19,6 +19,7 @@ import {
   usePersistentStore,
 } from '../../common/persistentStore'
 import { useEditorStore } from '../editorStore/flowStore'
+import { CollaborationTab } from './CollaborationTab'
 
 export const ProjectTab: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>()
@@ -70,7 +71,6 @@ export const ProjectTab: React.FC = () => {
                   projectName: val.target.value,
                 })
             }}
-            multiline
             maxRows={4}
             fullWidth
             disabled={projectId === undefined}
@@ -115,6 +115,8 @@ export const ProjectTab: React.FC = () => {
           </Button>
         </Stack>
       </Paper>
+
+      <CollaborationTab />
     </Box>
   )
 }
