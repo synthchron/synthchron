@@ -1,10 +1,9 @@
-import { BaseSyntheticEvent, SyntheticEvent, useState } from 'react'
+import { BaseSyntheticEvent, useState } from 'react'
 
 import { faker } from '@faker-js/faker'
 import {
   Box,
   Button,
-  FormControl,
   Input,
   InputLabel,
   Stack,
