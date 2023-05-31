@@ -47,59 +47,90 @@ export const ProjectTab: React.FC = () => {
               Project
             </Typography>
 
-            <TextField
-              label='Project Name'
-              size='small'
-              value={projectId && projects[projectId].projectName}
-              onChange={(val) => {
-                if (projectId)
-                  updateProject(projectId, {
-                    projectName: val.target.value,
-                  })
-              }}
-              maxRows={4}
-              fullWidth
-              disabled={projectId === undefined}
-            />
+            {projectId ? (
+              <>
+                <TextField
+                  label='Project Name'
+                  size='small'
+                  value={projectId && projects[projectId].projectName}
+                  onChange={(val) => {
+                    if (projectId)
+                      updateProject(projectId, {
+                        projectName: val.target.value,
+                      })
+                  }}
+                  maxRows={4}
+                  fullWidth
+                  disabled={projectId === undefined}
+                />
 
-            <TextField
-              label='Project Description'
-              value={projectId && projects[projectId].projectDescription}
-              onChange={(val) => {
-                if (projectId)
-                  updateProject(projectId, {
-                    projectDescription: val.target.value,
-                  })
-              }}
-              multiline
-              fullWidth
-              disabled={projectId === undefined}
-              minRows={3}
-            />
+                <TextField
+                  label='Project Description'
+                  value={projectId && projects[projectId].projectDescription}
+                  onChange={(val) => {
+                    if (projectId)
+                      updateProject(projectId, {
+                        projectDescription: val.target.value,
+                      })
+                  }}
+                  multiline
+                  fullWidth
+                  disabled={projectId === undefined}
+                  minRows={3}
+                />
 
-            <Button
-              onClick={() => {
-                if (projectId) {
-                  saveFlow()
-                } else {
-                  const processModel = transformFlowToSimulator(
-                    useEditorStore.getState()
-                  )
-                  const id = addProject({
-                    projectName: faker.animal.cow(),
-                    projectDescription: faker.lorem.lines(3),
-                    projectModel: processModel,
-                    created: new Date().toJSON(),
-                    lastEdited: new Date().toJSON(),
-                    lastOpened: new Date(0).toJSON(),
-                  })
+                <Button
+                  onClick={() => {
+                    if (projectId) {
+                      saveFlow()
+                    } else {
+                      const processModel = transformFlowToSimulator(
+                        useEditorStore.getState()
+                      )
+                      const id = addProject({
+                        projectName: faker.animal.cow(),
+                        projectDescription: faker.lorem.lines(3),
+                        projectModel: processModel,
+                        created: new Date().toJSON(),
+                        lastEdited: new Date().toJSON(),
+                        lastOpened: new Date(0).toJSON(),
+                      })
 
-                  navigate(`/editor/${id}`)
-                }
-              }}
-            >
-              Save
-            </Button>
+                      navigate(`/editor/${id}`)
+                    }
+                  }}
+                >
+                  Save
+                </Button>
+              </>
+            ) : (
+              <>
+                <Typography variant='caption' gutterBottom>
+                  This is a remote project. Create a local copy to persist it.
+                  (You will leave the collaboration session)
+                </Typography>
+
+                <Button
+                  onClick={() => {
+                    const processModel = transformFlowToSimulator(
+                      useEditorStore.getState()
+                    )
+                    const id = addProject({
+                      projectName: faker.animal.cow() + ' (local copy)',
+                      projectDescription: '',
+                      projectModel: processModel,
+                      created: new Date().toJSON(),
+                      lastEdited: new Date().toJSON(),
+                      lastOpened: new Date(0).toJSON(),
+                    })
+
+                    navigate(`/editor/${id}`)
+                  }}
+                >
+                  Create local copy
+                </Button>
+              </>
+            )}
           </Stack>
         </Paper>
 
