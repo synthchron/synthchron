@@ -111,13 +111,24 @@ export const PropertiesTab: React.FC = () => {
     )
 
   if (!(selectedElement && fieldsToDisplay)) {
-    return <></>
+    return (
+      <Paper
+        sx={{
+          padding: '16px',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100%',
+          display: 'flex',
+        }}
+      >
+        <Typography variant='caption'>No element selected</Typography>
+      </Paper>
+    )
   }
 
   return (
     <Paper
       sx={{
-        margin: '10px',
         padding: '16px',
       }}
     >

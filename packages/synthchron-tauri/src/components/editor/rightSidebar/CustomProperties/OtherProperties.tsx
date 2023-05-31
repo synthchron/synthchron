@@ -38,6 +38,7 @@ export const OtherProperty: React.FC<OtherPropertyProperties> = ({
     <TextField
       label={NonReactKey}
       variant='outlined'
+      fullWidth
       type={type}
       size='small'
       value={value}
