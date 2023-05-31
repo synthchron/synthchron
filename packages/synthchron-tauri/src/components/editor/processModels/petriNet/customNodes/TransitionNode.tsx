@@ -33,7 +33,7 @@ export const TransitionNodeShape: React.FC<TransitionNodeShapeProps> = ({
     <rect
       x={0}
       y={0}
-      rx={0}
+      rx={4}
       width={size}
       height={size}
       strokeWidth={strokeWidth || 1}
