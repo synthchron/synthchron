@@ -84,6 +84,11 @@ export const CollaborationTab = () => {
           onChange={(event) =>
             setRoomTextfieldState(event.target.value, undefined)
           }
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              openRoom(false)
+            }
+          }}
           error={connectError !== ''}
           helperText={connectError}
         />
