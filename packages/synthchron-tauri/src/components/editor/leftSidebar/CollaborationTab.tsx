@@ -68,7 +68,6 @@ export const CollaborationTab = () => {
   return (
     <Paper
       sx={{
-        margin: '10px',
         padding: '16px',
       }}
     >

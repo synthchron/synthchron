@@ -12,6 +12,7 @@ import {
 } from '../../common/persistentStore'
 import { useEditorStore } from '../editorStore/flowStore'
 import { CollaborationTab } from './CollaborationTab'
+import { CreatorTab } from './CreatorTab'
 
 export const ProjectTab: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>()
@@ -34,83 +35,78 @@ export const ProjectTab: React.FC = () => {
   const navigate = useNavigate()
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        marginTop: '10px',
-        width: '100%',
-      }}
-    >
-      <Paper
-        sx={{
-          margin: '10px',
-          padding: '16px',
-        }}
-      >
-        <Stack spacing={1}>
-          <Typography variant='h6' gutterBottom>
-            Project
-          </Typography>
+    <Box sx={{ padding: '10px' }}>
+      <Stack spacing={1}>
+        <Paper
+          sx={{
+            padding: '16px',
+          }}
+        >
+          <Stack spacing={1}>
+            <Typography variant='h6' gutterBottom>
+              Project
+            </Typography>
 
-          <TextField
-            label='Project Name'
-            size='small'
-            value={projectId && projects[projectId].projectName}
-            onChange={(val) => {
-              if (projectId)
-                updateProject(projectId, {
-                  projectName: val.target.value,
-                })
-            }}
-            maxRows={4}
-            fullWidth
-            disabled={projectId === undefined}
-          />
+            <TextField
+              label='Project Name'
+              size='small'
+              value={projectId && projects[projectId].projectName}
+              onChange={(val) => {
+                if (projectId)
+                  updateProject(projectId, {
+                    projectName: val.target.value,
+                  })
+              }}
+              maxRows={4}
+              fullWidth
+              disabled={projectId === undefined}
+            />
 
-          <TextField
-            label='Project Description'
-            value={projectId && projects[projectId].projectDescription}
-            onChange={(val) => {
-              if (projectId)
-                updateProject(projectId, {
-                  projectDescription: val.target.value,
-                })
-            }}
-            multiline
-            fullWidth
-            disabled={projectId === undefined}
-            minRows={3}
-          />
+            <TextField
+              label='Project Description'
+              value={projectId && projects[projectId].projectDescription}
+              onChange={(val) => {
+                if (projectId)
+                  updateProject(projectId, {
+                    projectDescription: val.target.value,
+                  })
+              }}
+              multiline
+              fullWidth
+              disabled={projectId === undefined}
+              minRows={3}
+            />
 
-          <Button
-            onClick={() => {
-              if (projectId) {
-                saveFlow()
-              } else {
-                const processModel = transformFlowToSimulator(
-                  useEditorStore.getState()
-                )
-                const id = addProject({
-                  projectName: faker.animal.cow(),
-                  projectDescription: faker.lorem.lines(3),
-                  projectModel: processModel,
-                  created: new Date().toJSON(),
-                  lastEdited: new Date().toJSON(),
-                  lastOpened: new Date(0).toJSON(),
-                })
+            <Button
+              onClick={() => {
+                if (projectId) {
+                  saveFlow()
+                } else {
+                  const processModel = transformFlowToSimulator(
+                    useEditorStore.getState()
+                  )
+                  const id = addProject({
+                    projectName: faker.animal.cow(),
+                    projectDescription: faker.lorem.lines(3),
+                    projectModel: processModel,
+                    created: new Date().toJSON(),
+                    lastEdited: new Date().toJSON(),
+                    lastOpened: new Date(0).toJSON(),
+                  })
 
-                navigate(`/editor/${id}`)
-              }
-            }}
-          >
-            Save
-          </Button>
-        </Stack>
-      </Paper>
+                  navigate(`/editor/${id}`)
+                }
+              }}
+            >
+              Save
+            </Button>
+          </Stack>
+        </Paper>
 
-      <CollaborationTab />
+        <CreatorTab />
+
+        <CollaborationTab />
+      </Stack>
     </Box>
   )
 }
