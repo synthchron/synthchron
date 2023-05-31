@@ -1,12 +1,16 @@
 import { useCallback, useState } from 'react'
 
 import { faker } from '@faker-js/faker'
+import CheckIcon from '@mui/icons-material/Check'
+import ContentPasteIcon from '@mui/icons-material/ContentPaste'
 import {
   Avatar,
   Box,
   Button,
   Chip,
   Divider,
+  IconButton,
+  InputAdornment,
   Paper,
   Stack,
   TextField,
@@ -49,7 +53,7 @@ export const CollaborationTab = () => {
     setChecking(true)
 
     const roomCode =
-      roomTextfieldState.roomCode.trim() || faker.string.alpha(10)
+      roomTextfieldState.roomCode.trim() || faker.string.alphanumeric(10)
     setRoomTextfieldState(roomCode, true)
 
     const isEmpty = await checkRoomIsEmpty(roomCode)
@@ -65,6 +69,15 @@ export const CollaborationTab = () => {
   function CloseRoom() {
     disconnectRoom()
   }
+
+  const [showCheckIcon, setShowCheckIcon] = useState<boolean>(false)
+
+  const checkFeedback = useCallback(() => {
+    setShowCheckIcon(true)
+    setTimeout(() => {
+      setShowCheckIcon(false)
+    }, 1000)
+  }, [])
 
   return (
     <Paper
@@ -86,8 +99,32 @@ export const CollaborationTab = () => {
           }
           onKeyDown={(event) => {
             if (event.key === 'Enter') {
-              openRoom(false)
+              openRoom(true)
             }
+          }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position='end'>
+                <IconButton
+                  aria-label='copy to clipboard'
+                  onClick={() => {
+                    checkFeedback()
+                    navigator.clipboard.writeText(
+                      roomTextfieldState.roomCode.trim()
+                    )
+                  }}
+                  onMouseDown={() => {
+                    checkFeedback()
+                    navigator.clipboard.writeText(
+                      roomTextfieldState.roomCode.trim()
+                    )
+                  }}
+                  edge='end'
+                >
+                  {showCheckIcon ? <CheckIcon /> : <ContentPasteIcon />}
+                </IconButton>
+              </InputAdornment>
+            ),
           }}
           error={connectError !== ''}
           helperText={connectError}
