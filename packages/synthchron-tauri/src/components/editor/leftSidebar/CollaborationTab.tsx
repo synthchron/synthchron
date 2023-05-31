@@ -45,15 +45,16 @@ export const CollaborationTab = () => {
     awarenessState,
   } = useEditorStore(selector, shallow)
 
-  async function OpenRoom(KeepCurrent: boolean) {
+  async function openRoom(keepCurrent: boolean) {
     setChecking(true)
 
-    const roomCode = roomTextfieldState.roomCode || faker.random.alpha(5)
+    const roomCode =
+      roomTextfieldState.roomCode.trim() || faker.string.alpha(10)
     setRoomTextfieldState(roomCode, true)
 
     const isEmpty = await checkRoomIsEmpty(roomCode)
     if (isEmpty) {
-      connectRoom(roomCode, KeepCurrent)
+      connectRoom(roomCode, keepCurrent)
       setConnectError('')
     } else {
       setConnectError('Room already exists')
@@ -86,7 +87,7 @@ export const CollaborationTab = () => {
           error={connectError !== ''}
           helperText={connectError}
         />
-        <Button onClick={() => OpenRoom(true)} disabled={checking} size='small'>
+        <Button onClick={() => openRoom(true)} disabled={checking} size='small'>
           {yWebRTCProvider !== null
             ? 'Reconnect'
             : 'Open room for collaboration'}
