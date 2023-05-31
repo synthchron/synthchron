@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { Button, Stack, Typography } from '@mui/material'
 
 import {
-  insertDuplicate,
   insertEvent,
   insertExisting,
 } from '@synthchron/postprocessor/src/insert'
@@ -74,17 +73,6 @@ export const PostProcessing = () => {
             }}
           >
             <Stack direction='column' spacing={2}>
-              <Button
-                variant='contained'
-                color='primary'
-                onClick={() => {
-                  setProcessingResult(
-                    XESLogToString(insertDuplicate(example, 20))
-                  )
-                }}
-              >
-                Insert Duplicate
-              </Button>
               <Button
                 variant='contained'
                 color='primary'

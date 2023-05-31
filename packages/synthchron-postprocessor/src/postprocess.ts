@@ -1,17 +1,15 @@
 import seedrandom from 'seedrandom'
 
 import { Trace } from '@synthchron/simulator'
-import {
-  Configuration,
-  PostprocessingConfiguration,
-  PostprocessingStepType,
-} from '@synthchron/types'
+import { Configuration, PostprocessingStepType } from '@synthchron/types'
+
+import { insertDuplicate } from './insert'
 
 export const postprocess = (
   traces: Trace[],
-  postProcessingConfiguration: PostprocessingConfiguration,
   config: Configuration
 ): Trace[] => {
+  const postProcessingConfiguration = config.postprocessing
   const postProcessingSteps = postProcessingConfiguration.postProcessingSteps
   const randomGenerator = seedrandom(config.randomSeed)
   traces.forEach((trace) => {
@@ -62,8 +60,8 @@ const performSwap = (trace: Trace, event_id: number): Trace => {
   return trace
 }
 
-const performInsertion = (trace: Trace, _event_id: number): Trace => {
-  return trace
+const performInsertion = (trace: Trace, event_id: number): Trace => {
+  return insertDuplicate(trace, event_id)
 }
 
 export const weightedRandom = <T>(
