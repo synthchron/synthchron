@@ -1,5 +1,5 @@
 import AddIcon from '@mui/icons-material/Add'
-import { Container, Paper, Tooltip, Typography } from '@mui/material'
+import { Paper, Tooltip, Typography } from '@mui/material'
 
 import { ProcessModelType } from '@synthchron/simulator'
 

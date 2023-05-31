@@ -6,7 +6,6 @@ import { useBeforeUnload, useParams } from 'react-router-dom'
 import { ReactFlowProvider, useOnViewportChange, useReactFlow } from 'reactflow'
 
 import { CustomAppBar } from '../components/CustomAppBar'
-import { CopyPaste } from '../components/common/CopyPaste'
 import { usePersistentStore } from '../components/common/persistentStore'
 import { SidebarsWrapper } from '../components/editor/SidebarsWrapper'
 import { useEditorStore } from '../components/editor/editorStore/flowStore'
