@@ -1,3 +1,4 @@
+import { PetriNetProcessModel } from '@synthchron/simulator/src/types/processModelTypes/petriNetTypes'
 import { SimulationLog } from '@synthchron/simulator/src/types/simulationTypes'
 import { XESLog } from '@synthchron/xes'
 
@@ -16,16 +17,23 @@ const SumMapSort = (list: unknown[]): [unknown, number][] => {
 
 //Translate simulation log to ResultType, and add statistics
 export const SimulationStatisticsAdapter = (
-  simulationLog: SimulationLog
+  simulationLog: SimulationLog,
+  processModel: PetriNetProcessModel
 ): ResultType => {
   const xeslog = transformSimulationLogToXESLog(simulationLog)
   const basicStats = GetBasicStats(xeslog)
   const lastTransitionStats = GetLastTransitions(xeslog)
   const terminationStats = GetTerminationStats(simulationLog)
+  const coverageStats = GetCoverage(xeslog, processModel)
 
   const result: ResultType = {
     log: xeslog,
-    statistics: { ...basicStats, ...lastTransitionStats, ...terminationStats },
+    statistics: {
+      ...basicStats,
+      ...coverageStats,
+      ...lastTransitionStats,
+      ...terminationStats,
+    },
   }
 
   return result
@@ -87,4 +95,47 @@ const GetTerminationStats = (simulationLog: SimulationLog) => {
     'Third most common exit reason': top3Terminations[2],
   }
   return terminationStats
+}
+
+const GetCoverage = (xeslog: XESLog, processModel: PetriNetProcessModel) => {
+  // event.attributes[0].value is used to identify unique transitions, however
+  // if attributes change to make use of their array or .key this may need to be changed.
+
+  //Transition labels may not be unique, so counting transitions would give the wrong number.
+  const uniqueTransitions = processModel.nodes.reduce((set, node) => {
+    if (node.type === 'transition') {
+      set.add(node.name)
+    }
+    return set
+  }, new Set<string>())
+
+  const uniqueEvents = new Set<string>()
+  xeslog.traces.forEach((trace) =>
+    trace.events.forEach((event) => uniqueEvents.add(event.attributes[0].value))
+  )
+
+  const uniquePerTrace = xeslog.traces.map((trace) =>
+    trace.events.reduce((set, event) => {
+      set.add(event.attributes[0].value)
+      return set
+    }, new Set<string>())
+  )
+
+  const totalUniqueEventsInTraces = uniquePerTrace.reduce(
+    (accumulator, traceSet) => accumulator + traceSet.size,
+    0
+  )
+
+  const coverageStats = {
+    Coverage:
+      ((uniqueEvents.size / uniqueTransitions.size) * 100).toFixed(2) + '%',
+    'Average coverage (per trace)':
+      (
+        (totalUniqueEventsInTraces /
+          (uniqueTransitions.size * xeslog.traces.length)) *
+        100
+      ).toFixed(2) + '%',
+  }
+
+  return coverageStats
 }
