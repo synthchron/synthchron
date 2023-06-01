@@ -39,6 +39,7 @@ const GetBasicStats = (xeslog: XESLog) => {
 
   // Issue with events.length casues length to be one larger than it should be
   // This is fixed with the -1
+  // Issue unfixed -> Issue has not appeared yet in SYN-167. Comment is kept for awareness.
   // https://user-images.githubusercontent.com/79922317/241557149-910ad5ea-c16d-49ba-9be9-223ec64d33eb.png
   let totalEvents = xeslog.traces.reduce((accumulator, trace) => {
     return accumulator + trace.events.length
@@ -57,7 +58,12 @@ const GetBasicStats = (xeslog: XESLog) => {
 
 const GetLastTransitions = (xeslog: XESLog) => {
   const lastTransitions: string[] = xeslog.traces
-    .map((trace) => trace.events.pop()?.attributes.pop()?.value)
+    .map((trace) => {
+      const lastEvent = trace.events[trace.events.length - 1]
+      const lastAttribute =
+        lastEvent?.attributes[lastEvent.attributes.length - 1]
+      return lastAttribute?.value
+    })
     .filter((xesEvent): xesEvent is string => xesEvent !== undefined)
 
   const transitionByFreq = SumMapSort(lastTransitions)
