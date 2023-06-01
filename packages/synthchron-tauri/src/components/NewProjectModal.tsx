@@ -69,7 +69,7 @@ const examplePetriNetModel: PetriNetProcessModel = {
     },
     {
       type: 'transition',
-      name: 'transition',
+      name: 'T1',
       identifier: 't1',
       weight: 1,
       position: {
