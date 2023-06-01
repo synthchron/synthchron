@@ -52,7 +52,7 @@ export const AcceptingExpressionsLine: React.FC<
 
   const error = computeExpressionError(
     expression.expression,
-    nodes.filter((n) => n.type == 'Place').map((n) => n.id)
+    nodes.filter((n) => n.type == 'Place').map((n) => n.data.label)
   )
 
   return (
@@ -69,7 +69,6 @@ export const AcceptingExpressionsLine: React.FC<
         style={{
           display: 'flex',
           flexDirection: 'row',
-          //alignItems: 'center',
           width: '30vw',
         }}
       >
@@ -107,9 +106,6 @@ export const AcceptingExpressionsLine: React.FC<
             flexGrow: 2,
             marginLeft: '-1px',
             '& .MuiOutlinedInput-input': {
-              //borderWidth: 0,
-              //outline: 'none',
-              //borderColor: 'white !important',
               paddingLeft: 1, // <-- added zero padding instruction
               paddingRight: 1, // <-- added zero padding instruction
             },

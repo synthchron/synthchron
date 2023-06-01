@@ -1,5 +1,5 @@
 import AddIcon from '@mui/icons-material/Add'
-import { Container, Paper, Tooltip, Typography } from '@mui/material'
+import { Paper, Tooltip, Typography } from '@mui/material'
 
 import { ProcessModelType } from '@synthchron/simulator'
 
@@ -24,12 +24,9 @@ export const GeneralTab: React.FC = () => {
   )
 
   return (
-    <Container
+    <Paper
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        marginTop: '1em',
+        padding: '16px',
       }}
     >
       <Typography variant='h6' gutterBottom>
@@ -42,35 +39,36 @@ export const GeneralTab: React.FC = () => {
           }}
         >
           <Typography variant='subtitle1'>Accepting Expressions</Typography>
-          {(meta as PetriNetMeta).acceptingExpressions.map(
-            (expression, index) => (
-              <AcceptingExpressionsLine
-                key={index}
-                expression={expression}
-                updateExpression={(expression) => {
-                  const newAcceptingExpressions = [
-                    ...(meta as PetriNetMeta).acceptingExpressions,
-                  ]
-                  newAcceptingExpressions[index] = expression
-                  setMeta({
-                    acceptingExpressions: newAcceptingExpressions,
-                  })
-                }}
-                deleteExpression={() => {
-                  const newAcceptingExpressions = [
-                    ...(meta as PetriNetMeta).acceptingExpressions,
-                  ]
-                  newAcceptingExpressions.splice(index, 1)
-                  setMeta({
-                    acceptingExpressions: newAcceptingExpressions,
-                  })
-                }}
-                placeholder={
-                  exampleExpressions[index % exampleExpressions.length]
-                }
-              />
-            )
-          )}
+          {Object.hasOwn(meta, 'acceptingExpressions') &&
+            (meta as PetriNetMeta).acceptingExpressions.map(
+              (expression, index) => (
+                <AcceptingExpressionsLine
+                  key={index}
+                  expression={expression}
+                  updateExpression={(expression) => {
+                    const newAcceptingExpressions = [
+                      ...(meta as PetriNetMeta).acceptingExpressions,
+                    ]
+                    newAcceptingExpressions[index] = expression
+                    setMeta({
+                      acceptingExpressions: newAcceptingExpressions,
+                    })
+                  }}
+                  deleteExpression={() => {
+                    const newAcceptingExpressions = [
+                      ...(meta as PetriNetMeta).acceptingExpressions,
+                    ]
+                    newAcceptingExpressions.splice(index, 1)
+                    setMeta({
+                      acceptingExpressions: newAcceptingExpressions,
+                    })
+                  }}
+                  placeholder={
+                    exampleExpressions[index % exampleExpressions.length]
+                  }
+                />
+              )
+            )}
           <Tooltip title='Add accepting condition'>
             <Paper
               style={{
@@ -97,6 +95,6 @@ export const GeneralTab: React.FC = () => {
           </Tooltip>
         </Paper>
       )}
-    </Container>
+    </Paper>
   )
 }

@@ -7,6 +7,7 @@ import { Allotment, AllotmentHandle, LayoutPriority } from 'allotment'
 import { ReactFlowInstance } from 'reactflow'
 import { shallow } from 'zustand/shallow'
 
+import { CopyPaste } from '../common/CopyPaste'
 // 👇 Importing components
 import { LeftSidebar } from './LeftSidebar'
 import { RightSidebar } from './RightSidebar'
@@ -61,7 +62,7 @@ export const SidebarsWrapper = () => {
       type: type,
       position,
       data: {
-        label: `${type == 'Transition' ? 'Transition' : 'Place'}`,
+        label: `${type == 'Transition' ? 'T' : 'P'}`,
         ...(type === 'Transition' ? { weight: 1 } : { tokens: 1 }),
       },
     }
@@ -134,6 +135,7 @@ export const SidebarsWrapper = () => {
               backgroundColor: 'white',
               transitionDuration: '0.25s',
               overflow: 'auto',
+              scrollbarWidth: 'thin',
             }}
           >
             <LeftSidebar />
@@ -148,6 +150,7 @@ export const SidebarsWrapper = () => {
             }}
             ref={reactFlowWrapper}
           >
+            <CopyPaste />
             <StateFlow
               onInit={setReactFlowInstance}
               onDrop={onDrop}
