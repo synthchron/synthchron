@@ -1,7 +1,7 @@
 import { SimulationLog } from '@synthchron/simulator/src/types/simulationTypes'
+import { transformSimulationLogToXESLog } from '@synthchron/utils'
 import { XESLog } from '@synthchron/xes'
 
-import { transformSimulationLogToXESLog } from '../../../../utils/simulatorToXESConverter'
 import { ResultType } from '../../editorStore/simulatorSlice'
 
 //Polymorphic funtion to count repetetions of entires in array, and sort them.

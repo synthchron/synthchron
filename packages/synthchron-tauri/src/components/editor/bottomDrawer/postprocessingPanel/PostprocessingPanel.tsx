@@ -54,7 +54,7 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
 }) => {
   // Note: This is a temporary implementation. There is a
   // bug that adding more than 10 post processing steps will cause a warning.
-  const [order, setOrder] = useState<number[]>([...range(1, 11)])
+  const [order, setOrder] = useState<number[]>([])
 
   const [localPostprocessing, setLocalPostprocessing] =
     useState<PostprocessingConfiguration>(postprocessing)

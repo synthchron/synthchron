@@ -13,7 +13,15 @@ import {
 } from '@mui/material'
 import Dropzone from 'react-dropzone'
 
+import { postprocess } from '@synthchron/postprocessor'
+import { SimulationLog } from '@synthchron/simulator'
 import { PostprocessingConfiguration } from '@synthchron/types'
+import {
+  exportStringAsFile,
+  transformSimulationLogToXESLog,
+  transformXESLogToSimulationLog,
+} from '@synthchron/utils'
+import { deserialize, serialize } from '@synthchron/xes'
 
 import { CustomAppBar } from '../components/CustomAppBar'
 import PostprocessingPanel from '../components/editor/bottomDrawer/postprocessingPanel/PostprocessingPanel'
@@ -23,13 +31,23 @@ const defaultPostprocessing: PostprocessingConfiguration = {
   postProcessingSteps: [],
 }
 
-const postProcess = (
+const postProcessXESFile = (
   trace: string,
   postProcessing: PostprocessingConfiguration
-) => {
-  console.log('Post processing')
-  console.log(postProcessing)
-  console.log(trace)
+): string => {
+  const xesLog = deserialize(trace)
+  console.log(xesLog)
+  const simulationLog = transformXESLogToSimulationLog(xesLog)
+  console.log(simulationLog)
+  const processedLog: SimulationLog = {
+    simulationResults: simulationLog.simulationResults.map((traceResult) => ({
+      trace: postprocess(traceResult.trace, postProcessing, ''),
+    })),
+  }
+  console.log(processedLog)
+  const processedXESLog = transformSimulationLogToXESLog(processedLog)
+  console.log(processedXESLog)
+  return serialize(processedXESLog)
 }
 
 type UploadedFile = {
@@ -184,7 +202,10 @@ export const PostProcessingPage = () => {
               onClick={() => {
                 const trace =
                   uploadedTrace !== null ? uploadedTrace.content : traceText
-                postProcess(trace, postprocessing)
+                exportStringAsFile(
+                  postProcessXESFile(trace, postprocessing),
+                  'postProcessedEventLog.xes'
+                )
               }}
               disabled={traceText === '' && uploadedTrace === null}
             >

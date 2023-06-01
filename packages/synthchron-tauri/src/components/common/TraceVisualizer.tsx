@@ -134,7 +134,7 @@ const EventLine: React.FC<EventLineProps> = ({ idx, event }) => (
 )
 
 interface LastLineProps {
-  reason: TraceTerminationReason
+  reason?: TraceTerminationReason
   acceptingState?: string
 }
 

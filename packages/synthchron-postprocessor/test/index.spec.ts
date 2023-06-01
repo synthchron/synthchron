@@ -53,7 +53,9 @@ describe('Testing delete functionality', function () {
         randomSeed: 'word',
       }
 
-      const result = postprocess(traces, steps, config)
+      const result = traces.map((trace) =>
+        postprocess(trace, steps, config.randomSeed)
+      )
 
       expect(result).to.deep.equal([
         {
@@ -112,7 +114,10 @@ describe('Testing delete functionality', function () {
         randomSeed: 'new',
       }
 
-      const result = postprocess(traces, steps, config)
+      const result = traces.map((trace) =>
+        postprocess(trace, steps, config.randomSeed)
+      )
+      //postprocess(traces, steps, config)
 
       expect(result).to.deep.equal([
         {
@@ -171,7 +176,9 @@ describe('Testing delete functionality', function () {
         randomSeed: 'abc',
       }
 
-      const result = postprocess(traces, steps, config)
+      const result = traces.map((trace) =>
+        postprocess(trace, steps, config.randomSeed)
+      )
       expect(result[0].events.length).to.equal(0)
 
       expect(result).to.deep.equal([
@@ -227,7 +234,9 @@ describe('Testing delete functionality', function () {
         randomSeed: 'random number',
       }
 
-      const result = postprocess(traces, steps, config)
+      const result = traces.map((trace) =>
+        postprocess(trace, steps, config.randomSeed)
+      )
       expect(result[0].events.length).to.equal(0)
 
       expect(result).to.deep.equal([
@@ -263,7 +272,10 @@ describe('Testing swap step', function () {
           events: [],
         },
       ]
-      const result = postprocess(traces, swapConfig, postProcessingConfig)
+      const result = traces.map((trace) =>
+        postprocess(trace, swapConfig, postProcessingConfig.randomSeed)
+      )
+      //postprocess(traces, swapConfig, postProcessingConfig)
       expect(result).to.deep.equal([
         {
           events: [],
@@ -276,7 +288,9 @@ describe('Testing swap step', function () {
           events: [{ name: 'a', meta: {} }],
         },
       ]
-      const result = postprocess(traces, swapConfig, postProcessingConfig)
+      const result = traces.map((trace) =>
+        postprocess(trace, swapConfig, postProcessingConfig.randomSeed)
+      )
 
       expect(result).to.deep.equal([
         {
@@ -295,7 +309,9 @@ describe('Testing swap step', function () {
         },
       ]
 
-      const result = postprocess(traces, swapConfig, postProcessingConfig)
+      const result = traces.map((trace) =>
+        postprocess(trace, swapConfig, postProcessingConfig.randomSeed)
+      )
 
       expect(result).to.deep.equal([
         {
@@ -318,7 +334,9 @@ describe('Testing swap step', function () {
         },
       ]
 
-      const result = postprocess(traces, swapConfig, postProcessingConfig)
+      const result = traces.map((trace) =>
+        postprocess(trace, swapConfig, postProcessingConfig.randomSeed)
+      )
 
       expect(result).to.deep.equal([
         {
@@ -342,7 +360,9 @@ describe('Testing swap step', function () {
         },
       ]
 
-      const result = postprocess(traces, swapConfig, postProcessingConfig)
+      const result = traces.map((trace) =>
+        postprocess(trace, swapConfig, postProcessingConfig.randomSeed)
+      )
 
       expect(result).to.deep.equal([
         {
@@ -383,7 +403,9 @@ describe('Testing swap step', function () {
         },
       ]
 
-      const result = postprocess(traces, swapConfig, postProcessingConfig)
+      const result = traces.map((trace) =>
+        postprocess(trace, swapConfig, postProcessingConfig.randomSeed)
+      )
 
       expect(result).to.deep.equal([
         {
@@ -433,7 +455,9 @@ describe('Testing swap step', function () {
         },
       ]
 
-      const result = postprocess(traces, newConfig, postProcessingConfig)
+      const result = traces.map((trace) =>
+        postprocess(trace, newConfig, postProcessingConfig.randomSeed)
+      )
 
       expect(result).to.deep.equal([
         {
