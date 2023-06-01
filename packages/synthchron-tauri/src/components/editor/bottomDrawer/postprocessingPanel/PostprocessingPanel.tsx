@@ -18,21 +18,13 @@ import {
 import AddIcon from '@mui/icons-material/Add'
 import HelpIcon from '@mui/icons-material/Help'
 // Temporary
-import {
-  Box,
-  IconButton,
-  Paper,
-  Slider,
-  Tooltip,
-  Typography,
-} from '@mui/material'
+import { IconButton, Paper, Slider, Tooltip, Typography } from '@mui/material'
 import { debounce } from 'lodash'
 
 import {
   PostprocessingConfiguration,
   PostprocessingStepType,
 } from '@synthchron/types'
-import { range } from '@synthchron/utils'
 
 import { SortableItem } from './SortableItem'
 

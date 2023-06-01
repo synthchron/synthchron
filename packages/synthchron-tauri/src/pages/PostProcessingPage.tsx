@@ -36,17 +36,13 @@ const postProcessXESFile = (
   postProcessing: PostprocessingConfiguration
 ): string => {
   const xesLog = deserialize(trace)
-  console.log(xesLog)
   const simulationLog = transformXESLogToSimulationLog(xesLog)
-  console.log(simulationLog)
   const processedLog: SimulationLog = {
     simulationResults: simulationLog.simulationResults.map((traceResult) => ({
       trace: postprocess(traceResult.trace, postProcessing, ''),
     })),
   }
-  console.log(processedLog)
   const processedXESLog = transformSimulationLogToXESLog(processedLog)
-  console.log(processedXESLog)
   return serialize(processedXESLog)
 }
 
