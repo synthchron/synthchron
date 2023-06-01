@@ -1,15 +1,18 @@
-import { BaseSyntheticEvent, useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import { faker } from '@faker-js/faker'
+import AddIcon from '@mui/icons-material/Add'
 import {
   Box,
   Button,
-  Input,
-  InputLabel,
+  IconButton,
+  Paper,
   Stack,
   TextField,
+  Tooltip,
   Typography,
 } from '@mui/material'
+import Dropzone from 'react-dropzone'
 import { useNavigate } from 'react-router-dom'
 
 import { ProcessModel, ProcessModelType } from '@synthchron/simulator'
@@ -27,20 +30,19 @@ interface NewFileProjectProps {
   redirect?: boolean
 }
 
+type UploadedFile = {
+  name: string
+  content: string
+}
+
 const NewProjectFile: React.FC<NewFileProjectProps> = ({
   onClose,
   redirect = false,
 }) => {
   const navigate = useNavigate()
-  const [processModelSet, setProcessModelSet] = useState(false)
-  const [fileInputClass, setFileInputClass] = useState('')
   const [fileErrors, setFileErrors] = useState<string>('')
-  const [processModel, setProcessModel] = useState({
-    type: ProcessModelType.PetriNet,
-    nodes: [],
-    edges: [],
-    acceptingExpressions: [],
-  } as ProcessModel)
+  const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null)
+  const [processModel, setProcessModel] = useState<ProcessModel | null>(null)
 
   const addProject = usePersistentStore((state) => state.addProject)
 
@@ -61,8 +63,13 @@ const NewProjectFile: React.FC<NewFileProjectProps> = ({
   }
 
   const createNewProject = () => {
-    if (!processModelSet) {
-      setFileInputClass('Mui-error')
+    if (!uploadedFile == null) {
+      setFileErrors('A file is needed.')
+      return
+    }
+
+    if (processModel == null) {
+      setFileErrors('The file couldnt parse to a process mdoel.')
       return
     }
 
@@ -80,20 +87,38 @@ const NewProjectFile: React.FC<NewFileProjectProps> = ({
     onClose()
   }
 
-  const readFile = (file: File) => {
-    file.text().then((res: string) => {
+  const uploadFile = useCallback((acceptedFiles: File[]) => {
+    reset()
+    // The check is done here instead of the dropzone component
+    // in order to display a more specific error message
+    if (acceptedFiles.length > 1) {
+      setFileErrors('Only one file can be uploaded at a time')
+      return
+    }
+    const file = acceptedFiles[0]
+    if (!file.name.endsWith('.json')) {
+      setFileErrors('File must be a .json file')
+      return
+    }
+    const reader = new FileReader()
+    reader.onload = function () {
+      const result: string = reader.result as string
+
       try {
-        const json: ProcessModel = JSON.parse(res) as ProcessModel
-        if (json != null) {
-          setFileErrors('')
-          setProcessModel(json)
-          setProcessModelSet(true)
-        }
-      } catch (e) {
-        setFileErrors('Could not parse the file as a process model.')
-        console.log(e)
+        const json: ProcessModel = JSON.parse(result) as ProcessModel
+
+        setProcessModel(json)
+        setUploadedFile({ name: file.name, content: result })
+      } catch (error) {
+        setFileErrors('The file couldnt parse to a process model.')
       }
-    })
+    }
+    reader.readAsText(file)
+  }, [])
+  const reset = () => {
+    setUploadedFile(null)
+    setProcessModel(null)
+    setFileErrors('')
   }
 
   return (
@@ -132,21 +157,62 @@ const NewProjectFile: React.FC<NewFileProjectProps> = ({
             updateNewProjectConfig({ description: event.target.value })
           }}
         />
-        <Input
-          type='file'
-          className={fileInputClass}
-          onChange={(e: BaseSyntheticEvent) => {
-            if (e.target.files != null && e.target.files.length > 0)
-              readFile(e.target.files[0])
-          }}
-        ></Input>
-        <InputLabel
-          style={{
-            color: 'red',
-          }}
-        >
-          {fileErrors}
-        </InputLabel>
+
+        <Dropzone onDrop={uploadFile} disabled={processModel !== null}>
+          {({ getRootProps, getInputProps, isDragActive }) => (
+            <div {...getRootProps()} style={{ backgroundColor: 'grey' }}>
+              <input {...getInputProps()} />
+              <Tooltip
+                title={
+                  processModel === null
+                    ? 'Drop / Select file'
+                    : 'Disabled while there is input in the text field above'
+                }
+                arrow
+                placement='left'
+              >
+                <Paper
+                  style={{
+                    minHeight: 150,
+                    height: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor:
+                      processModel !== null
+                        ? 'gray'
+                        : isDragActive
+                        ? 'lightgray'
+                        : 'whitesmoke',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <IconButton>
+                    <AddIcon fontSize='large' />
+                  </IconButton>
+                </Paper>
+              </Tooltip>
+            </div>
+          )}
+        </Dropzone>
+
+        {processModel !== null && (
+          <Box sx={{ backgroundColor: 'lightgreen', padding: '5px' }}>
+            <Typography variant='body1'>
+              Successfully uploaded file: {uploadedFile.name}
+            </Typography>
+          </Box>
+        )}
+        {fileErrors != '' && (
+          <Typography variant='body1'>
+            <Box sx={{ backgroundColor: 'red', padding: '5px' }}>
+              {fileErrors}
+            </Box>
+          </Typography>
+        )}
+        <Button variant='contained' color='primary' onClick={reset}>
+          Reset
+        </Button>
         <Button type='submit' color='primary' variant='contained'>
           Create
         </Button>
