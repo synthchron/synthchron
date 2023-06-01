@@ -1,11 +1,18 @@
 import { useCallback, useState } from 'react'
 
 import { faker } from '@faker-js/faker'
+import CheckIcon from '@mui/icons-material/Check'
+import ContentPasteIcon from '@mui/icons-material/ContentPaste'
 import {
   Avatar,
+  Box,
   Button,
   Chip,
-  Container,
+  Divider,
+  IconButton,
+  InputAdornment,
+  Paper,
+  Stack,
   TextField,
   Typography,
 } from '@mui/material'
@@ -42,15 +49,16 @@ export const CollaborationTab = () => {
     awarenessState,
   } = useEditorStore(selector, shallow)
 
-  async function OpenRoom(KeepCurrent: boolean) {
+  async function openRoom(keepCurrent: boolean) {
     setChecking(true)
 
-    const roomCode = roomTextfieldState.roomCode || faker.random.alpha(5)
+    const roomCode =
+      roomTextfieldState.roomCode.trim() || faker.string.alphanumeric(10)
     setRoomTextfieldState(roomCode, true)
 
     const isEmpty = await checkRoomIsEmpty(roomCode)
     if (isEmpty) {
-      connectRoom(roomCode, KeepCurrent)
+      connectRoom(roomCode, keepCurrent)
       setConnectError('')
     } else {
       setConnectError('Room already exists')
@@ -62,68 +70,117 @@ export const CollaborationTab = () => {
     disconnectRoom()
   }
 
+  const [showCheckIcon, setShowCheckIcon] = useState<boolean>(false)
+
+  const checkFeedback = useCallback(() => {
+    setShowCheckIcon(true)
+    setTimeout(() => {
+      setShowCheckIcon(false)
+    }, 1000)
+  }, [])
+
   return (
-    <Container
+    <Paper
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        marginTop: '10px',
+        padding: '16px',
       }}
     >
-      <Typography variant='h6'>Collaboration</Typography>
-      <TextField
-        variant='standard'
-        label='Room Code'
-        sx={{
-          alignSelf: 'center',
-        }}
-        inputProps={{
-          style: {
-            textAlign: 'center',
-          },
-        }}
-        disabled={roomTextfieldState.textAvailable}
-        value={roomTextfieldState.roomCode}
-        onChange={(event) =>
-          setRoomTextfieldState(event.target.value, undefined)
-        }
-        error={connectError !== ''}
-        helperText={connectError}
-      />
-      <Button onClick={() => OpenRoom(true)} disabled={checking}>
-        {yWebRTCProvider !== null ? 'Reconnect' : 'Open room for collaboration'}
-      </Button>
-      {yWebRTCProvider !== null && (
-        <Button onClick={CloseRoom}>Leave Collaboration</Button>
-      )}
-      {awareness && collaboratorStates && awarenessState && (
-        <Container>
-          <br />
-          You:
-          {awarenessState?.user?.name && (
-            <Chip
-              avatar={<Avatar>{awarenessState.user.name.charAt(0)}</Avatar>}
-              color='primary'
-              style={{ backgroundColor: awarenessState.user.color }}
-              label={awarenessState.user.name}
-            />
-          )}
-          <br /> <br />
-          Peers:
-          {Object.entries(Object.fromEntries(collaboratorStates))
-            .filter(([_key, value]) => value?.user?.name)
-            .map(([key, value]) => (
-              <Chip
-                key={key}
-                avatar={<Avatar>{value.user.name.charAt(0)}</Avatar>}
-                color='primary'
-                style={{ backgroundColor: value.user.color }}
-                label={value.user.name}
-              />
-            ))}
-        </Container>
-      )}
-    </Container>
+      <Stack spacing={1}>
+        <Typography variant='h6' gutterBottom>
+          Collaboration
+        </Typography>
+        <TextField
+          label='Room Code'
+          size='small'
+          disabled={roomTextfieldState.textAvailable}
+          value={roomTextfieldState.roomCode}
+          onChange={(event) =>
+            setRoomTextfieldState(event.target.value, undefined)
+          }
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              openRoom(true)
+            }
+          }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position='end'>
+                <IconButton
+                  aria-label='copy to clipboard'
+                  onClick={() => {
+                    checkFeedback()
+                    navigator.clipboard.writeText(
+                      roomTextfieldState.roomCode.trim()
+                    )
+                  }}
+                  onMouseDown={() => {
+                    checkFeedback()
+                    navigator.clipboard.writeText(
+                      roomTextfieldState.roomCode.trim()
+                    )
+                  }}
+                  edge='end'
+                >
+                  {showCheckIcon ? <CheckIcon /> : <ContentPasteIcon />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+          error={connectError !== ''}
+          helperText={connectError}
+        />
+        <Button onClick={() => openRoom(true)} disabled={checking} size='small'>
+          {yWebRTCProvider !== null
+            ? 'Reconnect'
+            : 'Open room for collaboration'}
+        </Button>
+
+        {yWebRTCProvider !== null && (
+          <>
+            <Divider />
+            {awareness && collaboratorStates && awarenessState && (
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  justifyContent: 'center',
+                }}
+              >
+                {awarenessState?.user?.name && (
+                  <Chip
+                    avatar={
+                      <Avatar>{awarenessState.user.name.charAt(0)}</Avatar>
+                    }
+                    color='primary'
+                    style={{ backgroundColor: awarenessState.user.color }}
+                    label={awarenessState.user.name + ' (You)'}
+                  />
+                )}
+                {Object.entries(Object.fromEntries(collaboratorStates))
+                  .filter(([_key, value]) => value?.user?.name)
+                  .map(([key, value]) => (
+                    <Chip
+                      key={key}
+                      avatar={<Avatar>{value.user.name.charAt(0)}</Avatar>}
+                      color='primary'
+                      style={{ backgroundColor: value.user.color }}
+                      label={value.user.name}
+                      sx={{
+                        margin: '1px',
+                        maxWidth: '100px',
+                      }}
+                    />
+                  ))}
+              </Box>
+            )}
+            <Divider />
+
+            <Button onClick={CloseRoom} color='error' size='small'>
+              Leave Collaboration
+            </Button>
+          </>
+        )}
+      </Stack>
+    </Paper>
   )
 }

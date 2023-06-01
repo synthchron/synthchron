@@ -12,14 +12,18 @@ export const TabbedDrawer: React.FC<DrawerProps> = ({ children, tabs }) => {
   const [value, setValue] = useState(0)
 
   return (
-    <div>
+    <>
       <Box
         sx={{
           borderBottom: 1,
           borderColor: 'divider',
         }}
       >
-        <Tabs value={value} onChange={(event, value) => setValue(value)}>
+        <Tabs
+          value={value}
+          variant='fullWidth'
+          onChange={(event, value) => setValue(value)}
+        >
           {tabs.map((tab) => (
             <Tab label={tab} key={tab} />
           ))}
@@ -30,7 +34,7 @@ export const TabbedDrawer: React.FC<DrawerProps> = ({ children, tabs }) => {
           {child}
         </TabPanel>
       ))}
-    </div>
+    </>
   )
 }
 

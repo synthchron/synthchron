@@ -45,6 +45,8 @@ export const LabelProperty: React.FC<LabelPropertyProperties> = ({
     <TextField
       label='label'
       variant='outlined'
+      fullWidth
+      size='small'
       value={textValue}
       onChange={(event) => onChangeLabel(event, changeSelectedPlaceLabel)}
       {...(error ? { error: true, helperText: error } : {})}

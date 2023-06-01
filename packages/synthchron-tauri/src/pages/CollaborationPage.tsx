@@ -66,7 +66,9 @@ export const CollaborationPage = () => {
             }}
             onKeyDown={async (event) => {
               if (event.key === 'Enter') {
-                const roomid = (event.target as HTMLTextAreaElement).value
+                const roomid = (
+                  event.target as HTMLTextAreaElement
+                ).value.trim()
                 setChecking(true)
                 const isEmpty = await checkRoomIsEmpty(roomid)
                 setChecking(false)

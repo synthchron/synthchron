@@ -6,6 +6,8 @@ import {
   PostprocessingStepType,
 } from '@synthchron/types'
 
+import { insertDuplicate } from './insert'
+
 export const postprocess = (
   trace: Trace,
   postProcessingConfiguration: PostprocessingConfiguration,
@@ -58,8 +60,8 @@ const performSwap = (trace: Trace, event_id: number): Trace => {
   return trace
 }
 
-const performInsertion = (trace: Trace, _event_id: number): Trace => {
-  return trace
+const performInsertion = (trace: Trace, event_id: number): Trace => {
+  return insertDuplicate(trace, event_id)
 }
 
 export const weightedRandom = <T>(

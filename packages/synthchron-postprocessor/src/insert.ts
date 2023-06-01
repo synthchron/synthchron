@@ -1,54 +1,13 @@
+import { Trace } from '@synthchron/simulator/src/types/simulationTypes'
 import { XESEvent, XESLog, XESTrace } from '@synthchron/xes/src/types'
 
-export function insertDuplicate(log: XESLog, chance: number): XESLog {
-  if (chance > 100 || chance < 0) {
-    throw 'Impossible chance: ' + chance + ' at insert duplicate'
-  }
-  chance = chance / 100
-
-  /*  
-  //Duplicate Attribute
-  return {
-    traces: log.traces.map((trace: XESTrace) => ({
-      events: trace.events.map((event: XESEvent) => ({
-        //Build new attributes with reduce
-        attributes: event.attributes.reduce(
-          (accumulator: XESAttribute[], attribute: XESAttribute) => {
-            accumulator.push(attribute)
-
-            // Randomly decide whether to duplicate the attribute
-            if (Math.random() <= chance) {
-              accumulator.push(attribute)
-            }
-
-            return accumulator
-          },
-          []
-        ),
-      })),
-    })),
-  }*/
-
-  //Duplicate event
-  return {
-    traces: log.traces.map((trace: XESTrace) => ({
-      events: trace.events.reduce(
-        (accumulator: XESEvent[], event: XESEvent) => {
-          accumulator.push(event)
-
-          // Randomly decide whether to duplicate the event
-          if (Math.random() <= chance) {
-            accumulator.push(event)
-          }
-
-          return accumulator
-        },
-        []
-      ),
-    })),
-  }
+export function insertDuplicate(trace: Trace, affectedEntry: number): Trace {
+  const duplicatedEvent = trace.events[affectedEntry]
+  trace.events.splice(affectedEntry, 0, duplicatedEvent)
+  return trace
 }
 
+// Legacy insertion method. Can be adapted to postprocess() if desired
 export function insertEvent(
   log: XESLog,
   chance: number,
@@ -78,6 +37,7 @@ export function insertEvent(
   }
 }
 
+// Legacy insertion method. Can be adapted to postprocess() if desired
 export function insertExisting(log: XESLog, chance: number): XESLog {
   if (chance > 100 || chance < 0) {
     throw 'Impossible chance: ' + chance + ' at insert duplicate'
