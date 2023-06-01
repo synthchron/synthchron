@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Button, LinearProgress, Paper, Stack } from '@mui/material'
 
@@ -29,20 +29,22 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
   const [inSimulation, setInSimulation] = useState(false)
   const [progress, setProgress] = useState(0)
 
-  // Todo:
-  // Test Coverage and Specific amount of traces
-  // Add unique traces to the simulation
-  // Merge changes to the main branch
-  // fix tests for the simulator
-  // Create tests for the simulatorToXESConverter
-  // Develop Random Generator for the Simulator
-  // Fix the simulation termination
+  const abortSimulation = useRef(false)
+
+  useEffect(() => {
+    abortSimulation.current = false
+    return () => {
+      abortSimulation.current = true
+    }
+  }, [])
+
   const simulate = async () => {
     let result
+    const processModel = transformFlowToSimulator(
+      useEditorStore.getState()
+    ) as PetriNetProcessModel
     const simulator = simulateWithEngine(
-      transformFlowToSimulator(
-        useEditorStore.getState()
-      ) as PetriNetProcessModel,
+      processModel,
       {
         ...configuration,
         randomSeed:
@@ -53,6 +55,10 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
       petriNetEngine
     )
     for await (const { progress, simulationLog } of simulator) {
+      if (abortSimulation.current) {
+        break
+      }
+
       setProgress(progress)
       // Do not delete this line, it is needed to update the UI - Ali
       await new Promise((resolve) => {
@@ -64,7 +70,7 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
     }
     if (result) {
       constPostprocessSimulation(result, configuration)
-      return SimulationStatisticsAdapter(result)
+      return SimulationStatisticsAdapter(result, processModel)
     } else {
       const emptyResult: ResultType = {
         log: { traces: [] },
@@ -96,10 +102,11 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
             setInSimulation(true)
             setProgress(0)
             simulate().then((result) => {
-              setResult(result)
-              // await new Promise((resolve) => setTimeout(resolve, 2500))
               setInSimulation(false)
-              nextStep()
+              if (!abortSimulation.current) {
+                setResult(result)
+                nextStep()
+              }
             })
           }}
         >

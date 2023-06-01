@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Box, Button, LinearProgress, Stack, Typography } from '@mui/material'
 import JSZip from 'jszip'
@@ -36,6 +36,14 @@ export const SwarmPage = () => {
   )
   const [inSimulation, setInSimulation] = useState(false)
 
+  const abortSimulation = useRef(false)
+  useEffect(() => {
+    abortSimulation.current = false
+    return () => {
+      abortSimulation.current = true
+    }
+  }, [])
+
   const simulate = async () => {
     const resultFiles: [string, string, string][] = []
     for (const [projectIndexIndex, projectIndex] of checkedProjects.entries()) {
@@ -58,6 +66,15 @@ export const SwarmPage = () => {
           petriNetEngine
         )
         for await (const { progress, simulationLog } of simulator) {
+          if (abortSimulation.current) {
+            setCurrentModel(undefined)
+            setCurrentConfig(undefined)
+            setProgress(0)
+            setModelProgress(0)
+            setConfigProgress(0)
+            setInSimulation(false)
+            return []
+          }
           setProgress(
             (100 *
               (projectIndexIndex +
@@ -197,6 +214,18 @@ export const SwarmPage = () => {
                 },
               }}
             />
+            <Button
+              variant='contained'
+              fullWidth
+              disabled={abortSimulation.current} // make it error color
+              onClick={() => {
+                abortSimulation.current = true
+                setInSimulation(false)
+              }}
+              color='error'
+            >
+              {abortSimulation.current ? 'Aborting...' : 'Abort Simulation'}
+            </Button>
           </Box>
         ) : (
           <Button
@@ -213,6 +242,11 @@ export const SwarmPage = () => {
               setInSimulation(true)
               setProgress(0)
               simulate().then(async (result: [string, string, string][]) => {
+                if (abortSimulation.current || result.length === 0) {
+                  setInSimulation(false)
+                  abortSimulation.current = false
+                  return
+                }
                 const zip = new JSZip()
                 for (const [projectName, configurationName, xes] of result) {
                   zip.file(`${projectName} - ${configurationName}.xes`, xes, {
