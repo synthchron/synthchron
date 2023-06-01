@@ -1,9 +1,21 @@
 import seedrandom from 'seedrandom'
 
-import { Trace } from '@synthchron/simulator'
+import { SimulationLog, Trace } from '@synthchron/simulator'
 import { Configuration, PostprocessingStepType } from '@synthchron/types'
 
 import { insertDuplicate } from './insert'
+
+export const constPostprocessSimulation = (
+  simulation: SimulationLog,
+  config: Configuration
+) => {
+  const traceList = simulation.simulationResults.map((simres) => simres.trace)
+  const postprocessedTraces = postprocess(traceList, config)
+  simulation.simulationResults.forEach(
+    (value, index) => (value.trace = postprocessedTraces[index])
+  )
+  return
+}
 
 export const postprocess = (
   traces: Trace[],

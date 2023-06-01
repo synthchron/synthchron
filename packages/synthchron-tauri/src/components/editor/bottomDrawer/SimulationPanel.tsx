@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import { Button, LinearProgress, Paper, Stack } from '@mui/material'
 
+import { constPostprocessSimulation } from '@synthchron/postprocessor/src/postprocess'
 import {
   PetriNetProcessModel,
   petriNetEngine,
@@ -62,6 +63,7 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
       result = simulationLog
     }
     if (result) {
+      //constPostprocessSimulation(result, configuration)
       return SimulationStatisticsAdapter(result)
     } else {
       const emptyResult: ResultType = {
