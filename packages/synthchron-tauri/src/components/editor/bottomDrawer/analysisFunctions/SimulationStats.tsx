@@ -18,10 +18,7 @@ const SumMapSort = (list: unknown[]): [unknown, number][] => {
 export const SimulationStatisticsAdapter = (
   simulationLog: SimulationLog
 ): ResultType => {
-  console.log('r2')
-  console.log(simulationLog)
   const xeslog = transformSimulationLogToXESLog(simulationLog)
-  console.log(xeslog)
   const basicStats = GetBasicStats(xeslog)
   const lastTransitionStats = GetLastTransitions(xeslog)
   const terminationStats = GetTerminationStats(simulationLog)
@@ -37,14 +34,9 @@ export const SimulationStatisticsAdapter = (
 const GetBasicStats = (xeslog: XESLog) => {
   const totalTraces = xeslog.traces.length
 
-  // Issue with events.length casues length to be one larger than it should be
-  // This is fixed with the -1
-  // Issue unfixed -> Issue has not appeared yet in SYN-167. Comment is kept for awareness.
-  // https://user-images.githubusercontent.com/79922317/241557149-910ad5ea-c16d-49ba-9be9-223ec64d33eb.png
-  let totalEvents = xeslog.traces.reduce((accumulator, trace) => {
+  const totalEvents = xeslog.traces.reduce((accumulator, trace) => {
     return accumulator + trace.events.length
   }, 0)
-  if (totalEvents < 0) totalEvents = 0
   const averageEvents = totalEvents / totalTraces
 
   const basicStats = {

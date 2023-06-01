@@ -43,6 +43,5 @@ function convertEventToXESEvent(event: Event): XESEvent {
   const xesEvent: XESEvent = {
     attributes: attributes,
   }
-  console.log(xesEvent)
   return xesEvent
 }

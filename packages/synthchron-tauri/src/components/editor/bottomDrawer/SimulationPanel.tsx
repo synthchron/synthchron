@@ -63,7 +63,7 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
       result = simulationLog
     }
     if (result) {
-      //constPostprocessSimulation(result, configuration)
+      constPostprocessSimulation(result, configuration)
       return SimulationStatisticsAdapter(result)
     } else {
       const emptyResult: ResultType = {
