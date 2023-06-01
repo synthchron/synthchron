@@ -11,7 +11,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import Dropzone, { useDropzone } from 'react-dropzone'
+import Dropzone from 'react-dropzone'
 
 import { PostprocessingConfiguration } from '@synthchron/types'
 
@@ -23,15 +23,23 @@ const defaultPostprocessing: PostprocessingConfiguration = {
   postProcessingSteps: [],
 }
 
-const postProcess = (file: unknown, text: string) => {
+const postProcess = (
+  trace: string,
+  postProcessing: PostprocessingConfiguration
+) => {
   console.log('Post processing')
-  console.log(file)
-  console.log(text)
+  console.log(postProcessing)
+  console.log(trace)
+}
+
+type UploadedFile = {
+  name: string
+  content: string
 }
 
 export const PostProcessingPage = () => {
   const [postprocessing, setPostprocessing] = useState(defaultPostprocessing)
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null)
+  const [uploadedTrace, setUploadedFile] = useState<UploadedFile | null>(null)
   const [traceText, setTraceText] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
   const uploadFile = useCallback((acceptedFiles: File[]) => {
@@ -49,7 +57,7 @@ export const PostProcessingPage = () => {
     }
     const reader = new FileReader()
     reader.onload = function () {
-      setUploadedFile(file)
+      setUploadedFile({ name: file.name, content: reader.result as string })
     }
     reader.readAsText(file)
   }, [])
@@ -74,29 +82,51 @@ export const PostProcessingPage = () => {
                 marginBottom: '10px',
               }}
             >
-              <Typography variant='h6'>Paste your log here</Typography>
-              <TextField
-                multiline
-                fullWidth
-                maxRows={10}
-                sx={{
-                  flexGrow: 1,
-                  alignItems: 'flex-start',
-                  maxHeight: '50vh',
-                }}
-                onChange={(event) => {
-                  setTraceText(event.target.value)
-                }}
-                disabled={uploadedFile !== null}
-              />
+              <Typography variant='h6' align={'center'}>
+                Paste your log here
+              </Typography>
+              <Tooltip
+                title={
+                  uploadedTrace !== null
+                    ? 'Disabled while there is an uploaded file'
+                    : ''
+                }
+                arrow
+                placement='left'
+              >
+                <TextField
+                  multiline
+                  fullWidth
+                  maxRows={10}
+                  sx={{
+                    flexGrow: 1,
+                    alignItems: 'flex-start',
+                    maxHeight: '50vh',
+                  }}
+                  onChange={(event) => {
+                    setTraceText(event.target.value)
+                  }}
+                  disabled={uploadedTrace !== null}
+                />
+              </Tooltip>
             </Box>
             <Box>
-              <Typography variant='h6'>Or upload file</Typography>
-              <Dropzone onDrop={uploadFile}>
+              <Typography variant='h6' align='center'>
+                Or upload file
+              </Typography>
+              <Dropzone onDrop={uploadFile} disabled={traceText !== ''}>
                 {({ getRootProps, getInputProps, isDragActive }) => (
                   <div {...getRootProps()} style={{ backgroundColor: 'grey' }}>
-                    <input {...getInputProps()} disabled={traceText !== ''} />
-                    <Tooltip title='Drop / Select file' arrow placement='left'>
+                    <input {...getInputProps()} />
+                    <Tooltip
+                      title={
+                        traceText === ''
+                          ? 'Drop / Select file'
+                          : 'Disabled while there is input in the text field above'
+                      }
+                      arrow
+                      placement='left'
+                    >
                       <Paper
                         style={{
                           minHeight: 250,
@@ -124,12 +154,12 @@ export const PostProcessingPage = () => {
               <Button variant='contained' color='primary' onClick={reset}>
                 Reset
               </Button>
-              {uploadedFile !== null && (
-                <Typography variant='body1'>
-                  <Box sx={{ backgroundColor: 'lightgreen', padding: '5px' }}>
-                    Successfully uploaded file: {uploadedFile.name}
-                  </Box>
-                </Typography>
+              {uploadedTrace !== null && (
+                <Box sx={{ backgroundColor: 'lightgreen', padding: '5px' }}>
+                  <Typography variant='body1'>
+                    Successfully uploaded file: {uploadedTrace.name}
+                  </Typography>
+                </Box>
               )}
               {errorMessage != '' && (
                 <Typography variant='body1'>
@@ -152,9 +182,11 @@ export const PostProcessingPage = () => {
               color='primary'
               fullWidth
               onClick={() => {
-                postProcess(uploadedFile, traceText)
+                const trace =
+                  uploadedTrace !== null ? uploadedTrace.content : traceText
+                postProcess(trace, postprocessing)
               }}
-              disabled={traceText === '' && uploadedFile === null}
+              disabled={traceText === '' && uploadedTrace === null}
             >
               Post Process and Generate XES
             </Button>
