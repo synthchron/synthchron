@@ -39,10 +39,11 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
 
   const simulate = async () => {
     let result
+    const processModel = transformFlowToSimulator(
+      useEditorStore.getState()
+    ) as PetriNetProcessModel
     const simulator = simulateWithEngine(
-      transformFlowToSimulator(
-        useEditorStore.getState()
-      ) as PetriNetProcessModel,
+      processModel,
       {
         ...configuration,
         randomSeed:
@@ -67,7 +68,7 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
       result = simulationLog
     }
     if (result) {
-      return SimulationStatisticsAdapter(result)
+      return SimulationStatisticsAdapter(result, processModel)
     } else {
       const emptyResult: ResultType = {
         log: { traces: [] },
