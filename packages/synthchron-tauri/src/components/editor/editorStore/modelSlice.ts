@@ -41,12 +41,21 @@ export const createModelSlice: StateCreator<EditorState, [], [], ModelSlice> = (
           .map((node) => parseInt(node.id))
           .filter((id) => !isNaN(id))
       ) + 1
+    nodesMap.forEach((node) => {
+      if (node.selected) {
+        node.selected = false
+      }
+    })
     nodesMap.set(newId.toString(), {
       ...node,
       id: `${newId}`,
+      data: {
+        ...node.data,
+        label: `${node.data.label} ${newId}`,
+      },
     })
   },
-  setConfig: (newConfig: Configuration) => {
-    set({ config: newConfig })
+  setConfig: (config: Configuration) => {
+    set({ config })
   },
 })
