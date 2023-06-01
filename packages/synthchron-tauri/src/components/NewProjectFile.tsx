@@ -196,7 +196,7 @@ const NewProjectFile: React.FC<NewFileProjectProps> = ({
           )}
         </Dropzone>
 
-        {processModel !== null && (
+        {processModel !== null && uploadedFile !== null && (
           <Box sx={{ backgroundColor: 'lightgreen', padding: '5px' }}>
             <Typography variant='body1'>
               Successfully uploaded file: {uploadedFile.name}
