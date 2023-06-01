@@ -107,10 +107,14 @@ const NewProjectFile: React.FC<NewFileProjectProps> = ({
       try {
         const json: ProcessModel = JSON.parse(result) as ProcessModel
 
-        setProcessModel(json)
-        setUploadedFile({ name: file.name, content: result })
+        if (json.type != null) {
+          setProcessModel(json)
+          setUploadedFile({ name: file.name, content: result })
+        } else {
+          setFileErrors('The file couldnt parse to a process model.')
+        }
       } catch (error) {
-        setFileErrors('The file couldnt parse to a process model.')
+        setFileErrors('Couldnt read file as json.')
       }
     }
     reader.readAsText(file)
@@ -166,7 +170,7 @@ const NewProjectFile: React.FC<NewFileProjectProps> = ({
                 title={
                   processModel === null
                     ? 'Drop / Select file'
-                    : 'Disabled while there is input in the text field above'
+                    : 'Disabled while a process model is selected for import'
                 }
                 arrow
                 placement='left'
@@ -211,7 +215,7 @@ const NewProjectFile: React.FC<NewFileProjectProps> = ({
           </Typography>
         )}
         <Button variant='contained' color='primary' onClick={reset}>
-          Reset
+          Remove import
         </Button>
         <Button type='submit' color='primary' variant='contained'>
           Create
