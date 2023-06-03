@@ -2,11 +2,11 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import { Debug } from './components/Debug'
 import { PostProcessing } from './components/PostProcessing'
+import { BatchPage } from './pages/BatchPage'
 import { CollaborationPage } from './pages/CollaborationPage'
 import { EditorPage } from './pages/EditorPage'
 import { MainMenuPage } from './pages/MainMenuPage'
 import { NotFoundPage } from './pages/NotFoundPage'
-import { SwarmPage } from './pages/SwarmPage'
 
 const router = createBrowserRouter([
   {
@@ -28,8 +28,8 @@ const router = createBrowserRouter([
     element: <CollaborationPage />,
   },
   {
-    path: 'swarm',
-    element: <SwarmPage />,
+    path: 'batch',
+    element: <BatchPage />,
   },
   {
     path: 'debug',
