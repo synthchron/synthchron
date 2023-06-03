@@ -36,6 +36,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-detect-offline": "^2.4.5",
     "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-hotkeys-hook": "^4.4.0",
     "react-router-dom": "^6.11.1",
     "reactflow": "^11.7.0",

@@ -1,45 +1,30 @@
 import { useState } from 'react'
 
-import { faker } from '@faker-js/faker'
-import {
-  Box,
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Modal,
-  Select,
-  SelectChangeEvent,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material'
-import { useNavigate } from 'react-router-dom'
+import { Box, Modal, Stack, Tab, Tabs } from '@mui/material'
 
-import {
-  PetriNetProcessModel,
-  ProcessModel,
-  ProcessModelType,
-} from '@synthchron/simulator'
-
-import { usePersistentStore } from './common/persistentStore'
-
-export type ProjectConfig = {
-  name: string
-  description: string
-  modelType: ProcessModelType
-}
+import NewProjectDefault from './NewProjectDefault'
+import NewProjectFile from './NewProjectFile'
 
 const modal_style = {
   position: 'absolute' as const,
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: 500,
   bgcolor: 'background.paper',
   borderRadius: '.3rem',
   boxShadow: 14,
   p: 4,
+  padding: '0px',
+}
+
+const modal_content_style = {
+  p: 4,
+  bgcolor: 'background.paper',
+}
+
+const tab_style = {
+  fontSize: '0.8rem',
 }
 
 interface NewProjectModalProps {
@@ -48,121 +33,12 @@ interface NewProjectModalProps {
   redirect?: boolean
 }
 
-const examplePetriNetModel: PetriNetProcessModel = {
-  type: ProcessModelType.PetriNet,
-  acceptingExpressions: [
-    {
-      name: 'accept',
-      expression: 'p2 >= 7',
-    },
-  ],
-  nodes: [
-    {
-      type: 'place',
-      name: 'p1',
-      identifier: 'p1',
-      amountOfTokens: 5,
-      position: {
-        x: -200,
-        y: 0,
-      },
-    },
-    {
-      type: 'transition',
-      name: 'T1',
-      identifier: 't1',
-      weight: 1,
-      position: {
-        x: 0,
-        y: 0,
-      },
-    },
-    {
-      type: 'place',
-      name: 'p2',
-      identifier: 'p2',
-      amountOfTokens: 0,
-      position: {
-        x: 200,
-        y: 0,
-      },
-    },
-  ],
-  edges: [
-    {
-      source: 'p1',
-      target: 't1',
-      multiplicity: 1,
-    },
-    {
-      source: 't1',
-      target: 'p2',
-      multiplicity: 2,
-    },
-  ],
-}
-
 const NewProjectModal: React.FC<NewProjectModalProps> = ({
   open,
   onClose,
   redirect = false,
 }) => {
-  const navigate = useNavigate()
-
-  const addProject = usePersistentStore((state) => state.addProject)
-
-  const newProjectDefault = () => {
-    return {
-      name: faker.animal.bird(),
-      description: '',
-      modelType: ProcessModelType.PetriNet,
-    }
-  }
-
-  const [newProjectConfig, setNewProjectConfig] = useState<ProjectConfig>(
-    newProjectDefault()
-  )
-
-  const updateNewProjectConfig = (fields: Partial<ProjectConfig>) => {
-    setNewProjectConfig({ ...newProjectConfig, ...fields })
-  }
-
-  const createNewProject = () => {
-    let model: ProcessModel
-    switch (newProjectConfig.modelType) {
-      default:
-      case ProcessModelType.PetriNet:
-        model = examplePetriNetModel
-        break
-      case ProcessModelType.DcrGraph:
-        model = { type: newProjectConfig.modelType, nodes: [], edges: [] }
-        break
-      case ProcessModelType.Flowchart:
-        model = {
-          type: newProjectConfig.modelType,
-          nodes: [
-            {
-              type: 'decision',
-              identifier: 'startNode',
-            },
-          ],
-          edges: [],
-          initialNode: 'startNode',
-        }
-        break
-    }
-    const projectId = addProject({
-      projectName: newProjectConfig.name,
-      projectDescription: newProjectConfig.description,
-      projectModel: model, // TODO
-      created: new Date().toJSON(),
-      lastEdited: new Date().toJSON(),
-      lastOpened: (redirect ? new Date() : new Date(0)).toJSON(),
-    })
-    setNewProjectConfig(newProjectDefault())
-    if (redirect) navigate(`/editor/${projectId}`)
-    onClose()
-  }
+  const [value, setValue] = useState(0)
 
   return (
     <Modal
@@ -171,64 +47,24 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
       aria-labelledby='modal-modal-title'
       aria-describedby='modal-modal-description'
     >
-      <Box
-        component='form'
-        sx={modal_style}
-        noValidate
-        onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
-          event.preventDefault()
-          createNewProject()
-        }}
-      >
-        <Typography
-          id='modal-modal-title'
-          variant='h5'
-          sx={{ marginBottom: '2rem' }}
-        >
-          New project
-        </Typography>
-        <Stack spacing={4} direction='column'>
-          <TextField
-            required
-            id='new-project-name'
-            label='Project name'
-            variant='standard'
-            value={newProjectConfig.name}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              updateNewProjectConfig({ name: event.target.value })
-            }}
-          />
-          <FormControl fullWidth>
-            <InputLabel id='demo-simple-select-label'>Model Type</InputLabel>
-            <Select
-              labelId='demo-simple-select-label'
-              id='new-project-model'
-              label='Process Model Type'
-              value={newProjectConfig.modelType}
-              onChange={(event: SelectChangeEvent) => {
-                updateNewProjectConfig({
-                  modelType: event.target.value as ProcessModelType,
-                })
-              }}
-            >
-              <MenuItem value={ProcessModelType.PetriNet}>Petri Net</MenuItem>
-              <MenuItem value={ProcessModelType.Flowchart}>Flowchart</MenuItem>
-              <MenuItem value={ProcessModelType.DcrGraph}>Dcr Graph</MenuItem>
-            </Select>
-          </FormControl>
-
-          <TextField
-            id='new-project-description'
-            label='Description'
-            multiline
-            value={newProjectConfig.description}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              updateNewProjectConfig({ description: event.target.value })
-            }}
-          />
-          <Button type='submit' color='primary' variant='contained'>
-            Create
-          </Button>
+      <Box sx={modal_style}>
+        <Stack>
+          <Tabs
+            centered={true}
+            value={value}
+            onChange={(_event, value) => setValue(value)}
+          >
+            <Tab sx={tab_style} label={'Create empty project'} />
+            <Tab sx={tab_style} label={'Create project from file'} />
+          </Tabs>
+          <Box sx={modal_content_style}>
+            {value == 0 && (
+              <NewProjectDefault onClose={onClose} redirect={redirect} />
+            )}
+            {value == 1 && (
+              <NewProjectFile onClose={onClose} redirect={redirect} />
+            )}
+          </Box>
         </Stack>
       </Box>
     </Modal>
