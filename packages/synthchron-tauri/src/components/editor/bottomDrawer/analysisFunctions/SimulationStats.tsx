@@ -34,6 +34,7 @@ export const SimulationStatisticsAdapter = (
       ...lastTransitionStats,
       ...terminationStats,
     },
+    simulationLog: simulationLog,
   }
 
   return result

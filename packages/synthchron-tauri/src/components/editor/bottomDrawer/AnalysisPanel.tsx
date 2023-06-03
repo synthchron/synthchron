@@ -12,8 +12,10 @@ import {
 } from 'chart.js/auto'
 import { Bar, Doughnut, Line, Radar, Scatter } from 'react-chartjs-2'
 
+import { PostprocessSimulation } from '@synthchron/postprocessor/src/postprocess'
 import { serialize } from '@synthchron/xes'
 
+import { transformSimulationLogToXESLog } from '../../../utils/simulatorToXESConverter'
 import { TablePreview } from '../../common/TablePreview'
 import { usePersistentStore } from '../../common/persistentStore'
 import { useEditorStore } from '../editorStore/flowStore'
@@ -91,6 +93,9 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
     return <>Hello</>
   }
 
+  const PostProcessedSimulation = transformSimulationLogToXESLog(
+    PostprocessSimulation(result.simulationLog, configuration)
+  )
   const exportButtons = (
     <Stack
       direction={'row'}
@@ -103,7 +108,7 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
         variant='contained'
         onClick={() => {
           downloadString(
-            serialize(result.log),
+            serialize(PostProcessedSimulation),
             `trace-${
               (projectId &&
                 projectId in projects &&
@@ -121,7 +126,7 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
         variant='contained'
         onClick={() => {
           downloadString(
-            serialize(result.log, [
+            serialize(PostProcessedSimulation, [
               'This log was generated using the following model and configuration.',
               `Model: ${
                 (projectId &&
@@ -148,7 +153,7 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
         variant='contained'
         onClick={() => {
           downloadString(
-            serialize(result.log, [
+            serialize(PostProcessedSimulation, [
               'This log was generated using the following model and configuration.',
               `Model: ${
                 (projectId &&

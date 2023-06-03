@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Box, Button, LinearProgress, Stack, Typography } from '@mui/material'
 import JSZip from 'jszip'
 
-import { constPostprocessSimulation } from '@synthchron/postprocessor/src/postprocess'
+import { PostprocessSimulation } from '@synthchron/postprocessor/src/postprocess'
 import {
   PetriNetProcessModel,
   petriNetEngine,
@@ -88,7 +88,7 @@ export const SwarmPage = () => {
           // DO not delete this line, it is needed to update the UI - Ali
           await new Promise((resolve) => setTimeout(resolve, 0))
           if (simulationLog == null) continue
-          constPostprocessSimulation(simulationLog, config)
+          PostprocessSimulation(simulationLog, config)
           resultFiles.push([
             Object.values(projects)[projectIndex].projectName,
             configurations[configIndex].configurationName ?? '',

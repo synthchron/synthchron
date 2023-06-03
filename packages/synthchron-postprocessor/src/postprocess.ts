@@ -5,7 +5,7 @@ import { Configuration, PostprocessingStepType } from '@synthchron/types'
 
 import { insertDuplicate } from './insert'
 
-export const constPostprocessSimulation = (
+export const PostprocessSimulation = (
   simulation: SimulationLog,
   config: Configuration
 ) => {
@@ -14,7 +14,7 @@ export const constPostprocessSimulation = (
   simulation.simulationResults.forEach(
     (value, index) => (value.trace = postprocessedTraces[index])
   )
-  return
+  return simulation
 }
 
 export const postprocess = (
