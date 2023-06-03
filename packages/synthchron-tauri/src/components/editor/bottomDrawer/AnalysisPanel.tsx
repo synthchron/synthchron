@@ -93,9 +93,11 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
     return <>Hello</>
   }
 
-  const PostProcessedSimulation = transformSimulationLogToXESLog(
-    PostprocessSimulation(result.simulationLog, configuration)
-  )
+  const PostProcessedSimulation = result.simulationLog
+    ? transformSimulationLogToXESLog(
+        PostprocessSimulation(result.simulationLog, configuration)
+      )
+    : result.log
   const exportButtons = (
     <Stack
       direction={'row'}

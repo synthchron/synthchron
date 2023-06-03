@@ -11,7 +11,7 @@ export type ResultType = {
   // TODO: To be updated
   log: XESLog
   statistics: object
-  simulationLog: SimulationLog
+  simulationLog: SimulationLog | undefined
 }
 
 export type SimulatorSlice = {
