@@ -207,11 +207,13 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
             <Bar data={lineData} options={options} />
           </Paper>
         </Grid>
-        <Grid item xs={4}>
-          <Paper style={{ padding: '16px' }}>
-            <Radar data={lineData} options={options} />
-          </Paper>
-        </Grid>
+        {aggregateOfLog.some((log) => log.size > 3) ? (
+          <Grid item xs={4}>
+            <Paper style={{ padding: '16px' }}>
+              <Radar data={lineData} options={options} />
+            </Paper>
+          </Grid>
+        ) : null}
         <Grid item xs={8}>
           <Paper style={{ padding: '16px' }}>
             <Scatter data={highDimensionalData} options={options} />

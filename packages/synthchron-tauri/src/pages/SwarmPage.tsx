@@ -232,7 +232,10 @@ export const SwarmPage = () => {
             variant='contained'
             fullWidth
             disabled={
-              checkedProjects.length === 0 || checkedConfigs.length === 0
+              checkedProjects.length === 0 ||
+              checkedConfigs.length === 0 ||
+              Object.values(projects).length === 0 ||
+              configurations.length === 0
             }
             onClick={() => {
               setInSimulation(true)
@@ -266,7 +269,18 @@ export const SwarmPage = () => {
               })
             }}
           >
-            Start {checkedProjects.length * checkedConfigs.length} simulations
+            {Object.values(projects).length === 0 ||
+            configurations.length === 0 ? (
+              <>
+                You need at least one project and one configuration to run
+                simulations
+              </>
+            ) : (
+              <>
+                Start {checkedProjects.length * checkedConfigs.length}{' '}
+                simulations
+              </>
+            )}
           </Button>
         )}
       </Stack>
