@@ -1,51 +1,51 @@
 import seedrandom from 'seedrandom'
 
 import { Trace } from '@synthchron/simulator'
-import { Configuration, PostprocessingStepType } from '@synthchron/types'
+import {
+  PostprocessingConfiguration,
+  PostprocessingStepType,
+} from '@synthchron/types'
 
 import { insertDuplicate } from './insert'
 
 export const postprocess = (
-  traces: Trace[],
-  config: Configuration
-): Trace[] => {
-  const postProcessingConfiguration = config.postprocessing
+  trace: Trace,
+  postProcessingConfiguration: PostprocessingConfiguration,
+  randomSeed: string
+): Trace => {
   const postProcessingSteps = postProcessingConfiguration.postProcessingSteps
-  const randomGenerator = seedrandom(config.randomSeed)
-  traces.forEach((trace) => {
-    // using for loop, to get the correct index to identify the event
-    for (let i = 0; i < trace.events.length; i++) {
-      const random = randomGenerator()
-      if (random < postProcessingConfiguration.stepProbability) {
-        const postProcessingStep = weightedRandom<PostprocessingStepType>(
-          (i != 0
-            ? postProcessingSteps
-            : postProcessingSteps.filter(
-                (step) => step.type !== PostprocessingStepType.SwapStep
-              )
-          ).map((step) => [step.type, step.weight]),
-          randomGenerator
-        )
+  const randomGenerator = seedrandom(randomSeed)
+  for (let i = 0; i < trace.events.length; i++) {
+    const random = randomGenerator()
+    if (random < postProcessingConfiguration.stepProbability) {
+      const postProcessingStep = weightedRandom<PostprocessingStepType>(
+        (i != 0
+          ? postProcessingSteps
+          : postProcessingSteps.filter(
+              (step) => step.type !== PostprocessingStepType.SwapStep
+            )
+        ).map((step) => [step.type, step.weight]),
+        randomGenerator
+      )
 
-        switch (postProcessingStep) {
-          case PostprocessingStepType.DeletionStep:
-            trace = performDeletion(trace, i)
-            i -= 1
-            break
-          case PostprocessingStepType.SwapStep:
-            trace = performSwap(trace, i)
-            i += 1
-            break
-          case PostprocessingStepType.InsertionStep:
-            trace = performInsertion(trace, i)
-            i += 1
-            break
-        }
+      switch (postProcessingStep) {
+        case PostprocessingStepType.DeletionStep:
+          trace = performDeletion(trace, i)
+          i -= 1
+          break
+        case PostprocessingStepType.SwapStep:
+          trace = performSwap(trace, i)
+          i += 1
+          break
+        case PostprocessingStepType.InsertionStep:
+          trace = performInsertion(trace, i)
+          i += 1
+          break
       }
     }
-  })
+  }
 
-  return traces
+  return trace
 }
 
 const performDeletion = (trace: Trace, event_id: number): Trace => {

@@ -44,6 +44,8 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
   postprocessing,
   setPostprocessing,
 }) => {
+  // Note: This is a temporary implementation. There is a
+  // bug that adding more than 10 post processing steps will cause a warning.
   const [order, setOrder] = useState<number[]>([])
 
   const [localPostprocessing, setLocalPostprocessing] =
@@ -111,6 +113,10 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
         step={0.01}
         min={0}
         max={1}
+        marks={[
+          { value: 0, label: '0' },
+          { value: 1, label: '1' },
+        ]}
       />
       <DndContext
         sensors={sensors}
@@ -122,13 +128,39 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
           strategy={verticalListSortingStrategy}
         >
           {postprocessing.postProcessingSteps.map((step, index) => (
-            <React.Fragment key={order[index]}>
-              <SortableItem
-                key={order[index]}
-                id={order[index]}
-                step={step}
-                setStep={(step) => {
-                  if (step === undefined) {
+            <div key={order[index]}>
+              {order[index] !== undefined && (
+                <SortableItem
+                  id={order[index]}
+                  step={step}
+                  setStep={(step) => {
+                    if (step === undefined) {
+                      setPostprocessing(
+                        (postprocessing: PostprocessingConfiguration) => {
+                          const newPostprocessing: PostprocessingConfiguration =
+                            {
+                              postProcessingSteps: [
+                                ...postprocessing.postProcessingSteps.slice(
+                                  0,
+                                  index
+                                ),
+                                ...postprocessing.postProcessingSteps.slice(
+                                  index + 1
+                                ),
+                              ],
+                              stepProbability: postprocessing.stepProbability,
+                            }
+
+                          return newPostprocessing
+                        }
+                      )
+                      setOrder((order) => [
+                        ...order.slice(0, index),
+                        ...order.slice(index + 1),
+                        order[index],
+                      ])
+                      return
+                    }
                     setPostprocessing(
                       (postprocessing: PostprocessingConfiguration) => {
                         const newPostprocessing: PostprocessingConfiguration = {
@@ -137,6 +169,7 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
                               0,
                               index
                             ),
+                            step,
                             ...postprocessing.postProcessingSteps.slice(
                               index + 1
                             ),
@@ -147,32 +180,10 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
                         return newPostprocessing
                       }
                     )
-                    setOrder((order) => [
-                      ...order.slice(0, index),
-                      ...order.slice(index + 1),
-                      order[index],
-                    ])
-                    return
-                  }
-                  setPostprocessing(
-                    (postprocessing: PostprocessingConfiguration) => {
-                      const newPostprocessing: PostprocessingConfiguration = {
-                        postProcessingSteps: [
-                          ...postprocessing.postProcessingSteps.slice(0, index),
-                          step,
-                          ...postprocessing.postProcessingSteps.slice(
-                            index + 1
-                          ),
-                        ],
-                        stepProbability: postprocessing.stepProbability,
-                      }
-
-                      return newPostprocessing
-                    }
-                  )
-                }}
-              />{' '}
-            </React.Fragment>
+                  }}
+                />
+              )}
+            </div>
           ))}
         </SortableContext>
       </DndContext>

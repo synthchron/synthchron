@@ -57,7 +57,7 @@ export type Event = {
 
 export type TraceSimulationResult = {
   trace: Trace
-  exitReason: TraceTerminationReason
+  exitReason?: TraceTerminationReason
   acceptingState?: string
 }
 

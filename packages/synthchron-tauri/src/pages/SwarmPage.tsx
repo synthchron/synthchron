@@ -8,13 +8,13 @@ import {
   petriNetEngine,
   simulateWithEngine,
 } from '@synthchron/simulator'
+import { transformSimulationLogToXESLog } from '@synthchron/utils'
 import { serialize } from '@synthchron/xes'
 
 import { BottomAppBar } from '../components/BottomAppBar'
 import { CustomAppBar } from '../components/CustomAppBar'
 import { usePersistentStore } from '../components/common/persistentStore'
 import { TitledCheckedList } from '../components/swarm/TitledCheckedList'
-import { transformSimulationLogToXESLog } from '../utils/simulatorToXESConverter'
 
 export const SwarmPage = () => {
   const projects = usePersistentStore((state) => state.projects)
