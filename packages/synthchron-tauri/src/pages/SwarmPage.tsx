@@ -10,13 +10,13 @@ import {
   simulateWithEngine,
 } from '@synthchron/simulator'
 import { Configuration } from '@synthchron/types'
+import { transformSimulationLogToXESLog } from '@synthchron/utils'
 import { serialize } from '@synthchron/xes'
 
 import { BottomAppBar } from '../components/BottomAppBar'
 import { CustomAppBar } from '../components/CustomAppBar'
 import { usePersistentStore } from '../components/common/persistentStore'
 import { TitledCheckedList } from '../components/swarm/TitledCheckedList'
-import { transformSimulationLogToXESLog } from '../utils/simulatorToXESConverter'
 
 export const SwarmPage = () => {
   const projects = usePersistentStore((state) => state.projects)
@@ -236,7 +236,10 @@ export const SwarmPage = () => {
             variant='contained'
             fullWidth
             disabled={
-              checkedProjects.length === 0 || checkedConfigs.length === 0
+              checkedProjects.length === 0 ||
+              checkedConfigs.length === 0 ||
+              Object.values(projects).length === 0 ||
+              configurations.length === 0
             }
             onClick={() => {
               setInSimulation(true)
@@ -270,7 +273,18 @@ export const SwarmPage = () => {
               })
             }}
           >
-            Start {checkedProjects.length * checkedConfigs.length} simulations
+            {Object.values(projects).length === 0 ||
+            configurations.length === 0 ? (
+              <>
+                You need at least one project and one configuration to run
+                simulations
+              </>
+            ) : (
+              <>
+                Start {checkedProjects.length * checkedConfigs.length}{' '}
+                simulations
+              </>
+            )}
           </Button>
         )}
       </Stack>

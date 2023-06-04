@@ -13,9 +13,12 @@ import {
 import { Bar, Doughnut, Line, Radar, Scatter } from 'react-chartjs-2'
 
 import { PostprocessSimulation } from '@synthchron/postprocessor/src/postprocess'
+import {
+  exportStringAsFile,
+  transformSimulationLogToXESLog,
+} from '@synthchron/utils'
 import { serialize } from '@synthchron/xes'
 
-import { transformSimulationLogToXESLog } from '../../../utils/simulatorToXESConverter'
 import { TablePreview } from '../../common/TablePreview'
 import { usePersistentStore } from '../../common/persistentStore'
 import { useEditorStore } from '../editorStore/flowStore'
@@ -68,17 +71,6 @@ const options = {
   },
 }
 
-const downloadString = (str: string, filename: string) => {
-  const element = document.createElement('a')
-  const file = new Blob([str], {
-    type: 'text/plain',
-  })
-  element.href = URL.createObjectURL(file)
-  element.download = filename
-  document.body.appendChild(element) // Required for this to work in FireFox
-  element.click()
-}
-
 interface AnalysisPanelProps {
   nextStep: () => void
 }
@@ -109,7 +101,7 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
       <Button
         variant='contained'
         onClick={() => {
-          downloadString(
+          exportStringAsFile(
             serialize(PostProcessedSimulation),
             `trace-${
               (projectId &&
@@ -127,7 +119,7 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
       <Button
         variant='contained'
         onClick={() => {
-          downloadString(
+          exportStringAsFile(
             serialize(PostProcessedSimulation, [
               'This log was generated using the following model and configuration.',
               `Model: ${
@@ -154,7 +146,7 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
       <Button
         variant='contained'
         onClick={() => {
-          downloadString(
+          exportStringAsFile(
             serialize(PostProcessedSimulation, [
               'This log was generated using the following model and configuration.',
               `Model: ${
