@@ -8,13 +8,13 @@ import {
   petriNetEngine,
   simulateWithEngine,
 } from '@synthchron/simulator'
+import { transformSimulationLogToXESLog } from '@synthchron/utils/src/simulatorToXESConverter'
 import { serialize } from '@synthchron/xes'
 
 import { BottomAppBar } from '../components/BottomAppBar'
 import { CustomAppBar } from '../components/CustomAppBar'
 import { TitledCheckedList } from '../components/batch/TitledCheckedList'
 import { usePersistentStore } from '../components/common/persistentStore'
-import { transformSimulationLogToXESLog } from '../utils/simulatorToXESConverter'
 
 export const BatchPage = () => {
   const projects = usePersistentStore((state) => state.projects)

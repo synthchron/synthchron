@@ -7,6 +7,7 @@ import { CollaborationPage } from './pages/CollaborationPage'
 import { EditorPage } from './pages/EditorPage'
 import { MainMenuPage } from './pages/MainMenuPage'
 import { NotFoundPage } from './pages/NotFoundPage'
+import { PostProcessingPage } from './pages/PostProcessingPage'
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
     element: <CollaborationPage />,
   },
   {
+    path: 'postprocessing',
+    element: <PostProcessingPage />,
+  },
+  {
     path: 'batch',
     element: <BatchPage />,
   },
@@ -36,7 +41,7 @@ const router = createBrowserRouter([
     element: <Debug />,
   },
   {
-    path: 'postprocessing',
+    path: 'debug_postprocessing',
     element: <PostProcessing />,
   },
   {
