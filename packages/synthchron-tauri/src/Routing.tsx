@@ -2,12 +2,12 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import { Debug } from './components/Debug'
 import { PostProcessing } from './components/PostProcessing'
+import { BatchPage } from './pages/BatchPage'
 import { CollaborationPage } from './pages/CollaborationPage'
 import { EditorPage } from './pages/EditorPage'
 import { MainMenuPage } from './pages/MainMenuPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { PostProcessingPage } from './pages/PostProcessingPage'
-import { SwarmPage } from './pages/SwarmPage'
 
 const router = createBrowserRouter([
   {
@@ -33,8 +33,8 @@ const router = createBrowserRouter([
     element: <PostProcessingPage />,
   },
   {
-    path: 'swarm',
-    element: <SwarmPage />,
+    path: 'batch',
+    element: <BatchPage />,
   },
   {
     path: 'debug',

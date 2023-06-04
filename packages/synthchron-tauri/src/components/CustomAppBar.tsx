@@ -61,8 +61,8 @@ export const CustomAppBar: React.FC = () => {
       href: '/',
     },
     {
-      name: 'Swarm',
-      href: '/swarm',
+      name: 'Batch',
+      href: '/batch',
     },
     {
       name: 'Post Processing',
