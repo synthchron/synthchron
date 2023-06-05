@@ -41,6 +41,22 @@ export const createModelSlice: StateCreator<EditorState, [], [], ModelSlice> = (
           .map((node) => parseInt(node.id))
           .filter((id) => !isNaN(id))
       ) + 1
+
+    const uniqueLabelNumber =
+      Math.max(
+        0,
+        ...Array.from(nodesMap.values()).map((node) => {
+          const strippedLabel = node.data.label && node.data.label.substring(1)
+          return strippedLabel &&
+            strippedLabel.length > 0 &&
+            !isNaN(parseInt(strippedLabel))
+            ? parseInt(strippedLabel)
+            : 0
+        })
+      ) + 1
+    console.log('test')
+    console.log(newId)
+    console.log(uniqueLabelNumber)
     nodesMap.forEach((node) => {
       if (node.selected) {
         node.selected = false
@@ -51,7 +67,7 @@ export const createModelSlice: StateCreator<EditorState, [], [], ModelSlice> = (
       id: `${newId}`,
       data: {
         ...node.data,
-        label: `${node.data.label} ${newId}`,
+        label: `${node.data.label}${uniqueLabelNumber}`,
       },
     })
   },
