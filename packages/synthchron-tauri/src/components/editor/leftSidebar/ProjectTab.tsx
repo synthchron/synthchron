@@ -35,6 +35,10 @@ export const ProjectTab: React.FC = () => {
 
   const navigate = useNavigate()
 
+  const test = () => {
+    console.log(useEditorStore.getState())
+  }
+
   return (
     <Box sx={{ padding: '10px' }}>
       <Stack spacing={1}>
@@ -79,7 +83,7 @@ export const ProjectTab: React.FC = () => {
                   disabled={projectId === undefined}
                   minRows={3}
                 />
-
+                <Button onClick={test}>Test</Button>
                 {connected && (
                   <Button
                     onClick={() => {
@@ -102,7 +106,7 @@ export const ProjectTab: React.FC = () => {
                       }
                     }}
                   >
-                    Save
+                    Fork
                   </Button>
                 )}
               </>
