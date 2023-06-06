@@ -10,15 +10,15 @@ import {
   simulateWithEngine,
 } from '@synthchron/simulator'
 import { Configuration } from '@synthchron/types'
-import { transformSimulationLogToXESLog } from '@synthchron/utils'
+import { transformSimulationLogToXESLog } from '@synthchron/utils/src/simulatorToXESConverter'
 import { serialize } from '@synthchron/xes'
 
 import { BottomAppBar } from '../components/BottomAppBar'
 import { CustomAppBar } from '../components/CustomAppBar'
+import { TitledCheckedList } from '../components/batch/TitledCheckedList'
 import { usePersistentStore } from '../components/common/persistentStore'
-import { TitledCheckedList } from '../components/swarm/TitledCheckedList'
 
-export const SwarmPage = () => {
+export const BatchPage = () => {
   const projects = usePersistentStore((state) => state.projects)
   const configurations = usePersistentStore((state) => state.configurations)
 
@@ -128,7 +128,7 @@ export const SwarmPage = () => {
             }}
             variant='h4'
           >
-            Swarm Simulation
+            Batch Simulation
           </Typography>
           <Typography
             sx={{
@@ -136,7 +136,7 @@ export const SwarmPage = () => {
               textAlign: 'center',
             }}
           >
-            Start a swarm simulation by choosing multiple projects and multiple
+            Start a batch simulation by choosing multiple projects and multiple
             configurations to run. <br /> Select at least one project and one
             configuration to start.
           </Typography>
@@ -259,7 +259,7 @@ export const SwarmPage = () => {
                 await zip.generateAsync({ type: 'blob' }).then((blob) => {
                   const url = URL.createObjectURL(blob)
                   const a = document.createElement('a')
-                  a.download = `swarm-${new Date()
+                  a.download = `batch-${new Date()
                     .toDateString()
                     .replace(/ /g, '_')}.zip`
                   a.href = url
