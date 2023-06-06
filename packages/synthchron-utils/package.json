@@ -18,8 +18,8 @@
     "pretest": "yarn run build"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.57.1",
-    "@typescript-eslint/parser": "^5.59.5",
+    "@typescript-eslint/eslint-plugin": "^5.59.8",
+    "@typescript-eslint/parser": "^5.59.8",
     "eslint": "^8.37.0",
     "@synthchron/eslint-config": "*",
     "mocha": "^10.1.0",
