@@ -47,26 +47,12 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
   // Note: This is a temporary implementation. There is a
   // bug that adding more than 10 post processing steps will cause a warning.
   const [order, setOrder] = useState<number[]>([])
+  const [sliderValue, setSliderValue] = useState(postprocessing.stepProbability)
 
-  const [localPostprocessing, setLocalPostprocessing] =
-    useState<PostprocessingConfiguration>(postprocessing)
-
+  // Temporary
   useEffect(() => {
-    setLocalPostprocessing(postprocessing)
+    console.log('Postprocessing changed', postprocessing)
   }, [postprocessing])
-
-  const deb = useCallback(
-    debounce(
-      (f: (p: PostprocessingConfiguration) => PostprocessingConfiguration) =>
-        setPostprocessing(f),
-      75
-    ),
-    [postprocessing]
-  )
-
-  useEffect(() => {
-    deb((_) => localPostprocessing)
-  }, [localPostprocessing])
 
   useEffect(() => {
     if (order.length > postprocessing.postProcessingSteps.length) return
@@ -86,6 +72,17 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
     })
   )
 
+  const sliderDebouncedChange = useCallback(
+    debounce((value) => {
+      setPostprocessing((postprocessing: PostprocessingConfiguration) => ({
+        ...postprocessing,
+        stepProbability: value as number,
+        postProcessingSteps: postprocessing.postProcessingSteps,
+      }))
+    }, 75),
+    [setPostprocessing]
+  )
+
   return (
     <Paper sx={{ padding: '16px' }}>
       <Typography variant='h6' gutterBottom>
@@ -97,17 +94,19 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
         </Tooltip>
       </Typography>
       <Typography variant='body2' gutterBottom>
-        Postprocessing probability
+        Noise probability
       </Typography>
       <Slider
-        value={localPostprocessing.stepProbability}
+        value={sliderValue}
         onChange={(event, value) => {
-          setLocalPostprocessing(
-            (postprocessing: PostprocessingConfiguration) => ({
-              stepProbability: value as number,
-              postProcessingSteps: postprocessing.postProcessingSteps,
-            })
-          )
+          setSliderValue(value as number)
+          sliderDebouncedChange(value)
+          // setLocalPostprocessing(
+          //   (postprocessing: PostprocessingConfiguration) => ({
+          //     stepProbability: value as number,
+          //     postProcessingSteps: postprocessing.postProcessingSteps,
+          //   })
+          // )
         }}
         valueLabelDisplay='auto'
         step={0.01}
@@ -124,7 +123,7 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
         onDragEnd={handleDragEnd}
       >
         <SortableContext
-          items={order.slice(0, localPostprocessing.postProcessingSteps.length)}
+          items={order.slice(0, postprocessing.postProcessingSteps.length)}
           strategy={verticalListSortingStrategy}
         >
           {postprocessing.postProcessingSteps.map((step, index) => (
@@ -134,6 +133,7 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
                   id={order[index]}
                   step={step}
                   setStep={(step) => {
+                    // If step is undefined, delete the step
                     if (step === undefined) {
                       setPostprocessing(
                         (postprocessing: PostprocessingConfiguration) => {
@@ -161,6 +161,7 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
                       ])
                       return
                     }
+                    // If step is not undefined, update the step
                     setPostprocessing(
                       (postprocessing: PostprocessingConfiguration) => {
                         const newPostprocessing: PostprocessingConfiguration = {
