@@ -2,9 +2,19 @@ import { useEffect, useState } from 'react'
 
 import { TextField } from '@mui/material'
 
+export enum labelChangeError {
+  noError = '',
+  labelNotUnique = 'Label is not Unique',
+  notJSVariable = 'Label is not an accepted identifier',
+  containsWhiteSpace = 'Label must not contain whitespace',
+}
+
 type LabelPropertyProperties = {
   value: string
-  changeSelectedPlaceLabel: (newLabel: string, oldLabel: string) => boolean
+  changeSelectedPlaceLabel: (
+    newLabel: string,
+    oldLabel: string
+  ) => labelChangeError
 }
 
 export const LabelProperty: React.FC<LabelPropertyProperties> = ({
@@ -17,21 +27,22 @@ export const LabelProperty: React.FC<LabelPropertyProperties> = ({
 
   const onChangeLabel = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    changeSelectedPlaceLabel: (newLabel: string, oldLabel: string) => boolean
+    changeSelectedPlaceLabel: (
+      newLabel: string,
+      oldLabel: string
+    ) => labelChangeError
   ) => {
     const newLabel = event.target.value.trim()
     const JSidentifierRegex =
       /^[$_\p{ID_Start}][$\u200c\u200d\p{ID_Continue}]*/u
     if (JSidentifierRegex.test(newLabel)) {
       const result = changeSelectedPlaceLabel(newLabel, actValue)
-      if (result) {
-        setError('')
+      setError(result)
+      if (result == labelChangeError.noError) {
         setActValue(newLabel)
-      } else {
-        setError('Label is not unique')
       }
     } else {
-      setError('input is not an accepted identifier')
+      setError(labelChangeError.notJSVariable)
     }
 
     setTextValue(event.target.value)
