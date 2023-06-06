@@ -3,11 +3,13 @@ import { useEffect, useRef, useState } from 'react'
 import { Box, Button, LinearProgress, Stack, Typography } from '@mui/material'
 import JSZip from 'jszip'
 
+import { PostprocessSimulation } from '@synthchron/postprocessor/src/postprocess'
 import {
   PetriNetProcessModel,
   petriNetEngine,
   simulateWithEngine,
 } from '@synthchron/simulator'
+import { Configuration } from '@synthchron/types'
 import { transformSimulationLogToXESLog } from '@synthchron/utils/src/simulatorToXESConverter'
 import { serialize } from '@synthchron/xes'
 
@@ -50,16 +52,17 @@ export const BatchPage = () => {
         setCurrentConfig(
           configurations[configIndex].configurationName ?? 'Default'
         )
+        const config: Configuration = {
+          ...configurations[configIndex],
+          randomSeed:
+            configurations[configIndex].randomSeed === undefined
+              ? Math.floor(Math.random() * Math.pow(2, 31)).toString()
+              : configurations[configIndex].randomSeed,
+        }
         const simulator = simulateWithEngine(
           Object.values(projects)[projectIndex]
             .projectModel as PetriNetProcessModel,
-          {
-            ...configurations[configIndex],
-            randomSeed:
-              configurations[configIndex].randomSeed === undefined
-                ? Math.floor(Math.random() * Math.pow(2, 31)).toString()
-                : configurations[configIndex].randomSeed,
-          },
+          config,
           petriNetEngine
         )
         for await (const { progress, simulationLog } of simulator) {
@@ -85,6 +88,7 @@ export const BatchPage = () => {
           // DO not delete this line, it is needed to update the UI - Ali
           await new Promise((resolve) => setTimeout(resolve, 0))
           if (simulationLog == null) continue
+          PostprocessSimulation(simulationLog, config)
           resultFiles.push([
             Object.values(projects)[projectIndex].projectName,
             configurations[configIndex].configurationName ?? '',

@@ -27,19 +27,21 @@ export const transformSimulationLogToXESLog = (
 
 function convertEventToXESEvent(event: Event): XESEvent {
   const attributes = Object.entries(event.meta).map(([key, value]) => {
+    // Does not do anything as of now (.meta is empty)
     return {
       key,
       value: value.toString(),
     }
   })
-  if (event.name !== undefined) {
+
+  if (event.name) {
     attributes.push({
       key: 'Activity',
       value: event.name,
     })
   }
   const xesEvent: XESEvent = {
-    attributes,
+    attributes: attributes,
   }
   return xesEvent
 }
