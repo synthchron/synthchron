@@ -73,6 +73,7 @@ export const SimulationPanel: React.FC<SimulationPanelProps> = ({
       const emptyResult: ResultType = {
         log: { traces: [] },
         statistics: {},
+        simulationLog: result,
       }
       return emptyResult
     }
