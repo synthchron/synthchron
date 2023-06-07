@@ -9,6 +9,7 @@ import {
 import { StateCreator } from 'zustand'
 
 import { GetElementType } from '../processModels/FlowUtil'
+import { labelChangeError } from '../rightSidebar/CustomProperties/PlaceLabelProperty'
 import { EditorState } from './flowStore'
 import { onEdgesChange } from './onEdgesChange'
 import { onNodesChanges } from './onNodesChange'
@@ -20,7 +21,10 @@ const getNodeFromLabel = (nodes: Node[], label: string) => {
 export type FlowSlice = {
   selectedElement: Node | Edge | undefined
   selectElement: (elem: Node | Edge | undefined) => void
-  changeSelectedPlaceLabel: (newLabel: string, oldLabel: string) => boolean
+  changeSelectedPlaceLabel: (
+    newLabel: string,
+    oldLabel: string
+  ) => labelChangeError
   onNodesChange: OnNodesChange
   onEdgesChange: OnEdgesChange
   onConnect: OnConnect
@@ -104,7 +108,10 @@ export const createFlowSlice: StateCreator<EditorState, [], [], FlowSlice> = (
   },
   changeSelectedPlaceLabel: (newLabel: string, oldLabel: string) => {
     if (newLabel === oldLabel) {
-      return true
+      return labelChangeError.noError
+    }
+    if (newLabel.includes(' ')) {
+      return labelChangeError.containsWhiteSpace
     }
 
     const nodesMap = get().yNodesMap
@@ -130,8 +137,8 @@ export const createFlowSlice: StateCreator<EditorState, [], [], FlowSlice> = (
       }
       get().selectElement(newElement)
 
-      return true
+      return labelChangeError.noError
     }
-    return false
+    return labelChangeError.labelNotUnique
   },
 })

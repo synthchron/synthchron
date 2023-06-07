@@ -34,6 +34,7 @@ export const SimulationStatisticsAdapter = (
       ...lastTransitionStats,
       ...terminationStats,
     },
+    simulationLog: simulationLog,
   }
 
   return result
@@ -42,11 +43,8 @@ export const SimulationStatisticsAdapter = (
 const GetBasicStats = (xeslog: XESLog) => {
   const totalTraces = xeslog.traces.length
 
-  // Issue with events.length casues length to be one larger than it should be
-  // This is fixed with the -1
-  // https://user-images.githubusercontent.com/79922317/241557149-910ad5ea-c16d-49ba-9be9-223ec64d33eb.png
   const totalEvents = xeslog.traces.reduce((accumulator, trace) => {
-    return accumulator + trace.events.length - 1
+    return accumulator + trace.events.length
   }, 0)
   const averageEvents = totalEvents / totalTraces
 
@@ -61,7 +59,12 @@ const GetBasicStats = (xeslog: XESLog) => {
 
 const GetLastTransitions = (xeslog: XESLog) => {
   const lastTransitions: string[] = xeslog.traces
-    .map((trace) => trace.events.pop()?.attributes.pop()?.value)
+    .map((trace) => {
+      const lastEvent = trace.events[trace.events.length - 1]
+      const lastAttribute =
+        lastEvent?.attributes[lastEvent.attributes.length - 1]
+      return lastAttribute?.value
+    })
     .filter((xesEvent): xesEvent is string => xesEvent !== undefined)
 
   const transitionByFreq = SumMapSort(lastTransitions)

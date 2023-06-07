@@ -1,5 +1,6 @@
 import { StateCreator } from 'zustand'
 
+import { SimulationLog } from '@synthchron/simulator/src/types/simulationTypes'
 import { Configuration } from '@synthchron/types'
 import { XESLog } from '@synthchron/xes'
 
@@ -10,6 +11,7 @@ export type ResultType = {
   // TODO: To be updated
   log: XESLog
   statistics: object
+  simulationLog: SimulationLog | undefined
 }
 
 export type SimulatorSlice = {
