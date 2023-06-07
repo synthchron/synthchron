@@ -275,6 +275,17 @@ export const PostProcessingPage = () => {
                         postProcessXESFile(traceText, postprocessing),
                         'postProcessedEventLog.xes'
                       )
+                    } else if (uploadedFiles.length === 1) {
+                      const newFileName =
+                        uploadedFiles[0].name.slice(0, -4) +
+                        '_PostProcessed.xes'
+                      exportStringAsFile(
+                        postProcessXESFile(
+                          uploadedFiles[0].content,
+                          postprocessing
+                        ),
+                        newFileName
+                      )
                     } else {
                       const zip = new JSZip()
                       uploadedFiles.forEach((file) => {
