@@ -11,6 +11,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
+import JSZip from 'jszip'
 import Dropzone from 'react-dropzone'
 
 import { postprocess } from '@synthchron/postprocessor'
@@ -60,19 +61,11 @@ export const PostProcessingPage = () => {
   const [errorMessage, setErrorMessage] = useState('')
   const uploadFile = useCallback(
     (acceptedFiles: File[]) => {
-      // The check is done here instead of the dropzone component
-      // in order to display a more specific error message
-      acceptedFiles.forEach((file) => {
-        if (!file.name.endsWith('.xes')) {
-          setErrorMessage('File must be a .xes file')
-          throw file.name + ' was not a .xes file'
-        }
-      })
+      // Error checks are done here instead of the dropzone component
+      // in order to display more specific error messages
 
       acceptedFiles.forEach((file) => {
-        if (
-          !uploadedFiles?.some((loadedFile) => loadedFile.name === file.name)
-        ) {
+        if (file.name.endsWith('.xes')) {
           const reader = new FileReader()
           reader.onload = function () {
             setUploadedFiles((prevUploadedFiles) => {
@@ -86,15 +79,36 @@ export const PostProcessingPage = () => {
             })
           }
           reader.readAsText(file)
+        } else if (file.name.endsWith('.zip')) {
+          const zip = new JSZip()
+          zip.loadAsync(file).then(async function (zippedFiles) {
+            const unzippedFiles = await Promise.all(
+              Object.keys(zippedFiles.files).map(async function (zippedFile) {
+                const fileData = await zippedFiles.files[zippedFile].async(
+                  'string'
+                )
+                return {
+                  name: zippedFile,
+                  content: fileData,
+                }
+              })
+            )
+            setUploadedFiles((prevUploadedFiles) => {
+              return prevUploadedFiles
+                ? [...prevUploadedFiles, ...unzippedFiles]
+                : [...unzippedFiles]
+            })
+          })
+        } else {
+          setErrorMessage('Files must be either .xes or .zip files')
+          throw file.name + ' was neither a .xes or .zip file'
         }
       })
-      console.log(uploadedFiles) //REMOVE
     },
     [uploadedFiles]
   )
 
   const reset = () => {
-    console.log(uploadedFiles) //REMOVE
     setUploadedFiles(null)
     setTraceText('')
     setErrorMessage('')
@@ -194,28 +208,53 @@ export const PostProcessingPage = () => {
                       </div>
                     )}
                   </Dropzone>
-                  <Box textAlign='center' sx={{ marginTop: '1em' }}>
-                    <Button variant='contained' color='primary' onClick={reset}>
-                      Reset
-                    </Button>
-                  </Box>
-                  {uploadedFiles !== null && (
-                    <Box sx={{ backgroundColor: 'lightgreen', padding: '5px' }}>
-                      <Typography variant='body1'>
-                        Successfully uploaded file: {uploadedFiles[0].name}{' '}
-                        {/*FIX*/}
-                      </Typography>
-                    </Box>
-                  )}
-                  {errorMessage != '' && (
-                    <Typography variant='body1'>
-                      <Box sx={{ backgroundColor: 'red', padding: '5px' }}>
-                        {errorMessage}
-                      </Box>
-                    </Typography>
-                  )}
                 </Box>
               </Box>
+            </Paper>
+            <Paper sx={{ padding: '1em' }}>
+              <Box textAlign='center' sx={{ marginTop: '1em' }}>
+                <Button variant='contained' color='primary' onClick={reset}>
+                  Reset
+                </Button>
+              </Box>
+              {uploadedFiles !== null && (
+                <>
+                  <Typography variant='h6'>Uploaded files:</Typography>
+                  <Box sx={{ padding: '5px' }}>
+                    {uploadedFiles.map((file, index) => (
+                      <Button
+                        key={file.name + index}
+                        sx={{
+                          marginTop: '8px',
+                          padding: '8px',
+                          alignItems: 'center',
+                          height: '32px',
+                          borderRadius: '10px',
+                        }}
+                        variant='contained'
+                        color='success'
+                        fullWidth
+                        onClick={() =>
+                          setUploadedFiles(
+                            uploadedFiles.filter(
+                              (prevfile) => file.name !== prevfile.name
+                            )
+                          )
+                        }
+                      >
+                        {file.name}
+                      </Button>
+                    ))}
+                  </Box>
+                </>
+              )}
+              {errorMessage != '' && (
+                <Typography variant='body1'>
+                  <Box sx={{ backgroundColor: 'red', padding: '5px' }}>
+                    {errorMessage}
+                  </Box>
+                </Typography>
+              )}
             </Paper>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -230,15 +269,36 @@ export const PostProcessingPage = () => {
                   variant='contained'
                   color='primary'
                   fullWidth
-                  onClick={() => {
-                    const trace =
-                      uploadedFiles !== null
-                        ? uploadedFiles[0].content //FIX
-                        : traceText
-                    exportStringAsFile(
-                      postProcessXESFile(trace, postprocessing),
-                      'postProcessedEventLog.xes'
-                    )
+                  onClick={async () => {
+                    if (uploadedFiles === null) {
+                      exportStringAsFile(
+                        postProcessXESFile(traceText, postprocessing),
+                        'postProcessedEventLog.xes'
+                      )
+                    } else {
+                      const zip = new JSZip()
+                      uploadedFiles.forEach((file) => {
+                        const updatedContent = postProcessXESFile(
+                          file.content,
+                          postprocessing
+                        )
+                        const newFileName =
+                          file.name.slice(0, -4) + '_PostProcessed.xes'
+                        zip.file(newFileName, updatedContent, {
+                          binary: false,
+                        })
+                      })
+                      await zip.generateAsync({ type: 'blob' }).then((blob) => {
+                        const url = URL.createObjectURL(blob)
+                        const a = document.createElement('a')
+                        a.download = `Post-Processed-${new Date()
+                          .toDateString()
+                          .replace(/ /g, '_')}.zip`
+                        a.href = url
+                        a.click()
+                        URL.revokeObjectURL(url)
+                      })
+                    }
                   }}
                   disabled={traceText === '' && uploadedFiles === null}
                 >
