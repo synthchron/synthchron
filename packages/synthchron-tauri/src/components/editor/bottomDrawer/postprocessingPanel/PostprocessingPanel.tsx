@@ -51,7 +51,7 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
 
   // Temporary
   useEffect(() => {
-    console.log('Postprocessing changed', postprocessing)
+    setSliderValue(postprocessing.stepProbability)
   }, [postprocessing])
 
   useEffect(() => {
@@ -101,12 +101,6 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
         onChange={(event, value) => {
           setSliderValue(value as number)
           sliderDebouncedChange(value)
-          // setLocalPostprocessing(
-          //   (postprocessing: PostprocessingConfiguration) => ({
-          //     stepProbability: value as number,
-          //     postProcessingSteps: postprocessing.postProcessingSteps,
-          //   })
-          // )
         }}
         valueLabelDisplay='auto'
         step={0.01}
