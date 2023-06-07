@@ -163,7 +163,11 @@ export const SidebarsWrapper = () => {
               size='small'
               aria-label='add'
               variant='extended'
+              color='primary'
               sx={{
+                ':hover': {
+                  bgcolor: 'gray',
+                },
                 position: 'absolute',
                 bottom: '8px',
                 right: '50%',
