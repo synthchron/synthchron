@@ -73,7 +73,7 @@ export const PostProcessingPage = () => {
                 name: file.name,
                 content: reader.result as string,
               }
-              return prevUploadedFiles
+              return prevUploadedFiles !== null
                 ? [...prevUploadedFiles, newUploadedFile]
                 : [newUploadedFile]
             })
@@ -82,26 +82,27 @@ export const PostProcessingPage = () => {
         } else if (file.name.endsWith('.zip')) {
           const zip = new JSZip()
           zip.loadAsync(file).then(async function (zippedFiles) {
-            const unzippedFiles = await Promise.all(
-              Object.keys(zippedFiles.files).map(async function (zippedFile) {
+            const unzippedFiles: UploadedFile[] = []
+            for (const zippedFile of Object.keys(zippedFiles.files)) {
+              if (zippedFile.endsWith('.xes')) {
                 const fileData = await zippedFiles.files[zippedFile].async(
                   'string'
                 )
-                return {
-                  name: zippedFile,
-                  content: fileData,
-                }
-              })
-            )
+                unzippedFiles.push({ name: zippedFile, content: fileData })
+              } else {
+                setErrorMessage('Files must be either .xes or .zip files')
+                console.warn(zippedFile + ' was neither a .xes or .zip file')
+              }
+            }
             setUploadedFiles((prevUploadedFiles) => {
-              return prevUploadedFiles
+              return prevUploadedFiles !== null
                 ? [...prevUploadedFiles, ...unzippedFiles]
                 : [...unzippedFiles]
             })
           })
         } else {
           setErrorMessage('Files must be either .xes or .zip files')
-          throw file.name + ' was neither a .xes or .zip file'
+          console.warn(file.name + ' was neither a .xes or .zip file')
         }
       })
     },
@@ -142,9 +143,9 @@ export const PostProcessingPage = () => {
                   </Typography>
                   <Tooltip
                     title={
-                      uploadedFiles !== null
-                        ? 'Disabled while there is an uploaded file'
-                        : ''
+                      uploadedFiles === null || uploadedFiles.length === 0
+                        ? ''
+                        : 'Disabled while there is an uploaded file'
                     }
                     arrow
                     placement='left'
@@ -163,7 +164,9 @@ export const PostProcessingPage = () => {
                       onChange={(event) => {
                         setTraceText(event.target.value)
                       }}
-                      disabled={uploadedFiles !== null}
+                      disabled={
+                        !(uploadedFiles === null || uploadedFiles.length === 0)
+                      }
                     />
                   </Tooltip>
                 </Box>
@@ -217,7 +220,7 @@ export const PostProcessingPage = () => {
                   Reset
                 </Button>
               </Box>
-              {uploadedFiles !== null && (
+              {!(uploadedFiles === null || uploadedFiles.length === 0) && (
                 <>
                   <Typography variant='h6'>Uploaded files:</Typography>
                   <Box sx={{ padding: '5px' }}>
@@ -228,7 +231,6 @@ export const PostProcessingPage = () => {
                           marginTop: '8px',
                           padding: '8px',
                           alignItems: 'center',
-                          height: '32px',
                           borderRadius: '10px',
                         }}
                         variant='contained'
