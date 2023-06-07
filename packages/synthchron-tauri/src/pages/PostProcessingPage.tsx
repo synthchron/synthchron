@@ -272,7 +272,7 @@ export const PostProcessingPage = () => {
                   color='primary'
                   fullWidth
                   onClick={async () => {
-                    if (uploadedFiles === null) {
+                    if (uploadedFiles === null || uploadedFiles.length === 0) {
                       exportStringAsFile(
                         postProcessXESFile(traceText, postprocessing),
                         'postProcessedEventLog.xes'
