@@ -1,51 +1,65 @@
 import seedrandom from 'seedrandom'
 
-import { Trace } from '@synthchron/simulator'
-import { Configuration, PostprocessingStepType } from '@synthchron/types'
+import { SimulationLog, Trace } from '@synthchron/simulator'
+import {
+  Configuration,
+  PostprocessingConfiguration,
+  PostprocessingStepType,
+} from '@synthchron/types'
 
 import { insertDuplicate } from './insert'
 
-export const postprocess = (
-  traces: Trace[],
+export const PostprocessSimulation = (
+  simulation: SimulationLog,
   config: Configuration
-): Trace[] => {
-  const postProcessingConfiguration = config.postprocessing
-  const postProcessingSteps = postProcessingConfiguration.postProcessingSteps
-  const randomGenerator = seedrandom(config.randomSeed)
-  traces.forEach((trace) => {
-    // using for loop, to get the correct index to identify the event
-    for (let i = 0; i < trace.events.length; i++) {
-      const random = randomGenerator()
-      if (random < postProcessingConfiguration.stepProbability) {
-        const postProcessingStep = weightedRandom<PostprocessingStepType>(
-          (i != 0
-            ? postProcessingSteps
-            : postProcessingSteps.filter(
-                (step) => step.type !== PostprocessingStepType.SwapStep
-              )
-          ).map((step) => [step.type, step.weight]),
-          randomGenerator
-        )
+) => {
+  const postprocessedTraces = simulation.simulationResults.map((simres) =>
+    postprocess(simres.trace, config.postprocessing, config.randomSeed || '')
+  )
+  simulation.simulationResults.forEach(
+    (value, index) => (value.trace = postprocessedTraces[index])
+  )
+  return simulation
+}
 
-        switch (postProcessingStep) {
-          case PostprocessingStepType.DeletionStep:
-            trace = performDeletion(trace, i)
-            i -= 1
-            break
-          case PostprocessingStepType.SwapStep:
-            trace = performSwap(trace, i)
-            i += 1
-            break
-          case PostprocessingStepType.InsertionStep:
-            trace = performInsertion(trace, i)
-            i += 1
-            break
-        }
+export const postprocess = (
+  trace: Trace,
+  postProcessingConfiguration: PostprocessingConfiguration,
+  randomSeed: string
+): Trace => {
+  const postProcessingSteps = postProcessingConfiguration.postProcessingSteps
+  const randomGenerator = seedrandom(randomSeed)
+  for (let i = 0; i < trace.events.length; i++) {
+    const random = randomGenerator()
+    if (random < postProcessingConfiguration.stepProbability) {
+      const postProcessingStep = weightedRandom<PostprocessingStepType>(
+        (i != 0
+          ? postProcessingSteps
+          : postProcessingSteps.filter(
+              (step) => step.type !== PostprocessingStepType.SwapStep
+            )
+        ).map((step) => [step.type, step.weight]),
+        randomGenerator
+      )
+
+      switch (postProcessingStep) {
+        case PostprocessingStepType.DeletionStep:
+          trace = performDeletion(trace, i)
+          i -= 1
+          break
+        case PostprocessingStepType.SwapStep:
+          trace = performSwap(trace, i)
+          i += 1
+          break
+        case PostprocessingStepType.InsertionStep:
+          trace = performInsertion(trace, i)
+          i += 1
+          break
       }
     }
-  })
+  }
 
-  return traces
+  return trace
 }
 
 const performDeletion = (trace: Trace, event_id: number): Trace => {

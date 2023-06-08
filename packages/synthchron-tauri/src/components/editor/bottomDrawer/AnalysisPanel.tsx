@@ -12,6 +12,11 @@ import {
 } from 'chart.js/auto'
 import { Bar, Doughnut, Line, Radar, Scatter } from 'react-chartjs-2'
 
+import { PostprocessSimulation } from '@synthchron/postprocessor/src/postprocess'
+import {
+  exportStringAsFile,
+  transformSimulationLogToXESLog,
+} from '@synthchron/utils'
 import { serialize } from '@synthchron/xes'
 
 import { TablePreview } from '../../common/TablePreview'
@@ -66,17 +71,6 @@ const options = {
   },
 }
 
-const downloadString = (str: string, filename: string) => {
-  const element = document.createElement('a')
-  const file = new Blob([str], {
-    type: 'text/plain',
-  })
-  element.href = URL.createObjectURL(file)
-  element.download = filename
-  document.body.appendChild(element) // Required for this to work in FireFox
-  element.click()
-}
-
 interface AnalysisPanelProps {
   nextStep: () => void
 }
@@ -91,6 +85,11 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
     return <>Hello</>
   }
 
+  const PostProcessedSimulation = result.simulationLog
+    ? transformSimulationLogToXESLog(
+        PostprocessSimulation(result.simulationLog, configuration)
+      )
+    : result.log
   const exportButtons = (
     <Stack
       direction={'row'}
@@ -102,8 +101,8 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
       <Button
         variant='contained'
         onClick={() => {
-          downloadString(
-            serialize(result.log),
+          exportStringAsFile(
+            serialize(PostProcessedSimulation),
             `trace-${
               (projectId &&
                 projectId in projects &&
@@ -120,8 +119,8 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
       <Button
         variant='contained'
         onClick={() => {
-          downloadString(
-            serialize(result.log, [
+          exportStringAsFile(
+            serialize(PostProcessedSimulation, [
               'This log was generated using the following model and configuration.',
               `Model: ${
                 (projectId &&
@@ -147,8 +146,8 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
       <Button
         variant='contained'
         onClick={() => {
-          downloadString(
-            serialize(result.log, [
+          exportStringAsFile(
+            serialize(PostProcessedSimulation, [
               'This log was generated using the following model and configuration.',
               `Model: ${
                 (projectId &&

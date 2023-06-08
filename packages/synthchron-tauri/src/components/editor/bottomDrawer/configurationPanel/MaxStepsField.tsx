@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import HelpIcon from '@mui/icons-material/Help'
 import {
   IconButton,
@@ -21,6 +23,7 @@ export const MaxStepsField: React.FC<MaxStepsFieldProps> = ({
   value,
   setValue,
 }) => {
+  const [textFieldValue, setTextFieldValue] = useState(value.toString())
   return (
     <Paper
       sx={{
@@ -38,8 +41,14 @@ export const MaxStepsField: React.FC<MaxStepsFieldProps> = ({
         </Typography>
         <div style={{ flexGrow: 1 }} />
         <TextField
-          value={value}
-          onChange={(event) => setValue(Number(event.target.value))}
+          value={textFieldValue}
+          onChange={(event) => {
+            const newVal = Number(event.target.value)
+            if (Number(newVal) >= 0) {
+              setValue(newVal)
+              setTextFieldValue(newVal.toString())
+            }
+          }}
           size='small'
           variant='outlined'
           label='Traces'

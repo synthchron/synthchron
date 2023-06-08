@@ -3,20 +3,22 @@ import { useEffect, useRef, useState } from 'react'
 import { Box, Button, LinearProgress, Stack, Typography } from '@mui/material'
 import JSZip from 'jszip'
 
+import { PostprocessSimulation } from '@synthchron/postprocessor/src/postprocess'
 import {
   PetriNetProcessModel,
   petriNetEngine,
   simulateWithEngine,
 } from '@synthchron/simulator'
+import { Configuration } from '@synthchron/types'
+import { transformSimulationLogToXESLog } from '@synthchron/utils/src/simulatorToXESConverter'
 import { serialize } from '@synthchron/xes'
 
 import { BottomAppBar } from '../components/BottomAppBar'
 import { CustomAppBar } from '../components/CustomAppBar'
+import { TitledCheckedList } from '../components/batch/TitledCheckedList'
 import { usePersistentStore } from '../components/common/persistentStore'
-import { TitledCheckedList } from '../components/swarm/TitledCheckedList'
-import { transformSimulationLogToXESLog } from '../utils/simulatorToXESConverter'
 
-export const SwarmPage = () => {
+export const BatchPage = () => {
   const projects = usePersistentStore((state) => state.projects)
   const configurations = usePersistentStore((state) => state.configurations)
 
@@ -50,16 +52,17 @@ export const SwarmPage = () => {
         setCurrentConfig(
           configurations[configIndex].configurationName ?? 'Default'
         )
+        const config: Configuration = {
+          ...configurations[configIndex],
+          randomSeed:
+            configurations[configIndex].randomSeed === undefined
+              ? Math.floor(Math.random() * Math.pow(2, 31)).toString()
+              : configurations[configIndex].randomSeed,
+        }
         const simulator = simulateWithEngine(
           Object.values(projects)[projectIndex]
             .projectModel as PetriNetProcessModel,
-          {
-            ...configurations[configIndex],
-            randomSeed:
-              configurations[configIndex].randomSeed === undefined
-                ? Math.floor(Math.random() * Math.pow(2, 31)).toString()
-                : configurations[configIndex].randomSeed,
-          },
+          config,
           petriNetEngine
         )
         for await (const { progress, simulationLog } of simulator) {
@@ -85,6 +88,7 @@ export const SwarmPage = () => {
           // DO not delete this line, it is needed to update the UI - Ali
           await new Promise((resolve) => setTimeout(resolve, 0))
           if (simulationLog == null) continue
+          PostprocessSimulation(simulationLog, config)
           resultFiles.push([
             Object.values(projects)[projectIndex].projectName,
             configurations[configIndex].configurationName ?? '',
@@ -124,7 +128,7 @@ export const SwarmPage = () => {
             }}
             variant='h4'
           >
-            Swarm Simulation
+            Batch Simulation
           </Typography>
           <Typography
             sx={{
@@ -132,7 +136,7 @@ export const SwarmPage = () => {
               textAlign: 'center',
             }}
           >
-            Start a swarm simulation by choosing multiple projects and multiple
+            Start a batch simulation by choosing multiple projects and multiple
             configurations to run. <br /> Select at least one project and one
             configuration to start.
           </Typography>
@@ -232,7 +236,10 @@ export const SwarmPage = () => {
             variant='contained'
             fullWidth
             disabled={
-              checkedProjects.length === 0 || checkedConfigs.length === 0
+              checkedProjects.length === 0 ||
+              checkedConfigs.length === 0 ||
+              Object.values(projects).length === 0 ||
+              configurations.length === 0
             }
             onClick={() => {
               setInSimulation(true)
@@ -252,7 +259,7 @@ export const SwarmPage = () => {
                 await zip.generateAsync({ type: 'blob' }).then((blob) => {
                   const url = URL.createObjectURL(blob)
                   const a = document.createElement('a')
-                  a.download = `swarm-${new Date()
+                  a.download = `batch-${new Date()
                     .toDateString()
                     .replace(/ /g, '_')}.zip`
                   a.href = url
@@ -266,7 +273,18 @@ export const SwarmPage = () => {
               })
             }}
           >
-            Start {checkedProjects.length * checkedConfigs.length} simulations
+            {Object.values(projects).length === 0 ||
+            configurations.length === 0 ? (
+              <>
+                You need at least one project and one configuration to run
+                simulations
+              </>
+            ) : (
+              <>
+                Start {checkedProjects.length * checkedConfigs.length}{' '}
+                simulations
+              </>
+            )}
           </Button>
         )}
       </Stack>
