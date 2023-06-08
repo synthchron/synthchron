@@ -14,7 +14,7 @@ import { ObjectForm } from './configurationPanel/ObjectForm'
 import { PercentSlider } from './configurationPanel/PercentSlider'
 import { RandomSeedSelector } from './configurationPanel/RandomSeedSelector'
 import { UniqueTracesSlide } from './configurationPanel/UniqueTracesSlider'
-import PostprocessingPanel from './postprocessingPanel/PostprocessingPanel'
+import { PostprocessingPanel } from './postprocessingPanel/PostprocessingPanel'
 
 type ConfigurationFormProps = {
   config: Configuration
@@ -121,6 +121,7 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
       />
 
       <PostprocessingPanel
+        name={config.configurationName ?? ''}
         postprocessing={postprocessing}
         setPostprocessing={setPostprocessing}
       />
