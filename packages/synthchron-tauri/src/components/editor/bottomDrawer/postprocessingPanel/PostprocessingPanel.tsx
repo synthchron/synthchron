@@ -1,24 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
-import {
-  DndContext,
-  DragEndEvent,
-  KeyboardSensor,
-  PointerSensor,
-  closestCenter,
-  useSensor,
-  useSensors,
-} from '@dnd-kit/core'
-import {
-  SortableContext,
-  arrayMove,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable'
-import AddIcon from '@mui/icons-material/Add'
 import HelpIcon from '@mui/icons-material/Help'
-// Temporary
-import { IconButton, Paper, Slider, Tooltip, Typography } from '@mui/material'
+import {
+  Checkbox,
+  Collapse,
+  Divider,
+  IconButton,
+  Paper,
+  Slider,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@mui/material'
 import { debounce } from 'lodash'
 
 import {
@@ -26,51 +19,60 @@ import {
   PostprocessingStepType,
 } from '@synthchron/types'
 
-import { SortableItem } from './SortableItem'
+import { PostprocessingCheckboxLine } from './PostprocessingCheckboxLine'
 
 const postprocessingText = `Apply postprocessing steps to the generated traces to add noise. 
-The weight chooses which postprocessing step should be applied. 
-Currently, only one type of noise can be applied to each event.`
+The noise probability controls whether noise should be applied to an event.
+Use the advanced settings to control the relative weights of each noise type.`
+
+const noiseWeightText = `Choose relative noise type weights. A higher weight means that the noise 
+type will be more likely. Twice the weight means twice as likely. All weights sum to 1.`
+
+const POSTPROCESSING_STEPS = [
+  PostprocessingStepType.InsertionStep,
+  PostprocessingStepType.DeletionStep,
+  PostprocessingStepType.SwapStep,
+]
 
 interface PostprocessingPanelProps {
-  // Define props here
+  name?: string
   postprocessing: PostprocessingConfiguration
   setPostprocessing: (
     f: (p: PostprocessingConfiguration) => PostprocessingConfiguration
   ) => void
 }
 
-const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
+export const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
+  name,
   postprocessing,
   setPostprocessing,
 }) => {
-  // Note: This is a temporary implementation. There is a
-  // bug that adding more than 10 post processing steps will cause a warning.
-  const [order, setOrder] = useState<number[]>([])
   const [sliderValue, setSliderValue] = useState(postprocessing.stepProbability)
+
+  const [weightValues, setWeightValues] = useState<number[]>(
+    POSTPROCESSING_STEPS.map(() => 1 / POSTPROCESSING_STEPS.length)
+  )
+
+  const [open, setOpen] = useState(false)
 
   // Temporary
   useEffect(() => {
     setSliderValue(postprocessing.stepProbability)
-  }, [postprocessing])
-
-  useEffect(() => {
-    if (order.length > postprocessing.postProcessingSteps.length) return
-    setOrder([
-      ...order, // Add new elements
-      ...Array.from(
-        { length: postprocessing.postProcessingSteps.length - order.length },
-        (_, i) => 1 + i + order.length
-      ), // Fill with new elements
-    ])
-  }, [postprocessing])
-
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  )
+    if (
+      postprocessing.postProcessingSteps.length !== POSTPROCESSING_STEPS.length
+    )
+      setPostprocessing((postprocessing: PostprocessingConfiguration) => ({
+        ...postprocessing,
+        postProcessingSteps: POSTPROCESSING_STEPS.map((step) => ({
+          type: step,
+          weight: 1 / POSTPROCESSING_STEPS.length,
+        })),
+      }))
+    else
+      setWeightValues(
+        postprocessing.postProcessingSteps.map((step) => step.weight)
+      )
+  }, [name])
 
   const sliderDebouncedChange = useCallback(
     debounce((value) => {
@@ -81,6 +83,41 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
       }))
     }, 75),
     [setPostprocessing]
+  )
+
+  const weightDebouncedChange = useCallback(
+    debounce((value: number[]) => {
+      setPostprocessing((postprocessing: PostprocessingConfiguration) => ({
+        ...postprocessing,
+        postProcessingSteps: postprocessing.postProcessingSteps.map(
+          (step, index) => ({
+            ...step,
+            weight: value[index],
+          })
+        ),
+      }))
+    }, 75),
+    [setPostprocessing]
+  )
+
+  const updateWeight = useCallback(
+    (index: number, value: number) => {
+      const oldSum = weightValues.reduce((a, b) => a + b, 0)
+      const oldFractionOfOthers = (oldSum - weightValues[index]) / oldSum
+      const newFractionOfOthers = 1 - value
+      const newWeightValues = weightValues.map((weight, i) =>
+        i === index
+          ? value
+          : oldFractionOfOthers <= 0
+          ? Number((newFractionOfOthers / (weightValues.length - 1)).toFixed(2))
+          : Number(
+              ((weight / oldFractionOfOthers) * newFractionOfOthers).toFixed(2)
+            )
+      )
+      setWeightValues(newWeightValues)
+      weightDebouncedChange(newWeightValues)
+    },
+    [weightValues, weightDebouncedChange]
   )
 
   return (
@@ -97,6 +134,10 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
         Noise probability
       </Typography>
       <Slider
+        sx={{
+          // add space left and right
+          width: 'calc(100% - 16px)',
+        }}
         value={sliderValue}
         onChange={(event, value) => {
           setSliderValue(value as number)
@@ -107,140 +148,55 @@ const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
         min={0}
         max={1}
         marks={[
-          { value: 0, label: '0' },
-          { value: 1, label: '1' },
+          { value: 0, label: '0%' },
+          { value: 1, label: '100%' },
         ]}
       />
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
+      <Divider
+        sx={{
+          marginTop: '16px',
+          marginBottom: '16px',
+        }}
+      />
+
+      <Stack
+        direction='row'
+        sx={{
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
       >
-        <SortableContext
-          items={order.slice(0, postprocessing.postProcessingSteps.length)}
-          strategy={verticalListSortingStrategy}
-        >
-          {postprocessing.postProcessingSteps.map((step, index) => (
-            <div key={order[index]}>
-              {order[index] !== undefined && (
-                <SortableItem
-                  id={order[index]}
-                  step={step}
-                  setStep={(step) => {
-                    // If step is undefined, delete the step
-                    if (step === undefined) {
-                      setPostprocessing(
-                        (postprocessing: PostprocessingConfiguration) => {
-                          const newPostprocessing: PostprocessingConfiguration =
-                            {
-                              postProcessingSteps: [
-                                ...postprocessing.postProcessingSteps.slice(
-                                  0,
-                                  index
-                                ),
-                                ...postprocessing.postProcessingSteps.slice(
-                                  index + 1
-                                ),
-                              ],
-                              stepProbability: postprocessing.stepProbability,
-                            }
-
-                          return newPostprocessing
-                        }
-                      )
-                      setOrder((order) => [
-                        ...order.slice(0, index),
-                        ...order.slice(index + 1),
-                        order[index],
-                      ])
-                      return
-                    }
-                    // If step is not undefined, update the step
-                    setPostprocessing(
-                      (postprocessing: PostprocessingConfiguration) => {
-                        const newPostprocessing: PostprocessingConfiguration = {
-                          postProcessingSteps: [
-                            ...postprocessing.postProcessingSteps.slice(
-                              0,
-                              index
-                            ),
-                            step,
-                            ...postprocessing.postProcessingSteps.slice(
-                              index + 1
-                            ),
-                          ],
-                          stepProbability: postprocessing.stepProbability,
-                        }
-
-                        return newPostprocessing
-                      }
-                    )
-                  }}
-                />
-              )}
-            </div>
-          ))}
-        </SortableContext>
-      </DndContext>
-      <Tooltip title='Add new postprocessing step'>
-        <Paper
-          style={{
-            backgroundColor: 'lightgrey',
-            width: '100%',
-            alignItems: 'center',
-            display: 'flex',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            height: '2rem',
-          }}
-          onClick={() => {
-            setPostprocessing((postprocessing: PostprocessingConfiguration) => {
-              const newPostprocessing: PostprocessingConfiguration = {
-                postProcessingSteps: [
-                  ...postprocessing.postProcessingSteps,
-                  {
-                    type:
-                      Math.random() < 0.33
-                        ? PostprocessingStepType.DeletionStep
-                        : Math.random() < 0.5
-                        ? PostprocessingStepType.InsertionStep
-                        : PostprocessingStepType.SwapStep,
-                    weight: 1,
-                  },
-                ],
-                stepProbability: postprocessing.stepProbability,
-              }
-
-              return newPostprocessing
-            })
-          }}
-        >
-          <AddIcon />
-        </Paper>
-      </Tooltip>
+        <Typography variant='body2' gutterBottom>
+          Show Advanced Settings
+        </Typography>
+        <Checkbox checked={open} onChange={() => setOpen(!open)} />
+      </Stack>
+      <Divider
+        sx={{
+          marginTop: '16px',
+          marginBottom: '16px',
+        }}
+      />
+      <Collapse in={open}>
+        <Typography variant='body2' gutterBottom>
+          Noise weights
+          <Tooltip title={noiseWeightText} placement='right'>
+            <IconButton>
+              <HelpIcon fontSize='small' />
+            </IconButton>
+          </Tooltip>
+        </Typography>
+        {POSTPROCESSING_STEPS.map((step, index) => (
+          <PostprocessingCheckboxLine
+            key={step}
+            label={step}
+            value={weightValues[index]}
+            setValue={(value) => {
+              updateWeight(index, value)
+            }}
+          />
+        ))}
+      </Collapse>
     </Paper>
   )
-
-  function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event
-
-    if (active == null || over == null) return
-
-    if (active.id === over.id) return
-
-    const oldIndex = order.indexOf(active.id as number)
-    const newIndex = order.indexOf(over.id as number)
-
-    setPostprocessing((postprocessing: PostprocessingConfiguration) => ({
-      postProcessingSteps: arrayMove(
-        postprocessing.postProcessingSteps,
-        oldIndex,
-        newIndex
-      ),
-      stepProbability: postprocessing.stepProbability,
-    }))
-    setOrder((order) => arrayMove(order, oldIndex, newIndex))
-  }
 }
-
-export default PostprocessingPanel

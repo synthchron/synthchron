@@ -25,7 +25,7 @@ import {
 import { deserialize, serialize } from '@synthchron/xes'
 
 import { CustomAppBar } from '../components/CustomAppBar'
-import PostprocessingPanel from '../components/editor/bottomDrawer/postprocessingPanel/PostprocessingPanel'
+import { PostprocessingPanel } from '../components/editor/bottomDrawer/postprocessingPanel/PostprocessingPanel'
 
 const defaultPostprocessing: PostprocessingConfiguration = {
   stepProbability: 0.1,
