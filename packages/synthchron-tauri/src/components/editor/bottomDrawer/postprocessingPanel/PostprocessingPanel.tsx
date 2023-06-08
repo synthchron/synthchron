@@ -22,7 +22,7 @@ import {
 import { PostprocessingCheckboxLine } from './PostprocessingCheckboxLine'
 
 const postprocessingText = `Apply postprocessing steps to the generated traces to add noise. 
-The noise probability controls how whether noise should be applied to an event.
+The noise probability controls whether noise should be applied to an event.
 Use the advanced settings to control the relative weights of each noise type.`
 
 const noiseWeightText = `Choose relative noise type weights. A higher weight means that the noise 
@@ -103,15 +103,15 @@ export const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
   const updateWeight = useCallback(
     (index: number, value: number) => {
       const oldSum = weightValues.reduce((a, b) => a + b, 0)
-      const oldFactionOfOthers = (oldSum - weightValues[index]) / oldSum
+      const oldFractionOfOthers = (oldSum - weightValues[index]) / oldSum
       const newFractionOfOthers = 1 - value
       const newWeightValues = weightValues.map((weight, i) =>
         i === index
           ? value
-          : oldFactionOfOthers <= 0
+          : oldFractionOfOthers <= 0
           ? Number((newFractionOfOthers / (weightValues.length - 1)).toFixed(2))
           : Number(
-              ((weight / oldFactionOfOthers) * newFractionOfOthers).toFixed(2)
+              ((weight / oldFractionOfOthers) * newFractionOfOthers).toFixed(2)
             )
       )
       setWeightValues(newWeightValues)
