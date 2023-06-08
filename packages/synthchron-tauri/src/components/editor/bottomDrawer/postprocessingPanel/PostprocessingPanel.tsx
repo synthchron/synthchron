@@ -24,8 +24,11 @@ import {
 import { PostprocessingCheckboxLine } from './PostprocessingCheckboxLine'
 
 const postprocessingText = `Apply postprocessing steps to the generated traces to add noise. 
-The weight chooses which postprocessing step should be applied. 
-Currently, only one type of noise can be applied to each event.`
+The noise probability controls how whether noise should be applied to an event.
+Use the advanced settings to control the relative weights of each noise type.`
+
+const noiseWeightText = `Choose relative noise type weights. A higher weight means that the noise 
+type will be more likely. Twice the weight means twice as likely. All weights sum to 1.`
 
 const POSTPROCESSING_STEPS = [
   PostprocessingStepType.InsertionStep,
@@ -179,6 +182,11 @@ export const PostprocessingPanel: React.FC<PostprocessingPanelProps> = ({
       <Collapse in={open}>
         <Typography variant='body2' gutterBottom>
           Noise weights
+          <Tooltip title={noiseWeightText} placement='right'>
+            <IconButton>
+              <HelpIcon fontSize='small' />
+            </IconButton>
+          </Tooltip>
         </Typography>
         {POSTPROCESSING_STEPS.map((step, index) => (
           <PostprocessingCheckboxLine
