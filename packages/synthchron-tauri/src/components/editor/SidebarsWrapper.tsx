@@ -2,7 +2,7 @@ import React from 'react'
 import { useCallback, useRef, useState } from 'react'
 
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow'
-import { Box, Fab } from '@mui/material'
+import { Box, Fab, Typography } from '@mui/material'
 import { Allotment, AllotmentHandle, LayoutPriority } from 'allotment'
 import { ReactFlowInstance } from 'reactflow'
 import { shallow } from 'zustand/shallow'
@@ -162,7 +162,12 @@ export const SidebarsWrapper = () => {
             <Fab
               size='small'
               aria-label='add'
+              variant='extended'
+              color='primary'
               sx={{
+                ':hover': {
+                  bgcolor: 'gray',
+                },
                 position: 'absolute',
                 bottom: '8px',
                 right: '50%',
@@ -172,6 +177,7 @@ export const SidebarsWrapper = () => {
               }}
             >
               <DoubleArrowIcon />
+              <Typography>Simulate</Typography>
             </Fab>
           }
         </Allotment.Pane>

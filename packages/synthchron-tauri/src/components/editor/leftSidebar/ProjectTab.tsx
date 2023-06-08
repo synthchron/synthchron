@@ -17,8 +17,6 @@ import { CreatorTab } from './CreatorTab'
 export const ProjectTab: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>()
 
-  const saveFlow = useEditorStore((state) => state.saveFlow)
-
   const selector = useCallback(
     (state: PersistentState) => ({
       projects: state.projects,
@@ -78,30 +76,6 @@ export const ProjectTab: React.FC = () => {
                   disabled={projectId === undefined}
                   minRows={3}
                 />
-
-                <Button
-                  onClick={() => {
-                    if (projectId) {
-                      saveFlow()
-                    } else {
-                      const processModel = transformFlowToSimulator(
-                        useEditorStore.getState()
-                      )
-                      const id = addProject({
-                        projectName: faker.animal.cow(),
-                        projectDescription: faker.lorem.lines(3),
-                        projectModel: processModel,
-                        created: new Date().toJSON(),
-                        lastEdited: new Date().toJSON(),
-                        lastOpened: new Date(0).toJSON(),
-                      })
-
-                      navigate(`/editor/${id}`)
-                    }
-                  }}
-                >
-                  Save
-                </Button>
               </>
             ) : (
               <>
