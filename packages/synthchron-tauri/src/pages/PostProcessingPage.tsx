@@ -63,20 +63,27 @@ export const PostProcessingPage = () => {
     (acceptedFiles: File[]) => {
       // Error checks are done here instead of the dropzone component
       // in order to display more specific error messages
-
+      setErrorMessage('')
       acceptedFiles.forEach((file) => {
         if (file.name.endsWith('.xes')) {
           const reader = new FileReader()
           reader.onload = function () {
-            setUploadedFiles((prevUploadedFiles) => {
-              const newUploadedFile = {
-                name: file.name,
-                content: reader.result as string,
-              }
-              return prevUploadedFiles !== null
-                ? [...prevUploadedFiles, newUploadedFile]
-                : [newUploadedFile]
-            })
+            if (
+              !uploadedFiles ||
+              !uploadedFiles.some((loadedFile) => loadedFile.name === file.name)
+            ) {
+              setUploadedFiles((prevUploadedFiles) => {
+                const newUploadedFile = {
+                  name: file.name,
+                  content: reader.result as string,
+                }
+                return prevUploadedFiles !== null
+                  ? [...prevUploadedFiles, newUploadedFile]
+                  : [newUploadedFile]
+              })
+            } else {
+              setErrorMessage('Duplicate file names are not allowed')
+            }
           }
           reader.readAsText(file)
         } else if (file.name.endsWith('.zip')) {
@@ -84,14 +91,23 @@ export const PostProcessingPage = () => {
           zip.loadAsync(file).then(async function (zippedFiles) {
             const unzippedFiles: UploadedFile[] = []
             for (const zippedFile of Object.keys(zippedFiles.files)) {
-              if (zippedFile.endsWith('.xes')) {
-                const fileData = await zippedFiles.files[zippedFile].async(
-                  'string'
+              if (
+                !uploadedFiles ||
+                !uploadedFiles.some(
+                  (loadedFile) => loadedFile.name === zippedFile
                 )
-                unzippedFiles.push({ name: zippedFile, content: fileData })
+              ) {
+                if (zippedFile.endsWith('.xes')) {
+                  const fileData = await zippedFiles.files[zippedFile].async(
+                    'string'
+                  )
+                  unzippedFiles.push({ name: zippedFile, content: fileData })
+                } else {
+                  setErrorMessage('Files must be either .xes or .zip files')
+                  console.warn(zippedFile + ' was neither a .xes or .zip file')
+                }
               } else {
-                setErrorMessage('Files must be either .xes or .zip files')
-                console.warn(zippedFile + ' was neither a .xes or .zip file')
+                setErrorMessage('Duplicate file names are not allowed')
               }
             }
             setUploadedFiles((prevUploadedFiles) => {
@@ -110,6 +126,7 @@ export const PostProcessingPage = () => {
   )
 
   const reset = () => {
+    console.log(uploadedFiles)
     setUploadedFiles(null)
     setTraceText('')
     setErrorMessage('')
@@ -213,9 +230,21 @@ export const PostProcessingPage = () => {
                   </Dropzone>
                 </Box>
               </Box>
-            </Paper>
-            <Paper sx={{ padding: '1em' }}>
               <Box textAlign='center' sx={{ marginTop: '1em' }}>
+                {errorMessage != '' && (
+                  <Typography variant='body1'>
+                    <Box
+                      sx={{
+                        backgroundColor: 'red',
+                        padding: '5px',
+                        borderRadius: '10px',
+                        marginBottom: '0.5em',
+                      }}
+                    >
+                      {errorMessage}
+                    </Box>
+                  </Typography>
+                )}
                 <Button variant='contained' color='primary' onClick={reset}>
                   Reset
                 </Button>
@@ -249,13 +278,6 @@ export const PostProcessingPage = () => {
                     ))}
                   </Box>
                 </>
-              )}
-              {errorMessage != '' && (
-                <Typography variant='body1'>
-                  <Box sx={{ backgroundColor: 'red', padding: '5px' }}>
-                    {errorMessage}
-                  </Box>
-                </Typography>
               )}
             </Paper>
           </Grid>
@@ -313,7 +335,10 @@ export const PostProcessingPage = () => {
                       })
                     }
                   }}
-                  disabled={traceText === '' && uploadedFiles === null}
+                  disabled={
+                    traceText === '' &&
+                    (uploadedFiles === null || uploadedFiles.length === 0)
+                  }
                 >
                   Post Process and Generate XES
                 </Button>
