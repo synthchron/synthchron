@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
-import { CheckBox } from '@mui/icons-material'
 import HelpIcon from '@mui/icons-material/Help'
-// Temporary
 import {
   Checkbox,
   Collapse,
