@@ -1,4 +1,5 @@
 import * as Cheerio from 'cheerio'
+import * as xml2js from 'xml2js'
 
 import { XESAttribute, XESEvent, XESLog, XESTrace } from './types'
 
@@ -33,7 +34,9 @@ export const serialize = (
   log: XESLog,
   comment: string | string[] | undefined = undefined
 ): string => {
-  const xml = parseXES(log)
+  const builder = new xml2js.Builder()
+  const xml = builder.buildObject(toXESobj(log))
+
   if (comment === undefined) return xml
   const [head, ...tail] = xml.split('\n')
   if (typeof comment === 'string') {
@@ -52,29 +55,6 @@ export const serialize = (
 export const deserialize = (xml: string): XESLog => {
   const logObject = parseXML(xml)
   return toXESlog(logObject)
-}
-
-const parseXES = (log: XESLog): string => {
-  let xesString = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'
-  xesString += '<log>\n'
-  log.traces.forEach((trace) => {
-    xesString += '  <trace>\n'
-    trace.events.forEach((event) => {
-      xesString += '    <event>\n'
-      event.attributes.forEach((attribute) => {
-        xesString +=
-          '      <string key="' +
-          attribute.key +
-          '" value="' +
-          attribute.value +
-          '"/>\n'
-      })
-      xesString += '    </event>\n'
-    })
-    xesString += '  </trace>\n'
-  })
-  xesString += '</log>'
-  return xesString
 }
 
 const parseXML = (xml: string): XESLogObject => {
