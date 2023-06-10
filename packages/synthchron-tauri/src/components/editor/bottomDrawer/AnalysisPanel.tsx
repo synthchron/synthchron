@@ -1,4 +1,4 @@
-import { Button, Divider, Grid, Paper, Stack, Typography } from '@mui/material'
+import { Button, Divider, Grid, Paper, Stack } from '@mui/material'
 import {
   CategoryScale,
   Chart as ChartJS,
@@ -9,7 +9,7 @@ import {
   Title,
   Tooltip,
 } from 'chart.js/auto'
-import { Bar, Doughnut, Line, Radar } from 'react-chartjs-2'
+import { Bar, Doughnut, Radar } from 'react-chartjs-2'
 
 import { PostprocessSimulation } from '@synthchron/postprocessor/src/postprocess'
 import {
@@ -46,7 +46,7 @@ const options = {
     },
     title: {
       display: true,
-      text: 'Trace Chart',
+      text: 'Unnamed Chart',
     },
   },
 }
@@ -183,39 +183,43 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
             columnTitles={['Transition', 'Amount']}
           />
         </Grid>
+
+        <Grid item xs={4}>
+          <Paper style={{ padding: '16px' }}>
+            {(() => {
+              const doughnutOptions = JSON.parse(JSON.stringify(options))
+              doughnutOptions.plugins.title.text =
+                'Transition distribution (Doughnut chart) in %'
+              return <Doughnut data={doughnutData} options={doughnutOptions} />
+            })()}
+          </Paper>
+        </Grid>
+
+        <Grid item xs={8}>
+          <Paper style={{ padding: '16px' }}>
+            {(() => {
+              const barOptions = JSON.parse(JSON.stringify(options))
+              barOptions.plugins.title.text =
+                'Transition distribution (Bar chart) in %'
+              barOptions.plugins.legend.display = false
+              return <Bar data={lineData} options={barOptions} />
+            })()}
+          </Paper>
+        </Grid>
         {showGraphs && (
-          <>
-            <Grid item xs={6}>
-              <Paper style={{ padding: '16px' }}>
-                <Line data={lineData} options={options} />
-              </Paper>
-            </Grid>
-            <Grid item xs={6}>
-              <Paper style={{ padding: '16px' }}>
-                <Bar data={lineData} options={options} />
-              </Paper>
-            </Grid>
-            <Grid item xs={4}>
-              <Paper style={{ padding: '16px' }}>
-                <Radar data={lineData} options={options} />
-              </Paper>
-            </Grid>
-            <Grid item xs={4}>
-              <Paper style={{ padding: '16px' }}>
-                <Doughnut data={doughnutData} options={options} />
-              </Paper>
-            </Grid>
-          </>
+          <Grid item xs={4}>
+            <Paper style={{ padding: '16px' }}>
+              {(() => {
+                const radarOptions = JSON.parse(JSON.stringify(options))
+                radarOptions.plugins.title.text =
+                  'Transition distribution (Radar chart) in %'
+                radarOptions.plugins.legend.display = false
+                return <Radar data={lineData} options={radarOptions} />
+              })()}
+            </Paper>
+          </Grid>
         )}
       </Grid>
-      {!showGraphs && (
-        <Divider style={{ margin: '2em 0 2em 0' }}>
-          <Typography variant='caption' color='textSecondary'>
-            No graphs are shown as there were too few unique events in your
-            traces.
-          </Typography>
-        </Divider>
-      )}
     </Stack>
   )
 }
