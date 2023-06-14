@@ -13,7 +13,6 @@ type DoughnutData = {
 }
 
 type DefaultData = {
-  label: string
   data: number[]
   borderColor: string
   backgroundColor: string
@@ -84,7 +83,7 @@ export const AggregateToChartData = (
       // eslint-disable-next-line no-case-declarations
       const dataSetD: DoughnutData = {
         label: 'Trace ',
-        data: Array.from(averageMap.values()),
+        data: Array.from(averageMap.values()).map((value) => value * 100),
         backgroundColor: doughnutColors,
         hoverOffset: 20,
       }
@@ -96,8 +95,7 @@ export const AggregateToChartData = (
 
       // eslint-disable-next-line no-case-declarations
       const dataSet: DefaultData = {
-        label: 'Trace ',
-        data: Array.from(averageMap.values()),
+        data: Array.from(averageMap.values()).map((value) => value * 100),
         borderColor: 'rgb(' + colorAsText + ')',
         backgroundColor: 'rgba(' + colorAsText + ', 0.5)',
       }

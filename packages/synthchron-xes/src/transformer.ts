@@ -36,6 +36,7 @@ export const serialize = (
 ): string => {
   const builder = new xml2js.Builder()
   const xml = builder.buildObject(toXESobj(log))
+
   if (comment === undefined) return xml
   const [head, ...tail] = xml.split('\n')
   if (typeof comment === 'string') {
