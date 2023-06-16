@@ -54,9 +54,6 @@ export const createModelSlice: StateCreator<EditorState, [], [], ModelSlice> = (
             : 0
         })
       ) + 1
-    console.log('test')
-    console.log(newId)
-    console.log(uniqueLabelNumber)
     nodesMap.forEach((node) => {
       if (node.selected) {
         node.selected = false

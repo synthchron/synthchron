@@ -126,7 +126,6 @@ export const PostProcessingPage = () => {
   )
 
   const reset = () => {
-    console.log(uploadedFiles)
     setUploadedFiles(null)
     setTraceText('')
     setErrorMessage('')
