@@ -1,4 +1,3 @@
-import { faker } from '@faker-js/faker'
 import { Button, Divider, Grid, Paper, Stack } from '@mui/material'
 import {
   CategoryScale,
@@ -10,7 +9,7 @@ import {
   Title,
   Tooltip,
 } from 'chart.js/auto'
-import { Bar, Doughnut, Line, Radar, Scatter } from 'react-chartjs-2'
+import { Bar, Doughnut, Radar } from 'react-chartjs-2'
 
 import { PostprocessSimulation } from '@synthchron/postprocessor/src/postprocess'
 import {
@@ -39,25 +38,6 @@ ChartJS.register(
   Legend
 )
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
-
-const highDimensionalData = {
-  labels,
-  datasets: [
-    {
-      label: 'Dataset 1',
-      data: [...labels, ...labels, ...labels, ...labels, ...labels].map(
-        (_l, i) => ({
-          x: faker.number.int({ min: i, max: Math.pow(i, 2) }),
-          y: faker.number.int({ min: -10 * i, max: 0 }),
-        })
-      ),
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-  ],
-}
-
 const options = {
   responsive: true,
   plugins: {
@@ -66,7 +46,7 @@ const options = {
     },
     title: {
       display: true,
-      text: 'Trace Chart',
+      text: 'Unnamed Chart',
     },
   },
 }
@@ -175,6 +155,7 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
 
   const aggregateOfLog = TransformToAggregate(result.log)
 
+  const showGraphs = aggregateOfLog.some((log) => log.size > 3)
   const doughnutData = AggregateToChartData(aggregateOfLog, ChartType.Doughnut)
   const lineData = AggregateToChartData(aggregateOfLog, ChartType.Other)
 
@@ -191,49 +172,53 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = () => {
       </Divider>
       <Grid container spacing={2}>
         <Grid item xs={8}>
-          <Paper style={{ padding: '16px' }}>
-            <TablePreview
-              object={result.statistics}
-              columnTitles={['Key', 'Value']}
-            />
-          </Paper>
+          <TablePreview
+            object={result.statistics}
+            columnTitles={['Key', 'Value']}
+          />
         </Grid>
         <Grid item xs={4}>
+          <TablePreview
+            object={AggregateToTable(aggregateOfLog)}
+            columnTitles={['Transition', 'Amount']}
+          />
+        </Grid>
+
+        <Grid item xs={4}>
           <Paper style={{ padding: '16px' }}>
-            <TablePreview
-              object={AggregateToTable(aggregateOfLog)}
-              columnTitles={['Transition', 'Amount']}
-            />
+            {(() => {
+              const doughnutOptions = JSON.parse(JSON.stringify(options))
+              doughnutOptions.plugins.title.text =
+                'Transition distribution (Doughnut chart) in %'
+              return <Doughnut data={doughnutData} options={doughnutOptions} />
+            })()}
           </Paper>
         </Grid>
-        <Grid item xs={6}>
-          <Paper style={{ padding: '16px' }}>
-            <Line data={lineData} options={options} />
-          </Paper>
-        </Grid>
-        <Grid item xs={6}>
-          <Paper style={{ padding: '16px' }}>
-            <Bar data={lineData} options={options} />
-          </Paper>
-        </Grid>
-        {aggregateOfLog.some((log) => log.size > 3) ? (
-          <Grid item xs={4}>
-            <Paper style={{ padding: '16px' }}>
-              <Radar data={lineData} options={options} />
-            </Paper>
-          </Grid>
-        ) : null}
+
         <Grid item xs={8}>
           <Paper style={{ padding: '16px' }}>
-            <Scatter data={highDimensionalData} options={options} />
-            Not implemented
+            {(() => {
+              const barOptions = JSON.parse(JSON.stringify(options))
+              barOptions.plugins.title.text =
+                'Transition distribution (Bar chart) in %'
+              barOptions.plugins.legend.display = false
+              return <Bar data={lineData} options={barOptions} />
+            })()}
           </Paper>
         </Grid>
-        <Grid item xs={4}>
-          <Paper style={{ padding: '16px' }}>
-            <Doughnut data={doughnutData} options={options} />
-          </Paper>
-        </Grid>
+        {showGraphs && (
+          <Grid item xs={4}>
+            <Paper style={{ padding: '16px' }}>
+              {(() => {
+                const radarOptions = JSON.parse(JSON.stringify(options))
+                radarOptions.plugins.title.text =
+                  'Transition distribution (Radar chart) in %'
+                radarOptions.plugins.legend.display = false
+                return <Radar data={lineData} options={radarOptions} />
+              })()}
+            </Paper>
+          </Grid>
+        )}
       </Grid>
     </Stack>
   )
