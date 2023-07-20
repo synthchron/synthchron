@@ -37,7 +37,7 @@
     "sinon": "^15.1.0",
     "ts-mocha": "^10.0.0",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.0.4"
+    "typescript": "^5.1.6"
   },
   "dependencies": {
     "yaml": "^2.3.1"
