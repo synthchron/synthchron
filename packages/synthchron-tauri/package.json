@@ -41,7 +41,7 @@
     "react-router-dom": "^6.12.1",
     "reactflow": "^11.7.0",
     "seedrandom": "^3.0.5",
-    "styled-components": "^5.3.11",
+    "styled-components": "^6.0.4",
     "uuid": "^9.0.0",
     "vite-plugin-eslint": "^1.8.1",
     "y-protocols": "^1.0.5",
