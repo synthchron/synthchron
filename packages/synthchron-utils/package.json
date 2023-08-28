@@ -27,7 +27,7 @@
     "sinon": "^15.0.3",
     "ts-mocha": "^10.0.0",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.0.4"
+    "typescript": "^5.2.2"
   },
   "dependencies": {
     "eslint-plugin-prettier": "^4.2.1",
