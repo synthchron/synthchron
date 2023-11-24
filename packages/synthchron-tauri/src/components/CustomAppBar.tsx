@@ -75,16 +75,16 @@ export const CustomAppBar: React.FC = () => {
   ]
 
   // These pages will not be shown in the final product but are useful during development
-  const debugPages = [
-    {
-      name: 'Post Processing (Debug)',
-      href: '/debug_postprocessing',
-    },
-    {
-      name: 'Debug',
-      href: '/debug',
-    },
-  ]
+  // const debugPages = [
+  //   {
+  //     name: 'Post Processing (Debug)',
+  //     href: '/debug_postprocessing',
+  //   },
+  //   {
+  //     name: 'Debug',
+  //     href: '/debug',
+  //   },
+  // ]
 
   const projectButtons = Object.entries(projects)
     .sort(
@@ -194,7 +194,7 @@ export const CustomAppBar: React.FC = () => {
               flexGrow: 1,
             }}
           />
-          {debugPages.length > 0 && (
+          {/* {debugPages.length > 0 && (
             <Divider
               orientation='vertical'
               flexItem
@@ -221,7 +221,7 @@ export const CustomAppBar: React.FC = () => {
             >
               {page.name}
             </Button>
-          ))}
+          ))} */}
         </Toolbar>
       </Container>
       <NewProjectModal
