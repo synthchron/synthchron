@@ -4,6 +4,7 @@ import { Typography } from '@mui/material'
 import { Handle, NodeProps, Position } from 'reactflow'
 
 import { PetriNetTransitionData } from '../petriNetTypes'
+import { useEditorStore } from '../../editorStore/flowStore'
 
 const config = {
   size: 60,
@@ -28,6 +29,7 @@ export const TransitionNodeShape: React.FC<TransitionNodeShapeProps> = ({
   data,
 }) => {
   const { size, color } = config
+  const displayFullTransitionName = useEditorStore((state) => state.displayFullTransitionName)
 
   const shape = (
     <rect
@@ -72,7 +74,7 @@ export const TransitionNodeShape: React.FC<TransitionNodeShapeProps> = ({
           maxHeight: size,
         }}
       >
-        <Typography fontSize={10} noWrap padding={0.4}>
+        <Typography fontSize={10} noWrap={!displayFullTransitionName} padding={0.4}>
           {label}
         </Typography>
       </div>
@@ -98,6 +100,8 @@ export const TransitionNode: React.FC<NodeProps<PetriNetTransitionData>> = ({
   selected,
   isConnectable,
 }) => {
+  const displayFullTransitionName = useEditorStore((state) => state.displayFullTransitionName)
+
   return (
     <div style={{ position: 'relative' }}>
       <Handle
@@ -125,6 +129,22 @@ export const TransitionNode: React.FC<NodeProps<PetriNetTransitionData>> = ({
         label={data?.label}
         data={data}
       />
+      {displayFullTransitionName && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '-1.5em',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            whiteSpace: 'nowrap',
+            pointerEvents: 'none',
+          }}
+        >
+          <Typography fontSize={10} noWrap>
+            {data?.label}
+          </Typography>
+        </div>
+      )}
     </div>
   )
 }
