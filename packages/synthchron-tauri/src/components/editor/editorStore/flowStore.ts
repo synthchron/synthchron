@@ -119,7 +119,8 @@ export const useEditorStore = create<EditorState>((set, get, api) => ({
       yMetaMap: metaMap,
       yProcessModelType: processModelType,
       displayFullTransitionName: false,
-      setDisplayFullTransitionName: (display: boolean) => set({ displayFullTransitionName: display }),
+      setDisplayFullTransitionName: (display: boolean) =>
+        set({ displayFullTransitionName: display }),
     })
   },
 }))

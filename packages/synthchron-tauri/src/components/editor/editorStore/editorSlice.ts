@@ -47,5 +47,6 @@ export const createEditorSlice: StateCreator<
   setViewPort: (viewPort: { x: number; y: number; zoom: number }) =>
     set({ viewPort }),
   displayFullTransitionName: false,
-  setDisplayFullTransitionName: (display: boolean) => set({ displayFullTransitionName: display }),
+  setDisplayFullTransitionName: (display: boolean) =>
+    set({ displayFullTransitionName: display }),
 })

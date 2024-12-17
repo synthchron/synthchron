@@ -1,13 +1,16 @@
 import { Box, FormControlLabel, Switch } from '@mui/material'
-import { useEditorStore } from './editorStore/flowStore'
+
 import { TabbedDrawer } from './TabbedDrawer'
+import { useEditorStore } from './editorStore/flowStore'
 import { PropertiesAndGeneralTab } from './rightSidebar/PropertiesAndGeneralTab'
 import { SimulationTab } from './rightSidebar/SimulationTab'
 
 export const RightSidebar = () => {
-  const [displayFullTransitionName, setDisplayFullTransitionName] = useEditorStore(
-    (state) => [state.displayFullTransitionName, state.setDisplayFullTransitionName]
-  )
+  const [displayFullTransitionName, setDisplayFullTransitionName] =
+    useEditorStore((state) => [
+      state.displayFullTransitionName,
+      state.setDisplayFullTransitionName,
+    ])
 
   return (
     <TabbedDrawer side='right' tabs={['Properties', 'Verify']}>
@@ -18,7 +21,9 @@ export const RightSidebar = () => {
           control={
             <Switch
               checked={displayFullTransitionName}
-              onChange={(event) => setDisplayFullTransitionName(event.target.checked)}
+              onChange={(event) =>
+                setDisplayFullTransitionName(event.target.checked)
+              }
               name='displayFullTransitionName'
               color='primary'
             />
