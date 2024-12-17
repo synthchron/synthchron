@@ -26,6 +26,8 @@ export type EditorState = YjsSlice &
       config: ProcessModelFlowConfig,
       projectId: string
     ) => void
+    displayFullTransitionName: boolean
+    setDisplayFullTransitionName: (display: boolean) => void
   }
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
@@ -116,6 +118,9 @@ export const useEditorStore = create<EditorState>((set, get, api) => ({
       yEdgesMap: edgesMap,
       yMetaMap: metaMap,
       yProcessModelType: processModelType,
+      displayFullTransitionName: false,
+      setDisplayFullTransitionName: (display: boolean) =>
+        set({ displayFullTransitionName: display }),
     })
   },
 }))

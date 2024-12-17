@@ -13,6 +13,8 @@ export type EditorSlice = {
   sessionStart: number
   viewPort?: { x: number; y: number; zoom: number }
   setViewPort: (viewPort: { x: number; y: number; zoom: number }) => void
+  displayFullTransitionName: boolean
+  setDisplayFullTransitionName: (display: boolean) => void
 }
 
 export const createEditorSlice: StateCreator<
@@ -44,4 +46,7 @@ export const createEditorSlice: StateCreator<
   viewPort: undefined,
   setViewPort: (viewPort: { x: number; y: number; zoom: number }) =>
     set({ viewPort }),
+  displayFullTransitionName: false,
+  setDisplayFullTransitionName: (display: boolean) =>
+    set({ displayFullTransitionName: display }),
 })
